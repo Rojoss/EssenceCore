@@ -8,21 +8,21 @@ import com.clashwars.essence.util.TabCompleteUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class HealCmd extends EssenceCommand {
+public class FeedCmd extends EssenceCommand {
 
-    public HealCmd(Essence ess, String command, String usage, String description, String permission, List<String> aliases) {
+    public FeedCmd(Essence ess, String command, String usage, String description, String permission, List<String> aliases) {
         super(ess, command, usage, description, permission, aliases);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player) && args.length < 1) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_INVALID_USAGE, true, "/heal {player} [max]"));
+            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_INVALID_USAGE, true, "/feed {player} [amount]"));
             return true;
         }
 
@@ -39,34 +39,23 @@ public class HealCmd extends EssenceCommand {
             return true;
         }
 
-        if (player.isDead() || player.getHealth() == 0) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.DEAD_PLAYER, true, args[0]));
-            return true;
-        }
-
-        double max = -1;
+        int amount = 20;
         if (args.length > 1) {
-            if (!hasPermission(sender, "max")) {
-                sender.sendMessage(ess.getMessages().getMsg(Message.NO_PERM, true, getPermission() + ".max"));
-                return true;
-            }
-            max = NumberUtil.getDouble(args[1]);
+            amount = NumberUtil.getInt(args[1]);
         }
-        if (max < 0) {
-            max = player.getMaxHealth();
+        amount = Math.min(Math.max(amount, 0), 20);
+
+        FoodLevelChangeEvent foodLevelChangeEvent = new FoodLevelChangeEvent(player, amount);
+        ess.getServer().getPluginManager().callEvent(foodLevelChangeEvent);
+        if (!foodLevelChangeEvent.isCancelled()) {
+            player.setFoodLevel(amount);
+            player.setSaturation(10);
+            player.setExhaustion(0F);
         }
 
-        player.setMaxHealth(max);
-        double amount = max - player.getHealth();
-        EntityRegainHealthEvent regainHealthEvent = new EntityRegainHealthEvent(player, amount, EntityRegainHealthEvent.RegainReason.CUSTOM);
-        ess.getServer().getPluginManager().callEvent(regainHealthEvent);
-        if (!regainHealthEvent.isCancelled()) {
-            player.setHealth(max);
-        }
-
-        player.sendMessage(ess.getMessages().getMsg(Message.CMD_HEAL_HEALED, true));
+        player.sendMessage(ess.getMessages().getMsg(Message.CMD_FEED_FEEDED, true));
         if (!sender.equals(player)) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_HEAL_OTHER, true, player.getDisplayName()));
+            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_FEED_OTHER, true, player.getDisplayName()));
         }
         return true;
     }

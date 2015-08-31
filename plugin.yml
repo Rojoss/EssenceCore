@@ -1,0 +1,5 @@
+main : com.clashwars.essence.Essence
+name: Essence
+version: 0.1
+description: Essentials plugin with lots of commands and utilities.
+softdepend: [Vault]

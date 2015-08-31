@@ -13,8 +13,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.help.HelpTopic;
-import org.bukkit.help.HelpTopicFactory;
 
 /**
  * Reflection and command registration code by: Goblom

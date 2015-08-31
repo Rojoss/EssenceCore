@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.clashwars.essence.Essence;
+import com.clashwars.essence.Message;
+import com.clashwars.essence.commands.arguments.internal.ArgumentParseResult;
+import com.clashwars.essence.commands.arguments.internal.ArgumentParseResults;
+import com.clashwars.essence.commands.arguments.internal.CmdArgument;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,6 +29,8 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     protected List<String> aliases;
     protected String usage;
     protected String permission;
+
+    protected CmdArgument[] cmdArgs;
 
     protected static CommandMap commandMap;
 
@@ -98,6 +104,11 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         return getCommandMap();
     }
 
+    /** Get the main Essence plugin instance */
+    public Essence getEss() {
+        return ess;
+    }
+
 
     /** Get the command label/command */
     public String getLabel() {
@@ -143,6 +154,35 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     /** Get a list of all the command aliases */
     public List<String> getAliases() {
         return aliases;
+    }
+
+
+    public ArgumentParseResults parseArgs(EssenceCommand cmd, CommandSender sender, String[] args) {
+        ArgumentParseResults result = new ArgumentParseResults();
+        int index = 0;
+        for (CmdArgument cmdArg : cmdArgs) {
+            if (args.length > index) {
+                ArgumentParseResult parsed = cmdArg.parse(cmd, sender, args.length > index ? args[index] : "");
+                if (!parsed.success) {
+                    result.success = false;
+                    return result;
+                }
+                result.setValue(index, parsed);
+            } else {
+                if (cmdArg.isRequired(sender)) {
+                    sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.CMD_INVALID_USAGE, true, cmd.getUsage()));
+                    result.success = false;
+                    return result;
+                } else {
+                    ArgumentParseResult parsed = new ArgumentParseResult();
+                    parsed.success = true;
+                    parsed.setValue(null);
+                    result.setValue(index, parsed);
+                }
+            }
+            index++;
+        }
+        return result;
     }
 
 

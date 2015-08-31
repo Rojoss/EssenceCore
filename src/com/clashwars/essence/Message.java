@@ -4,12 +4,22 @@ public enum Message {
     //Main messages
     PREFIX("&8[&4Essence&8] &6"),
     NO_PERM("&cInsuficcient permissions! &8'&7{0}&8'"),
-    INVALID_PLAYER("&4{0} &cis not a valid player name."),
     DEAD_PLAYER("&4{0} &cis dead."),
 
     //Main command messages
     CMD_PLAYER_ONLY("&cThis command can only be executed by players."),
     CMD_INVALID_USAGE("&cInvalid usage! &7Command syntax: &8{0}"),
+
+    //Argument parsing messages
+    INVALID_PLAYER("&4{0} &cis not a valid player name."),
+    NUMBER_TOO_LOW("&4{0} &cis too low! &7Can't be less than &c{1}&7."),
+    NUMBER_TOO_HIGH("&4{0} &cis too high! &7Can't be more than &c{1}&7."),
+    INVALID_LIST_ARGUMENT("&4{0} &cis not a valid argument! &7Arguments: &8{1}"),
+    NO_STRING_MATCH("&4{0} &cdoesn't match with &4{1}&c."),
+    DOESNT_START_WITH("&4{0} &cdoesn't start with &4{1}&c."),
+    DOESNT_END_WITH("&4{0} &cdoesn't end with &4{1}&c."),
+    TOO_FEW_CHARACTERS("&4{0} &cis too short! &7Need at least &8{1} &7characters."),
+    TOO_MUCH_CHARACTERS("&4{1} &cis too long! &7Can't have more than &8{1} &7characters."),
 
     //Command messages
     CMD_ESSENCE_INFO("&8===== &4&lEssence plugin &8=====\n&8&o{0}\n&6Version&8: &7{1}\n&6Website&8: &9{2}\n&6Authors&8: &7{3}"),

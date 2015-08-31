@@ -2,8 +2,12 @@ package com.clashwars.essence.commands;
 
 import com.clashwars.essence.Essence;
 import com.clashwars.essence.Message;
+import com.clashwars.essence.commands.arguments.IntArgument;
+import com.clashwars.essence.commands.arguments.PlayerArgument;
+import com.clashwars.essence.commands.arguments.internal.ArgumentParseResults;
+import com.clashwars.essence.commands.arguments.internal.ArgumentRequirement;
+import com.clashwars.essence.commands.arguments.internal.CmdArgument;
 import com.clashwars.essence.commands.internal.EssenceCommand;
-import com.clashwars.essence.util.NumberUtil;
 import com.clashwars.essence.util.TabCompleteUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -17,33 +21,22 @@ public class FeedCmd extends EssenceCommand {
 
     public FeedCmd(Essence ess, String command, String usage, String description, String permission, List<String> aliases) {
         super(ess, command, usage, description, permission, aliases);
+
+        cmdArgs = new CmdArgument[] {
+                new PlayerArgument(ArgumentRequirement.REQUIRED_CONSOLE, "others"),
+                new IntArgument(ArgumentRequirement.OPTIONAL, "", 0, 20, false)
+        };
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player) && args.length < 1) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_INVALID_USAGE, true, "/feed {player} [amount]"));
+        ArgumentParseResults result = parseArgs(this, sender, args);
+        if (!result.success) {
             return true;
         }
 
-        Player player = sender instanceof Player ? (Player)sender : null;
-        if (args.length > 0) {
-            if (!hasPermission(sender, "others")) {
-                sender.sendMessage(ess.getMessages().getMsg(Message.NO_PERM, true, getPermission() + ".others"));
-                return true;
-            }
-            player = ess.getServer().getPlayer(args[0]);
-        }
-        if (player == null) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.INVALID_PLAYER, true, args[0]));
-            return true;
-        }
-
-        int amount = 20;
-        if (args.length > 1) {
-            amount = NumberUtil.getInt(args[1]);
-        }
-        amount = Math.min(Math.max(amount, 0), 20);
+        Player player = result.getValue(0).getValue() == null ? (Player)sender : (Player)result.getValue(0).getValue();
+        int amount = result.getValue(1).getValue() == null ?  20 : (Integer)result.getValue(1).getValue();
 
         FoodLevelChangeEvent foodLevelChangeEvent = new FoodLevelChangeEvent(player, amount);
         ess.getServer().getPluginManager().callEvent(foodLevelChangeEvent);

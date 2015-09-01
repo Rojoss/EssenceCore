@@ -5,44 +5,44 @@ import java.math.BigDecimal;
 public class NumberUtil {
 
     /**
-     * Convert a string like '1' to a int. Returns -1 if it's invalid.
+     * Convert a string like '1' to a int. Returns null if it's invalid.
      * @param str
      * @return int
      */
-    public static int getInt(String str) {
+    public static Integer getInt(String str) {
         try {
             return Integer.parseInt(str);
         } catch (NumberFormatException e) {
         }
-        return -1;
+        return null;
     }
 
     /**
-     * Convert a string like '1.5' to a double. Returns -1 if it's invalid.
+     * Convert a string like '1.5' to a double. Returns null if it's invalid.
      * @param str
      * @return double
      */
-    public static double getDouble(String str) {
+    public static Double getDouble(String str) {
         try {
             return Double.parseDouble(str);
         } catch (NumberFormatException e) {
         }
-        return -1;
+        return null;
     }
 
     /**
-     * Convert a string like '1.12' to a float. Returns -1 if it's invalid.
+     * Convert a string like '1.12' to a float. Returns null if it's invalid.
      * @param str
      * @return float
      */
-    public static float getFloat(String str) {
+    public static Float getFloat(String str) {
         if (str != null && str != "") {
             try {
                 return Float.parseFloat(str);
             } catch (NumberFormatException e) {
             }
         }
-        return -1;
+        return null;
     }
 
     /**

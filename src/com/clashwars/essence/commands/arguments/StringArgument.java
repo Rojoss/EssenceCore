@@ -6,6 +6,10 @@ import com.clashwars.essence.commands.arguments.internal.ArgumentRequirement;
 import com.clashwars.essence.commands.arguments.internal.CmdArgument;
 import com.clashwars.essence.commands.internal.EssenceCommand;
 import org.bukkit.command.CommandSender;
+import org.bukkit.util.StringUtil;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class StringArgument extends CmdArgument {
 
@@ -76,6 +80,14 @@ public class StringArgument extends CmdArgument {
         result.success = true;
         result.setValue(arg);
         return result;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String message) {
+        if (!match.isEmpty() && StringUtil.startsWithIgnoreCase(match, message)) {
+            return Arrays.asList(match);
+        }
+        return null;
     }
     
 }

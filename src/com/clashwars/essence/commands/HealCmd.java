@@ -9,14 +9,12 @@ import com.clashwars.essence.commands.arguments.internal.ArgumentRequirement;
 import com.clashwars.essence.commands.arguments.internal.CmdArgument;
 import com.clashwars.essence.commands.internal.EssenceCommand;
 import com.clashwars.essence.commands.options.BoolOption;
-import com.clashwars.essence.util.TabCompleteUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class HealCmd extends EssenceCommand {
@@ -87,15 +85,5 @@ public class HealCmd extends EssenceCommand {
             }
         }
         return true;
-    }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String message, String[] args) {
-        //TODO: Tab completion based on cmdArgs (inside EssenceCommand I guess)
-        Player player = sender instanceof Player ? (Player) sender : null;
-        if (args.length == 1) {
-            return TabCompleteUtil.onlinePlayers(ess, sender, args[0]);
-        }
-        return Arrays.asList("20");
     }
 }

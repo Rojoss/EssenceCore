@@ -6,6 +6,10 @@ import com.clashwars.essence.commands.arguments.internal.CmdArgument;
 import com.clashwars.essence.commands.internal.EssenceCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.StringUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PotionEffectArgument extends CmdArgument {
 
@@ -31,5 +35,16 @@ public class PotionEffectArgument extends CmdArgument {
 
         result.setValue(type);
         return result;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String message) {
+        List<String> tabComplete = new ArrayList<String>();
+        for (PotionEffectType effectType : PotionEffectType.values()) {
+            if (StringUtil.startsWithIgnoreCase(effectType.getName(), message)) {
+                tabComplete.add(effectType.getName());
+            }
+        }
+        return tabComplete;
     }
 }

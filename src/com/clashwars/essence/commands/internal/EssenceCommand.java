@@ -12,7 +12,6 @@ import com.clashwars.essence.commands.arguments.internal.ArgumentParseResult;
 import com.clashwars.essence.commands.arguments.internal.ArgumentParseResults;
 import com.clashwars.essence.commands.arguments.internal.CmdArgument;
 import com.clashwars.essence.commands.options.CommandOption;
-import com.clashwars.essence.util.Debug;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -236,8 +235,14 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     /** Method to be overwritten by each command */
     public abstract boolean onCommand(CommandSender sender, Command cmd, String label, String[] args);
 
-    /** Optional method to be overwritten by each command (recommended to have tab completion for all commands) */
+    /**
+     * Optional method to be overwritten by each command
+     * By default it will automatically tab complete all specified arguments if they have tab completion.
+     */
     public List<String> onTabComplete(CommandSender sender, Command cmd, String message, String[] args) {
-        return null;
+        if (cmdArgs.length < args.length) {
+            return null;
+        }
+        return cmdArgs[args.length-1].tabComplete(sender, args[args.length-1]);
     }
 }

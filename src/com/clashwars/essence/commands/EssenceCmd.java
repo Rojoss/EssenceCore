@@ -12,7 +12,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class EssenceCmd extends EssenceCommand {
@@ -50,8 +49,4 @@ public class EssenceCmd extends EssenceCommand {
         return true;
     }
 
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String message, String[] args) {
-        return Arrays.asList("reload");
-    }
 }

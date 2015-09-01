@@ -7,6 +7,7 @@ import com.clashwars.essence.commands.arguments.internal.CmdArgument;
 import com.clashwars.essence.commands.internal.EssenceCommand;
 import com.clashwars.essence.util.Util;
 import org.bukkit.command.CommandSender;
+import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,5 +44,15 @@ public class ListArgument extends CmdArgument {
         result.setValue(arg);
         return result;
     }
-    
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String message) {
+        List<String> tabComplete = new ArrayList<String>();
+        for (String str : strings) {
+            if (StringUtil.startsWithIgnoreCase(str, message)) {
+                tabComplete.add(str);
+            }
+        }
+        return tabComplete;
+    }
 }

@@ -5,6 +5,8 @@ import com.clashwars.essence.commands.internal.EssenceCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public abstract class CmdArgument {
 
     protected String permission;
@@ -58,5 +60,9 @@ public abstract class CmdArgument {
             }
         }
         return false;
+    }
+
+    public List<String> tabComplete(CommandSender sender, String message) {
+        return null;
     }
 }

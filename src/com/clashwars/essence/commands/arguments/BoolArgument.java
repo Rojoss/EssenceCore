@@ -5,6 +5,10 @@ import com.clashwars.essence.commands.arguments.internal.ArgumentRequirement;
 import com.clashwars.essence.commands.arguments.internal.CmdArgument;
 import com.clashwars.essence.commands.internal.EssenceCommand;
 import org.bukkit.command.CommandSender;
+import org.bukkit.util.StringUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BoolArgument extends CmdArgument {
 
@@ -28,5 +32,16 @@ public class BoolArgument extends CmdArgument {
 
         return result;
     }
-    
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String message) {
+        List<String> tabComplete = new ArrayList<String>();
+        if (StringUtil.startsWithIgnoreCase("true", message)) {
+            tabComplete.add("true");
+        }
+        if (StringUtil.startsWithIgnoreCase("false", message)) {
+            tabComplete.add("false");
+        }
+        return tabComplete;
+    }
 }

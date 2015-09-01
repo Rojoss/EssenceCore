@@ -1,5 +1,6 @@
 package com.clashwars.essence.commands.arguments;
 
+import com.clashwars.essence.Essence;
 import com.clashwars.essence.Message;
 import com.clashwars.essence.commands.arguments.internal.ArgumentParseResult;
 import com.clashwars.essence.commands.arguments.internal.ArgumentRequirement;
@@ -8,7 +9,11 @@ import com.clashwars.essence.commands.internal.EssenceCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 public class PlayerArgument extends CmdArgument {
@@ -44,5 +49,18 @@ public class PlayerArgument extends CmdArgument {
 
         return result;
     }
-    
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String message) {
+        Player player = sender instanceof Player ? (Player) sender : null;
+        List<String> playerNames = new ArrayList<String>();
+        Collection<Player> players = (Collection<Player>)Essence.inst().getServer().getOnlinePlayers();
+        for (Player p : players) {
+            String name = p.getName();
+            if ((player == null || player.canSee(p)) && StringUtil.startsWithIgnoreCase(name, message)) {
+                playerNames.add(name);
+            }
+        }
+        return playerNames;
+    }
 }

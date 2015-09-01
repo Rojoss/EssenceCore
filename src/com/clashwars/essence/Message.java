@@ -32,6 +32,7 @@ public enum Message {
     CMD_HEAL_OTHER("You have healed &a{0}&6."),
     CMD_FEED_FEEDED("You have been feeded!"),
     CMD_FEED_OTHER("You have fed &a{0}&6."),
+    CMD_LIGHTNING("Lightning has struck!"),
 
     //Command modifiers
     MOD_HELP("Show detailed command information."),

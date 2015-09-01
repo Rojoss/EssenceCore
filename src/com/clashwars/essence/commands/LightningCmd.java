@@ -39,8 +39,13 @@ public class LightningCmd extends EssenceCmd {
         args = result.getArgs();
 
         Location location = (Location) result.getValue(0).getValue();
+        location.setY(location.getWorld().getHighestBlockAt(location).getY());
 
         location.getWorld().strikeLightning(location);
+
+        if (!result.hasModifier("-s")) {
+            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_HEAL_HEALED, true));
+        }
 
         return true;
     }

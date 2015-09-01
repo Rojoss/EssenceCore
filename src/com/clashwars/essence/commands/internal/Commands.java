@@ -1,9 +1,7 @@
 package com.clashwars.essence.commands.internal;
 
 import com.clashwars.essence.Essence;
-import com.clashwars.essence.commands.EssenceCmd;
-import com.clashwars.essence.commands.FeedCmd;
-import com.clashwars.essence.commands.HealCmd;
+import com.clashwars.essence.commands.*;
 import com.clashwars.essence.config.CommandsCfg;
 
 import java.lang.reflect.InvocationTargetException;
@@ -28,6 +26,7 @@ public class Commands {
         registerCommand(EssenceCmd.class, "essence", "/essence [reload]", "Main plugin command and config reloading", "essence.essence", "essentials");
         registerCommand(HealCmd.class, "heal", "/heal [player] [max]", "Heal a player", "essence.heal");
         registerCommand(FeedCmd.class, "feed", "/feed [player] [amount]", "Feed a player", "essence.feed");
+        registerCommand(LightningCmd.class, "lightning", "/lightning [location]", "Strike lightning somewhere", "essence.lightning");
     }
 
     /**

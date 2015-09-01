@@ -3,6 +3,7 @@ package com.clashwars.essence.commands.internal;
 import com.clashwars.essence.Essence;
 import com.clashwars.essence.commands.EssenceCmd;
 import com.clashwars.essence.commands.FeedCmd;
+import com.clashwars.essence.commands.GamemodeCmd;
 import com.clashwars.essence.commands.HealCmd;
 import com.clashwars.essence.config.CommandsCfg;
 
@@ -26,8 +27,9 @@ public class Commands {
     /** Register all Essence commands */
     public void registerCommands() {
         registerCommand(EssenceCmd.class, "essence", "/essence [reload]", "Main plugin command and config reloading", "essence.essence", "essentials");
-        registerCommand(HealCmd.class, "heal", "/heal [player] [max]", "Heal a player", "essence.heal");
-        registerCommand(FeedCmd.class, "feed", "/feed [player] [amount]", "Feed a player", "essence.feed");
+        registerCommand(HealCmd.class, "heal", "/heal [player] [max]", "Heal a player", "essence.heal", "health", "sethealth");
+        registerCommand(FeedCmd.class, "feed", "/feed [player] [amount]", "Feed a player", "essence.feed", "food", "hunger", "eat");
+        registerCommand(GamemodeCmd.class, "gamemode", "/gamemode {mode} [player]", "Change a player his gamemmode", "essence.gamemode", "gm");
     }
 
     /**

@@ -29,7 +29,12 @@ public class IntArgument extends CmdArgument {
             return result;
         }
 
-        int value = NumberUtil.getInt(arg);
+        Integer value = NumberUtil.getInt(arg);
+        if (value == null) {
+            sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.NOT_A_NUMBER, true, arg));
+            result.success = false;
+            return result;
+        }
         if (minValue != -1 && value < minValue) {
             if (clampValue) {
                 value = minValue;

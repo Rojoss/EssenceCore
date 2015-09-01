@@ -29,7 +29,12 @@ public class DoubleArgument extends CmdArgument {
             return result;
         }
 
-        double value = NumberUtil.getDouble(arg);
+        Double value = NumberUtil.getDouble(arg);
+        if (value == null) {
+            sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.NOT_A_NUMBER, true, arg));
+            result.success = false;
+            return result;
+        }
         if (value != -1 && value < minValue) {
             if (clampValue) {
                 value = minValue;

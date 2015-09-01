@@ -29,7 +29,12 @@ public class FloatArgument extends CmdArgument {
             return result;
         }
 
-        float value = NumberUtil.getFloat(arg);
+        Float value = NumberUtil.getFloat(arg);
+        if (value == null) {
+            sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.NOT_A_NUMBER, true, arg));
+            result.success = false;
+            return result;
+        }
         if (value != -1 && value < minValue) {
             if (clampValue) {
                 value = minValue;

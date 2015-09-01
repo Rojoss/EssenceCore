@@ -33,6 +33,9 @@ public enum Message {
     CMD_FEED_FEEDED("You have been feeded!"),
     CMD_FEED_OTHER("You have fed &a{0}&6."),
     CMD_LIGHTNING("Lightning has struck!"),
+    CMD_GAMEMODE_CHANGED("Gamemode changed to &a{0}&6."),
+    CMD_GAMEMODE_OTHER("You have changed &a{0}'s &6gamemode to &a{1}&6."),
+    CMD_GAMEMODE_INVALID("&4{0} &cis not a valid gamemode!"),
 
     //Command modifiers
     MOD_HELP("Show detailed command information."),

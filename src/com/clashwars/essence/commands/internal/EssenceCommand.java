@@ -167,7 +167,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         ArgumentParseResults result = new ArgumentParseResults();
         List<String> argsList = new ArrayList<String>();
         for (String arg : args) {
-            if (arg.startsWith("-") && arg.length() > 1) {
+            if (arg.startsWith("-") && modifiers.containsKey(arg.toLowerCase())) {
                 result.addModifier(arg);
             } else if (arg.contains(":")) {
                 String[] split = arg.split(":");

@@ -172,7 +172,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                 result.addModifier(arg);
             } else if (arg.contains(":")) {
                 String[] split = arg.split(":");
-                if (split.length > 1 && !split[0].isEmpty() && !split[1].isEmpty()) {
+                if (split.length > 1 && !split[0].isEmpty() && !split[1].isEmpty() && optionalArgs.containsKey(split[0])) {
                     if (!optionalArgs.get(split[0]).isValid(split[1])) {
                         sender.sendMessage(ess.getMessages().getMsg(Message.INVALID_OPTIONAL_ARGUMENT, true, split[0], optionalArgs.get(split[0]).getClass().getSimpleName(), split[1]));
                         result.success = false;

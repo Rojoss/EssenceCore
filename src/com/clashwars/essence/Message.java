@@ -43,6 +43,8 @@ public enum Message {
     OPT_HEAL_FEED("Restore hunger"),
     OPT_HEAL_CLEAR_EFFECTS("Remove all active potion effects"),
     OPT_HEAL_EXTINGUISH("Remove remaining fire ticks"),
+    OPT_FEED_SATURATION("The amount of saturation given"),
+    OPT_FEED_EXHAUSTION("Reset exhaustion"),
     ;
 
     private String defaultMessage;

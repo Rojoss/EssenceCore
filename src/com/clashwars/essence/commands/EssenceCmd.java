@@ -30,16 +30,18 @@ public class EssenceCmd extends EssenceCommand {
         if (!result.success) {
             return true;
         }
+        args = result.getArgs();
 
-        String arg = result.getValue(0).getValue() == null ? "" : (String)result.getValue(0).getValue();
-
-        if (arg.equalsIgnoreCase("reload")) {
+        String option = result.getValue(0).getValue() == null ? "" : (String)result.getValue(0).getValue();
+        if (option.equalsIgnoreCase("reload")) {
             ess.getMessages().load();
             ess.getCommandsCfg().load();
             ess.getCmdOptions().load();
             ess.getCommands().registerCommands();
 
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_ESSENCE_RELOAD, true));
+            if (!result.hasModifier("-s")) {
+                sender.sendMessage(ess.getMessages().getMsg(Message.CMD_ESSENCE_RELOAD, true));
+            }
             return true;
         }
 

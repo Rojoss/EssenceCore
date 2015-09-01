@@ -1,6 +1,7 @@
 package com.clashwars.essence;
 
 import com.clashwars.essence.commands.internal.Commands;
+import com.clashwars.essence.config.CommandOptionsCfg;
 import com.clashwars.essence.config.CommandsCfg;
 import com.clashwars.essence.config.MessagesCfg;
 import com.google.gson.Gson;
@@ -16,6 +17,7 @@ public class Essence extends JavaPlugin {
 
     private MessagesCfg messages;
     private CommandsCfg commandsCfg;
+    private CommandOptionsCfg cmdOptionsCfg;
 
     private Commands commands;
 
@@ -36,6 +38,7 @@ public class Essence extends JavaPlugin {
 
         messages = new MessagesCfg("plugins/Essence/Messages.yml");
         commandsCfg = new CommandsCfg("plugins/Essence/Commands.yml");
+        cmdOptionsCfg = new CommandOptionsCfg("plugins/Essence/CommandOptions.yml");
 
         commands = new Commands(this);
 
@@ -72,6 +75,10 @@ public class Essence extends JavaPlugin {
 
     public CommandsCfg getCommandsCfg() {
         return commandsCfg;
+    }
+
+    public CommandOptionsCfg getCmdOptions() {
+        return cmdOptionsCfg;
     }
 
 

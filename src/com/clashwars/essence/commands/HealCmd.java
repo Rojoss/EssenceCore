@@ -8,11 +8,13 @@ import com.clashwars.essence.commands.arguments.internal.ArgumentParseResults;
 import com.clashwars.essence.commands.arguments.internal.ArgumentRequirement;
 import com.clashwars.essence.commands.arguments.internal.CmdArgument;
 import com.clashwars.essence.commands.internal.EssenceCommand;
+import com.clashwars.essence.commands.options.BoolOption;
 import com.clashwars.essence.util.TabCompleteUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.potion.PotionEffect;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,9 +25,16 @@ public class HealCmd extends EssenceCommand {
         super(ess, command, usage, description, permission, aliases);
 
         cmdArgs = new CmdArgument[] {
-            new PlayerArgument(ArgumentRequirement.REQUIRED_CONSOLE, "others"),
-            new DoubleArgument(ArgumentRequirement.OPTIONAL, "max", 1, 2048, false)
+                new PlayerArgument(ArgumentRequirement.REQUIRED_CONSOLE, "others"),
+                new DoubleArgument(ArgumentRequirement.OPTIONAL, "max", 1, 2048, false)
         };
+
+        addCommandOption("feed", new BoolOption(true, Message.OPT_HEAL_FEED));
+        addCommandOption("clear-effects", new BoolOption(true, Message.OPT_HEAL_CLEAR_EFFECTS));
+        addCommandOption("extinguish", new BoolOption(true, Message.OPT_HEAL_EXTINGUISH));
+
+        addModifier("-h", Message.MOD_HEAL_ONLY);
+        addModifier("-m", Message.MOD_HEAL_MAX_ONLY);
     }
 
     @Override
@@ -34,6 +43,7 @@ public class HealCmd extends EssenceCommand {
         if (!result.success) {
             return true;
         }
+        args = result.getArgs();
 
         Player player = result.getValue(0).getValue() == null ? (Player)sender : (Player)result.getValue(0).getValue();
         double max = result.getValue(1).getValue() == null ? player.getMaxHealth() : (Double)result.getValue(1).getValue();
@@ -43,17 +53,38 @@ public class HealCmd extends EssenceCommand {
             return true;
         }
 
-        player.setMaxHealth(max);
-        double amount = max - player.getHealth();
-        EntityRegainHealthEvent regainHealthEvent = new EntityRegainHealthEvent(player, amount, EntityRegainHealthEvent.RegainReason.CUSTOM);
-        ess.getServer().getPluginManager().callEvent(regainHealthEvent);
-        if (!regainHealthEvent.isCancelled()) {
-            player.setHealth(max);
+        if (!result.hasModifier("-h")) {
+            player.setMaxHealth(max);
         }
 
-        player.sendMessage(ess.getMessages().getMsg(Message.CMD_HEAL_HEALED, true));
-        if (!sender.equals(player)) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_HEAL_OTHER, true, player.getDisplayName()));
+        if (!result.hasModifier("-m")) {
+            max = Math.min(player.getMaxHealth(), max);
+            double amount = max - player.getHealth();
+            EntityRegainHealthEvent regainHealthEvent = new EntityRegainHealthEvent(player, amount, EntityRegainHealthEvent.RegainReason.CUSTOM);
+            ess.getServer().getPluginManager().callEvent(regainHealthEvent);
+            if (!regainHealthEvent.isCancelled()) {
+                player.setHealth(max);
+            }
+        }
+
+        if (result.hasOptionalArg("feed") ? (Boolean)result.getOptionalArg("feed") : (Boolean)cmdOptions.get("feed").getValue()) {
+            player.setFoodLevel(20);
+        }
+
+        if (result.hasOptionalArg("extinguish") ? (Boolean)result.getOptionalArg("extinguish") : (Boolean)cmdOptions.get("extinguish").getValue()) {
+            player.setFireTicks(0);
+        }
+        if (result.hasOptionalArg("clear-effects") ? (Boolean)result.getOptionalArg("clear-effects") : (Boolean)cmdOptions.get("clear-effects").getValue()) {
+            for (PotionEffect effect : player.getActivePotionEffects()) {
+                player.removePotionEffect(effect.getType());
+            }
+        }
+
+        if (!result.hasModifier("-s")) {
+            player.sendMessage(ess.getMessages().getMsg(Message.CMD_HEAL_HEALED, true));
+            if (!sender.equals(player)) {
+                sender.sendMessage(ess.getMessages().getMsg(Message.CMD_HEAL_OTHER, true, player.getDisplayName()));
+            }
         }
         return true;
     }

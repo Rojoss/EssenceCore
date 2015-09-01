@@ -37,6 +37,7 @@ public class EssenceCmd extends EssenceCommand {
         if (arg.equalsIgnoreCase("reload")) {
             ess.getMessages().load();
             ess.getCommandsCfg().load();
+            ess.getCmdOptions().load();
             ess.getCommands().registerCommands();
 
             sender.sendMessage(ess.getMessages().getMsg(Message.CMD_ESSENCE_RELOAD, true));

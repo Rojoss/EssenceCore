@@ -11,6 +11,7 @@ public enum Message {
     CMD_INVALID_USAGE("&cInvalid usage! &7Command syntax: &8{0}"),
 
     //Argument parsing messages
+    INVALID_OPTIONAL_ARGUMENT("&cThe argument &4{0} &cneeds to be a &4{1}&c! &7You specified &8'&c{2}&8'"),
     INVALID_PLAYER("&4{0} &cis not a valid player name."),
     NUMBER_TOO_LOW("&4{0} &cis too low! &7Can't be less than &c{1}&7."),
     NUMBER_TOO_HIGH("&4{0} &cis too high! &7Can't be more than &c{1}&7."),
@@ -29,6 +30,16 @@ public enum Message {
     CMD_FEED_FEEDED("You have been feeded!"),
     CMD_FEED_OTHER("You have fed &a{0}&6."),
 
+    //Command modifiers
+    MOD_HELP("Show detailed command information."),
+    MOD_SILENT("Don't send any messages."),
+    MOD_HEAL_ONLY("Only modify the health limited by max health."),
+    MOD_HEAL_MAX_ONLY("Only modify the max health."),
+
+    //Command options/optional arguments
+    OPT_HEAL_FEED("Restore hunger"),
+    OPT_HEAL_CLEAR_EFFECTS("Remove all active potion effects"),
+    OPT_HEAL_EXTINGUISH("Remove remaining fire ticks"),
     ;
 
     private String defaultMessage;

@@ -1,6 +1,8 @@
 package com.clashwars.essence.commands.internal;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +11,8 @@ import com.clashwars.essence.Message;
 import com.clashwars.essence.commands.arguments.internal.ArgumentParseResult;
 import com.clashwars.essence.commands.arguments.internal.ArgumentParseResults;
 import com.clashwars.essence.commands.arguments.internal.CmdArgument;
+import com.clashwars.essence.commands.options.CommandOption;
+import com.clashwars.essence.util.Debug;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,9 +22,6 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
-/**
- * Reflection and command registration code by: Goblom
- */
 public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Listener {
 
     protected final Essence ess;
@@ -31,6 +32,9 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     protected String permission;
 
     protected CmdArgument[] cmdArgs;
+    public Map<String, Message> modifiers = new HashMap<String, Message>();
+    public Map<String, CommandOption> cmdOptions = new HashMap<String, CommandOption>();
+    public Map<String, CommandOption> optionalArgs = new HashMap<String, CommandOption>();
 
     protected static CommandMap commandMap;
 
@@ -38,6 +42,9 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         this.ess = ess;
         this.label = label;
         loadData(usage, description, permission, aliases);
+
+        modifiers.put("-?", Message.MOD_HELP);
+        modifiers.put("-s", Message.MOD_SILENT);
     }
 
     /** Update the data with the data specified and register the command. */
@@ -159,6 +166,30 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
 
     public ArgumentParseResults parseArgs(EssenceCommand cmd, CommandSender sender, String[] args) {
         ArgumentParseResults result = new ArgumentParseResults();
+        List<String> argsList = new ArrayList<String>();
+        for (String arg : args) {
+            if (arg.startsWith("-") && arg.length() > 1) {
+                result.addModifier(arg);
+            } else if (arg.contains(":")) {
+                String[] split = arg.split(":");
+                if (split.length > 1 && !split[0].isEmpty() && !split[1].isEmpty()) {
+                    if (!optionalArgs.get(split[0]).isValid(split[1])) {
+                        sender.sendMessage(ess.getMessages().getMsg(Message.INVALID_OPTIONAL_ARGUMENT, true, split[0], optionalArgs.get(split[0]).getClass().getSimpleName(), split[1]));
+                        result.success = false;
+                        return result;
+                    }
+                    optionalArgs.get(split[0]).setValue(split[1]);
+                    result.addOptionalArg(split[0], optionalArgs.get(split[0]).getValue());
+                } else {
+                    argsList.add(arg);
+                }
+            } else {
+                argsList.add(arg);
+            }
+        }
+        args = argsList.toArray(new String[argsList.size()]);
+        result.setArgs(args);
+
         int index = 0;
         for (CmdArgument cmdArg : cmdArgs) {
             if (args.length > index) {
@@ -185,7 +216,22 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         return result;
     }
 
+    public void addCommandOption(String key, CommandOption optionType) {
+        cmdOptions.put(key, optionType);
+        optionalArgs.put(key, optionType);
+        ess.getCmdOptions().registerOption(this, key);
+    }
 
+    public void addOptionalArgument(String key, CommandOption argumentType) {
+        optionalArgs.put(key, argumentType);
+    }
+
+    public void addModifier(String modifier, Message info) {
+        if (!modifier.startsWith("-")) {
+            modifier = "-" + modifier;
+        }
+        modifiers.put(modifier, info);
+    }
 
     /** Method to be overwritten by each command */
     public abstract boolean onCommand(CommandSender sender, Command cmd, String label, String[] args);

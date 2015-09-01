@@ -21,7 +21,7 @@ public class IntOption implements CommandOption {
         if (NumberUtil.getInt(input) == null) {
             return false;
         }
-        return false;
+        return true;
     }
 
     public boolean setValue(String input) {

@@ -10,6 +10,7 @@ import com.clashwars.essence.commands.player_status.FeedCmd;
 import com.clashwars.essence.commands.player_status.GamemodeCmd;
 import com.clashwars.essence.commands.player_status.HealCmd;
 import com.clashwars.essence.commands.plugin.MainPluginCmd;
+import com.clashwars.essence.commands.teleport.TpCmd;
 import com.clashwars.essence.commands.world.LightningCmd;
 import com.clashwars.essence.config.CommandsCfg;
 import com.clashwars.essence.config.data.Warps;
@@ -42,6 +43,7 @@ public class Commands {
         registerCommand(DelWarpCmd.class, "delwarp", "warps", "Delete a warp with the given name", new String[] {"warpdel", "deletewarp", "rmwarp", "removewarp", "warpdelete", "warprm", "warpremove"});
         registerCommand(WarpsCmd.class, "warps", "warps", "List all the warps (for a world)", new String[] {"warplist"});
         registerCommand(WarpCmd.class, "warp", "warps", "Teleport to a warp", new String[] {});
+        registerCommand(TpCmd.class, "tp", "tp", "Teleport to a player", new String[] {"teleport", "tele"});
     }
 
     /**

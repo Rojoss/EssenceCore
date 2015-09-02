@@ -45,6 +45,8 @@ public enum Message {
     CMD_WARPS_NONE(MsgCat.COMMAND, "No warps set yet!"),
     CMD_WARP_USE(MsgCat.COMMAND, "Warping to &a{0}&6..."),
     CMD_WARP_OTHER(MsgCat.COMMAND, "You have send &a{0} &6to the warp &a{1}&6."),
+    CMD_TP(MsgCat.COMMAND, "&6Teleported to &a{0}"),
+    CMD_TP_OTHER(MsgCat.COMMAND, "&6You have teleported &a{1} &6to &a{0}"),
 
     //Command modifiers
     MOD_HELP(MsgCat.COMMAND_MODIFIERS, "Show detailed command information."),

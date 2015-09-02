@@ -3,10 +3,6 @@ package com.clashwars.essence.commands.internal;
 import com.clashwars.essence.Essence;
 import com.clashwars.essence.ModuleCategory;
 import com.clashwars.essence.commands.*;
-import com.clashwars.essence.commands.MainPluginCmd;
-import com.clashwars.essence.commands.FeedCmd;
-import com.clashwars.essence.commands.GamemodeCmd;
-import com.clashwars.essence.commands.HealCmd;
 import com.clashwars.essence.config.CommandsCfg;
 
 import java.lang.reflect.InvocationTargetException;

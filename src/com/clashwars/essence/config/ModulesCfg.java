@@ -2,7 +2,8 @@ package com.clashwars.essence.config;
 
 import com.clashwars.essence.ModuleCategory;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ModulesCfg extends EasyConfig {
 

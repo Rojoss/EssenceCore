@@ -3,7 +3,10 @@ package com.clashwars.essence.config.data;
 import com.clashwars.essence.config.EasyConfig;
 import org.bukkit.Location;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Warps extends EasyConfig {
 

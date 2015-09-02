@@ -1,11 +1,5 @@
 package com.clashwars.essence.commands.internal;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.clashwars.essence.Essence;
 import com.clashwars.essence.Message;
 import com.clashwars.essence.commands.arguments.internal.ArgumentParseResult;
@@ -14,13 +8,15 @@ import com.clashwars.essence.commands.arguments.internal.CmdArgument;
 import com.clashwars.essence.commands.options.CommandOption;
 import com.clashwars.essence.util.Util;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandMap;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
+import org.bukkit.command.*;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Listener {
 

@@ -1,10 +1,5 @@
 package com.clashwars.essence.commands.arguments.internal;
 
-import com.clashwars.essence.Essence;
-import com.clashwars.essence.Message;
-import com.clashwars.essence.commands.options.CommandOption;
-import org.bukkit.command.CommandSender;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

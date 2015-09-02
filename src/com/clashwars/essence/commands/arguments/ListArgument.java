@@ -16,12 +16,8 @@ public class ListArgument extends CmdArgument {
 
     List<String> strings = new ArrayList<String>();
 
-    public ListArgument(ArgumentRequirement requirement, String permission) {
-        super(requirement, permission);
-    }
-
-    public ListArgument(ArgumentRequirement requirement, String permission, List<String> strings) {
-        super(requirement, permission);
+    public ListArgument(String name, ArgumentRequirement requirement, String permission, List<String> strings) {
+        super(name, requirement, permission);
         this.strings = strings;
     }
 

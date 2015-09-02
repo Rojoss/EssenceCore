@@ -14,8 +14,8 @@ public class FloatArgument extends CmdArgument {
     protected float maxValue;
     protected boolean clampValue;
 
-    public FloatArgument(ArgumentRequirement requirement, String permission, float minValue, float maxValue, boolean clampValue) {
-        super(requirement, permission);
+    public FloatArgument(String name, ArgumentRequirement requirement, String permission, float minValue, float maxValue, boolean clampValue) {
+        super(name, requirement, permission);
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.clampValue = clampValue;

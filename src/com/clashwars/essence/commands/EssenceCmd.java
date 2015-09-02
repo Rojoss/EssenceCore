@@ -16,12 +16,14 @@ import java.util.List;
 
 public class EssenceCmd extends EssenceCommand {
 
-    public EssenceCmd(Essence ess, String command, String usage, String description, String permission, List<String> aliases) {
-        super(ess, command, usage, description, permission, aliases);
+    public EssenceCmd(Essence ess, String command, String description, String permission, List<String> aliases) {
+        super(ess, command, description, permission, aliases);
 
         cmdArgs = new CmdArgument[] {
-                new StringArgument(ArgumentRequirement.OPTIONAL, "reload", "reload")
+                new StringArgument("reload", ArgumentRequirement.OPTIONAL, "reload", "reload")
         };
+
+        register();
     }
 
     @Override

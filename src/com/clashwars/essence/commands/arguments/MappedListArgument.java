@@ -19,12 +19,8 @@ public class MappedListArgument extends CmdArgument {
 
     Map<String, List<String>> strings = new HashMap<String, List<String>>();
 
-    public MappedListArgument(ArgumentRequirement requirement, String permission) {
-        super(requirement, permission);
-    }
-
-    public MappedListArgument(ArgumentRequirement requirement, String permission, Map<String, List<String>> strings) {
-        super(requirement, permission);
+    public MappedListArgument(String name, ArgumentRequirement requirement, String permission, Map<String, List<String>> strings) {
+        super(name, requirement, permission);
         this.strings = strings;
     }
 

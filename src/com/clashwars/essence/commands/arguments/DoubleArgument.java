@@ -14,8 +14,8 @@ public class DoubleArgument extends CmdArgument {
     protected double maxValue;
     protected boolean clampValue;
 
-    public DoubleArgument(ArgumentRequirement requirement, String permission, double minValue, double maxValue, boolean clampValue) {
-        super(requirement, permission);
+    public DoubleArgument(String name, ArgumentRequirement requirement, String permission, double minValue, double maxValue, boolean clampValue) {
+        super(name, requirement, permission);
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.clampValue = clampValue;

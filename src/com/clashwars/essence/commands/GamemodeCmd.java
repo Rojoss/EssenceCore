@@ -12,7 +12,6 @@ import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 
 import java.util.Arrays;
@@ -22,8 +21,8 @@ import java.util.Map;
 
 public class GamemodeCmd extends EssenceCommand {
 
-    public GamemodeCmd(Essence ess, String command, String usage, String description, String permission, List<String> aliases) {
-        super(ess, command, usage, description, permission, aliases);
+    public GamemodeCmd(Essence ess, String command, String description, String permission, List<String> aliases) {
+        super(ess, command, description, permission, aliases);
 
         Map<String, List<String>> modes = new HashMap<String, List<String>>();
         modes.put("survival", Arrays.asList("survival", "0", "sur", "s"));
@@ -32,9 +31,11 @@ public class GamemodeCmd extends EssenceCommand {
         modes.put("spectator", Arrays.asList("spectator", "3", "spec", "sp"));
 
         cmdArgs = new CmdArgument[] {
-                new MappedListArgument(ArgumentRequirement.REQUIRED, "", modes),
-                new PlayerArgument(ArgumentRequirement.OPTIONAL, "others")
+                new MappedListArgument("mode", ArgumentRequirement.REQUIRED, "", modes),
+                new PlayerArgument("player", ArgumentRequirement.OPTIONAL, "others")
         };
+
+        register();
     }
 
     @Override

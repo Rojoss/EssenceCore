@@ -13,8 +13,8 @@ import java.util.List;
 
 public class PotionEffectArgument extends CmdArgument {
 
-    public PotionEffectArgument(ArgumentRequirement requirement, String permission) {
-        super(requirement, permission);
+    public PotionEffectArgument(String name, ArgumentRequirement requirement, String permission) {
+        super(name, requirement, permission);
     }
 
     @Override

@@ -19,16 +19,18 @@ import java.util.List;
 
 public class FeedCmd extends EssenceCommand {
 
-    public FeedCmd(Essence ess, String command, String usage, String description, String permission, List<String> aliases) {
-        super(ess, command, usage, description, permission, aliases);
+    public FeedCmd(Essence ess, String command, String description, String permission, List<String> aliases) {
+        super(ess, command, description, permission, aliases);
 
         cmdArgs = new CmdArgument[] {
-                new PlayerArgument(ArgumentRequirement.REQUIRED_CONSOLE, "others"),
-                new IntArgument(ArgumentRequirement.OPTIONAL, "", 0, 20, false)
+                new PlayerArgument("player", ArgumentRequirement.REQUIRED_CONSOLE, "others"),
+                new IntArgument("amount", ArgumentRequirement.OPTIONAL, "", 0, 20, false)
         };
 
         addCommandOption("saturation", new IntOption(5, Message.OPT_FEED_SATURATION));
         addCommandOption("exhaustion", new BoolOption(true, Message.OPT_FEED_EXHAUSTION));
+
+        register();
     }
 
     @Override

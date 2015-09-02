@@ -12,8 +12,8 @@ import java.util.List;
 
 public class BoolArgument extends CmdArgument {
 
-    public BoolArgument(ArgumentRequirement requirement, String permission) {
-        super(requirement, permission);
+    public BoolArgument(String name, ArgumentRequirement requirement, String permission) {
+        super(name, requirement, permission);
     }
 
     @Override

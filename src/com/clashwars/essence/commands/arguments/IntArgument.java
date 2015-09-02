@@ -14,8 +14,8 @@ public class IntArgument extends CmdArgument {
     protected int maxValue;
     protected boolean clampValue;
 
-    public IntArgument(ArgumentRequirement requirement, String permission, int minValue, int maxValue, boolean clampValue) {
-        super(requirement, permission);
+    public IntArgument(String name, ArgumentRequirement requirement, String permission, int minValue, int maxValue, boolean clampValue) {
+        super(name, requirement, permission);
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.clampValue = clampValue;

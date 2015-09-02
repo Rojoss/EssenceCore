@@ -21,8 +21,8 @@ import java.util.Map;
 public class LocationArgument extends CmdArgument {
 
 
-    public LocationArgument(ArgumentRequirement requirement, String permission) {
-        super(requirement, permission);
+    public LocationArgument(String name, ArgumentRequirement requirement, String permission) {
+        super(name, requirement, permission);
     }
 
     @Override

@@ -19,12 +19,12 @@ import java.util.List;
 
 public class HealCmd extends EssenceCommand {
 
-    public HealCmd(Essence ess, String command, String usage, String description, String permission, List<String> aliases) {
-        super(ess, command, usage, description, permission, aliases);
+    public HealCmd(Essence ess, String command, String description, String permission, List<String> aliases) {
+        super(ess, command, description, permission, aliases);
 
         cmdArgs = new CmdArgument[] {
-                new PlayerArgument(ArgumentRequirement.REQUIRED_CONSOLE, "others"),
-                new DoubleArgument(ArgumentRequirement.OPTIONAL, "max", 1, 2048, false)
+                new PlayerArgument("player", ArgumentRequirement.REQUIRED_CONSOLE, "others"),
+                new DoubleArgument("max", ArgumentRequirement.OPTIONAL, "max", 1, 2048, false)
         };
 
         addCommandOption("feed", new BoolOption(true, Message.OPT_HEAL_FEED));
@@ -33,6 +33,8 @@ public class HealCmd extends EssenceCommand {
 
         addModifier("-h", Message.MOD_HEAL_ONLY);
         addModifier("-m", Message.MOD_HEAL_MAX_ONLY);
+
+        register();
     }
 
     @Override

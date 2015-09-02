@@ -9,18 +9,20 @@ import java.util.List;
 
 public abstract class CmdArgument {
 
+    private String name;
     protected String permission;
     protected ArgumentRequirement requirement;
 
-    public CmdArgument() {
-        this(ArgumentRequirement.REQUIRED, "");
+    public CmdArgument(String name) {
+        this(name, ArgumentRequirement.REQUIRED, "");
     }
 
-    public CmdArgument(ArgumentRequirement requirement) {
-        this(requirement, "");
+    public CmdArgument(String name, ArgumentRequirement requirement) {
+        this(name, requirement, "");
     }
 
-    public CmdArgument(ArgumentRequirement requirement, String permission) {
+    public CmdArgument(String name, ArgumentRequirement requirement, String permission) {
+        this.name = name;
         this.requirement = requirement;
         this.permission = permission;
     }
@@ -31,7 +33,7 @@ public abstract class CmdArgument {
 
         if (arg == null || arg.isEmpty()) {
             if (isRequired(sender)) {
-                sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.CMD_INVALID_USAGE, true, cmd.getUsage()));
+                sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.CMD_INVALID_USAGE, true, cmd.getUsage(sender)));
                 result.success = false;
             } else {
                 result.success = true;
@@ -60,6 +62,29 @@ public abstract class CmdArgument {
             }
         }
         return false;
+    }
+
+    public String getName(boolean format) {
+        if (!format) {
+            return name;
+        }
+        if (requirement == ArgumentRequirement.REQUIRED) {
+            return "{" + name + "}";
+        } else {
+            return "[" + name + "]";
+        }
+    }
+
+    public String getName(CommandSender sender) {
+        if (sender == null) {
+            return getName(true);
+        } else {
+            if (isRequired(sender)) {
+                return "{" + name + "}";
+            } else {
+                return "[" + name + "]";
+            }
+        }
     }
 
     public List<String> tabComplete(CommandSender sender, String message) {

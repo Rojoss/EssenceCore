@@ -12,6 +12,7 @@ import com.clashwars.essence.commands.arguments.internal.ArgumentParseResult;
 import com.clashwars.essence.commands.arguments.internal.ArgumentParseResults;
 import com.clashwars.essence.commands.arguments.internal.CmdArgument;
 import com.clashwars.essence.commands.options.CommandOption;
+import com.clashwars.essence.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -27,7 +28,6 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     protected final String label;
     protected String description;
     protected List<String> aliases;
-    protected String usage;
     protected String permission;
 
     protected CmdArgument[] cmdArgs;
@@ -37,22 +37,21 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
 
     protected static CommandMap commandMap;
 
-    public EssenceCommand(Essence ess, String label, String usage, String description, String permission, List<String> aliases) {
+    public EssenceCommand(Essence ess, String label, String description, String permission, List<String> aliases) {
         this.ess = ess;
         this.label = label;
-        loadData(usage, description, permission, aliases);
 
         modifiers.put("-?", Message.MOD_HELP);
         modifiers.put("-s", Message.MOD_SILENT);
+
+        loadData(description, permission, aliases);
     }
 
-    /** Update the data with the data specified and register the command. */
-    public void loadData(String usage, String description, String permission, List<String> aliases) {
-        this.usage = usage;
+    /** Update the data with the data specified. */
+    public void loadData(String description, String permission, List<String> aliases) {
         this.description = description;
         this.permission = permission;
         this.aliases = aliases;
-        register();
     }
 
     /** Register the command on the server */
@@ -60,7 +59,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         ReflectCommand cmd = new ReflectCommand(this.label);
         if (this.aliases != null) cmd.setAliases(this.aliases);
         if (this.description != null) cmd.setDescription(this.description);
-        if (this.usage != null) cmd.setUsage(this.usage);
+        if (getUsage() != null) cmd.setUsage(this.getUsage());
         getCommandMap().register("", cmd);
         cmd.setExecutor(this);
         ess.getServer().getPluginManager().registerEvents(this, ess);
@@ -128,7 +127,18 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
 
     /** Get the command usage */
     public String getUsage() {
-        return usage;
+        return getUsage(null);
+    }
+
+    /** Get the command usage */
+    public String getUsage(CommandSender sender) {
+        List<String> args = new ArrayList<String>();
+        if (cmdArgs != null && cmdArgs.length > 0) {
+            for (CmdArgument arg : cmdArgs) {
+                args.add(arg.getName(sender));
+            }
+        }
+        return "/" + label  + (args.isEmpty() ? "" : " " + Util.implode(args, " "));
     }
 
     /** Get the base permission */
@@ -200,7 +210,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                 result.setValue(index, parsed);
             } else {
                 if (cmdArg.isRequired(sender)) {
-                    sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.CMD_INVALID_USAGE, true, cmd.getUsage()));
+                    sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.CMD_INVALID_USAGE, true, cmd.getUsage(sender)));
                     result.success = false;
                     return result;
                 } else {

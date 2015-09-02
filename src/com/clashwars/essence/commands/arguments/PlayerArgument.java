@@ -18,8 +18,8 @@ import java.util.UUID;
 
 public class PlayerArgument extends CmdArgument {
 
-    public PlayerArgument(ArgumentRequirement requirement, String permission) {
-        super(requirement, permission);
+    public PlayerArgument(String name, ArgumentRequirement requirement, String permission) {
+        super(name, requirement, permission);
     }
 
     @Override

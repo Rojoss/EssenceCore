@@ -2,32 +2,27 @@ package com.clashwars.essence.commands;
 
 import com.clashwars.essence.Essence;
 import com.clashwars.essence.Message;
-import com.clashwars.essence.commands.arguments.DoubleArgument;
 import com.clashwars.essence.commands.arguments.LocationArgument;
-import com.clashwars.essence.commands.arguments.PlayerArgument;
 import com.clashwars.essence.commands.arguments.internal.ArgumentParseResults;
 import com.clashwars.essence.commands.arguments.internal.ArgumentRequirement;
 import com.clashwars.essence.commands.arguments.internal.CmdArgument;
-import com.clashwars.essence.commands.options.BoolOption;
+import com.clashwars.essence.commands.internal.EssenceCommand;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityRegainHealthEvent;
-import org.bukkit.event.weather.LightningStrikeEvent;
-import org.bukkit.potion.PotionEffect;
 
 import java.util.List;
 
-public class LightningCmd extends EssenceCmd {
+public class LightningCmd extends EssenceCommand {
 
-    public LightningCmd(Essence ess, String command, String usage, String description, String permission, List<String> aliases) {
-        super(ess, command, usage, description, permission, aliases);
+    public LightningCmd(Essence ess, String command, String description, String permission, List<String> aliases) {
+        super(ess, command, description, permission, aliases);
 
         cmdArgs = new CmdArgument[] {
-                new LocationArgument(ArgumentRequirement.REQUIRED, "")
+                new LocationArgument("location|player", ArgumentRequirement.REQUIRED, "")
         };
 
+        register();
     }
 
     @Override

@@ -45,23 +45,29 @@ public enum Message {
     CMD_WARPS_NONE(MsgCat.COMMAND, "No warps set yet!"),
     CMD_WARP_USE(MsgCat.COMMAND, "Warping to &a{0}&6..."),
     CMD_WARP_OTHER(MsgCat.COMMAND, "You have send &a{0} &6to the warp &a{1}&6."),
-    CMD_TP(MsgCat.COMMAND, "&6Teleported to &a{0}"),
-    CMD_TP_OTHER(MsgCat.COMMAND, "&6You have teleported &a{1} &6to &a{0}"),
+    CMD_TP(MsgCat.COMMAND, "&6Teleported to &a{0}&6."),
+    CMD_TP_OTHER(MsgCat.COMMAND, "&6You have teleported &a{1} &6to &a{0}&6."),
+    CMD_NICK_CHANGED(MsgCat.COMMAND, "&6Nickname changed to &r{0}"),
+    CMD_NICK_OTHER(MsgCat.COMMAND, "&6You have changed &a{1}'s &6nickname to &r{0}&6."),
 
     //Command modifiers
-    MOD_HELP(MsgCat.COMMAND_MODIFIERS, "Show detailed command information."),
-    MOD_SILENT(MsgCat.COMMAND_MODIFIERS, "Don't send any messages."),
-    MOD_HEAL_ONLY(MsgCat.COMMAND_MODIFIERS, "Only modify the health limited by max health."),
-    MOD_HEAL_MAX_ONLY(MsgCat.COMMAND_MODIFIERS, "Only modify the max health."),
-    MOD_DELWARP_ALL(MsgCat.COMMAND_MODIFIERS, "Delete all warps."),
+    MOD_HELP(MsgCat.COMMAND_MODIFIERS, "Show detailed command information"),
+    MOD_SILENT(MsgCat.COMMAND_MODIFIERS, "Don't send any messages"),
+    MOD_HEAL_ONLY(MsgCat.COMMAND_MODIFIERS, "Only modify the health limited by max health"),
+    MOD_HEAL_MAX_ONLY(MsgCat.COMMAND_MODIFIERS, "Only modify the max health"),
+    MOD_DELWARP_ALL(MsgCat.COMMAND_MODIFIERS, "Delete all warps"),
+    MOD_NICK_REMOVE(MsgCat.COMMAND_MODIFIERS, "Remove your nickname."),
 
     //Command options/optional arguments
-    OPT_HEAL_FEED(MsgCat.COMMAND_OPTIONS, "Restore hunger"),
-    OPT_HEAL_CLEAR_EFFECTS(MsgCat.COMMAND_OPTIONS, "Remove all active potion effects"),
-    OPT_HEAL_EXTINGUISH(MsgCat.COMMAND_OPTIONS, "Remove remaining fire ticks"),
-    OPT_FEED_SATURATION(MsgCat.COMMAND_OPTIONS, "The amount of saturation given"),
-    OPT_FEED_EXHAUSTION(MsgCat.COMMAND_OPTIONS, "Reset exhaustion"),
-    OPT_WARP_PERM_BASED(MsgCat.COMMAND_OPTIONS, "Should warps be permissions based? Like essence.warp.spawn to use /warp spawn");
+    OPT_HEAL_FEED(MsgCat.COMMAND_OPTIONS, "Restore hunger?"),
+    OPT_HEAL_CLEAR_EFFECTS(MsgCat.COMMAND_OPTIONS, "Remove all active potion effects?"),
+    OPT_HEAL_EXTINGUISH(MsgCat.COMMAND_OPTIONS, "Remove remaining fire ticks?"),
+    OPT_FEED_SATURATION(MsgCat.COMMAND_OPTIONS, "The amount of saturation given."),
+    OPT_FEED_EXHAUSTION(MsgCat.COMMAND_OPTIONS, "Reset exhaustion?"),
+    OPT_WARP_PERM_BASED(MsgCat.COMMAND_OPTIONS, "Should warps be permissions based? Like essence.warp.spawn to use /warp spawn"),
+    OPT_NICK_PREFIX(MsgCat.COMMAND_OPTIONS, "Prefix added in front of all nicknames."),
+    OPT_NICK_MIN_CHARS(MsgCat.COMMAND_OPTIONS, "Minimum amount of characters required. (exclusive prefix)"),
+    OPT_NICK_MAX_CHARS(MsgCat.COMMAND_OPTIONS, "Maximum amount of characters allowed. (exclusive prefix)"),
     ;
 
     private String defaultMessage;

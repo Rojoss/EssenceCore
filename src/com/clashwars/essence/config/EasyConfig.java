@@ -1,62 +1,90 @@
 package com.clashwars.essence.config;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.util.Vector;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.*;
+
 
 /**
- * Inspired by md_5
- * <p>
- * An awesome super-duper-lazy Config lib!
- * Just extend it, set some (non-static) variables
+ * Simple configuration class.
+ * To use this class just extend from it.
  *
- * @author codename_B
- * @version 2.1
+ * It will create config options for the fields in the config class.
+ * private, static, final and transient fields will be ignored.
+ * So if you want to create a field and not have it in the config you should make it private transient static or/and final.
+ *
+ * Double underscores in field names will be replaces with new config sections (indents).
+ *
+ * The following data types for fields are supported:
+ * String, Boolean, Integer, Double, Float, Long, Byte, Char
+ * Location, Vector & UUID.
+ * List, Map & Enum (The data inside these can be any of these data types. However, for maps the key has to be a string.)
+ *
+ * To create a new config file call setFile() on the config class that extends from this.
+ * Then call load() to load in all config values in to the fields.
+ * And call save() to save the values from the fields to the config file.
+ *
+ * @authors (original idea)md_5, (by)codename_B & MrFigg, (customized)Worstboy
  */
 public abstract class EasyConfig {
 
-    private transient File file = null;
-    private transient YamlConfiguration conf = new YamlConfiguration();
+    protected transient File file = null;
+    protected transient YamlConfiguration conf = new YamlConfiguration();
 
     /**
+     * Set the file (location) for the config.
+     * Can pass in a File, Plugin, or String with the path like: "plugins/Essence/Messages.yml"
      * Must be called before using config.load() or config.save();
-     *
-     * @param input
-     * @return (Config) instance
      */
-    public EasyConfig setFile(Object input) {
-        // handle the File
+    public EasyConfig setFile(Object input)  {
         if (input == null) {
             new InvalidConfigurationException("File cannot be null!").printStackTrace();
         } else if (input instanceof File) {
-            // the file, directly
             file = (File) input;
         } else if (input instanceof Plugin) {
-            // the config.yml of the plugin
             file = getFile((Plugin) input);
         } else if (input instanceof String) {
-            // the literal file from the string
             file = new File((String) input);
         }
         return this;
     }
 
     /**
-     * Lazy load
+     * Load the config file in to memory.
+     * The value of all fields will be set with the config values.
      */
     public void load() {
         if (file != null) {
             try {
-                onLoad(file);
+                if (!file.exists()) {
+                    if (file.getParentFile() != null) {
+                        file.getParentFile().mkdirs();
+                    }
+                    file.createNewFile();
+                }
+
+                conf.load(file);
+                onLoad(conf);
+                conf.save(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InvalidConfigurationException e) {
+                e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -66,12 +94,25 @@ public abstract class EasyConfig {
     }
 
     /**
-     * Lazy save
+     * Save the config file to disk.
+     * All values from the fields will be placed in the config.
      */
     public void save() {
         if (file != null) {
             try {
-                onSave(file);
+                if (!file.exists()) {
+                    if (file.getParentFile() != null) {
+                        file.getParentFile().mkdirs();
+                    }
+                    file.createNewFile();
+                }
+
+                onSave(conf);
+                conf.save(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InvalidConfigurationException e) {
+                e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -80,87 +121,161 @@ public abstract class EasyConfig {
         }
     }
 
-    /**
-     * Internal method - used by load();
-     *
-     * @param file
-     * @throws Exception
-     */
-    private void onLoad(File file) throws Exception {
-        if (!file.exists()) {
-            if (file.getParentFile() != null)
-                file.getParentFile().mkdirs();
-            file.createNewFile();
-        }
-        conf.load(file);
+
+    private void onLoad(ConfigurationSection cs) throws Exception {
         for (Field field : getClass().getDeclaredFields()) {
-            String path = field.getName().replaceAll("__", "");
+            String path = field.getName().replaceAll("__", ".");
             if (doSkip(field)) {
-                // don't touch it
+                continue;
             }
-            if (conf.isSet(path)) {
-                field.set(this, toBukkit(conf.get(path), field, path));
+            if(cs.isSet(path)) {
+                field.set(this, loadObject(field, cs, path));
             } else {
-                conf.set(path, toConfig(field.get(this), field, path));
+                cs.set(path, saveObject(field.get(this), field, cs, path));
             }
         }
-        conf.save(file);
     }
 
-    /**
-     * Internal method - used by save();
-     *
-     * @param file
-     * @throws Exception
-     */
-    private void onSave(File file) throws Exception {
-        if (!file.exists()) {
-            if (file.getParentFile() != null)
-                file.getParentFile().mkdirs();
-            file.createNewFile();
-        }
-        for (Field field : getClass().getDeclaredFields()) {
-            String path = field.getName().replaceAll("__", "");
+    private void onSave(ConfigurationSection cs) throws Exception {
+        for(Field field : getClass().getDeclaredFields()) {
+            String path = field.getName().replaceAll("__", ".");
             if (doSkip(field)) {
-                // don't touch it
+                continue;
+            }
+            cs.set(path, saveObject(field.get(this), field, cs, path));
+        }
+    }
+
+    private Object loadObject(Field field, ConfigurationSection cs, String path) throws Exception {
+        return loadObject(field, cs, path, 0);
+    }
+
+    private Object saveObject(Object obj, Field field, ConfigurationSection cs, String path) throws Exception {
+        return saveObject(obj, field, cs, path, 0);
+    }
+
+    private Object loadObject(Field field, ConfigurationSection cs, String path, int depth) throws Exception {
+        Class clazz = getClassAtDepth(field.getGenericType(), depth);
+        if (EasyConfig.class.isAssignableFrom(clazz) && isConfigurationSection(cs.get(path))) {
+            return getSimpleConfig(clazz, cs.getConfigurationSection(path));
+        } else if (UUID.class.isAssignableFrom(clazz) && isUUID(cs.get(path))) {
+            return getUUID((String) cs.get(path));
+        } else if (Location.class.isAssignableFrom(clazz) && isJSON(cs.get(path))) {
+            return getLocation((String) cs.get(path));
+        } else if (Vector.class.isAssignableFrom(clazz) && isJSON(cs.get(path))) {
+            return getVector((String) cs.get(path));
+        } else if (Map.class.isAssignableFrom(clazz) && isConfigurationSection(cs.get(path))) {
+            return getMap(field, cs.getConfigurationSection(path), path, depth);
+        } else if (clazz.isEnum() && isString(cs.get(path))) {
+            return getEnum(clazz, (String) cs.get(path));
+        } else if (List.class.isAssignableFrom(clazz) && isConfigurationSection(cs.get(path))) {
+            Class subClazz = getClassAtDepth(field.getGenericType(), depth+1);
+            if (EasyConfig.class.isAssignableFrom(subClazz) || Location.class.isAssignableFrom(subClazz) || Vector.class.isAssignableFrom(subClazz) ||
+                    Map.class.isAssignableFrom(subClazz) || List.class.isAssignableFrom(subClazz) || subClazz.isEnum()) {
+                return getList(field, cs.getConfigurationSection(path), path, depth);
             } else {
-                conf.set(path, toConfig(field.get(this), field, path));
+                return cs.get(path);
+            }
+        } else {
+            return cs.get(path);
+        }
+    }
+
+    private Object saveObject(Object obj, Field field, ConfigurationSection cs, String path, int depth) throws Exception {
+        Class clazz = getClassAtDepth(field.getGenericType(), depth);
+        if (EasyConfig.class.isAssignableFrom(clazz) && isSimpleConfig(obj)) {
+            return getSimpleConfig((EasyConfig) obj, path, cs);
+        } else if (UUID.class.isAssignableFrom(clazz) && isUUID(obj)) {
+            return getUUID((UUID)obj);
+        } else if (Location.class.isAssignableFrom(clazz) && isLocation(obj)) {
+            return getLocation((Location) obj);
+        } else if (Vector.class.isAssignableFrom(clazz) && isVector(obj)) {
+            return getVector((Vector) obj);
+        } else if (Map.class.isAssignableFrom(clazz) && isMap(obj)) {
+            return getMap((Map) obj, field, cs, path, depth);
+        } else if (clazz.isEnum() && isEnum(clazz, obj)) {
+            return getEnum((Enum)obj);
+        } else if (List.class.isAssignableFrom(clazz) && isList(obj)) {
+            Class subClazz = getClassAtDepth(field.getGenericType(), depth+1);
+            if(EasyConfig.class.isAssignableFrom(subClazz) || Location.class.isAssignableFrom(subClazz) || Vector.class.isAssignableFrom(subClazz) ||
+                    Map.class.isAssignableFrom(subClazz) || List.class.isAssignableFrom(subClazz) || subClazz.isEnum()) {
+                return getList((List) obj, field, cs, path, depth);
+            } else {
+                return obj;
+            }
+        } else {
+            return obj;
+        }
+    }
+
+    private Class getClassAtDepth(Type type, int depth) throws Exception {
+        if(depth<=0) {
+            String className = type.toString();
+            if (className.length() >=6 && className.substring(0, 6).equalsIgnoreCase("class ")) {
+                className = className.substring(6);
+            }
+            if (className.indexOf("<") >= 0) {
+                className = className.substring(0, className.indexOf("<"));
+            }
+            try {
+                return Class.forName(className);
+            } catch(ClassNotFoundException ex) {
+                if(className.equalsIgnoreCase("byte")) return Byte.class;
+                if(className.equalsIgnoreCase("short")) return Short.class;
+                if(className.equalsIgnoreCase("int")) return Integer.class;
+                if(className.equalsIgnoreCase("long")) return Long.class;
+                if(className.equalsIgnoreCase("float")) return Float.class;
+                if(className.equalsIgnoreCase("double")) return Double.class;
+                if(className.equalsIgnoreCase("char")) return Character.class;
+                if(className.equalsIgnoreCase("boolean")) return Boolean.class;
+                throw ex;
             }
         }
-        conf.save(file);
+        depth--;
+        ParameterizedType pType = (ParameterizedType) type;
+        Type[] typeArgs = pType.getActualTypeArguments();
+        return getClassAtDepth(typeArgs[typeArgs.length-1], depth);
     }
+
+
 
     /*
-     * Main conversion methods
-     */
+    * class detection
+    */
 
-    private Object toBukkit(Object in, Field field, String path) throws Exception {
-        if (isConfigurationSection(in)) {
-            return getMap((ConfigurationSection) in, field, path);
-        } else {
-            return in;
-        }
+    private boolean isString(Object obj) {
+        return obj instanceof String;
     }
 
-    @SuppressWarnings("rawtypes")
-    private Object toConfig(Object out, Field field, String path) throws Exception {
-        if (isMap(out)) {
-            return getMap((Map) out, field, path);
-        } else {
-            return out;
+    private boolean isUUID(Object o) {
+        if (o instanceof UUID) {
+            return true;
         }
+        if (o instanceof String) {
+            try {
+                UUID.fromString((String)o);
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
+        }
+        return false;
     }
 
-    /*
-     * Checkers
-     */
-
-    private boolean isJSON(Object o) {
+    private boolean isConfigurationSection(Object o) {
         try {
-            if (o instanceof String) {
-                String s = (String) o;
-                if (s.startsWith("{")) {
-                    return new JSONParser().parse(s) != null;
+            return (ConfigurationSection)o != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isJSON(Object obj) {
+        try {
+            if (obj instanceof String) {
+                String str = (String) obj;
+                if (str.startsWith("{")) {
+                    return new JSONParser().parse(str) != null;
                 }
             }
             return false;
@@ -169,73 +284,271 @@ public abstract class EasyConfig {
         }
     }
 
-    @SuppressWarnings("rawtypes")
-    private boolean isMap(Object o) {
+    private boolean isSimpleConfig(Object obj) {
         try {
-            return (Map) o != null;
+            return (EasyConfig)obj != null;
         } catch (Exception e) {
             return false;
         }
     }
 
-    private boolean isConfigurationSection(Object o) {
+    private boolean isLocation(Object obj) {
         try {
-            return (ConfigurationSection) o != null;
+            return (Location)obj != null;
         } catch (Exception e) {
             return false;
         }
     }
+
+    private boolean isVector(Object obj) {
+        try {
+            return (Vector)obj != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isMap(Object obj) {
+        try {
+            return (Map)obj != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isList(Object obj) {
+        try {
+            return (List)obj != null;
+        } catch(Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isEnum(Class clazz, Object obj) {
+        if (!clazz.isEnum()) return false;
+        for (Object constant : clazz.getEnumConstants()) {
+            if(constant.equals(obj)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     /*
-     * Converters
-     */
+    * loading conversion
+    */
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    private ConfigurationSection getMap(Map data, Field field, String path) throws Exception {
-        ConfigurationSection cs = conf.createSection(path);
-        Set<String> keys = data.keySet();
-        if (keys != null && keys.size() > 0) {
-            for (String key : keys) {
-                Object out = data.get(key);
-                out = toConfig(out, field, path);
-                cs.set(key, out);
-            }
-            return cs;
-        }
-        return cs;
+    private EasyConfig getSimpleConfig(Class clazz, ConfigurationSection cs) throws Exception {
+        EasyConfig obj = (EasyConfig)clazz.newInstance();
+        obj.onLoad(cs);
+        return obj;
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    private Map getMap(ConfigurationSection data, Field field, String path) throws Exception {
-        Set<String> keys = data.getKeys(false);
+    private UUID getUUID(String string) {
+        try {
+            return UUID.fromString(string);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private Location getLocation(String json) throws Exception {
+        JSONObject data = (JSONObject) new JSONParser().parse(json);
+
+        World world = Bukkit.getWorld((String)data.get("world"));
+        double x = Double.parseDouble((String)data.get("x"));
+        double y = Double.parseDouble((String)data.get("y"));
+        double z = Double.parseDouble((String)data.get("z"));
+        float pitch = Float.parseFloat((String)data.get("pitch"));
+        float yaw = Float.parseFloat((String)data.get("yaw"));
+
+        Location loc = new Location(world, x, y, z);
+        loc.setPitch(pitch);
+        loc.setYaw(yaw);
+        return loc;
+    }
+
+    private Vector getVector(String json) throws Exception {
+        JSONObject data = (JSONObject) new JSONParser().parse(json);
+
+        double x = Double.parseDouble((String)data.get("x"));
+        double y = Double.parseDouble((String)data.get("y"));
+        double z = Double.parseDouble((String)data.get("z"));
+
+        return new Vector(x, y, z);
+    }
+
+    private Map getMap(Field field, ConfigurationSection cs, String path, int depth) throws Exception {
+        depth++;
+        Set<String> keys = cs.getKeys(false);
         Map map = new HashMap();
         if (keys != null && keys.size() > 0) {
             for (String key : keys) {
-                Object in = data.get(key);
-                in = toBukkit(in, field, path);
+                Object in = cs.get(key);
+                in = loadObject(field, cs, key, depth);
                 map.put(key, in);
             }
-            return map;
         }
         return map;
     }
 
-    /*
-     * Utility methods
-     */
+    private List getList(Field field, ConfigurationSection cs, String path, int depth) throws Exception {
+        depth++;
+        int listSize = cs.getKeys(false).size();
+        String key = path;
+        if (key.lastIndexOf(".") >= 0) {
+            key = key.substring(key.lastIndexOf("."));
+        }
+        List list = new ArrayList();
+        if (listSize > 0) {
+            int loaded = 0;
+            int i = 0;
+            while (loaded < listSize) {
+                if (cs.isSet(key+i)) {
+                    Object in = cs.get(key+i);
+                    in = loadObject(field, cs, key+i, depth);
+                    list.add(in);
+                    loaded++;
+                }
+                i++;
+                if (i > (listSize*3)) {
+                    loaded = listSize;
+                }
+            }
+        }
+        return list;
+    }
 
-    /**
-     * A little internal method to save re-using code
-     *
-     * @param field
-     * @return skip
-     */
+    private Enum getEnum(Class clazz, String string) throws Exception {
+        if (!clazz.isEnum()) {
+            throw new Exception("Class " + clazz.getName() + " is not an enum.");
+        }
+        for (Object constant : clazz.getEnumConstants()) {
+            if (((Enum)constant).toString().equals(string)) {
+                return (Enum) constant;
+            }
+        }
+        throw new Exception("String " + string + " not a valid enum constant for "+clazz.getName());
+    }
+
+
+    /*
+    * saving conversion
+    */
+
+    private ConfigurationSection getSimpleConfig(EasyConfig obj, String path, ConfigurationSection cs) throws Exception {
+        ConfigurationSection subCS = cs.createSection(path);
+        obj.onSave(subCS);
+        return subCS;
+    }
+
+    private String getUUID(UUID uuid) {
+        return uuid.toString();
+    }
+
+    private String getLocation(Location loc) {
+        String ret = "{";
+        ret += "\"world\":\"" + loc.getWorld().getName() + "\"";
+        ret += ",\"x\":\"" + loc.getX()+"\"";
+        ret += ",\"y\":\"" + loc.getY()+"\"";
+        ret += ",\"z\":\"" + loc.getZ()+"\"";
+        ret += ",\"pitch\":\"" + loc.getPitch()+"\"";
+        ret += ",\"yaw\":\"" + loc.getYaw()+"\"";
+        ret += "}";
+        if (!isJSON(ret)) {
+            return getLocationJSON(loc);
+        }
+        try {
+            getLocation(ret);
+        } catch(Exception ex) {
+            return getLocationJSON(loc);
+        }
+        return ret;
+    }
+
+    private String getLocationJSON(Location loc) {
+        JSONObject data = new JSONObject();
+
+        data.put("world", loc.getWorld().getName());
+        data.put("x", String.valueOf(loc.getX()));
+        data.put("y", String.valueOf(loc.getY()));
+        data.put("z", String.valueOf(loc.getZ()));
+        data.put("pitch", String.valueOf(loc.getPitch()));
+        data.put("yaw", String.valueOf(loc.getYaw()));
+
+        return data.toJSONString();
+    }
+
+    private String getVector(Vector vec) {
+        String ret = "{";
+        ret += "\"x\":\"" + vec.getX()+"\"";
+        ret += ",\"y\":\"" + vec.getY()+"\"";
+        ret += ",\"z\":\"" + vec.getZ()+"\"";
+        ret += "}";
+        if(!isJSON(ret)) {
+            return getVectorJSON(vec);
+        }
+        try {
+            getVector(ret);
+        } catch(Exception ex) {
+            return getVectorJSON(vec);
+        }
+        return ret;
+    }
+
+    private String getVectorJSON(Vector vec) {
+        JSONObject data = new JSONObject();
+
+        data.put("x", String.valueOf(vec.getX()));
+        data.put("y", String.valueOf(vec.getY()));
+        data.put("z", String.valueOf(vec.getZ()));
+
+        return data.toJSONString();
+    }
+
+    private ConfigurationSection getMap(Map map, Field field, ConfigurationSection cs, String path, int depth) throws Exception {
+        depth++;
+        ConfigurationSection subCS = cs.createSection(path);
+        Set<String> keys = map.keySet();
+        if (keys != null && keys.size() > 0) {
+            for (String key : keys) {
+                Object out = map.get(key);
+                out = saveObject(out, field, cs, path+"."+key, depth);
+                subCS.set(key, out);
+            }
+        }
+        return subCS;
+    }
+
+    private ConfigurationSection getList(List list, Field field, ConfigurationSection cs, String path, int depth) throws Exception {
+        depth++;
+        ConfigurationSection subCS = cs.createSection(path);
+        String key = path;
+        if (key.lastIndexOf(".") >= 0) {
+            key = key.substring(key.lastIndexOf("."));
+        }
+        if (list != null && list.size() > 0) {
+            for(int i = 0; i < list.size(); i++) {
+                Object out = list.get(i);
+                out = saveObject(out, field, cs, path + "." + key + (i+1), depth);
+                subCS.set(key + (i+1), out);
+            }
+        }
+        return subCS;
+    }
+
+    private String getEnum(Enum enumObj) {
+        return enumObj.toString();
+    }
+
+
+
     private boolean doSkip(Field field) {
-        return Modifier.isTransient(field.getModifiers()) || Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers());
+        return Modifier.isTransient(field.getModifiers()) || Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers()) || Modifier.isPrivate(field.getModifiers());
     }
 
     private File getFile(Plugin plugin) {
         return new File(plugin.getDataFolder(), "config.yml");
     }
-
 }

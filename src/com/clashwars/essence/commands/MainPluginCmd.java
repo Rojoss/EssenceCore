@@ -14,9 +14,9 @@ import org.bukkit.plugin.PluginDescriptionFile;
 
 import java.util.List;
 
-public class EssenceCmd extends EssenceCommand {
+public class MainPluginCmd extends EssenceCommand {
 
-    public EssenceCmd(Essence ess, String command, String description, String permission, List<String> aliases) {
+    public MainPluginCmd(Essence ess, String command, String description, String permission, List<String> aliases) {
         super(ess, command, description, permission, aliases);
 
         cmdArgs = new CmdArgument[] {

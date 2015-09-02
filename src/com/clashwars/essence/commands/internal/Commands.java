@@ -3,7 +3,7 @@ package com.clashwars.essence.commands.internal;
 import com.clashwars.essence.Essence;
 import com.clashwars.essence.ModuleCategory;
 import com.clashwars.essence.commands.*;
-import com.clashwars.essence.commands.EssenceCmd;
+import com.clashwars.essence.commands.MainPluginCmd;
 import com.clashwars.essence.commands.FeedCmd;
 import com.clashwars.essence.commands.GamemodeCmd;
 import com.clashwars.essence.commands.HealCmd;
@@ -28,7 +28,7 @@ public class Commands {
 
     /** Register all Essence commands */
     public void registerCommands() {
-        registerCommand(EssenceCmd.class, "essence", "", "Main plugin command and config reloading", new String[] {"essentials", "essential"});
+        registerCommand(MainPluginCmd.class, "essence", "", "Main plugin command and config reloading", new String[] {"essentials", "essential"});
         registerCommand(HealCmd.class, "heal", "heal", "Heal a player", new String[] {"health", "sethealth"});
         registerCommand(FeedCmd.class, "feed", "feed", "Feed a player", new String[] {"hunger", "eat"});
         registerCommand(LightningCmd.class, "lightning", "lightning", "Strike lightning somewhere", new String[] {"smite"});

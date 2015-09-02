@@ -222,8 +222,14 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     }
 
     public void addCommandOption(String key, CommandOption optionType) {
+        addCommandOption(key, optionType, true);
+    }
+
+    public void addCommandOption(String key, CommandOption optionType, boolean addAsArgument) {
         cmdOptions.put(key, optionType);
-        optionalArgs.put(key, optionType);
+        if (addAsArgument) {
+            optionalArgs.put(key, optionType);
+        }
         ess.getCmdOptions().registerOption(this, key);
     }
 

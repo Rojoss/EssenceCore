@@ -7,7 +7,7 @@ import java.util.*;
 
 public class MessagesCfg extends EasyConfig {
 
-    public Map<String, String> MESSAGES = new HashMap<String, String>();
+    public Map<String, Map<String, String>> MESSAGES = new TreeMap<String, Map<String, String>>();
 
     public MessagesCfg(String fileName) {
         this.setFile(fileName);
@@ -19,39 +19,66 @@ public class MessagesCfg extends EasyConfig {
         super.load();
         int changes = 0;
 
-        //Add new messages
-        for (Message message : Message.values()) {
-            if (!MESSAGES.containsKey(message.toString())) {
-                MESSAGES.put(message.toString(), message.getDefault());
+        //Remove old messages
+        List<String> categories = new ArrayList<>(MESSAGES.keySet());
+        for (String category : categories) {
+            if (Message.MsgCat.fromString(category) == null) {
+                MESSAGES.remove(category);
                 changes++;
+                break;
             }
+            Map<String, String> messages = MESSAGES.get(category);
+            for (String msg : messages.keySet()) {
+                if (Message.fromString(msg) == null) {
+                    messages.remove(msg);
+                    changes++;
+                }
+            }
+            MESSAGES.put(category, messages);
         }
 
-        //Remove old messages
-        List<String> messages = new ArrayList<>(MESSAGES.keySet());
-        for (String message : messages) {
-            if (Message.fromString(message) == null) {
-                MESSAGES.remove(message);
+        //Add new messages
+        for (Message message : Message.values()) {
+            String cat = message.getCat().toString().toLowerCase().replace("_","-");
+            String msg = message.toString().toLowerCase().replace("_","-");
+            Map<String, String> messages = new HashMap<String, String>();
+            if (MESSAGES.containsKey(cat)) {
+                messages = MESSAGES.get(cat);
+            }
+            if (!messages.containsKey(msg)) {
+                messages.put(msg, message.getDefault());
+                MESSAGES.put(cat, messages);
                 changes++;
             }
         }
 
         if (changes > 0) {
+            //Sort messages
+            for (String category : MESSAGES.keySet()) {
+                MESSAGES.put(category, new TreeMap<String, String>(MESSAGES.get(category)));
+            }
             save();
         }
     }
 
     /** Get the message from config from the specified Message */
     public String getMsg(Message message, boolean format) {
-        if (!MESSAGES.containsKey(message.toString())) {
-            MESSAGES.put(message.toString(), message.getDefault());
+        String cat = message.getCat().toString().toLowerCase().replace("_","-");
+        String msg = message.toString().toLowerCase().replace("_","-");
+        Map<String, String> messages = new HashMap<String, String>();
+        if (MESSAGES.containsKey(cat)) {
+            messages = MESSAGES.get(cat);
+        }
+        if (!messages.containsKey(msg)) {
+            messages.put(msg, message.getDefault());
+            MESSAGES.put(cat, new TreeMap<String, String>(messages));
             save();
         }
-        String msg = MESSAGES.get(message.toString());
-        if (format && !msg.isEmpty()) {
-            msg = Util.color(getMsg(Message.PREFIX, false) + msg);
+        String resultMsg = messages.get(msg);
+        if (format && !resultMsg.isEmpty()) {
+            resultMsg = Util.color(getMsg(Message.PREFIX, false) + resultMsg);
         }
-        return msg;
+        return resultMsg;
     }
 
     /**

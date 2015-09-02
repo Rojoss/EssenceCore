@@ -2,12 +2,17 @@ package com.clashwars.essence.commands;
 
 import com.clashwars.essence.Essence;
 import com.clashwars.essence.ModuleCategory;
+import com.clashwars.essence.commands.location.DelWarpCmd;
+import com.clashwars.essence.commands.location.SetWarpCmd;
+import com.clashwars.essence.commands.location.WarpCmd;
+import com.clashwars.essence.commands.location.WarpsCmd;
 import com.clashwars.essence.commands.player_status.FeedCmd;
 import com.clashwars.essence.commands.player_status.GamemodeCmd;
 import com.clashwars.essence.commands.player_status.HealCmd;
 import com.clashwars.essence.commands.plugin.MainPluginCmd;
 import com.clashwars.essence.commands.world.LightningCmd;
 import com.clashwars.essence.config.CommandsCfg;
+import com.clashwars.essence.config.data.Warps;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -33,6 +38,10 @@ public class Commands {
         registerCommand(FeedCmd.class, "feed", "feed", "Feed a player", new String[] {"hunger", "eat"});
         registerCommand(LightningCmd.class, "lightning", "lightning", "Strike lightning somewhere", new String[] {"smite"});
         registerCommand(GamemodeCmd.class, "gamemode", "gamemode", "Change a player his gamemmode", new String[] {"gm"});
+        registerCommand(SetWarpCmd.class, "setwarp", "warps", "Set a warp with the given name", new String[] {"addwarp", "warpset"});
+        registerCommand(DelWarpCmd.class, "delwarp", "warps", "Delete a warp with the given name", new String[] {"warpdel", "deletewarp", "rmwarp", "removewarp", "warpdelete", "warprm", "warpremove"});
+        registerCommand(WarpsCmd.class, "warps", "warps", "List all the warps (for a world)", new String[] {"warplist"});
+        registerCommand(WarpCmd.class, "warp", "warps", "Teleport to a warp", new String[] {});
     }
 
     /**

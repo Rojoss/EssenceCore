@@ -8,7 +8,8 @@ public enum Message {
 
     //Argument parsing messages
     INVALID_OPTIONAL_ARGUMENT(MsgCat.VALIDATION, "&cThe argument &4{0} &cneeds to be a &4{1}&c! &7You specified &8'&c{2}&8'"),
-    INVALID_PLAYER(MsgCat.VALIDATION, "&4{0} &cis not a valid player name."),
+    INVALID_PLAYER(MsgCat.VALIDATION, "&4{0} &cis not a valid player name or uuid."),
+    INVALID_WORLD(MsgCat.VALIDATION, "&4{0} &cis not a valid world name, id or uuid."),
     NUMBER_TOO_LOW(MsgCat.VALIDATION, "&4{0} &cis too low! &7Can't be less than &c{1}&7."),
     NUMBER_TOO_HIGH(MsgCat.VALIDATION, "&4{0} &cis too high! &7Can't be more than &c{1}&7."),
     INVALID_LIST_ARGUMENT(MsgCat.VALIDATION, "&4{0} &cis not a valid argument! &7Arguments: &8{1}"),
@@ -36,12 +37,21 @@ public enum Message {
     CMD_GAMEMODE_OTHER(MsgCat.COMMAND, "You have changed &a{0}'s &6gamemode to &a{1}&6."),
     CMD_GAMEMODE_INVALID(MsgCat.COMMAND, "&4{0} &cis not a valid gamemode!"),
     CMD_LIGHTNING(MsgCat.COMMAND, "Lightning has struck!"),
+    CMD_WARP_SET(MsgCat.COMMAND, "Warp &a{0} &6set!"),
+    CMD_WARP_DELETED(MsgCat.COMMAND, "Warp &a{0} &6deleted!"),
+    CMD_WARP_DELETED_AlL(MsgCat.COMMAND, "All warps have been deleted!"),
+    CMD_WARP_INVALID(MsgCat.COMMAND, "&cNo warp found with the name &4{0}&c!"),
+    CMD_WARPS(MsgCat.COMMAND, "&6&lWarps&8&l: &7{0}"),
+    CMD_WARPS_NONE(MsgCat.COMMAND, "No warps set yet!"),
+    CMD_WARP_USE(MsgCat.COMMAND, "Warping to &a{0}&6..."),
+    CMD_WARP_OTHER(MsgCat.COMMAND, "You have send &a{0} &6to the warp &a{1}&6."),
 
     //Command modifiers
     MOD_HELP(MsgCat.COMMAND_MODIFIERS, "Show detailed command information."),
     MOD_SILENT(MsgCat.COMMAND_MODIFIERS, "Don't send any messages."),
     MOD_HEAL_ONLY(MsgCat.COMMAND_MODIFIERS, "Only modify the health limited by max health."),
     MOD_HEAL_MAX_ONLY(MsgCat.COMMAND_MODIFIERS, "Only modify the max health."),
+    MOD_DELWARP_ALL(MsgCat.COMMAND_MODIFIERS, "Delete all warps."),
 
     //Command options/optional arguments
     OPT_HEAL_FEED(MsgCat.COMMAND_OPTIONS, "Restore hunger"),
@@ -49,6 +59,7 @@ public enum Message {
     OPT_HEAL_EXTINGUISH(MsgCat.COMMAND_OPTIONS, "Remove remaining fire ticks"),
     OPT_FEED_SATURATION(MsgCat.COMMAND_OPTIONS, "The amount of saturation given"),
     OPT_FEED_EXHAUSTION(MsgCat.COMMAND_OPTIONS, "Reset exhaustion"),
+    OPT_WARP_PERM_BASED(MsgCat.COMMAND_OPTIONS, "Should warps be permissions based? Like essence.warp.spawn to use /warp spawn");
     ;
 
     private String defaultMessage;

@@ -66,5 +66,9 @@ public class Warps extends EasyConfig {
         return false;
     }
 
+    public void clear() {
+        warps.clear();
+        save();
+    }
 
 }

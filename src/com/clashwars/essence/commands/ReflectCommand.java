@@ -1,5 +1,7 @@
 package com.clashwars.essence.commands;
 
+import com.clashwars.essence.Essence;
+import com.clashwars.essence.Message;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -21,7 +23,7 @@ public class ReflectCommand extends Command {
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
         if (cmd != null) {
             if (!cmd.hasPermission(sender)) {
-                //TODO: Send no permission message.
+                sender.sendMessage(Essence.inst().getMessages().getMsg(Message.NO_PERM, true, cmd.getPermission()));
                 return true;
             }
             return cmd.onCommand(sender, this, commandLabel, args);

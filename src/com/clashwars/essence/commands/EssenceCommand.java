@@ -1,11 +1,11 @@
-package com.clashwars.essence.commands.internal;
+package com.clashwars.essence.commands;
 
 import com.clashwars.essence.Essence;
 import com.clashwars.essence.Message;
-import com.clashwars.essence.commands.arguments.internal.ArgumentParseResult;
-import com.clashwars.essence.commands.arguments.internal.ArgumentParseResults;
-import com.clashwars.essence.commands.arguments.internal.CmdArgument;
-import com.clashwars.essence.commands.options.CommandOption;
+import com.clashwars.essence.cmd_arguments.internal.ArgumentParseResult;
+import com.clashwars.essence.cmd_arguments.internal.ArgumentParseResults;
+import com.clashwars.essence.cmd_arguments.internal.CmdArgument;
+import com.clashwars.essence.cmd_options.CommandOption;
 import com.clashwars.essence.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;

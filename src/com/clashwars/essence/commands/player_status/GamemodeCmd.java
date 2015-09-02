@@ -1,13 +1,13 @@
-package com.clashwars.essence.commands;
+package com.clashwars.essence.commands.player_status;
 
 import com.clashwars.essence.Essence;
 import com.clashwars.essence.Message;
-import com.clashwars.essence.commands.arguments.MappedListArgument;
-import com.clashwars.essence.commands.arguments.PlayerArgument;
-import com.clashwars.essence.commands.arguments.internal.ArgumentParseResults;
-import com.clashwars.essence.commands.arguments.internal.ArgumentRequirement;
-import com.clashwars.essence.commands.arguments.internal.CmdArgument;
-import com.clashwars.essence.commands.internal.EssenceCommand;
+import com.clashwars.essence.cmd_arguments.MappedListArgument;
+import com.clashwars.essence.cmd_arguments.PlayerArgument;
+import com.clashwars.essence.cmd_arguments.internal.ArgumentParseResults;
+import com.clashwars.essence.cmd_arguments.internal.ArgumentRequirement;
+import com.clashwars.essence.cmd_arguments.internal.CmdArgument;
+import com.clashwars.essence.commands.EssenceCommand;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

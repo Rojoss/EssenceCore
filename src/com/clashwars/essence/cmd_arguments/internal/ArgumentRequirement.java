@@ -1,4 +1,4 @@
-package com.clashwars.essence.commands.arguments.internal;
+package com.clashwars.essence.cmd_arguments.internal;
 
 public enum ArgumentRequirement {
     OPTIONAL,

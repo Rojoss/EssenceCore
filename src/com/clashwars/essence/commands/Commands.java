@@ -1,8 +1,12 @@
-package com.clashwars.essence.commands.internal;
+package com.clashwars.essence.commands;
 
 import com.clashwars.essence.Essence;
 import com.clashwars.essence.ModuleCategory;
-import com.clashwars.essence.commands.*;
+import com.clashwars.essence.commands.player_status.FeedCmd;
+import com.clashwars.essence.commands.player_status.GamemodeCmd;
+import com.clashwars.essence.commands.player_status.HealCmd;
+import com.clashwars.essence.commands.plugin.MainPluginCmd;
+import com.clashwars.essence.commands.world.LightningCmd;
 import com.clashwars.essence.config.CommandsCfg;
 
 import java.lang.reflect.InvocationTargetException;

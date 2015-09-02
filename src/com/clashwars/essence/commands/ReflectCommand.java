@@ -1,4 +1,4 @@
-package com.clashwars.essence.commands.internal;
+package com.clashwars.essence.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

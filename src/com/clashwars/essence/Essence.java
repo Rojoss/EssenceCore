@@ -1,6 +1,6 @@
 package com.clashwars.essence;
 
-import com.clashwars.essence.commands.internal.Commands;
+import com.clashwars.essence.commands.Commands;
 import com.clashwars.essence.config.CommandOptionsCfg;
 import com.clashwars.essence.config.CommandsCfg;
 import com.clashwars.essence.config.MessagesCfg;

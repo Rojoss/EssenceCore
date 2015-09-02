@@ -1,8 +1,8 @@
 package com.clashwars.essence.config;
 
 import com.clashwars.essence.Essence;
-import com.clashwars.essence.commands.internal.EssenceCommand;
-import com.clashwars.essence.commands.options.CommandOption;
+import com.clashwars.essence.commands.EssenceCommand;
+import com.clashwars.essence.cmd_options.CommandOption;
 
 import java.util.HashMap;
 import java.util.List;

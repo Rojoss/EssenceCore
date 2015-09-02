@@ -1,20 +1,20 @@
-package com.clashwars.essence.commands.arguments;
+package com.clashwars.essence.cmd_arguments;
 
 import com.clashwars.essence.Message;
-import com.clashwars.essence.commands.arguments.internal.ArgumentParseResult;
-import com.clashwars.essence.commands.arguments.internal.ArgumentRequirement;
-import com.clashwars.essence.commands.arguments.internal.CmdArgument;
-import com.clashwars.essence.commands.internal.EssenceCommand;
+import com.clashwars.essence.cmd_arguments.internal.ArgumentParseResult;
+import com.clashwars.essence.cmd_arguments.internal.ArgumentRequirement;
+import com.clashwars.essence.cmd_arguments.internal.CmdArgument;
+import com.clashwars.essence.commands.EssenceCommand;
 import com.clashwars.essence.util.NumberUtil;
 import org.bukkit.command.CommandSender;
 
-public class IntArgument extends CmdArgument {
+public class FloatArgument extends CmdArgument {
 
-    protected int minValue;
-    protected int maxValue;
+    protected float minValue;
+    protected float maxValue;
     protected boolean clampValue;
 
-    public IntArgument(String name, ArgumentRequirement requirement, String permission, int minValue, int maxValue, boolean clampValue) {
+    public FloatArgument(String name, ArgumentRequirement requirement, String permission, float minValue, float maxValue, boolean clampValue) {
         super(name, requirement, permission);
         this.minValue = minValue;
         this.maxValue = maxValue;
@@ -29,26 +29,26 @@ public class IntArgument extends CmdArgument {
             return result;
         }
 
-        Integer value = NumberUtil.getInt(arg);
+        Float value = NumberUtil.getFloat(arg);
         if (value == null) {
             sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.NOT_A_NUMBER, true, arg));
             result.success = false;
             return result;
         }
-        if (minValue != -1 && value < minValue) {
+        if (value != -1 && value < minValue) {
             if (clampValue) {
                 value = minValue;
             } else {
-                sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.NUMBER_TOO_LOW, true, arg, Integer.toString(minValue)));
+                sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.NUMBER_TOO_LOW, true, arg, Float.toString(minValue)));
                 result.success = false;
                 return result;
             }
         }
-        if (maxValue != -1 && value > maxValue) {
+        if (value != -1 && value > maxValue) {
             if (clampValue) {
                 value = maxValue;
             } else {
-                sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.NUMBER_TOO_HIGH, true, arg, Integer.toString(maxValue)));
+                sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.NUMBER_TOO_HIGH, true, arg, Float.toString(maxValue)));
                 result.success = false;
                 return result;
             }

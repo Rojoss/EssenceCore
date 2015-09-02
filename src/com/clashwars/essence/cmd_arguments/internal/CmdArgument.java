@@ -1,7 +1,7 @@
-package com.clashwars.essence.commands.arguments.internal;
+package com.clashwars.essence.cmd_arguments.internal;
 
 import com.clashwars.essence.Message;
-import com.clashwars.essence.commands.internal.EssenceCommand;
+import com.clashwars.essence.commands.EssenceCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

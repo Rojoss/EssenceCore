@@ -1,4 +1,4 @@
-package com.clashwars.essence.commands.options;
+package com.clashwars.essence.cmd_options;
 
 import com.clashwars.essence.Message;
 import com.clashwars.essence.util.NumberUtil;

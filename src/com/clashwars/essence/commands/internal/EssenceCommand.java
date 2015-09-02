@@ -233,12 +233,14 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     }
 
     /** Method to be overwritten by each command */
+    @Override
     public abstract boolean onCommand(CommandSender sender, Command cmd, String label, String[] args);
 
     /**
      * Optional method to be overwritten by each command
      * By default it will automatically tab complete all specified arguments if they have tab completion.
      */
+    @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String message, String[] args) {
         if (cmdArgs.length < args.length) {
             return null;

@@ -4,6 +4,7 @@ import com.clashwars.essence.commands.internal.Commands;
 import com.clashwars.essence.config.CommandOptionsCfg;
 import com.clashwars.essence.config.CommandsCfg;
 import com.clashwars.essence.config.MessagesCfg;
+import com.clashwars.essence.config.ModulesCfg;
 import com.google.gson.Gson;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,6 +17,7 @@ public class Essence extends JavaPlugin {
     private Gson gson = new Gson();
 
     private MessagesCfg messages;
+    private ModulesCfg modules;
     private CommandsCfg commandsCfg;
     private CommandOptionsCfg cmdOptionsCfg;
 
@@ -37,6 +39,7 @@ public class Essence extends JavaPlugin {
         registerEvents();
 
         messages = new MessagesCfg("plugins/Essence/Messages.yml");
+        modules = new ModulesCfg("plugins/Essence/Modules.yml");
         commandsCfg = new CommandsCfg("plugins/Essence/Commands.yml");
         cmdOptionsCfg = new CommandOptionsCfg("plugins/Essence/CommandOptions.yml");
 
@@ -71,6 +74,10 @@ public class Essence extends JavaPlugin {
 
     public MessagesCfg getMessages() {
         return messages;
+    }
+
+    public ModulesCfg getmodules() {
+        return modules;
     }
 
     public CommandsCfg getCommandsCfg() {

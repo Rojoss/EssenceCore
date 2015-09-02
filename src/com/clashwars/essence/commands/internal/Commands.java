@@ -1,6 +1,7 @@
 package com.clashwars.essence.commands.internal;
 
 import com.clashwars.essence.Essence;
+import com.clashwars.essence.ModuleCategory;
 import com.clashwars.essence.commands.*;
 import com.clashwars.essence.commands.EssenceCmd;
 import com.clashwars.essence.commands.FeedCmd;
@@ -27,13 +28,11 @@ public class Commands {
 
     /** Register all Essence commands */
     public void registerCommands() {
-        registerCommand(EssenceCmd.class, "essence", "/essence [reload]", "Main plugin command and config reloading", "essence.essence", "essentials");
-        registerCommand(HealCmd.class, "heal", "/heal [player] [max]", "Heal a player", "essence.heal");
-        registerCommand(FeedCmd.class, "feed", "/feed [player] [amount]", "Feed a player", "essence.feed");
-        registerCommand(LightningCmd.class, "lightning", "/lightning [location]", "Strike lightning somewhere", "essence.lightning");
-        registerCommand(HealCmd.class, "heal", "/heal [player] [max]", "Heal a player", "essence.heal", "health", "sethealth");
-        registerCommand(FeedCmd.class, "feed", "/feed [player] [amount]", "Feed a player", "essence.feed", "food", "hunger", "eat");
-        registerCommand(GamemodeCmd.class, "gamemode", "/gamemode {mode} [player]", "Change a player his gamemmode", "essence.gamemode", "gm");
+        registerCommand(EssenceCmd.class, "essence", "", "/essence [reload]", "Main plugin command and config reloading", new String[] {"essentials", "essential"});
+        registerCommand(HealCmd.class, "heal", "heal", "/heal [player] [max]", "Heal a player", new String[] {"health", "sethealth"});
+        registerCommand(FeedCmd.class, "feed", "feed", "/feed [player] [amount]", "Feed a player", new String[] {"hunger", "eat"});
+        registerCommand(LightningCmd.class, "lightning", "lightning", "/lightning {location|player}", "Strike lightning somewhere", new String[] {"smite"});
+        registerCommand(GamemodeCmd.class, "gamemode", "gamemode", "/gamemode {mode} [player]", "Change a player his gamemmode", new String[] {"gm"});
     }
 
     /**
@@ -42,14 +41,18 @@ public class Commands {
      * It will only register the command if it's enabled in the config.
      * If the command is already registered and disabled in the config it will be unregistered.
      */
-    public void registerCommand(Class<? extends EssenceCommand> clazz, String label, String usage, String description, String permission, String... aliases) {
+    //TODO: Create the usage string based on arguments
+    public void registerCommand(Class<? extends EssenceCommand> clazz, String label, String module, String usage, String description, String[] aliases) {
+        if (!module.isEmpty()) {
+            ess.getmodules().registerModule(ModuleCategory.COMMAND, module);
+        }
         for (EssenceCommand cmd : commands) {
             if (cmd.getLabel().equals(label)) {
                 cmd.unregister();
-                if (!cfg.isEnabled(label)) {
-                    commands.remove(cmd);
+                if (module.isEmpty() || ess.getmodules().isEnabled(ModuleCategory.COMMAND, module)) {
+                    cmd.loadData(usage, cfg.getDescription(label), cfg.getPermission(label), cfg.getAliases(label));
                 } else {
-                    cmd.loadData(cfg.getUsage(label), cfg.getDescription(label), cfg.getPermission(label), cfg.getAliases(label));
+                    commands.remove(cmd);
                 }
                 return;
             }
@@ -61,13 +64,13 @@ public class Commands {
             return;
         }
 
-        cfg.registerCommand(label, usage, description, permission, aliases);
-        if (!cfg.isEnabled(label)) {
+        cfg.registerCommand(label, description, "essence." + label, aliases);
+        if (!module.isEmpty() && !ess.getmodules().isEnabled(ModuleCategory.COMMAND, module)) {
             return;
         }
 
         try {
-            EssenceCommand cmd = clazz.getConstructor(Essence.class, String.class, String.class, String.class, String.class, List.class).newInstance(ess, label, cfg.getUsage(label), cfg.getDescription(label), cfg.getPermission(label), cfg.getAliases(label));
+            EssenceCommand cmd = clazz.getConstructor(Essence.class, String.class, String.class, String.class, String.class, List.class).newInstance(ess, label, usage, cfg.getDescription(label), cfg.getPermission(label), cfg.getAliases(label));
             commands.add(cmd);
         } catch (InstantiationException e) {
             ess.logError("Failed to register the command " + label);

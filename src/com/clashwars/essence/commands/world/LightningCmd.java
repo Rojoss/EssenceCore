@@ -39,7 +39,7 @@ public class LightningCmd extends EssenceCommand {
         location.getWorld().strikeLightning(location);
 
         if (!result.hasModifier("-s")) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_HEAL_HEALED, true));
+            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_LIGHTNING, true));
         }
 
         return true;

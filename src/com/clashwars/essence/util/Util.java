@@ -1,10 +1,15 @@
 package com.clashwars.essence.util;
 
 import org.bukkit.ChatColor;
+import org.bukkit.potion.PotionEffectType;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 public class Util {
+
+    private static final List<PotionEffectType> NEGATIVE_POTION_EFFECTS = Arrays.asList(PotionEffectType.BLINDNESS, PotionEffectType.CONFUSION, PotionEffectType.HARM, PotionEffectType.HUNGER, PotionEffectType.POISON, PotionEffectType.SLOW, PotionEffectType.SLOW_DIGGING, PotionEffectType.WEAKNESS, PotionEffectType.WITHER);
 
     /**
      * Integrate ChatColor in a string based on color codes.
@@ -17,6 +22,7 @@ public class Util {
         }
         return str;
     }
+
 
     /**
      * Remove all color and put colors as the formatting codes like &1.
@@ -31,6 +37,14 @@ public class Util {
     }
 
 
+    /**
+     * Check whether a PotionEffectType is negative or positive.
+     * @param effect The PotionEffectType to check.
+     * @return Boolean
+     */
+    public static boolean isNegativePotionEffect(PotionEffectType effect) {
+        return NEGATIVE_POTION_EFFECTS.contains(effect);
+    }
 
 
 

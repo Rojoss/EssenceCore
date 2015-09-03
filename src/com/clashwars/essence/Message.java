@@ -35,7 +35,6 @@ public enum Message {
     CMD_FEED_OTHER(MsgCat.COMMAND, "You have fed &a{0}&6."),
     CMD_GAMEMODE_CHANGED(MsgCat.COMMAND, "Gamemode changed to &a{0}&6."),
     CMD_GAMEMODE_OTHER(MsgCat.COMMAND, "You have changed &a{0}'s &6gamemode to &a{1}&6."),
-    CMD_GAMEMODE_INVALID(MsgCat.COMMAND, "&4{0} &cis not a valid gamemode!"),
     CMD_LIGHTNING(MsgCat.COMMAND, "Lightning has struck!"),
     CMD_WARP_SET(MsgCat.COMMAND, "Warp &a{0} &6set!"),
     CMD_WARP_DELETED(MsgCat.COMMAND, "Warp &a{0} &6deleted!"),
@@ -49,6 +48,10 @@ public enum Message {
     CMD_TP_OTHER(MsgCat.COMMAND, "&6You have teleported &a{1} &6to &a{0}&6."),
     CMD_NICK_CHANGED(MsgCat.COMMAND, "&6Nickname changed to &r{0}"),
     CMD_NICK_OTHER(MsgCat.COMMAND, "&6You have changed &a{1}'s &6nickname to &r{0}&6."),
+    CMD_REMOVEEFFECT_REMOVED_SELF_SINGLE(MsgCat.COMMAND, "&6Removed &a{0} &6potion effect."),
+    CMD_REMOVEEFFECT_REMOVED_SELF_ALL(MsgCat.COMMAND, "&6All potion effects removed."),
+    CMD_REMOVEEFFECT_REMOVED_OTHER_SINGLE(MsgCat.COMMAND, "&6Removed &a{0}&6's &a{1} &6potion effect."),
+    CMD_REMOVEEFFECT_REMOVED_OTHER_ALL(MsgCat.COMMAND, "&6All of &a{0}'s potion effects have been removed."),
 
     //Command modifiers
     MOD_HELP(MsgCat.COMMAND_MODIFIERS, "Show detailed command information"),

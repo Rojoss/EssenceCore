@@ -7,9 +7,7 @@ import com.clashwars.essence.commands.location.SetWarpCmd;
 import com.clashwars.essence.commands.location.WarpCmd;
 import com.clashwars.essence.commands.location.WarpsCmd;
 import com.clashwars.essence.commands.player.NicknameCmd;
-import com.clashwars.essence.commands.player_status.FeedCmd;
-import com.clashwars.essence.commands.player_status.GamemodeCmd;
-import com.clashwars.essence.commands.player_status.HealCmd;
+import com.clashwars.essence.commands.player_status.*;
 import com.clashwars.essence.commands.plugin.MainPluginCmd;
 import com.clashwars.essence.commands.teleport.TpCmd;
 import com.clashwars.essence.commands.world.LightningCmd;
@@ -46,6 +44,7 @@ public class Commands {
         registerCommand(WarpCmd.class, "warp", "warps", "Teleport to a warp", new String[] {});
         registerCommand(TpCmd.class, "tp", "tp", "Teleport to a player", new String[] {"teleport", "tele"});
         registerCommand(NicknameCmd.class, "nickname", "nickname", "Change your nickname", new String[] {"nick", "displayname", "name"});
+        registerCommand(RemoveEffectCmd.class, "removeeffect", "removeeffect", "Remove potion effects", new String[] {"remeffect"});
     }
 
     /**

@@ -56,11 +56,6 @@ public class GamemodeCmd extends EssenceCommand {
             }
         }
 
-        if (gm == null) {
-            player.sendMessage(ess.getMessages().getMsg(Message.CMD_GAMEMODE_INVALID, true, mode));
-            return true;
-        }
-
         PlayerGameModeChangeEvent gamemodeChangeEvent = new PlayerGameModeChangeEvent(player, gm);
         ess.getServer().getPluginManager().callEvent(gamemodeChangeEvent);
         if (gamemodeChangeEvent.isCancelled()) {

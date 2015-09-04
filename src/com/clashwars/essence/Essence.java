@@ -5,6 +5,7 @@ import com.clashwars.essence.config.CommandOptionsCfg;
 import com.clashwars.essence.config.CommandsCfg;
 import com.clashwars.essence.config.MessagesCfg;
 import com.clashwars.essence.config.ModulesCfg;
+import com.clashwars.essence.config.aliases.ItemAliases;
 import com.clashwars.essence.config.data.Warps;
 import com.google.gson.Gson;
 import org.bukkit.plugin.PluginManager;
@@ -22,6 +23,8 @@ public class Essence extends JavaPlugin {
     private CommandsCfg commandsCfg;
     private CommandOptionsCfg cmdOptionsCfg;
     private Warps warps;
+
+    private ItemAliases itemAliases;
 
     private Commands commands;
 
@@ -44,6 +47,8 @@ public class Essence extends JavaPlugin {
         modules = new ModulesCfg("plugins/Essence/Modules.yml");
         commandsCfg = new CommandsCfg("plugins/Essence/Commands.yml");
         cmdOptionsCfg = new CommandOptionsCfg("plugins/Essence/CommandOptions.yml");
+
+        itemAliases = new ItemAliases("plugins/Essence/aliases/Items.yml");
 
         //TODO: Have a class for modules were it would create the config and such.
         warps = new Warps("plugins/Essence/data/Warps.yml");

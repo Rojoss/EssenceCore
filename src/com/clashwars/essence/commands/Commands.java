@@ -2,6 +2,7 @@ package com.clashwars.essence.commands;
 
 import com.clashwars.essence.Essence;
 import com.clashwars.essence.ModuleCategory;
+import com.clashwars.essence.commands.item.ItemInfoCmd;
 import com.clashwars.essence.commands.location.DelWarpCmd;
 import com.clashwars.essence.commands.location.SetWarpCmd;
 import com.clashwars.essence.commands.location.WarpCmd;
@@ -45,6 +46,7 @@ public class Commands {
         registerCommand(TpCmd.class, "tp", "tp", "Teleport to a player", new String[] {"teleport", "tele"});
         registerCommand(NicknameCmd.class, "nickname", "nickname", "Change your nickname", new String[] {"nick", "displayname", "name"});
         registerCommand(RemoveEffectCmd.class, "removeeffect", "removeeffect", "Remove potion effects", new String[] {"remeffect"});
+        registerCommand(ItemInfoCmd.class, "iteminfo", "iteminfo", "Show item detailed item information.", new String[] {"itemdb"});
     }
 
     /**

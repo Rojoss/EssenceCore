@@ -9,6 +9,7 @@ import com.clashwars.essence.cmd_arguments.internal.ArgumentParseResults;
 import com.clashwars.essence.cmd_arguments.internal.ArgumentRequirement;
 import com.clashwars.essence.cmd_arguments.internal.CmdArgument;
 import com.clashwars.essence.commands.EssenceCommand;
+import com.clashwars.essence.util.Util;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -34,6 +35,9 @@ public class RemoveEffectCmd extends EssenceCommand {
                 new PlayerArgument("player", ArgumentRequirement.OPTIONAL, "others")
         };
 
+        addModifier("-n", Message.MOD_REMOVEEFFECT_NEGATIVE);
+        addModifier("-p", Message.MOD_REMOVEEFFECT_POSITIVE);
+
         register();
     }
 
@@ -53,6 +57,8 @@ public class RemoveEffectCmd extends EssenceCommand {
 
         if (single == false) {
             for (PotionEffect effect : player.getActivePotionEffects()) {
+                if (result.hasModifier("-n") && !Util.isNegativePotionEffect(effect.getType())) continue;
+                if (result.hasModifier("-p") && Util.isNegativePotionEffect(effect.getType())) continue;
                 player.removePotionEffect(effect.getType());
             }
         } else {
@@ -62,15 +68,15 @@ public class RemoveEffectCmd extends EssenceCommand {
         if (!result.hasModifier("-s")) {
             if (sender.equals(player)) {
                 if (single == true) {
-                    player.sendMessage(ess.getMessages().getMsg(Message.CMD_REMOVEEFFECT_REMOVED_SELF_SINGLE, true, effectType.toLowerCase()));
+                    player.sendMessage(ess.getMessages().getMsg(Message.CMD_REMOVEEFFECT, true, effectType.toLowerCase()));
                 } else {
-                    player.sendMessage(ess.getMessages().getMsg(Message.CMD_REMOVEEFFECT_REMOVED_SELF_ALL, true));
+                    player.sendMessage(ess.getMessages().getMsg(Message.CMD_REMOVEEFFECT_ALL, true));
                 }
             } else {
                 if (single == true) {
-                    player.sendMessage(ess.getMessages().getMsg(Message.CMD_REMOVEEFFECT_REMOVED_OTHER_SINGLE, true, player.getName(), effectType.toLowerCase()));
+                    player.sendMessage(ess.getMessages().getMsg(Message.CMD_REMOVEEFFECT_OTHER, true, player.getName(), effectType.toLowerCase()));
                 } else {
-                    player.sendMessage(ess.getMessages().getMsg(Message.CMD_REMOVEEFFECT_REMOVED_OTHER_ALL, true));
+                    player.sendMessage(ess.getMessages().getMsg(Message.CMD_REMOVEEFFECT_OTHER_ALL, true));
                 }
             }
         }

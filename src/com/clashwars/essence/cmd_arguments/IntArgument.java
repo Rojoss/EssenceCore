@@ -10,15 +10,22 @@ import org.bukkit.command.CommandSender;
 
 public class IntArgument extends CmdArgument {
 
-    protected int minValue;
-    protected int maxValue;
+    protected Integer minValue;
+    protected Integer maxValue;
     protected boolean clampValue;
 
-    public IntArgument(String name, ArgumentRequirement requirement, String permission, int minValue, int maxValue, boolean clampValue) {
+    public IntArgument(String name, ArgumentRequirement requirement, String permission, Integer minValue, Integer maxValue, boolean clampValue) {
         super(name, requirement, permission);
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.clampValue = clampValue;
+    }
+
+    public IntArgument(String name, ArgumentRequirement requirement, String permission) {
+        super(name, requirement, permission);
+        this.minValue = null;
+        this.maxValue = null;
+        this.clampValue = false;
     }
 
 
@@ -35,7 +42,7 @@ public class IntArgument extends CmdArgument {
             result.success = false;
             return result;
         }
-        if (minValue != -1 && value < minValue) {
+        if (minValue != null && value < minValue) {
             if (clampValue) {
                 value = minValue;
             } else {
@@ -44,7 +51,7 @@ public class IntArgument extends CmdArgument {
                 return result;
             }
         }
-        if (maxValue != -1 && value > maxValue) {
+        if (maxValue != null && value > maxValue) {
             if (clampValue) {
                 value = maxValue;
             } else {

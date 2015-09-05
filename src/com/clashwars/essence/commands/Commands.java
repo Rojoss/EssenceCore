@@ -45,8 +45,9 @@ public class Commands {
         registerCommand(WarpCmd.class, "warp", "warps", "Teleport to a warp", new String[] {});
         registerCommand(TpCmd.class, "tp", "tp", "Teleport to a player", new String[] {"teleport", "tele"});
         registerCommand(NicknameCmd.class, "nickname", "nickname", "Change your nickname", new String[] {"nick", "displayname", "name"});
-        registerCommand(RemoveEffectCmd.class, "removeeffect", "removeeffect", "Remove potion effects", new String[] {"remeffect"});
+        registerCommand(RemoveEffectCmd.class, "removeeffect", "removeeffect", "Remove potion effects", new String[] {"remeffect", "remeffects", "cleareffect", "cleareffects", "removeeffects"});
         registerCommand(ItemInfoCmd.class, "iteminfo", "iteminfo", "Show item detailed item information.", new String[] {"itemdb"});
+        registerCommand(BurnCmd.class, "burn", "burn", "Set yourself or another player on fire for the specified amount of seconds. (or ticks)", new String[] {"ignite"});
     }
 
     /**

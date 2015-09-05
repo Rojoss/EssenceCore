@@ -48,10 +48,12 @@ public enum Message {
     CMD_TP_OTHER(MsgCat.COMMAND, "&6You have teleported &a{1} &6to &a{0}&6."),
     CMD_NICK_CHANGED(MsgCat.COMMAND, "&6Nickname changed to &r{0}"),
     CMD_NICK_OTHER(MsgCat.COMMAND, "&6You have changed &a{1}'s &6nickname to &r{0}&6."),
-    CMD_REMOVEEFFECT_REMOVED_SELF_SINGLE(MsgCat.COMMAND, "&6Removed &a{0} &6potion effect."),
-    CMD_REMOVEEFFECT_REMOVED_SELF_ALL(MsgCat.COMMAND, "&6All potion effects removed."),
-    CMD_REMOVEEFFECT_REMOVED_OTHER_SINGLE(MsgCat.COMMAND, "&6Removed &a{0}&6's &a{1} &6potion effect."),
-    CMD_REMOVEEFFECT_REMOVED_OTHER_ALL(MsgCat.COMMAND, "&6All of &a{0}'s potion effects have been removed."),
+    CMD_REMOVEEFFECT(MsgCat.COMMAND, "&6Removed &a{0} &6potion effect."),
+    CMD_REMOVEEFFECT_ALL(MsgCat.COMMAND, "&6All potion effects removed."),
+    CMD_REMOVEEFFECT_OTHER(MsgCat.COMMAND, "&6Removed &a{0}&6's &a{1} &6potion effect."),
+    CMD_REMOVEEFFECT_OTHER_ALL(MsgCat.COMMAND, "&6All of &a{0}'s potion effects have been removed."),
+    CMD_BURN(MsgCat.COMMAND, "&6You will burn for &a{0} &6seconds."),
+    CMD_BURN_OTHER(MsgCat.COMMAND, "&a{0} &6will burn for &a{1} &6seconds."),
 
     //Command modifiers
     MOD_HELP(MsgCat.COMMAND_MODIFIERS, "Show detailed command information"),
@@ -60,6 +62,9 @@ public enum Message {
     MOD_HEAL_MAX_ONLY(MsgCat.COMMAND_MODIFIERS, "Only modify the max health"),
     MOD_DELWARP_ALL(MsgCat.COMMAND_MODIFIERS, "Delete all warps"),
     MOD_NICK_REMOVE(MsgCat.COMMAND_MODIFIERS, "Remove your nickname."),
+    MOD_REMOVEEFFECT_NEGATIVE(MsgCat.COMMAND_MODIFIERS, "Will ignore all positive potion effects and only remove the negative ones"),
+    MOD_REMOVEEFFECT_POSITIVE(MsgCat.COMMAND_MODIFIERS, "Will ignore all negative potion effects and only remove the positive ones"),
+    MOD_BURN_INCREMENT(MsgCat.COMMAND_MODIFIERS, "Increment the duration if the player is already burning"),
 
     //Command options/optional arguments
     OPT_HEAL_FEED(MsgCat.COMMAND_OPTIONS, "Restore hunger?"),
@@ -71,6 +76,7 @@ public enum Message {
     OPT_NICK_PREFIX(MsgCat.COMMAND_OPTIONS, "Prefix added in front of all nicknames."),
     OPT_NICK_MIN_CHARS(MsgCat.COMMAND_OPTIONS, "Minimum amount of characters required. (exclusive prefix)"),
     OPT_NICK_MAX_CHARS(MsgCat.COMMAND_OPTIONS, "Maximum amount of characters allowed. (exclusive prefix)"),
+    OPT_BURN_TICKS(MsgCat.COMMAND_OPTIONS, "Change the time from seconds to ticks for more precision. (20 ticks per second)")
     ;
 
     private String defaultMessage;

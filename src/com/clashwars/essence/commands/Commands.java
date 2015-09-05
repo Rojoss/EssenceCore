@@ -49,6 +49,8 @@ public class Commands {
         registerCommand(ItemInfoCmd.class, "iteminfo", "iteminfo", "Show item detailed item information.", new String[] {"itemdb"});
         registerCommand(BurnCmd.class, "burn", "burn", "Set yourself or another player on fire for the specified amount of seconds. (or ticks)", new String[] {"ignite"});
         registerCommand(FlyCmd.class, "fly", "fly", "Toggle flight on/off.", new String[] {"flight"});
+        registerCommand(WalkspeedCmd.class, "walkspeed", "walkspeed", "Change your walking speed.", new String[] {"walkingspeed"});
+        registerCommand(FlyspeedCmd.class, "flyspeed", "flyspeed", "Change your flying speed.", new String[] {"flyingspeed"});
     }
 
     /**

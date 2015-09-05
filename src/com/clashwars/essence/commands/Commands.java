@@ -48,6 +48,7 @@ public class Commands {
         registerCommand(RemoveEffectCmd.class, "removeeffect", "removeeffect", "Remove potion effects", new String[] {"remeffect", "remeffects", "cleareffect", "cleareffects", "removeeffects"});
         registerCommand(ItemInfoCmd.class, "iteminfo", "iteminfo", "Show item detailed item information.", new String[] {"itemdb"});
         registerCommand(BurnCmd.class, "burn", "burn", "Set yourself or another player on fire for the specified amount of seconds. (or ticks)", new String[] {"ignite"});
+        registerCommand(FlyCmd.class, "fly", "fly", "Toggle flight on/off.", new String[] {"flight"});
     }
 
     /**

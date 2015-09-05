@@ -12,6 +12,7 @@ import com.clashwars.essence.commands.EssenceCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 
 import java.util.List;
 
@@ -41,6 +42,10 @@ public class FlyCmd extends EssenceCommand {
 
         Player player = result.getValue(0).getValue() == null ? (Player)sender : (Player)result.getValue(0).getValue();
         Boolean state = result.getValue(1).getValue() == null ? !player.isFlying() : (Boolean)result.getValue(1).getValue();
+
+        PlayerToggleFlightEvent event = new PlayerToggleFlightEvent(player, state);
+        ess.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) return true;
 
         player.setAllowFlight(true);
         player.setFlying(state);

@@ -44,18 +44,22 @@ public class BurnCmd extends EssenceCommand {
         int duration = (int)result.getValue(0).getValue();
         Player player = result.getValue(1).getValue() == null ? (Player)sender : (Player)result.getValue(1).getValue();
 
-        // TODO: Check for optional arg ticks-instead-of-seconds.
+        int ticks = duration;
 
-        if (duration < 0) {
+        if (!result.hasOptionalArg("ticks-instead-of-seconds")) {
+            ticks = duration * 20;
+        }
+
+        if (ticks < 0) {
             result.addModifier("-i");
         }
 
         if (result.hasModifier("-i")) {
-            if (duration > player.getFireTicks() * 20) duration = 0;
+            if (ticks < 0 && ticks > player.getFireTicks()) ticks = 0;
 
-            player.setFireTicks(player.getFireTicks() + duration / 20);
+            player.setFireTicks(player.getFireTicks() + ticks);
         } else {
-            player.setFireTicks(duration * 20);
+            player.setFireTicks(ticks);
         }
 
         if (!result.hasModifier("-s")) {

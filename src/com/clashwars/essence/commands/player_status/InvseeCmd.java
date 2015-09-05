@@ -11,18 +11,18 @@ import com.clashwars.essence.commands.EssenceCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.inventory.InventoryView;
 
 import java.util.List;
 
-public class FlyspeedCmd extends EssenceCommand {
+public class InvseeCmd extends EssenceCommand {
 
-
-    public FlyspeedCmd(Essence ess, String label, String description, String permission, List<String> aliases) {
+    public InvseeCmd(Essence ess, String label, String description, String permission, List<String> aliases) {
         super(ess, label, description, permission, aliases);
 
         cmdArgs = new CmdArgument[] {
-                new IntArgument("speed", ArgumentRequirement.OPTIONAL, "", 0, 20, false),
-                new PlayerArgument("player", ArgumentRequirement.REQUIRED_CONSOLE, "others")
+                new PlayerArgument("player", ArgumentRequirement.REQUIRED, "")
         };
 
         register();
@@ -35,22 +35,19 @@ public class FlyspeedCmd extends EssenceCommand {
             return true;
         }
 
-        Float speed = result.getValue(0).getValue() == null ? 0.2F : (Integer)result.getValue(0).getValue() / 20F;
-        Player player = result.getValue(1).getValue() == null ? (Player)sender : (Player)result.getValue(1).getValue();
-
-        player.setFlySpeed(speed);
-
-        speed *= 20;
-
-        if (!result.hasModifier("-s")) {
-            player.sendMessage(ess.getMessages().getMsg(Message.CMD_FLYSPEED, true, speed.toString()));
-            if (!sender.equals(player)) {
-                sender.sendMessage(ess.getMessages().getMsg(Message.CMD_FLYSPEED_OTHER, true, player.getDisplayName(), speed.toString()));
-            }
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_PLAYER_ONLY, true));
+            return true;
         }
+
+        Player player = (Player)sender;
+        Player invOwner = (Player)result.getValue(0).getValue();
+
+        // TODO: Find a way to call InventoryOpenEvent.
+
+        player.openInventory(invOwner.getInventory());
 
         return true;
     }
-
 
 }

@@ -51,6 +51,10 @@ public class Commands {
         registerCommand(FlyCmd.class, "fly", "fly", "Toggle flight on/off.", new String[] {"flight"});
         registerCommand(WalkspeedCmd.class, "walkspeed", "walkspeed", "Change your walking speed.", new String[] {"walkingspeed"});
         registerCommand(FlyspeedCmd.class, "flyspeed", "flyspeed", "Change your flying speed.", new String[] {"flyingspeed"});
+        registerCommand(InvseeCmd.class, "invsee", "invsee", "View another player's inventory.", new String[] {});
+        registerCommand(EnderchestCmd.class, "enderchest", "enderchest", "View your or another player's enderchest", new String[] {});
+        registerCommand(SuicideCmd.class, "suicide", "suicide", "Kill yourself", new String[] {});
+        registerCommand(KillCmd.class, "kill", "kill", "Kill someone else", new String[] {"slay"});
     }
 
     /**

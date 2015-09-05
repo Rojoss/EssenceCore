@@ -57,9 +57,11 @@ public enum Message {
     CMD_FLY(MsgCat.COMMAND, "&6Flight state: &a{0}"),
     CMD_FLY_OTHER(MsgCat.COMMAND, "&a{0}&6's flight state: &a{1}"),
     CMD_WALKSPEED(MsgCat.COMMAND, "&6Your walking speed is now &a{0}"),
-    CMD_WALKSPEED_OTHER(MsgCat.COMMAND, "&a{0}'s walking speed is now &a{1}"),
+    CMD_WALKSPEED_OTHER(MsgCat.COMMAND, "&a{0}&6's walking speed is now &a{1}"),
     CMD_FLYSPEED(MsgCat.COMMAND, "&6Your flying speed is now &a{0}"),
-    CMD_FLYSPEED_OTHER(MsgCat.COMMAND, "&a{0}'s flying speed is now &a{1}"),
+    CMD_FLYSPEED_OTHER(MsgCat.COMMAND, "&a{0}&6's flying speed is now &a{1}"),
+    CMD_SUICIDE(MsgCat.COMMAND, "&a{0} &6has decided to take his own life."),
+    CMD_KILL(MsgCat.COMMAND, "&6You killed &a{0}."),
 
     //Command modifiers
     MOD_HELP(MsgCat.COMMAND_MODIFIERS, "Show detailed command information"),

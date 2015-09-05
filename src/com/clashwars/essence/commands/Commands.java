@@ -12,6 +12,7 @@ import com.clashwars.essence.commands.player_status.*;
 import com.clashwars.essence.commands.plugin.MainPluginCmd;
 import com.clashwars.essence.commands.teleport.TpCmd;
 import com.clashwars.essence.commands.world.LightningCmd;
+import com.clashwars.essence.commands.world.TreeCmd;
 import com.clashwars.essence.config.CommandsCfg;
 import com.clashwars.essence.config.data.Warps;
 
@@ -55,6 +56,7 @@ public class Commands {
         registerCommand(EnderchestCmd.class, "enderchest", "enderchest", "View your or another player's enderchest", new String[] {});
         registerCommand(SuicideCmd.class, "suicide", "suicide", "Kill yourself", new String[] {});
         registerCommand(KillCmd.class, "kill", "kill", "Kill someone else", new String[] {"slay"});
+        registerCommand(TreeCmd.class, "tree", "tree", "Generate a tree somewhere in the world", new String[] {});
     }
 
     /**

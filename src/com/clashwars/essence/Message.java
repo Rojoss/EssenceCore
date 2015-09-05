@@ -62,6 +62,8 @@ public enum Message {
     CMD_FLYSPEED_OTHER(MsgCat.COMMAND, "&a{0}&6's flying speed is now &a{1}"),
     CMD_SUICIDE(MsgCat.COMMAND, "&a{0} &6has decided to take his own life."),
     CMD_KILL(MsgCat.COMMAND, "&6You killed &a{0}."),
+    CMD_TREE(MsgCat.COMMAND, "&6A tree has been generated."),
+    CMD_TREE_FAILURE(MsgCat.COMMAND, "&cA tree cannot be generated there."),
 
     //Command modifiers
     MOD_HELP(MsgCat.COMMAND_MODIFIERS, "Show detailed command information"),

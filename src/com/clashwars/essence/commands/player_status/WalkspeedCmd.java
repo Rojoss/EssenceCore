@@ -20,7 +20,7 @@ public class WalkspeedCmd extends EssenceCommand {
         super(ess, label, description, permission, aliases);
 
         cmdArgs = new CmdArgument[] {
-                new IntArgument("speed", ArgumentRequirement.OPTIONAL, "", 0, 20, false),
+                new IntArgument("speed", ArgumentRequirement.REQUIRED_CONSOLE, "", 0, 100, false),
                 new PlayerArgument("player", ArgumentRequirement.REQUIRED_CONSOLE, "others")
         };
 
@@ -34,12 +34,12 @@ public class WalkspeedCmd extends EssenceCommand {
             return true;
         }
 
-        Float speed = result.getValue(0).getValue() == null ? 0.2F : (Integer)result.getValue(0).getValue() / 20F;
+        Float speed = result.getValue(0).getValue() == null ? 0.2F : (Integer)result.getValue(0).getValue() / 100F;
         Player player = result.getValue(1).getValue() == null ? (Player)sender : (Player)result.getValue(1).getValue();
 
         player.setWalkSpeed(speed);
 
-        speed *= 20;
+        speed *= 100;
 
         if (!result.hasModifier("-s")) {
             player.sendMessage(ess.getMessages().getMsg(Message.CMD_WALKSPEED, true, speed.toString()));

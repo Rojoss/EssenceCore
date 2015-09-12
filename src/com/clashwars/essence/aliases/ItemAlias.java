@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import java.util.Arrays;
 import java.util.List;
 
-public class EItem {
+public class ItemAlias {
 
     private String name;
     private Material type;
@@ -14,7 +14,7 @@ public class EItem {
     private short data;
     private List<String> aliases;
 
-    public EItem(String name, Material type, short data, String[] aliases) {
+    public ItemAlias(String name, Material type, short data, String[] aliases) {
         this.name = name;
         this.type = type;
         this.data = data;

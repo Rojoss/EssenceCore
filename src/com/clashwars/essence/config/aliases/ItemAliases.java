@@ -1,10 +1,8 @@
 package com.clashwars.essence.config.aliases;
 
-import com.clashwars.essence.aliases.EItem;
+import com.clashwars.essence.aliases.ItemAlias;
 import com.clashwars.essence.aliases.Items;
 import com.clashwars.essence.config.EasyConfig;
-import com.clashwars.essence.util.Debug;
-import org.bukkit.Material;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,8 +21,8 @@ public class ItemAliases extends EasyConfig {
     public void load() {
         super.load();
         HashMap<String, HashMap<String, String>> data = new HashMap<String, HashMap<String, String>>();
-        List<EItem> items = Items.getItems();
-        for (EItem item : items) {
+        List<ItemAlias> items = Items.getItems();
+        for (ItemAlias item : items) {
             HashMap<String, String> dataMap = new HashMap<String, String>();
             dataMap.put("name", item.getName());
             dataMap.put("aliases", item.getAliasesStr());
@@ -56,7 +54,7 @@ public class ItemAliases extends EasyConfig {
             save();
         }
 
-        for (EItem item : items) {
+        for (ItemAlias item : items) {
             item.setAliases(getAliases(item.getKey(), true));
         }
     }

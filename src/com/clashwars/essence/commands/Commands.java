@@ -57,6 +57,7 @@ public class Commands {
         registerCommand(SuicideCmd.class, "suicide", "suicide", "Kill yourself", new String[] {});
         registerCommand(KillCmd.class, "kill", "kill", "Kill someone else", new String[] {"slay"});
         registerCommand(TreeCmd.class, "tree", "tree", "Generate a tree somewhere in the world", new String[] {});
+        registerCommand(GodCmd.class, "god", "god", "Turns your or another player's god mode on or off.", new String[] {"immortal", "invulnerable", "immortality", "invulnerability"});
     }
 
     /**

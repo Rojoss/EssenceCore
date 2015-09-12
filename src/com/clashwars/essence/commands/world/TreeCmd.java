@@ -56,12 +56,10 @@ public class TreeCmd extends EssenceCommand {
         }
 
         TreeType type = TreeType.valueOf(result.getValue(0).getValue().toString());
-        Location location = null;
+        Location location = (Location)result.getValue(1).getValue();
 
         if (result.getValue(1).getValue() == null) {
             location = ((Player)sender).getTargetBlock((HashSet<Byte>)null, 100).getRelative(BlockFace.UP).getLocation();
-        } else {
-            location = (Location)result.getValue(1).getValue();
         }
 
         boolean success = location.getWorld().generateTree(location, type);

@@ -69,6 +69,8 @@ public enum Message {
     CMD_INVSEE_EXEMPT(MsgCat.COMMAND, "&cYou cannot view &a{0}&c's inventory."),
     CMD_ENDERCHEST(MsgCat.COMMAND, "&6You are viewing your enderchest."),
     CMD_ENDERCHEST_OTHER(MsgCat.COMMAND, "&cYou cannot view &a{0}&c's enderchest."),
+    CMD_TPHERE(MsgCat.COMMAND, "&6You have teleported &a{0} &6here."),
+
 
     //Command modifiers
     MOD_HELP(MsgCat.COMMAND_MODIFIERS, "Show detailed command information"),

@@ -649,7 +649,7 @@ public class Items {
         items.add(new ItemAlias("Large Fern", Material.DOUBLE_PLANT, (short)3, new String[] {}));
         items.add(new ItemAlias("Rose Bush", Material.DOUBLE_PLANT, (short)4, new String[] {}));
         items.add(new ItemAlias("Peony", Material.DOUBLE_PLANT, (short)5, new String[] {}));
-        items.add(new ItemAlias("Command Minecart", Material.COMMAND_MINECART, (short)0, new String[] {}));
+        items.add(new ItemAlias("Command Minecart", Material.COMMAND_MINECART, (short)0, new String[] {"cmdminecart", "commandcart", "cmdcart"}));
         items.add(new ItemAlias("Potion of Water Breathing", Material.POTION, (short)8205, new String[] {}));
         items.add(new ItemAlias("Potion of Water Breathing (Reverted);", Material.POTION, (short)8237, new String[] {}));
         items.add(new ItemAlias("Potion of Water Breathing (Extended);", Material.POTION, (short)8269, new String[] {}));

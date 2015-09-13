@@ -1,15 +1,15 @@
-package info.mcessence.essence.nms.v1_8_R2;
+package info.mcessence.essence.nms.v1_8_R3;
 
-import info.mcessence.essence.util.Util;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import net.minecraft.server.v1_8_R2.BlockPosition;
-import net.minecraft.server.v1_8_R2.TileEntitySkull;
+import info.mcessence.essence.util.Util;
+import net.minecraft.server.v1_8_R3.BlockPosition;
+import net.minecraft.server.v1_8_R3.TileEntitySkull;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
 import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
-import org.bukkit.craftbukkit.v1_8_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Field;

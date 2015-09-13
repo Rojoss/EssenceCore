@@ -69,15 +69,15 @@ public class Essence extends JavaPlugin {
         } catch (ArrayIndexOutOfBoundsException whatVersionAreYouUsingException) {
             return;
         }
-        if (version.equals("v1_8_R2")) {
-            nmsUtil = new info.mcessence.essence.nms.v1_8_R2.NmsUtil();
+        if (version.equals("v1_8_R3")) {
+            nmsUtil = new info.mcessence.essence.nms.v1_8_R3.NmsUtil();
         }
 
         if (nmsUtil == null) {
             warn("This version of Essence is not fully compatible with your server version!");
             warn("Your server version: " + version);
-            warn("Earliest compatible version: v1_8_R2");
-            warn("Latest compatible version: v1_8_R2");
+            warn("Earliest compatible version: v1_8_R3");
+            warn("Latest compatible version: v1_8_R3");
             warn("If there is a newer server version we will update the plugin as soon as possible.");
             warn("Essence will still work fine but certain features will be disabled.");
         } else {

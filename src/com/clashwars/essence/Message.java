@@ -70,6 +70,7 @@ public enum Message {
     CMD_ENDERCHEST(MsgCat.COMMAND, "&6You are viewing your enderchest."),
     CMD_ENDERCHEST_OTHER(MsgCat.COMMAND, "&cYou cannot view &a{0}&c's enderchest."),
     CMD_TPHERE(MsgCat.COMMAND, "&6You have teleported &a{0} &6here."),
+    CMD_SUDO(MsgCat.COMMAND, "&6You made &a{0} &6run &a{1}&c."),
 
 
     //Command modifiers

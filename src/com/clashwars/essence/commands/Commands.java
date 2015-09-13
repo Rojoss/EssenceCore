@@ -8,6 +8,7 @@ import com.clashwars.essence.commands.location.SetWarpCmd;
 import com.clashwars.essence.commands.location.WarpCmd;
 import com.clashwars.essence.commands.location.WarpsCmd;
 import com.clashwars.essence.commands.player.NicknameCmd;
+import com.clashwars.essence.commands.player.SudoCmd;
 import com.clashwars.essence.commands.player_status.*;
 import com.clashwars.essence.commands.plugin.MainPluginCmd;
 import com.clashwars.essence.commands.teleport.TpCmd;
@@ -60,6 +61,7 @@ public class Commands {
         registerCommand(TreeCmd.class, "tree", "tree", "Generate a tree somewhere in the world", new String[] {});
         registerCommand(GodCmd.class, "god", "god", "Turns your or another player's god mode on or off.", new String[] {"immortal", "invulnerable", "immortality", "invulnerability"});
         registerCommand(TpHereCmd.class, "tphere", "tphere", "Teleports a player to your location.", new String[] {});
+        registerCommand(SudoCmd.class, "sudo", "sudo", "Execute a command on someone's behalf.", new String[] {});
     }
 
     /**

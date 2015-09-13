@@ -7,6 +7,7 @@ import com.clashwars.essence.config.MessagesCfg;
 import com.clashwars.essence.config.ModulesCfg;
 import com.clashwars.essence.config.aliases.ItemAliases;
 import com.clashwars.essence.config.data.Warps;
+import com.clashwars.essence.nms.v1_8_R2.NmsUtil;
 import com.google.gson.Gson;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -23,6 +24,8 @@ public class Essence extends JavaPlugin {
     private CommandsCfg commandsCfg;
     private CommandOptionsCfg cmdOptionsCfg;
     private Warps warps;
+
+    private com.clashwars.essence.nms.NmsUtil nmsUtil;
 
     private ItemAliases itemAliases;
 
@@ -41,6 +44,8 @@ public class Essence extends JavaPlugin {
         instance = this;
         log.setParent(this.getLogger());
 
+        setupNMS();
+
         registerEvents();
 
         messages = new MessagesCfg("plugins/Essence/Messages.yml");
@@ -56,6 +61,29 @@ public class Essence extends JavaPlugin {
         commands = new Commands(this);
 
         log("loaded successfully");
+    }
+
+    private void setupNMS() {
+        String version;
+        try {
+            version = getServer().getClass().getPackage().getName().replace(".",  ",").split(",")[3];
+        } catch (ArrayIndexOutOfBoundsException whatVersionAreYouUsingException) {
+            return;
+        }
+        if (version.equals("v1_8_R2")) {
+            nmsUtil = new com.clashwars.essence.nms.v1_8_R2.NmsUtil();
+        }
+
+        if (nmsUtil == null) {
+            warn("This version of Essence is not fully compatible with your server version!");
+            warn("Your server version: " + version);
+            warn("Earliest compatible version: v1_8_R2");
+            warn("Latest compatible version: v1_8_R2");
+            warn("If there is a newer server version we will update the plugin as soon as possible.");
+            warn("Essence will still work fine but certain features will be disabled.");
+        } else {
+            log("This version of Essence is fully compatible with your server version!");
+        }
     }
 
     private void registerEvents() {
@@ -79,6 +107,10 @@ public class Essence extends JavaPlugin {
 
     public Gson getGson() {
         return gson;
+    }
+
+    public com.clashwars.essence.nms.NmsUtil getNmsUtil() {
+        return nmsUtil;
     }
 
 

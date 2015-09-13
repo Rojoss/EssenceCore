@@ -241,9 +241,9 @@ public class Items {
         items.add(new ItemAlias("Seeds", Material.SEEDS, (short)0, new String[] {}));
         items.add(new ItemAlias("Wheat", Material.WHEAT, (short)0, new String[] {}));
         items.add(new ItemAlias("Bread", Material.BREAD, (short)0, new String[] {}));
-        items.add(new ItemAlias("Leather Cap", Material.LEATHER_HELMET, (short)0, new String[] {}));
-        items.add(new ItemAlias("Leather Tunic", Material.LEATHER_CHESTPLATE, (short)0, new String[] {}));
-        items.add(new ItemAlias("Leather Pants", Material.LEATHER_LEGGINGS, (short)0, new String[] {}));
+        items.add(new ItemAlias("Leather Helmet", Material.LEATHER_HELMET, (short)0, new String[] {}));
+        items.add(new ItemAlias("Leather Chestplate", Material.LEATHER_CHESTPLATE, (short)0, new String[] {}));
+        items.add(new ItemAlias("Leather Leggings", Material.LEATHER_LEGGINGS, (short)0, new String[] {}));
         items.add(new ItemAlias("Leather Boots", Material.LEATHER_BOOTS, (short)0, new String[] {}));
         items.add(new ItemAlias("Chainmail Helmet", Material.CHAINMAIL_HELMET, (short)0, new String[] {}));
         items.add(new ItemAlias("Chainmail Chestplate", Material.CHAINMAIL_CHESTPLATE, (short)0, new String[] {}));
@@ -484,9 +484,9 @@ public class Items {
         items.add(new ItemAlias("Item Frame", Material.ITEM_FRAME, (short)0, new String[] {}));
         items.add(new ItemAlias("Skeleton Skull", Material.SKULL_ITEM, (short)0, new String[] {}));
         items.add(new ItemAlias("Wither Skeleton Skull", Material.SKULL_ITEM, (short)1, new String[] {}));
-        items.add(new ItemAlias("Zombie Head", Material.SKULL_ITEM, (short)2, new String[] {}));
-        items.add(new ItemAlias("Human Head", Material.SKULL_ITEM, (short)3, new String[] {}));
-        items.add(new ItemAlias("Creeper Head", Material.SKULL_ITEM, (short)4, new String[] {}));
+        items.add(new ItemAlias("Zombie Skull", Material.SKULL_ITEM, (short)2, new String[] {}));
+        items.add(new ItemAlias("Player Skull", Material.SKULL_ITEM, (short)3, new String[] {}));
+        items.add(new ItemAlias("Creeper Skull", Material.SKULL_ITEM, (short)4, new String[] {}));
         items.add(new ItemAlias("Carrot", Material.CARROT_ITEM, (short)0, new String[] {}));
         items.add(new ItemAlias("Golden Carrot", Material.GOLDEN_CARROT, (short)0, new String[] {}));
         items.add(new ItemAlias("Carrot Block", Material.CARROT, (short)0, new String[] {}));

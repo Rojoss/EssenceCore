@@ -1,4 +1,4 @@
-package com.clashwars.essence.commands.player_status;
+package com.clashwars.essence.commands.teleport;
 
 import com.clashwars.essence.Essence;
 import com.clashwars.essence.Message;
@@ -13,13 +13,13 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class KillCmd extends EssenceCommand {
+public class TpHereCmd extends EssenceCommand {
 
-    public KillCmd(Essence ess, String label, String description, String permission, List<String> aliases) {
-        super(ess, label, description, permission, aliases);
+    public TpHereCmd(Essence ess, String command, String description, String permission, List<String> aliases) {
+        super(ess, command, description, permission, aliases);
 
         cmdArgs = new CmdArgument[] {
-                new PlayerArgument("player", ArgumentRequirement.REQUIRED, "")
+                new PlayerArgument("target", ArgumentRequirement.REQUIRED, ""),
         };
 
         register();
@@ -27,24 +27,26 @@ public class KillCmd extends EssenceCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_PLAYER_ONLY, true));
+            return true;
+        }
+
         ArgumentParseResults result = parseArgs(this, sender, args);
         if (!result.success) {
             return true;
         }
+        args = result.getArgs();
 
-        Player player = (Player)result.getValue(0).getValue();
+        Player target = (Player)result.getValue(0).getValue();
+        Player player = (Player)sender;
 
-        if (hasPermission(player, "exempt")) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_KILL_EXEMPT, true, player.getName()));
-            return true;
-        }
-
-        player.setHealth(0);
+        target.teleport(player);
 
         if (!result.hasModifier("-s")) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_KILL, true, player.getName()));
+            player.sendMessage(ess.getMessages().getMsg(Message.CMD_TPHERE, true, target.getDisplayName()));
         }
-
         return true;
     }
+
 }

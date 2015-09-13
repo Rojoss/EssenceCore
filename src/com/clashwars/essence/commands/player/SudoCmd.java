@@ -1,25 +1,28 @@
-package com.clashwars.essence.commands.player_status;
+package com.clashwars.essence.commands.player;
 
 import com.clashwars.essence.Essence;
 import com.clashwars.essence.Message;
 import com.clashwars.essence.cmd_arguments.PlayerArgument;
+import com.clashwars.essence.cmd_arguments.StringArgument;
 import com.clashwars.essence.cmd_arguments.internal.ArgumentParseResults;
 import com.clashwars.essence.cmd_arguments.internal.ArgumentRequirement;
 import com.clashwars.essence.cmd_arguments.internal.CmdArgument;
 import com.clashwars.essence.commands.EssenceCommand;
+import com.clashwars.essence.util.Util;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class KillCmd extends EssenceCommand {
+public class SudoCmd extends EssenceCommand {
 
-    public KillCmd(Essence ess, String label, String description, String permission, List<String> aliases) {
-        super(ess, label, description, permission, aliases);
+    public SudoCmd(Essence ess, String command, String description, String permission, List<String> aliases) {
+        super(ess, command, description, permission, aliases);
 
         cmdArgs = new CmdArgument[] {
-                new PlayerArgument("player", ArgumentRequirement.REQUIRED, "")
+                new PlayerArgument("player", ArgumentRequirement.REQUIRED, ""),
+                new StringArgument("command", ArgumentRequirement.REQUIRED, ""),
         };
 
         register();
@@ -32,19 +35,16 @@ public class KillCmd extends EssenceCommand {
             return true;
         }
 
-        Player player = (Player)result.getValue(0).getValue();
+        Player target = (Player)result.getValue(0).getValue();
+        String command = Util.implode(args, " ", 1);
 
-        if (hasPermission(player, "exempt")) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_KILL_EXEMPT, true, player.getName()));
-            return true;
-        }
-
-        player.setHealth(0);
+        ess.getServer().dispatchCommand(target, command);
 
         if (!result.hasModifier("-s")) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_KILL, true, player.getName()));
+            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_SUDO, true, target.getName(), command));
         }
 
         return true;
     }
+
 }

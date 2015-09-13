@@ -8,6 +8,7 @@ import com.clashwars.essence.commands.EssenceCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.List;
 
@@ -23,20 +24,21 @@ public class SuicideCmd extends EssenceCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        ArgumentParseResults result = parseArgs(this, sender, args);
-        if (!result.success) {
-            return true;
-        }
-
         if (!(sender instanceof Player)) {
             sender.sendMessage(ess.getMessages().getMsg(Message.CMD_PLAYER_ONLY, true));
             return true;
         }
 
+        ArgumentParseResults result = parseArgs(this, sender, args);
+        if (!result.success) {
+            return true;
+        }
+
         Player player = (Player)sender;
+        double health = player.getHealth();
 
         player.setHealth(0);
-        ess.getServer().broadcastMessage(ess.getMessages().getMsg(Message.CMD_SUICIDE, true, player.getName()));
+        player.setLastDamageCause(new EntityDamageEvent(player, EntityDamageEvent.DamageCause.SUICIDE, health));
 
         return true;
     }

@@ -62,8 +62,16 @@ public enum Message {
     CMD_FLYSPEED_OTHER(MsgCat.COMMAND, "&a{0}&6's flying speed is now &a{1}"),
     CMD_SUICIDE(MsgCat.COMMAND, "&a{0} &6has decided to take his own life."),
     CMD_KILL(MsgCat.COMMAND, "&6You killed &a{0}."),
+    CMD_KILL_EXEMPT(MsgCat.COMMAND, "&cYou cannot kill &a{0}&c."),
     CMD_TREE(MsgCat.COMMAND, "&6A tree has been generated."),
     CMD_TREE_FAILURE(MsgCat.COMMAND, "&cA tree cannot be generated there."),
+    CMD_INVSEE(MsgCat.COMMAND, "&6You're now viewing &a{0}&6's inventory."),
+    CMD_INVSEE_EXEMPT(MsgCat.COMMAND, "&cYou cannot view &a{0}&c's inventory."),
+    CMD_ENDERCHEST(MsgCat.COMMAND, "&6You are viewing your enderchest."),
+    CMD_ENDERCHEST_OTHER(MsgCat.COMMAND, "&cYou cannot view &a{0}&c's enderchest."),
+    CMD_TPHERE(MsgCat.COMMAND, "&6You have teleported &a{0} &6here."),
+    CMD_SUDO(MsgCat.COMMAND, "&6You made &a{0} &6run &a{1}&c."),
+
 
     //Command modifiers
     MOD_HELP(MsgCat.COMMAND_MODIFIERS, "Show detailed command information"),
@@ -75,6 +83,7 @@ public enum Message {
     MOD_REMOVEEFFECT_NEGATIVE(MsgCat.COMMAND_MODIFIERS, "Will ignore all positive potion effects and only remove the negative ones"),
     MOD_REMOVEEFFECT_POSITIVE(MsgCat.COMMAND_MODIFIERS, "Will ignore all negative potion effects and only remove the positive ones"),
     MOD_BURN_INCREMENT(MsgCat.COMMAND_MODIFIERS, "Increment the duration if the player is already burning"),
+    MOD_GOD_RESET(MsgCat.COMMAND_MODIFIERS, "Reset any remaining effects like fire ticks, negative potion effects and so on"),
 
     //Command options/optional arguments
     OPT_HEAL_FEED(MsgCat.COMMAND_OPTIONS, "Restore hunger?"),
@@ -88,6 +97,8 @@ public enum Message {
     OPT_NICK_MAX_CHARS(MsgCat.COMMAND_OPTIONS, "Maximum amount of characters allowed. (exclusive prefix)"),
     OPT_BURN_TICKS(MsgCat.COMMAND_OPTIONS, "Change the time from seconds to ticks for more precision. (20 ticks per second)"),
     OPT_ALLOW_FLY(MsgCat.COMMAND_OPTIONS, "If true it will allow the player to keep toggling flying by double tapping space. If false the player can't start flying when double tapping space"),
+    OPT_NO_HUNGER_LOSS(MsgCat.COMMAND_OPTIONS, "If enabled you wont lose hunger while in god mode"),
+    OPT_NO_DAMAGE(MsgCat.COMMAND_OPTIONS, "If enabled you wont be able to damage other entities wile in god mode"),
     //OPT_FLYING(MsgCat.COMMAND_OPTIONS, "If true it will set the player to currently flying. If false it will stop flight"),
     ;
 

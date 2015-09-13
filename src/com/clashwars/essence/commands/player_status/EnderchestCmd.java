@@ -19,7 +19,7 @@ public class EnderchestCmd extends EssenceCommand {
         super(ess, label, description, permission, aliases);
 
         cmdArgs = new CmdArgument[] {
-                new PlayerArgument("player", ArgumentRequirement.OPTIONAL, "")
+                new PlayerArgument("player", ArgumentRequirement.OPTIONAL, "others")
         };
 
         register();
@@ -27,20 +27,29 @@ public class EnderchestCmd extends EssenceCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        ArgumentParseResults result = parseArgs(this, sender, args);
-        if (!result.success) {
-            return true;
-        }
-
         if (!(sender instanceof Player)) {
             sender.sendMessage(ess.getMessages().getMsg(Message.CMD_PLAYER_ONLY, true));
             return true;
         }
 
+        ArgumentParseResults result = parseArgs(this, sender, args);
+        if (!result.success) {
+            return true;
+        }
+
+        // TODO: Offline player support
+
         Player player = (Player)sender;
         Player targetPlayer = result.getValue(0).getValue() == null ? (Player)sender : (Player)result.getValue(0).getValue();
 
         player.openInventory(targetPlayer.getEnderChest());
+
+        if (!result.hasModifier("-s")) {
+            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_ENDERCHEST, true));
+            if (!sender.equals(player)) {
+                sender.sendMessage(ess.getMessages().getMsg(Message.CMD_ENDERCHEST_OTHER, true, player.getName()));
+            }
+        }
 
         return true;
     }

@@ -30,13 +30,13 @@ public class InvseeCmd extends EssenceCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        ArgumentParseResults result = parseArgs(this, sender, args);
-        if (!result.success) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_PLAYER_ONLY, true));
             return true;
         }
 
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_PLAYER_ONLY, true));
+        ArgumentParseResults result = parseArgs(this, sender, args);
+        if (!result.success) {
             return true;
         }
 
@@ -45,7 +45,16 @@ public class InvseeCmd extends EssenceCommand {
 
         // TODO: Find a way to call InventoryOpenEvent.
 
+        if (hasPermission(invOwner, "exempt")) {
+            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_INVSEE_EXEMPT, true, invOwner.getName()));
+            return true;
+        }
+
         player.openInventory(invOwner.getInventory());
+
+        if (!result.hasModifier("-s")) {
+            player.sendMessage(ess.getMessages().getMsg(Message.CMD_INVSEE, true, invOwner.getName()));
+        }
 
         return true;
     }

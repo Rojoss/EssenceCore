@@ -19,6 +19,10 @@ public class StringArgument extends CmdArgument {
     private int minChars = -1;
     private int maxChars = -1;
 
+    public StringArgument(String name, ArgumentRequirement requirement, String permission) {
+        super(name, requirement, permission);
+    }
+
     public StringArgument(String name, ArgumentRequirement requirement, String permission, String match) {
         super(name, requirement, permission);
         this.match = match;

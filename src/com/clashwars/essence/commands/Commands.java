@@ -7,6 +7,7 @@ import com.clashwars.essence.commands.location.DelWarpCmd;
 import com.clashwars.essence.commands.location.SetWarpCmd;
 import com.clashwars.essence.commands.location.WarpCmd;
 import com.clashwars.essence.commands.location.WarpsCmd;
+import com.clashwars.essence.commands.misc.TestCmd;
 import com.clashwars.essence.commands.player.NicknameCmd;
 import com.clashwars.essence.commands.player_status.*;
 import com.clashwars.essence.commands.plugin.MainPluginCmd;
@@ -35,6 +36,7 @@ public class Commands {
 
     /** Register all Essence commands */
     public void registerCommands() {
+        registerCommand(TestCmd.class, "test", "", "Command for testing plugin functionality.", new String[] {});
         registerCommand(MainPluginCmd.class, "essence", "", "Main plugin command and config reloading", new String[] {"essentials", "essential"});
         registerCommand(HealCmd.class, "heal", "heal", "Heal a player", new String[] {"health", "sethealth"});
         registerCommand(FeedCmd.class, "feed", "feed", "Feed a player", new String[] {"hunger", "eat"});

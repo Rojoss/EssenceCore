@@ -8,7 +8,7 @@
 *.ipr
 *.iws
 .idea/
-.iml
+*.iml
 
 # Eclipse stuff
 /.classpath

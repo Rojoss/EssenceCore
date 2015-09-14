@@ -5,27 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>info.mcessence.essence</groupId>
-    <artifactId>Essence</artifactId>
+    <artifactId>parent</artifactId>
     <name>Essence</name>
-    <version>0.1</version>
+    <version>parent</version>
     <description>Essentials plugin with lots of commands and utilities.</description>
     <url>http://mc-essence.info/</url>
 
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <build>
-        <finalName>Essence</finalName>
-        <sourceDirectory>src/main/java</sourceDirectory>
-        <resources>
-            <resource>
-                <targetPath>.</targetPath>
-                <filtering>true</filtering>
-                <directory>${basedir}/src/main/resources/</directory>
-                <includes>
-                    <include>plugin.yml</include>
-                </includes>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -46,13 +34,11 @@
         </repository>
     </repositories>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit</artifactId>
-            <version>1.8.8-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+    <modules>
+        <module>essence</module>
+        <module>v1_8R1</module>
+        <module>v1_8R2</module>
+        <module>v1_8R3</module>
+    </modules>
     
 </project>

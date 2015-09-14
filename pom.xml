@@ -39,6 +39,7 @@
         <module>v1_8R1</module>
         <module>v1_8R2</module>
         <module>v1_8R3</module>
+        <module>nms-common</module>
     </modules>
     
 </project>

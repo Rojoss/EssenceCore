@@ -18,6 +18,7 @@ Please see the [publishing rules](https://www.spigotmc.org/wiki/plugins/) on Spi
 If you'd like to integrate or use Essence in your plugin you can do so.
 We don't really have a solid API but but there are lots of things you can do with Essence.
 Please check out the [API page](http://mc-essence.info/api) on the wiki for detailed information.
+Please note that the API of this plugin is subject to change at this stage.
 
 ## Contributing ##
 This project is still in early development currently.

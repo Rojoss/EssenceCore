@@ -27,4 +27,4 @@ For the guidelines please see this [contributing guidelines](http://mc-essence.i
 ## Issues with Spigot versions ##
 If you are a contributor, and dont have spigot (not spigot-api) artifacts on your local repository, you will have errors.
 To solve this make sure you have used buildtools to compile 1.8, 1.8.3 and 1.8.8 versions of spigot server atleast once.
-This is subject to change as new nms versions maybe come and there spigot versions maybe needed.
+This is subject to change as new nms versions may come and there spigot versions maybe needed.

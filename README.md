@@ -23,3 +23,8 @@ Please check out the [API page](http://mc-essence.info/api) on the wiki for deta
 This project is still in early development currently.
 We really appreciate it if people help contribute by creating pull requests.
 For the guidelines please see this [contributing guidelines](http://mc-essence.info/contribute_guidelines) page.
+
+## Issues with Spigot versions ##
+If you are a contributor, and dont have spigot (not spigot-api) artifacts on your local repository, you will have errors.
+To solve this make sure you have used buildtools to compile 1.8, 1.8.3 and 1.8.8 versions of spigot server atleast once.
+This is subject to change as new nms versions maybe come and there spigot versions maybe needed.

@@ -52,12 +52,12 @@ public class HealCmd extends EssenceCommand {
                 new DoubleArgument("max", ArgumentRequirement.OPTIONAL, "max", 1, 2048, false)
         };
 
-        addCommandOption("feed", new BoolOption(true, Message.OPT_HEAL_FEED));
-        addCommandOption("clear-effects", new BoolOption(true, Message.OPT_HEAL_CLEAR_EFFECTS));
-        addCommandOption("extinguish", new BoolOption(true, Message.OPT_HEAL_EXTINGUISH));
+        addCommandOption("feed", new BoolOption(true, Message.OPT_HEAL_FEED.msg()));
+        addCommandOption("clear-effects", new BoolOption(true, Message.OPT_HEAL_CLEAR_EFFECTS.msg()));
+        addCommandOption("extinguish", new BoolOption(true, Message.OPT_HEAL_EXTINGUISH.msg()));
 
-        addModifier("-h", Message.MOD_HEAL_ONLY);
-        addModifier("-m", Message.MOD_HEAL_MAX_ONLY);
+        addModifier("-h", Message.MOD_HEAL_ONLY.msg());
+        addModifier("-m", Message.MOD_HEAL_MAX_ONLY.msg());
 
         register();
     }

@@ -50,7 +50,7 @@ public class WarpCmd extends EssenceCommand {
                 new PlayerArgument("player", ArgumentRequirement.REQUIRED_CONSOLE, "others")
         };
 
-        addCommandOption("permission-based-warps", new BoolOption(true, Message.OPT_WARP_PERM_BASED), false);
+        addCommandOption("permission-based-warps", new BoolOption(true, Message.OPT_WARP_PERM_BASED.msg()), false);
 
         register();
     }

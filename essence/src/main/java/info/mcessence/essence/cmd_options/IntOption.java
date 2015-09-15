@@ -25,16 +25,16 @@
 
 package info.mcessence.essence.cmd_options;
 
-import info.mcessence.essence.message.Message;
+import info.mcessence.essence.message.EMessage;
 import info.mcessence.essence.util.NumberUtil;
 
 public class IntOption implements CommandOption {
 
-    private Message info;
+    private EMessage info;
     private Integer defaultValue;
     private Integer value;
 
-    public IntOption(int defaultValue, Message info) {
+    public IntOption(int defaultValue, EMessage info) {
         this.defaultValue = defaultValue;
         this.info = info;
     }
@@ -68,7 +68,7 @@ public class IntOption implements CommandOption {
         return defaultValue;
     }
 
-    public Message getInfo() {
+    public EMessage getInfo() {
         return info;
     }
 }

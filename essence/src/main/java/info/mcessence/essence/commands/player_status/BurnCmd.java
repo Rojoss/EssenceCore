@@ -50,9 +50,9 @@ public class BurnCmd extends EssenceCommand {
                 new PlayerArgument("player", ArgumentRequirement.REQUIRED_CONSOLE, "others")
         };
 
-        addModifier("-i", Message.MOD_BURN_INCREMENT);
+        addModifier("-i", Message.MOD_BURN_INCREMENT.msg());
 
-        addCommandOption("ticks-instead-of-seconds", new BoolOption(true, Message.OPT_BURN_TICKS));
+        addCommandOption("ticks-instead-of-seconds", new BoolOption(true, Message.OPT_BURN_TICKS.msg()));
 
         register();
 

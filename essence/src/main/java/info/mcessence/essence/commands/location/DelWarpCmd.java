@@ -46,7 +46,7 @@ public class DelWarpCmd extends EssenceCommand {
                 new StringArgument("name", ArgumentRequirement.REQUIRED, "", 2, 32)
         };
 
-        addModifier("-a", Message.MOD_DELWARP_ALL);
+        addModifier("-a", Message.MOD_DELWARP_ALL.msg());
 
         register();
     }

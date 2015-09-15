@@ -52,9 +52,9 @@ public class GodCmd extends EssenceCommand {
                 new BoolArgument("state", ArgumentRequirement.OPTIONAL, "")
         };
 
-        addModifier("-r", Message.MOD_GOD_RESET);
-        addCommandOption("no-hunger-loss", new BoolOption(true, Message.OPT_NO_HUNGER_LOSS));
-        addCommandOption("no-damage", new BoolOption(true, Message.OPT_NO_DAMAGE));
+        addModifier("-r", Message.MOD_GOD_RESET.msg());
+        addCommandOption("no-hunger-loss", new BoolOption(true, Message.OPT_NO_HUNGER_LOSS.msg()));
+        addCommandOption("no-damage", new BoolOption(true, Message.OPT_NO_DAMAGE.msg()));
 
         register();
 

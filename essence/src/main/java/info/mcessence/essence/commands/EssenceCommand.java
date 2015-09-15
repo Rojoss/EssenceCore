@@ -26,6 +26,7 @@
 package info.mcessence.essence.commands;
 
 import info.mcessence.essence.Essence;
+import info.mcessence.essence.message.EMessage;
 import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResult;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
@@ -52,7 +53,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     protected String permission;
 
     protected CmdArgument[] cmdArgs;
-    public Map<String, Message> modifiers = new HashMap<String, Message>();
+    public Map<String, EMessage> modifiers = new HashMap<String, EMessage>();
     public Map<String, CommandOption> cmdOptions = new HashMap<String, CommandOption>();
     public Map<String, CommandOption> optionalArgs = new HashMap<String, CommandOption>();
 
@@ -62,8 +63,8 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         this.ess = ess;
         this.label = label;
 
-        modifiers.put("-?", Message.MOD_HELP);
-        modifiers.put("-s", Message.MOD_SILENT);
+        modifiers.put("-?", Message.MOD_HELP.msg());
+        modifiers.put("-s", Message.MOD_SILENT.msg());
 
         loadData(description, permission, aliases);
     }
@@ -262,7 +263,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         optionalArgs.put(key, argumentType);
     }
 
-    public void addModifier(String modifier, Message info) {
+    public void addModifier(String modifier, EMessage info) {
         if (!modifier.startsWith("-")) {
             modifier = "-" + modifier;
         }

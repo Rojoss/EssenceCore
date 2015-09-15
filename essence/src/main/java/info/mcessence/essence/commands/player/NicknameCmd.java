@@ -47,16 +47,16 @@ public class NicknameCmd extends EssenceCommand {
     public NicknameCmd(Essence ess, String command, String description, String permission, List<String> aliases) {
         super(ess, command, description, permission, aliases);
 
-        addCommandOption("prefix", new StringOption("~", Message.OPT_NICK_PREFIX), false);
-        addCommandOption("min-characters", new IntOption(3, Message.OPT_NICK_MIN_CHARS), false);
-        addCommandOption("max-characters", new IntOption(16, Message.OPT_NICK_MAX_CHARS), false);
+        addCommandOption("prefix", new StringOption("~", Message.OPT_NICK_PREFIX.msg()), false);
+        addCommandOption("min-characters", new IntOption(3, Message.OPT_NICK_MIN_CHARS.msg()), false);
+        addCommandOption("max-characters", new IntOption(16, Message.OPT_NICK_MAX_CHARS.msg()), false);
 
         cmdArgs = new CmdArgument[] {
                 new StringArgument("nickname", ArgumentRequirement.REQUIRED, "", (Integer)cmdOptions.get("min-characters").getValue(), (Integer)cmdOptions.get("max-characters").getValue()),
                 new PlayerArgument("player", ArgumentRequirement.REQUIRED_CONSOLE, "others")
         };
 
-        addModifier("-r", Message.MOD_NICK_REMOVE);
+        addModifier("-r", Message.MOD_NICK_REMOVE.msg());
 
         register();
     }

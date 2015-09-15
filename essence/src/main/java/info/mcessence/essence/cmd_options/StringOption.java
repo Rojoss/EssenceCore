@@ -25,15 +25,15 @@
 
 package info.mcessence.essence.cmd_options;
 
-import info.mcessence.essence.message.Message;
+import info.mcessence.essence.message.EMessage;
 
 public class StringOption implements CommandOption {
 
-    private Message info;
+    private EMessage info;
     private String defaultValue;
     private String value;
 
-    public StringOption(String defaultValue, Message info) {
+    public StringOption(String defaultValue, EMessage info) {
         this.defaultValue = defaultValue;
         this.info = info;
     }
@@ -61,7 +61,7 @@ public class StringOption implements CommandOption {
         return defaultValue;
     }
 
-    public Message getInfo() {
+    public EMessage getInfo() {
         return info;
     }
 }

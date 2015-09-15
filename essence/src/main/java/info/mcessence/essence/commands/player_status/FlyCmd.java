@@ -51,8 +51,8 @@ public class FlyCmd extends EssenceCommand {
                 new BoolArgument("state", ArgumentRequirement.OPTIONAL, "")
         };
 
-        addCommandOption("allow-fly", new BoolOption(true, Message.OPT_BURN_TICKS));
-        //addCommandOption("flying", new BoolOption(true, Message.OPT_BURN_TICKS));
+        addCommandOption("allow-fly", new BoolOption(true, Message.OPT_BURN_TICKS.msg()));
+        //addCommandOption("flying", new BoolOption(true, Message.OPT_BURN_TICKS.msg()));
 
         register();
     }

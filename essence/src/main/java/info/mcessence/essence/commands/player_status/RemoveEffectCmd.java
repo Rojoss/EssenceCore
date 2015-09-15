@@ -60,8 +60,8 @@ public class RemoveEffectCmd extends EssenceCommand {
                 new PlayerArgument("player", ArgumentRequirement.OPTIONAL, "others")
         };
 
-        addModifier("-n", Message.MOD_REMOVEEFFECT_NEGATIVE);
-        addModifier("-p", Message.MOD_REMOVEEFFECT_POSITIVE);
+        addModifier("-n", Message.MOD_REMOVEEFFECT_NEGATIVE.msg());
+        addModifier("-p", Message.MOD_REMOVEEFFECT_POSITIVE.msg());
 
         register();
     }

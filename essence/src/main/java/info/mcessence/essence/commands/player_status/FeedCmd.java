@@ -52,8 +52,8 @@ public class FeedCmd extends EssenceCommand {
                 new IntArgument("amount", ArgumentRequirement.OPTIONAL, "", 0, 20, false)
         };
 
-        addCommandOption("saturation", new IntOption(5, Message.OPT_FEED_SATURATION));
-        addCommandOption("exhaustion", new BoolOption(true, Message.OPT_FEED_EXHAUSTION));
+        addCommandOption("saturation", new IntOption(5, Message.OPT_FEED_SATURATION.msg()));
+        addCommandOption("exhaustion", new BoolOption(true, Message.OPT_FEED_EXHAUSTION.msg()));
 
         register();
     }

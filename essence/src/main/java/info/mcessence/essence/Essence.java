@@ -33,6 +33,10 @@ import info.mcessence.essence.config.ModulesCfg;
 import info.mcessence.essence.config.aliases.ItemAliases;
 import info.mcessence.essence.config.data.Warps;
 import com.google.gson.Gson;
+import info.mcessence.essence.nms.api.ISkull;
+import info.mcessence.essence.nms.v1_8_R1.SkullUtil_v1_8_R1;
+import info.mcessence.essence.nms.v1_8_R2.SkullUtil_1_8_R2;
+import info.mcessence.essence.nms.v1_8_R3.SkullUtil_1_8_R3;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -49,7 +53,7 @@ public class Essence extends JavaPlugin {
     private CommandOptionsCfg cmdOptionsCfg;
     private Warps warps;
 
-    private info.mcessence.essence.nms.NmsUtil nmsUtil;
+    private info.mcessence.essence.nms.api.ISkull iSkull = null;
 
     private ItemAliases itemAliases;
 
@@ -94,14 +98,25 @@ public class Essence extends JavaPlugin {
         } catch (ArrayIndexOutOfBoundsException whatVersionAreYouUsingException) {
             return;
         }
-        if (version.equals("v1_8_R3")) {
-            nmsUtil = new info.mcessence.essence.nms.v1_8_R3.NmsUtil();
+
+        switch (version) {
+            case "v1_8_R1" :
+                iSkull = new SkullUtil_v1_8_R1();
+                break;
+            case "v1_8_R2" :
+                iSkull = new SkullUtil_1_8_R2();
+                break;
+            case "v1_8_R3" :
+                iSkull = new SkullUtil_1_8_R3();
+                break;
+            default:
+                iSkull = null;
         }
 
-        if (nmsUtil == null) {
+        if (iSkull == null) {
             warn("This version of Essence is not fully compatible with your server version!");
             warn("Your server version: " + version);
-            warn("Earliest compatible version: v1_8_R3");
+            warn("Earliest compatible version: v1_8_R1");
             warn("Latest compatible version: v1_8_R3");
             warn("If there is a newer server version we will update the plugin as soon as possible.");
             warn("Essence will still work fine but certain features will be disabled.");
@@ -133,8 +148,8 @@ public class Essence extends JavaPlugin {
         return gson;
     }
 
-    public info.mcessence.essence.nms.NmsUtil getNmsUtil() {
-        return nmsUtil;
+    public ISkull getISkull() {
+        return iSkull;
     }
 
 
@@ -162,4 +177,5 @@ public class Essence extends JavaPlugin {
     public Commands getCommands() {
         return commands;
     }
+
 }

@@ -53,7 +53,8 @@ public class MessagesCfg extends EasyConfig {
                 break;
             }
             Map<String, String> messages = MESSAGES.get(category);
-            for (String msg : messages.keySet()) {
+            List<String> keys = new ArrayList<>(messages.keySet());
+            for (String msg : keys) {
                 if (Message.fromString(msg) == null) {
                     messages.remove(msg);
                     changes++;

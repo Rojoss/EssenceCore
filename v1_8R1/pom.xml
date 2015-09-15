@@ -50,8 +50,8 @@
 
         <dependency>
             <groupId>info.mcessence.essence</groupId>
-            <artifactId>Essence</artifactId>
-            <version>0.1</version>
+            <artifactId>nms-common</artifactId>
+            <version>0.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

@@ -33,6 +33,12 @@ import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.*;
+import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
 
@@ -71,7 +77,7 @@ public class ItemParser {
         }
         List<String> sectionList = new ArrayList<String>(Arrays.asList(sections));
 
-        //item:data
+        //item[:data]
         ItemAlias itemAlias = Items.getItem(sections[0]);
         if (itemAlias == null) {
             error = Message.PARSER_INVALID_ITEM; //TODO: Set item specified
@@ -83,6 +89,7 @@ public class ItemParser {
 
         //No meta can be applied to air.
         if (item.getType() == Material.AIR) {
+            this.item = item;
             return;
         }
 
@@ -101,6 +108,7 @@ public class ItemParser {
 
         //No meta specified
         if (sectionList.size() < 1) {
+            this.item = item;
             return;
         }
 
@@ -133,9 +141,8 @@ public class ItemParser {
         }
 
         //Color
-        //TODO: Change this to a different name (color is for firework)
-        if (metaMap.containsKey("color")) {
-            Color color = Util.getColor(metaMap.get("color"));
+        if (metaMap.containsKey("leather")) {
+            Color color = Util.getColor(metaMap.get("leather"));
             if (color == null) {
                 error = Message.PARSER_INVALID_COLOR; //TODO: Set color
                 if (!ignoreErrors) {
@@ -144,7 +151,7 @@ public class ItemParser {
             } else {
                 item.setColor(color);
             }
-            metaMap.remove("color");
+            metaMap.remove("leather");
         }
 
         //Books
@@ -260,8 +267,8 @@ public class ItemParser {
             metaMap.remove("fade");
             hasFireworkMeta = true;
         }
-        if (metaMap.containsKey("twinkle")) {
-            if (Util.getBoolean(metaMap.get("twinkle"))) {
+        if (metaMap.containsKey("flicker")) {
+            if (Util.getBoolean(metaMap.get("flicker"))) {
                 fireworkBuilder.withFlicker();
             }
             metaMap.remove("twinkle");
@@ -306,6 +313,13 @@ public class ItemParser {
         this.item = item;
     }
 
+    /**
+     * Parses the given ItemStack in to a string.
+     * @param item The item instance to be parsed.
+     */
+    public ItemParser(ItemStack item) {
+        this(new EItem(item));
+    }
 
     /**
      * Parses the given EItem in to a string.
@@ -314,6 +328,151 @@ public class ItemParser {
     public ItemParser(EItem item) {
         this.item = item;
 
+        //Don't do anything for air.
+        if (item == null || item.getType() == Material.AIR) {
+            this.string = "Air";
+            return;
+        }
+
+        List<String> components = new ArrayList<String>();
+
+        //Material[:data]
+        ItemAlias itemAlias = Items.getItem(item.getType(), item.getDurability());
+        if (itemAlias == null) {
+            error = Message.PARSER_INVALID_ITEM;
+            return;
+        }
+        String itemString = itemAlias.getName().replaceAll(" ", "");
+        if (itemAlias.getData() != 0) {
+            itemString += ":" + itemAlias.getData();
+        }
+        components.add(itemString);
+
+        //Amount
+        components.add(Integer.toString(item.getAmount()));
+
+        //No meta
+        if (!item.hasItemMeta()) {
+            this.string = Util.implode(components, " ");
+            return;
+        }
+        ItemMeta meta = item.getItemMeta();
+
+        //Name
+        if (meta.hasDisplayName()) {
+            components.add("name:" + Util.removeColor(meta.getDisplayName()).replaceAll(" ", "_"));
+        }
+
+        //Lore
+        if (meta.hasLore()) {
+            String lore = Util.implode(meta.getLore(), "|");
+            components.add("lore:" + Util.removeColor(lore).replaceAll(" ", "_"));
+        }
+
+        //Enchants
+        if (meta.hasEnchants()) {
+            for (Map.Entry<Enchantment, Integer> entry : meta.getEnchants().entrySet()) {
+                //TODO: Use default name from alias.
+                components.add(entry.getKey().getName().toLowerCase().replaceAll("_", "") + ":" + entry.getValue());
+            }
+        }
+
+        //Leather color
+        if (meta instanceof LeatherArmorMeta) {
+            Color color = ((LeatherArmorMeta)meta).getColor();
+            if (color != null) {
+                components.add("leather:" + String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue()));
+            }
+        }
+
+        //Book
+        if (meta instanceof BookMeta) {
+            BookMeta bookMeta = (BookMeta)meta;
+
+            if (bookMeta.hasPages()) {
+                //TODO: Get the book template from EItem (probably have to store it in EItem when setting book)
+                components.add("book:Unknown");
+            }
+            if (bookMeta.hasAuthor()) {
+                components.add("author:" + Util.removeColor(bookMeta.getAuthor()).replaceAll(" ", "_"));
+            }
+            if (bookMeta.hasTitle()) {
+                components.add("title:" + Util.removeColor(bookMeta.getTitle()).replaceAll(" ", "_"));
+            }
+        }
+
+        //Skulls
+        if (meta instanceof SkullMeta) {
+            SkullMeta skullMeta = (SkullMeta)meta;
+
+            if (skullMeta.hasOwner()) {
+                if (skullMeta.getOwner() == null) {
+                    //TODO: Get skull texture
+                } else {
+                    components.add("player:" + skullMeta.getOwner());
+                }
+            }
+        }
+
+        //Banners
+        if (meta instanceof BannerMeta) {
+            BannerMeta bannerMeta = (BannerMeta)meta;
+
+            //TODO: Use default DyeColor name from alias.
+            components.add("basecolor:" + bannerMeta.getBaseColor().toString().toLowerCase().replaceAll("_", ""));
+            if (bannerMeta.getPatterns() != null && bannerMeta.getPatterns().size() > 0) {
+                for (Pattern pattern : bannerMeta.getPatterns()) {
+                    //TODO: Use default Pattern and DyeColor name from alias.
+                    components.add(pattern.getPattern().toString().toLowerCase().replace("_", "") + ":" + pattern.getColor().toString().toLowerCase().replaceAll("_", ""));
+                }
+            }
+        }
+
+        //Firework
+        if (meta instanceof FireworkMeta) {
+            FireworkMeta fireworkMeta = (FireworkMeta)meta;
+            components.add("power:" + fireworkMeta.getPower());
+
+            if (fireworkMeta.hasEffects()) {
+                for (FireworkEffect effect : fireworkMeta.getEffects()) {
+                    //TODO: Use default Shape/Effect name from alias.
+                    components.add("shape:" + effect.getType().toString().replaceAll("_", ""));
+
+                    components.add("flicker:" + effect.hasFlicker());
+                    components.add("trail:" + effect.hasTrail());
+
+                    List<String> colors = new ArrayList<String>();
+                    if (effect.getColors() != null && effect.getColors().size() > 0) {
+                        for (Color color : effect.getColors()) {
+                            colors.add(String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue()));
+                        }
+                        components.add("color:" + Util.implode(colors, ";"));
+                    }
+
+                    if (effect.getFadeColors() != null && effect.getFadeColors().size() > 0) {
+                        colors.clear();
+                        for (Color color : effect.getFadeColors()) {
+                            colors.add(String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue()));
+                        }
+                        components.add("fade:" + Util.implode(colors, ";"));
+                    }
+                }
+            }
+        }
+
+        //Potion effects
+        if (meta instanceof PotionMeta) {
+            PotionMeta potionMeta = (PotionMeta)meta;
+            if (potionMeta.hasCustomEffects()) {
+                for (PotionEffect effect : potionMeta.getCustomEffects()) {
+                    //TODO: Use default Effect name from alias.
+                    components.add(effect.getType().getName().toLowerCase().replaceAll("_", "") + ":" + effect.getDuration() + "." + effect.getAmplifier());
+                }
+            }
+        }
+
+        //DONE PARSING!
+        this.string = Util.implode(components, " ");
     }
 
     /**

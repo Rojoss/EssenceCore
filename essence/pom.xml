@@ -72,7 +72,7 @@
 
         <dependency>
             <groupId>info.mcessence.essence</groupId>
-            <artifactId>nms-common</artifactId>
+            <artifactId>api</artifactId>
             <version>0.0</version>
             <scope>compile</scope>
         </dependency>

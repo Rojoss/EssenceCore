@@ -6,7 +6,7 @@ Please check out the [wiki](http://mc-essence.info) for more information about E
 ## Links ##
 * [The wiki/website](http://mc-essence.info)
 * Spigot plugin page
-* JIRA
+* [JIRA] (https://essence.atlassian.net/projects/ES/)
 
 ## Licence ##
 This plugin is licensed under **MIT**.

@@ -18,7 +18,7 @@ import java.util.UUID;
 
 
 /**
- * Handles player skull data
+ * Handles player skull data for v1_8R1
  */
 public class SkullUtil_v1_8_R1 implements ISkull {
 

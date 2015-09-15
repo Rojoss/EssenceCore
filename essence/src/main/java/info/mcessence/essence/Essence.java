@@ -25,6 +25,7 @@
 
 package info.mcessence.essence;
 
+import com.google.gson.Gson;
 import info.mcessence.essence.commands.Commands;
 import info.mcessence.essence.config.CommandOptionsCfg;
 import info.mcessence.essence.config.CommandsCfg;
@@ -32,7 +33,6 @@ import info.mcessence.essence.config.MessagesCfg;
 import info.mcessence.essence.config.ModulesCfg;
 import info.mcessence.essence.config.aliases.ItemAliases;
 import info.mcessence.essence.config.data.Warps;
-import com.google.gson.Gson;
 import info.mcessence.essence.nms.api.ISkull;
 import info.mcessence.essence.nms.v1_8_R1.SkullUtil_v1_8_R1;
 import info.mcessence.essence.nms.v1_8_R2.SkullUtil_1_8_R2;
@@ -53,7 +53,7 @@ public class Essence extends JavaPlugin {
     private CommandOptionsCfg cmdOptionsCfg;
     private Warps warps;
 
-    private info.mcessence.essence.nms.api.ISkull iSkull = null;
+    private ISkull iSkull = null;
 
     private ItemAliases itemAliases;
 

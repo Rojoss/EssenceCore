@@ -54,6 +54,7 @@ public class MessagesCfg extends EasyConfig {
             }
             Map<String, String> messages = MESSAGES.get(category);
             List<String> keys = new ArrayList<>(messages.keySet());
+            //Testing JIRA commits.
             for (String msg : keys) {
                 if (Message.fromString(msg) == null) {
                     messages.remove(msg);

@@ -25,6 +25,7 @@
 
 package info.mcessence.essence.util;
 
+import info.mcessence.essence.message.EMessage;
 import info.mcessence.essence.message.Message;
 import info.mcessence.essence.aliases.ItemAlias;
 import info.mcessence.essence.aliases.Items;
@@ -53,8 +54,7 @@ public class ItemParser {
     private String string = null;
     private EItem item = null;
 
-    //TODO: Change this to the new message system and insert the data in to the messages.
-    private Message error = Message.PARSER_VALID;
+    private String error = "";
 
 
     /**
@@ -71,7 +71,7 @@ public class ItemParser {
 
         String[] sections = string.split(" ");
         if (sections.length < 1) {
-            error = Message.PARSER_NO_ITEM_SPECIFIED;
+            error = Message.PARSER_NO_ITEM_SPECIFIED.msg().getMsg(true);
             return;
         }
         List<String> sectionList = new ArrayList<String>(Arrays.asList(sections));
@@ -79,7 +79,7 @@ public class ItemParser {
         //item[:data]
         ItemAlias itemAlias = Items.getItem(sections[0]);
         if (itemAlias == null) {
-            error = Message.PARSER_INVALID_ITEM; //TODO: Set item specified
+            error = Message.PARSER_INVALID_ITEM.msg().getMsg(true, sections[0]);
             return;
         }
         item.setType(itemAlias.getType());
@@ -95,7 +95,7 @@ public class ItemParser {
         //Amount
         if (sections.length > 1) {
             if (NumberUtil.getInt(sections[1]) == null) {
-                error = Message.PARSER_INVALID_AMOUNT; //TODO: Set amount specified
+                error = Message.PARSER_INVALID_AMOUNT.msg().getMsg(true, sections[1]);
                 if (!ignoreErrors) {
                     return;
                 }
@@ -116,7 +116,7 @@ public class ItemParser {
         for (String section : sectionList) {
             String[] split = section.split(":");
             if (split.length < 2) {
-                error = Message.NO_META_VALUE; //TODO: Set meta key
+                error = Message.NO_META_VALUE.msg().getMsg(true, split[0]);
                 if (ignoreErrors) {
                     continue;
                 } else {
@@ -143,7 +143,7 @@ public class ItemParser {
         if (metaMap.containsKey("leather")) {
             Color color = Util.getColor(metaMap.get("leather"));
             if (color == null) {
-                error = Message.PARSER_INVALID_COLOR; //TODO: Set color
+                error = Message.PARSER_INVALID_COLOR.msg().getMsg(true, metaMap.get("leather"));
                 if (!ignoreErrors) {
                     return;
                 }
@@ -185,7 +185,7 @@ public class ItemParser {
         if (metaMap.containsKey("basecolor")) {
             DyeColor color = DyeColor.WHITE; //TODO: Get color from alias.
             if (color == null) {
-                error = Message.PARSER_INVALID_DYE_COLOR; //TODO: Set color
+                error = Message.PARSER_INVALID_DYE_COLOR.msg().getMsg(true, metaMap.get("basecolor"));
                 if (!ignoreErrors) {
                     return;
                 }
@@ -202,7 +202,7 @@ public class ItemParser {
         boolean hasColor = false;
         if (metaMap.containsKey("power")) {
             if (NumberUtil.getInt(metaMap.get("power")) == null) {
-                error = Message.NOT_A_NUMBER; //TODO: Set power specified
+                error = Message.NOT_A_NUMBER.msg().getMsg(true, metaMap.get("power"));
                 if (!ignoreErrors) {
                     return;
                 }
@@ -214,7 +214,7 @@ public class ItemParser {
         if (metaMap.containsKey("shape")) {
             FireworkEffect.Type shape = FireworkEffect.Type.BALL; //TODO: Get shape from alias
             if (shape == null) {
-                error = Message.PARSER_INVALID_SHAPE; //TODO: Set shape specified.
+                error = Message.PARSER_INVALID_SHAPE.msg().getMsg(true, metaMap.get("shape"));
                 if (!ignoreErrors) {
                     return;
                 }
@@ -231,7 +231,7 @@ public class ItemParser {
             for (String color : colorSplit) {
                 Color clr = Util.getColor(color);
                 if (clr == null) {
-                    error = Message.PARSER_INVALID_COLOR; //TODO: Set the color specified.
+                    error = Message.PARSER_INVALID_COLOR.msg().getMsg(true, metaMap.get("color"));
                     if (!ignoreErrors) {
                         return;
                     }
@@ -252,7 +252,7 @@ public class ItemParser {
             for (String color : colorSplit) {
                 Color clr = Util.getColor(color);
                 if (clr == null) {
-                    error = Message.PARSER_INVALID_COLOR; //TODO: Set the color specified.
+                    error = Message.PARSER_INVALID_COLOR.msg().getMsg(true, metaMap.get("fade"));
                     if (!ignoreErrors) {
                         return;
                     }
@@ -285,13 +285,13 @@ public class ItemParser {
         } catch (Exception e) {
             if (hasFireworkMeta) {
                 if (!hasShape) {
-                    error = Message.PARSER_MISSING_FIREWORK_SHAPE;
+                    error = Message.PARSER_MISSING_FIREWORK_SHAPE.msg().getMsg(true);
                     if (!ignoreErrors) {
                         return;
                     }
                 }
                 if (!hasShape) {
-                    error = Message.PARSER_MISSING_FIREWORK_COLOR;
+                    error = Message.PARSER_MISSING_FIREWORK_COLOR.msg().getMsg(true);
                     if (!ignoreErrors) {
                         return;
                     }
@@ -338,7 +338,7 @@ public class ItemParser {
         //Material[:data]
         ItemAlias itemAlias = Items.getItem(item.getType(), item.getDurability());
         if (itemAlias == null) {
-            error = Message.PARSER_INVALID_ITEM;
+            error = Message.PARSER_INVALID_ITEM.msg().getMsg(true);
             return;
         }
         String itemString = itemAlias.getName().replaceAll(" ", "");
@@ -480,14 +480,14 @@ public class ItemParser {
      * @return if it parsed successful.
      */
     public boolean isValid() {
-        return item != null && string != null && error == Message.PARSER_VALID;
+        return item != null && string != null && !error.isEmpty();
     }
 
     /**
      * If the validation was unsuccessful this will return the error message.
-     * @return the Message which contains the error. If it was successfull the message will be PARSER_VALID
+     * @return the message which contains the error. If it was successfull the message will be empty.
      */
-    public Message getError() {
+    public String getError() {
         return error;
     }
 

@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.player_status;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.IntArgument;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
@@ -83,9 +83,9 @@ public class FeedCmd extends EssenceCommand {
         }
 
         if (!result.hasModifier("-s")) {
-            player.sendMessage(ess.getMessages().getMsg(Message.CMD_FEED_FEEDED, true));
+            player.sendMessage(Message.CMD_FEED_FEEDED.msg().getMsg(true));
             if (!sender.equals(player)) {
-                sender.sendMessage(ess.getMessages().getMsg(Message.CMD_FEED_OTHER, true, player.getDisplayName()));
+                sender.sendMessage(Message.CMD_FEED_OTHER.msg().getMsg(true, player.getDisplayName()));
             }
         }
         return true;

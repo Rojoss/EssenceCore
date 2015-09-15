@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.location;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.LocationArgument;
 import info.mcessence.essence.cmd_arguments.StringArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
@@ -66,7 +66,7 @@ public class SetWarpCmd extends EssenceCommand {
 
         ess.getWarps().setWarp(name, location);
         if (!result.hasModifier("-s")) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_WARP_SET, true, name));
+            sender.sendMessage(Message.CMD_WARP_SET.msg().getMsg(true, name));
         }
         return true;
     }

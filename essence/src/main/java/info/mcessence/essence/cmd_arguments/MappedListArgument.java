@@ -26,7 +26,7 @@
 package info.mcessence.essence.cmd_arguments;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResult;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
@@ -70,7 +70,7 @@ public class MappedListArgument extends CmdArgument {
             }
         }
 
-        sender.sendMessage(Essence.inst().getMessages().getMsg(Message.INVALID_LIST_ARGUMENT, true, arg, Util.implode(allArgs, ",")));
+        sender.sendMessage(Message.INVALID_LIST_ARGUMENT.msg().getMsg(true, arg, Util.implode(allArgs, ",")));
         result.success = false;
         return result;
     }

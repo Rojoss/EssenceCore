@@ -25,7 +25,7 @@
 
 package info.mcessence.essence.cmd_arguments;
 
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResult;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
@@ -98,7 +98,7 @@ public class LocationArgument extends CmdArgument {
 
         if (components.length < 3 || components.length > 5) {
             result.success = false;
-            sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.INVALID_LOCATION, true, arg));
+            sender.sendMessage(Message.INVALID_LOCATION.msg().getMsg(true, arg));
             return result;
         }
 
@@ -122,7 +122,7 @@ public class LocationArgument extends CmdArgument {
                     Double val = NumberUtil.getDouble(components[index].substring(1));
                     if (val == null) {
                         result.success = false;
-                        sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.NOT_A_NUMBER, true, components[index].substring(1)));
+                        sender.sendMessage(Message.NOT_A_NUMBER.msg().getMsg(true, components[index].substring(1)));
                         return result;
                     }
                     if (selectorLoc.containsKey(key) && selectorLoc.get(key) instanceof Double) {
@@ -131,14 +131,14 @@ public class LocationArgument extends CmdArgument {
                     newLocValues.put(key, val);
                 } else {
                     result.success = false;
-                    sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.CANT_USE_RELATIVE_COORDS, true));
+                    sender.sendMessage(Message.CANT_USE_RELATIVE_COORDS.msg().getMsg(true));
                     return result;
                 }
             } else {
                 Double val = NumberUtil.getDouble(components[index]);
                 if (val == null) {
                     result.success = false;
-                    sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.NOT_A_NUMBER, true, components[index].substring(1)));
+                    sender.sendMessage(Message.NOT_A_NUMBER.msg().getMsg(true, components[index].substring(1)));
                     return result;
                 }
 

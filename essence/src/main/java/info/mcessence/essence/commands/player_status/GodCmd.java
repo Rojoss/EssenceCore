@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.player_status;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.BoolArgument;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;

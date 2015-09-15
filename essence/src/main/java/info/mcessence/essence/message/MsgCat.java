@@ -23,52 +23,27 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.cmd_options;
+package info.mcessence.essence.message;
 
-import info.mcessence.essence.message.Message;
-import info.mcessence.essence.util.NumberUtil;
+public enum MsgCat {
+    GENERAL,
+    COMMAND,
+    COMMAND_MODIFIERS,
+    COMMAND_OPTIONS,
+    COMMAND_OTHER,
+    VALIDATION,
+    ITEM_PARSER,
+    OTHER,
+    ;
 
-public class IntOption implements CommandOption {
-
-    private Message info;
-    private Integer defaultValue;
-    private Integer value;
-
-    public IntOption(int defaultValue, Message info) {
-        this.defaultValue = defaultValue;
-        this.info = info;
-    }
-
-    public boolean isValid(String input) {
-        if (input == null || input.isEmpty()) {
-            return false;
+    public static MsgCat fromString(String name) {
+        name = name.toLowerCase().replace("_", "");
+        name = name.toLowerCase().replace("-", "");
+        for (MsgCat cat : values()) {
+            if (cat.toString().toLowerCase().replace("_", "").equals(name)) {
+                return cat;
+            }
         }
-        if (NumberUtil.getInt(input) == null) {
-            return false;
-        }
-        return true;
-    }
-
-    public boolean setValue(String input) {
-        if (NumberUtil.getInt(input) != null) {
-            this.value = NumberUtil.getInt(input);
-            return true;
-        }
-        return false;
-    }
-
-    public Object getValue() {
-        if (value == null) {
-            return defaultValue;
-        }
-        return value;
-    }
-
-    public Object getDefaultValue() {
-        return defaultValue;
-    }
-
-    public Message getInfo() {
-        return info;
+        return null;
     }
 }

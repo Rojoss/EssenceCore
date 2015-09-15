@@ -25,7 +25,7 @@
 
 package info.mcessence.essence.cmd_options;
 
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 
 public interface CommandOption {
 

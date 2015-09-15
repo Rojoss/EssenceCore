@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.player;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
 import info.mcessence.essence.cmd_arguments.StringArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
@@ -79,9 +79,9 @@ public class NicknameCmd extends EssenceCommand {
         }
 
         if (!result.hasModifier("-s")) {
-            player.sendMessage(ess.getMessages().getMsg(Message.CMD_NICK_CHANGED, true, hasPermission(sender, "color") ? player.getDisplayName() : Util.removeColor(player.getDisplayName())));
+            player.sendMessage(Message.CMD_NICK_CHANGED.msg().getMsg(true, hasPermission(sender, "color") ? player.getDisplayName() : Util.removeColor(player.getDisplayName())));
             if (!sender.equals(player)) {
-                sender.sendMessage(ess.getMessages().getMsg(Message.CMD_NICK_OTHER, true, hasPermission(sender, "color") ? player.getDisplayName() : Util.removeColor(player.getDisplayName()), player.getName()));
+                sender.sendMessage(Message.CMD_NICK_OTHER.msg().getMsg(true, hasPermission(sender, "color") ? player.getDisplayName() : Util.removeColor(player.getDisplayName()), player.getName()));
             }
         }
         return true;

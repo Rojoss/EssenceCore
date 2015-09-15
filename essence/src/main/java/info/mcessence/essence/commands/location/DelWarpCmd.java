@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.location;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.StringArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
@@ -59,7 +59,7 @@ public class DelWarpCmd extends EssenceCommand {
             if (result.hasModifier("-a")) {
                 ess.getWarps().clear();
                 if (!result.hasModifier("-s")) {
-                    sender.sendMessage(ess.getMessages().getMsg(Message.CMD_WARP_DELETED_AlL, true));
+                    sender.sendMessage(Message.CMD_WARP_DELETED_AlL.msg().getMsg(true));
                 }
             }
             return true;
@@ -68,12 +68,12 @@ public class DelWarpCmd extends EssenceCommand {
 
         String name = (String)result.getValue(0).getValue();
         if (!ess.getWarps().delWarp(name)) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_WARP_INVALID, true, name));
+            sender.sendMessage(Message.CMD_WARP_INVALID.msg().getMsg(true, name));
             return true;
         }
 
         if (!result.hasModifier("-s")) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_WARP_DELETED, true, name));
+            sender.sendMessage(Message.CMD_WARP_DELETED.msg().getMsg(true, name));
         }
         return true;
     }

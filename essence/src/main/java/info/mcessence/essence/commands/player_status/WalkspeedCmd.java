@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.player_status;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
@@ -67,9 +67,9 @@ public class WalkspeedCmd extends EssenceCommand {
         speed *= 100;
 
         if (!result.hasModifier("-s")) {
-            player.sendMessage(ess.getMessages().getMsg(Message.CMD_WALKSPEED, true, speed.toString()));
+            player.sendMessage(Message.CMD_WALKSPEED.msg().getMsg(true, speed.toString()));
             if (!sender.equals(player)) {
-                sender.sendMessage(ess.getMessages().getMsg(Message.CMD_WALKSPEED_OTHER, true, player.getDisplayName(), speed.toString()));
+                sender.sendMessage(Message.CMD_WALKSPEED_OTHER.msg().getMsg(true, player.getDisplayName(), speed.toString()));
             }
         }
 

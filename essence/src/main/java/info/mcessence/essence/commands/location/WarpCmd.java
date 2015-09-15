@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.location;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
 import info.mcessence.essence.cmd_arguments.StringArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
@@ -67,22 +67,22 @@ public class WarpCmd extends EssenceCommand {
         Player player = result.getValue(1).getValue() == null ? (Player)sender : (Player)result.getValue(1).getValue();
 
         if (ess.getWarps().getWarp(name) == null) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_WARP_INVALID, true, name));
+            sender.sendMessage(Message.CMD_WARP_INVALID.msg().getMsg(true, name));
             return true;
         }
 
         if ((Boolean)cmdOptions.get("permission-based-warps").getValue()) {
             if (!sender.hasPermission("essence.*") && !sender.hasPermission("essence.warps.*") && !sender.hasPermission("essence.warps." + name)) {
-                player.sendMessage(ess.getMessages().getMsg(Message.NO_PERM, true, "essence.warps." + name));
+                player.sendMessage(Message.NO_PERM.msg().getMsg(true, "essence.warps." + name));
                 return true;
             }
         }
 
         player.teleport(ess.getWarps().getWarp(name));
         if (!result.hasModifier("-s")) {
-            player.sendMessage(ess.getMessages().getMsg(Message.CMD_WARP_USE, true, name));
+            player.sendMessage(Message.CMD_WARP_USE.msg().getMsg(true, name));
             if (!sender.equals(player)) {
-                sender.sendMessage(ess.getMessages().getMsg(Message.CMD_WARP_OTHER, true, player.getDisplayName(), name));
+                sender.sendMessage(Message.CMD_WARP_OTHER.msg().getMsg(true, player.getDisplayName(), name));
             }
         }
         return true;

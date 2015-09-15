@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.teleport;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
@@ -64,9 +64,9 @@ public class TpCmd extends EssenceCommand {
 
         player.teleport(target);
         if (!result.hasModifier("-s")) {
-            player.sendMessage(ess.getMessages().getMsg(Message.CMD_TP, true, target.getDisplayName()));
+            player.sendMessage(Message.CMD_TP.msg().getMsg(true, target.getDisplayName()));
             if (!sender.equals(player)) {
-                sender.sendMessage(ess.getMessages().getMsg(Message.CMD_TP_OTHER, true, player.getDisplayName(), target.getDisplayName()));
+                sender.sendMessage(Message.CMD_TP_OTHER.msg().getMsg(true, player.getDisplayName(), target.getDisplayName()));
             }
         }
         return true;

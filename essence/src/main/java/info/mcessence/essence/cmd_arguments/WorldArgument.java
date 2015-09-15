@@ -26,7 +26,7 @@
 package info.mcessence.essence.cmd_arguments;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResult;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
@@ -69,7 +69,7 @@ public class WorldArgument extends CmdArgument {
         result.success = true;
         if (world == null) {
             result.success = false;
-            sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.INVALID_WORLD, true, arg));
+            sender.sendMessage(Message.INVALID_WORLD.msg().getMsg(true, arg));
         }
         return result;
     }

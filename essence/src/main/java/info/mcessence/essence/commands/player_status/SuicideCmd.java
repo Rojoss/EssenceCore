@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.player_status;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
 import info.mcessence.essence.commands.EssenceCommand;
@@ -50,7 +50,7 @@ public class SuicideCmd extends EssenceCommand {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_PLAYER_ONLY, true));
+            sender.sendMessage(Message.CMD_PLAYER_ONLY.msg().getMsg(true));
             return true;
         }
 

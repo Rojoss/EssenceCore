@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.player_status;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.MappedListArgument;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
@@ -90,9 +90,9 @@ public class GamemodeCmd extends EssenceCommand {
         player.setGameMode(gm);
 
         if (!result.hasModifier("-s")) {
-            player.sendMessage(ess.getMessages().getMsg(Message.CMD_GAMEMODE_CHANGED, true, mode));
+            player.sendMessage(Message.CMD_GAMEMODE_CHANGED.msg().getMsg(true, mode));
             if (!sender.equals(player)) {
-                sender.sendMessage(ess.getMessages().getMsg(Message.CMD_GAMEMODE_OTHER, true, mode, player.getDisplayName()));
+                sender.sendMessage(Message.CMD_GAMEMODE_OTHER.msg().getMsg(true, mode, player.getDisplayName()));
             }
         }
         return true;

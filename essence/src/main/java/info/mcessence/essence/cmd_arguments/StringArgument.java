@@ -25,7 +25,7 @@
 
 package info.mcessence.essence.cmd_arguments;
 
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResult;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
@@ -74,29 +74,29 @@ public class StringArgument extends CmdArgument {
 
         if (!match.isEmpty()) {
             if (!arg.equalsIgnoreCase(match)) {
-                sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.NO_STRING_MATCH, true, arg, match));
+                sender.sendMessage(Message.NO_STRING_MATCH.msg().getMsg(true, arg, match));
                 result.success = false;
                 return result;
             }
         } else if (minChars > 0 || maxChars > 0) {
             if (minChars > 0 && arg.length() < minChars) {
-                sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.TOO_FEW_CHARACTERS, true, arg, Integer.toString(minChars)));
+                sender.sendMessage(Message.TOO_FEW_CHARACTERS.msg().getMsg(true, arg, Integer.toString(minChars)));
                 result.success = false;
                 return result;
             }
             if (maxChars > 0 && arg.length() > maxChars) {
-                sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.TOO_MUCH_CHARACTERS, true, arg, Integer.toString(maxChars)));
+                sender.sendMessage(Message.TOO_MUCH_CHARACTERS.msg().getMsg(true, arg, Integer.toString(maxChars)));
                 result.success = false;
                 return result;
             }
         } else if (!start.isEmpty() || !end.isEmpty()) {
             if (!start.isEmpty() && !arg.toLowerCase().startsWith(start)) {
-                sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.DOESNT_START_WITH, true, arg, start));
+                sender.sendMessage(Message.DOESNT_START_WITH.msg().getMsg(true, arg, start));
                 result.success = false;
                 return result;
             }
             if (!end.isEmpty() && !arg.toLowerCase().endsWith(end)) {
-                sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.DOESNT_START_WITH, true, arg, end));
+                sender.sendMessage(Message.DOESNT_START_WITH.msg().getMsg(true, arg, end));
                 result.success = false;
                 return result;
             }

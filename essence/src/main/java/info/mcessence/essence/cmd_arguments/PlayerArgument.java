@@ -26,7 +26,7 @@
 package info.mcessence.essence.cmd_arguments;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResult;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
@@ -67,7 +67,7 @@ public class PlayerArgument extends CmdArgument {
 
         if (player == null) {
             result.success = false;
-            sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.INVALID_PLAYER, true, arg));
+            sender.sendMessage(Message.INVALID_PLAYER.msg().getMsg(true, arg));
         } else {
             result.success = true;
         }

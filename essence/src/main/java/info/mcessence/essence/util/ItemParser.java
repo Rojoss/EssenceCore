@@ -25,7 +25,7 @@
 
 package info.mcessence.essence.util;
 
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.aliases.ItemAlias;
 import info.mcessence.essence.aliases.Items;
 import info.mcessence.essence.entity.EItem;
@@ -37,7 +37,6 @@ import org.bukkit.block.banner.Pattern;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
-import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.*;

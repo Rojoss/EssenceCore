@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.player_status;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.IntArgument;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
@@ -88,9 +88,9 @@ public class BurnCmd extends EssenceCommand {
         }
 
         if (!result.hasModifier("-s")) {
-            player.sendMessage(ess.getMessages().getMsg(Message.CMD_BURN, true, Integer.toString(duration)));
+            player.sendMessage(Message.CMD_BURN.msg().getMsg(true, Integer.toString(duration)));
             if (!sender.equals(player)) {
-                sender.sendMessage(ess.getMessages().getMsg(Message.CMD_HEAL_OTHER, true, player.getDisplayName(), Integer.toString(duration)));
+                sender.sendMessage(Message.CMD_HEAL_OTHER.msg().getMsg(true, player.getDisplayName(), Integer.toString(duration)));
             }
         }
 

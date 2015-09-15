@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.world;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.LocationArgument;
 import info.mcessence.essence.cmd_arguments.MappedListArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
@@ -90,9 +90,9 @@ public class TreeCmd extends EssenceCommand {
         boolean success = location.getWorld().generateTree(location, type);
 
         if (success) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_TREE, true));
+            sender.sendMessage(Message.CMD_TREE.msg().getMsg(true));
         } else {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_TREE_FAILURE, true));
+            sender.sendMessage(Message.CMD_TREE_FAILURE.msg().getMsg(true));
         }
 
         return true;

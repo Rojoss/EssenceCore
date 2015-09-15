@@ -25,7 +25,7 @@
 
 package info.mcessence.essence.cmd_arguments;
 
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResult;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
@@ -56,7 +56,7 @@ public class DoubleArgument extends CmdArgument {
 
         Double value = NumberUtil.getDouble(arg);
         if (value == null) {
-            sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.NOT_A_NUMBER, true, arg));
+            sender.sendMessage(Message.NOT_A_NUMBER.msg().getMsg(true, arg));
             result.success = false;
             return result;
         }
@@ -64,7 +64,7 @@ public class DoubleArgument extends CmdArgument {
             if (clampValue) {
                 value = minValue;
             } else {
-                sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.NUMBER_TOO_LOW, true, arg, Double.toString(minValue)));
+                sender.sendMessage(Message.NUMBER_TOO_LOW.msg().getMsg(true, arg, Double.toString(minValue)));
                 result.success = false;
                 return result;
             }
@@ -73,7 +73,7 @@ public class DoubleArgument extends CmdArgument {
             if (clampValue) {
                 value = maxValue;
             } else {
-                sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.NUMBER_TOO_HIGH, true, arg, Double.toString(maxValue)));
+                sender.sendMessage(Message.NUMBER_TOO_HIGH.msg().getMsg(true, arg, Double.toString(maxValue)));
                 result.success = false;
                 return result;
             }

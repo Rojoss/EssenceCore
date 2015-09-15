@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.teleport;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
@@ -53,7 +53,7 @@ public class TpHereCmd extends EssenceCommand {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_PLAYER_ONLY, true));
+            sender.sendMessage(Message.CMD_PLAYER_ONLY.msg().getMsg(true));
             return true;
         }
 
@@ -69,7 +69,7 @@ public class TpHereCmd extends EssenceCommand {
         target.teleport(player);
 
         if (!result.hasModifier("-s")) {
-            player.sendMessage(ess.getMessages().getMsg(Message.CMD_TPHERE, true, target.getDisplayName()));
+            player.sendMessage(Message.CMD_TPHERE.msg().getMsg(true, target.getDisplayName()));
         }
         return true;
     }

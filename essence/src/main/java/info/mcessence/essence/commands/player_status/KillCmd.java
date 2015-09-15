@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.player_status;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
@@ -60,14 +60,14 @@ public class KillCmd extends EssenceCommand {
         Player player = (Player)result.getValue(0).getValue();
 
         if (hasPermission(player, "exempt")) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_KILL_EXEMPT, true, player.getName()));
+            sender.sendMessage(Message.CMD_KILL_EXEMPT.msg().getMsg(true, player.getName()));
             return true;
         }
 
         player.setHealth(0);
 
         if (!result.hasModifier("-s")) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_KILL, true, player.getName()));
+            sender.sendMessage(Message.CMD_KILL.msg().getMsg(true, player.getName()));
         }
 
         return true;

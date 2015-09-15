@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.player;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
 import info.mcessence.essence.cmd_arguments.StringArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
@@ -66,7 +66,7 @@ public class SudoCmd extends EssenceCommand {
         ess.getServer().dispatchCommand(target, command);
 
         if (!result.hasModifier("-s")) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_SUDO, true, target.getName(), command));
+            sender.sendMessage(Message.CMD_SUDO.msg().getMsg(true, target.getName(), command));
         }
 
         return true;

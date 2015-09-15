@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence;
+package info.mcessence.essence.message;
 
 public enum Message {
     //Main messages
@@ -139,53 +139,24 @@ public enum Message {
     //OPT_FLYING(MsgCat.COMMAND_OPTIONS, "If true it will set the player to currently flying. If false it will stop flight"),
     ;
 
-    private String defaultMessage;
-    private MsgCat cat;
+    private EMessage message;
 
-    Message(MsgCat cat, String defaultMessage) {
-        this.defaultMessage = defaultMessage;
-        this.cat = cat;
+    Message(MsgCat category, String defaultMsg) {
+        message = new EMessage(category, this.toString(), defaultMsg);
     }
 
-    public String getDefault() {
-        return defaultMessage;
+    public EMessage msg() {
+        return message;
     }
 
-    public MsgCat getCat() {
-        return cat;
-    }
-
-    public static Message fromString(String name) {
+    public static EMessage fromString(String name) {
         name = name.toLowerCase().replace("_", "");
         name = name.toLowerCase().replace("-", "");
         for (Message msg : values()) {
             if (msg.toString().toLowerCase().replace("_", "").equals(name)) {
-                return msg;
+                return msg.msg();
             }
         }
         return null;
-    }
-
-    public enum MsgCat {
-        GENERAL,
-        COMMAND,
-        COMMAND_MODIFIERS,
-        COMMAND_OPTIONS,
-        COMMAND_OTHER,
-        VALIDATION,
-        ITEM_PARSER,
-        OTHER,
-        ;
-
-        public static MsgCat fromString(String name) {
-            name = name.toLowerCase().replace("_", "");
-            name = name.toLowerCase().replace("-", "");
-            for (MsgCat cat : values()) {
-                if (cat.toString().toLowerCase().replace("_", "").equals(name)) {
-                    return cat;
-                }
-            }
-            return null;
-        }
     }
 }

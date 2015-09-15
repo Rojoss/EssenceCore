@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.location;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.WorldArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
@@ -74,7 +74,7 @@ public class WarpsCmd extends EssenceCommand {
             }
         }
 
-        sender.sendMessage(ess.getMessages().getMsg(Message.CMD_WARPS, true, warps.size() <= 0 ? ess.getMessages().getMsg(Message.CMD_WARPS_NONE, false) : Util.implode(warps, ", ")));
+        sender.sendMessage(Message.CMD_WARPS.msg().getMsg(true, warps.size() <= 0 ? Message.CMD_WARPS_NONE.msg().getMsg(false) : Util.implode(warps, ", ")));
         return true;
     }
 

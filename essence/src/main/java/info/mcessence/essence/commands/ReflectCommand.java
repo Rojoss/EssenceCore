@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -48,7 +48,7 @@ public class ReflectCommand extends Command {
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
         if (cmd != null) {
             if (!cmd.hasPermission(sender)) {
-                sender.sendMessage(Essence.inst().getMessages().getMsg(Message.NO_PERM, true, cmd.getPermission()));
+                sender.sendMessage(Message.NO_PERM.msg().getMsg(true, cmd.getPermission()));
                 return true;
             }
             return cmd.onCommand(sender, this, commandLabel, args);

@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.player_status;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.DoubleArgument;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
@@ -74,7 +74,7 @@ public class HealCmd extends EssenceCommand {
         double max = result.getValue(1).getValue() == null ? player.getMaxHealth() : (Double)result.getValue(1).getValue();
 
         if (player.isDead() || player.getHealth() == 0) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.DEAD_PLAYER, true, args[0]));
+            sender.sendMessage(Message.DEAD_PLAYER.msg().getMsg(true, args[0]));
             return true;
         }
 
@@ -106,9 +106,9 @@ public class HealCmd extends EssenceCommand {
         }
 
         if (!result.hasModifier("-s")) {
-            player.sendMessage(ess.getMessages().getMsg(Message.CMD_HEAL_HEALED, true));
+            player.sendMessage(Message.CMD_HEAL_HEALED.msg().getMsg(true));
             if (!sender.equals(player)) {
-                sender.sendMessage(ess.getMessages().getMsg(Message.CMD_HEAL_OTHER, true, player.getDisplayName()));
+                sender.sendMessage(Message.CMD_HEAL_OTHER.msg().getMsg(true, player.getDisplayName()));
             }
         }
         return true;

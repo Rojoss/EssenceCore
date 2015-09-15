@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.player_status;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
@@ -53,7 +53,7 @@ public class InvseeCmd extends EssenceCommand {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_PLAYER_ONLY, true));
+            sender.sendMessage(Message.CMD_PLAYER_ONLY.msg().getMsg(true));
             return true;
         }
 
@@ -68,14 +68,14 @@ public class InvseeCmd extends EssenceCommand {
         // TODO: Find a way to call InventoryOpenEvent.
 
         if (hasPermission(invOwner, "exempt")) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_INVSEE_EXEMPT, true, invOwner.getName()));
+            sender.sendMessage(Message.CMD_INVSEE_EXEMPT.msg().getMsg(true, invOwner.getName()));
             return true;
         }
 
         player.openInventory(invOwner.getInventory());
 
         if (!result.hasModifier("-s")) {
-            player.sendMessage(ess.getMessages().getMsg(Message.CMD_INVSEE, true, invOwner.getName()));
+            player.sendMessage(Message.CMD_INVSEE.msg().getMsg(true, invOwner.getName()));
         }
 
         return true;

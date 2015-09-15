@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.player_status;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
@@ -53,7 +53,7 @@ public class EnderchestCmd extends EssenceCommand {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_PLAYER_ONLY, true));
+            sender.sendMessage(Message.CMD_PLAYER_ONLY.msg().getMsg(true));
             return true;
         }
 
@@ -70,9 +70,9 @@ public class EnderchestCmd extends EssenceCommand {
         player.openInventory(targetPlayer.getEnderChest());
 
         if (!result.hasModifier("-s")) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_ENDERCHEST, true));
+            sender.sendMessage(Message.CMD_ENDERCHEST.msg().getMsg(true));
             if (!sender.equals(player)) {
-                sender.sendMessage(ess.getMessages().getMsg(Message.CMD_ENDERCHEST_OTHER, true, player.getName()));
+                sender.sendMessage(Message.CMD_ENDERCHEST_OTHER.msg().getMsg(true, player.getName()));
             }
         }
 

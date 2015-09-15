@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.world;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.LocationArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
@@ -64,7 +64,7 @@ public class LightningCmd extends EssenceCommand {
         location.getWorld().strikeLightning(location);
 
         if (!result.hasModifier("-s")) {
-            sender.sendMessage(ess.getMessages().getMsg(Message.CMD_LIGHTNING, true));
+            sender.sendMessage(Message.CMD_LIGHTNING.msg().getMsg(true));
         }
 
         return true;

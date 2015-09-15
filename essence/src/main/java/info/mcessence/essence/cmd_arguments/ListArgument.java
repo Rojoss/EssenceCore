@@ -25,7 +25,7 @@
 
 package info.mcessence.essence.cmd_arguments;
 
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResult;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
@@ -55,7 +55,7 @@ public class ListArgument extends CmdArgument {
 
         if (strings != null && !strings.isEmpty()) {
             if (!strings.contains(arg)) {
-                sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.INVALID_LIST_ARGUMENT, true, arg, Util.implode(strings, ",")));
+                sender.sendMessage(Message.INVALID_LIST_ARGUMENT.msg().getMsg(true, arg, Util.implode(strings, ",")));
                 result.success = false;
                 return result;
             }

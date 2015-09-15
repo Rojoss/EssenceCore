@@ -25,7 +25,7 @@
 
 package info.mcessence.essence.cmd_arguments.internal;
 
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.commands.EssenceCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -58,7 +58,7 @@ public abstract class CmdArgument {
 
         if (arg == null || arg.isEmpty()) {
             if (isRequired(sender)) {
-                sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.CMD_INVALID_USAGE, true, cmd.getUsage(sender)));
+                sender.sendMessage(Message.CMD_INVALID_USAGE.msg().getMsg(true, cmd.getUsage(sender)));
                 result.success = false;
             } else {
                 result.success = true;
@@ -67,7 +67,7 @@ public abstract class CmdArgument {
         }
 
         if (!cmd.hasPermission(sender, permission)) {
-            sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.NO_PERM, true, cmd.getPermission() + "." + permission));
+            sender.sendMessage(Message.NO_PERM.msg().getMsg(true, cmd.getPermission() + "." + permission));
             result.success = false;
             return result;
         }

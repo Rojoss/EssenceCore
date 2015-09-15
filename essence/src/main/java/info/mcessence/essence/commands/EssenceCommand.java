@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResult;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
@@ -204,7 +204,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                 String[] split = arg.split(":");
                 if (split.length > 1 && !split[0].isEmpty() && !split[1].isEmpty() && optionalArgs.containsKey(split[0])) {
                     if (!optionalArgs.get(split[0]).isValid(split[1])) {
-                        sender.sendMessage(ess.getMessages().getMsg(Message.INVALID_OPTIONAL_ARGUMENT, true, split[0], optionalArgs.get(split[0]).getClass().getSimpleName(), split[1]));
+                        sender.sendMessage(Message.INVALID_OPTIONAL_ARGUMENT.msg().getMsg(true, split[0], optionalArgs.get(split[0]).getClass().getSimpleName(), split[1]));
                         result.success = false;
                         return result;
                     }
@@ -231,7 +231,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                 result.setValue(index, parsed);
             } else {
                 if (cmdArg.isRequired(sender)) {
-                    sender.sendMessage(cmd.getEss().getMessages().getMsg(Message.CMD_INVALID_USAGE, true, cmd.getUsage(sender)));
+                    sender.sendMessage(Message.CMD_INVALID_USAGE.msg().getMsg(true, cmd.getUsage(sender)));
                     result.success = false;
                     return result;
                 } else {

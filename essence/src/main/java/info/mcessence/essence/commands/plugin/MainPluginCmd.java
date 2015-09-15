@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.plugin;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.StringArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
@@ -67,13 +67,13 @@ public class MainPluginCmd extends EssenceCommand {
             ess.getCommands().registerCommands();
 
             if (!result.hasModifier("-s")) {
-                sender.sendMessage(ess.getMessages().getMsg(Message.CMD_ESSENCE_RELOAD, true));
+                sender.sendMessage(Message.CMD_ESSENCE_RELOAD.msg().getMsg(true));
             }
             return true;
         }
 
         PluginDescriptionFile pdf = ess.getDescription();
-        sender.sendMessage(Util.color(ess.getMessages().getMsg(Message.CMD_ESSENCE_INFO, false, pdf.getDescription(), pdf.getVersion(), pdf.getWebsite(),
+        sender.sendMessage(Util.color(Message.CMD_ESSENCE_INFO.msg().getMsg(false, pdf.getDescription(), pdf.getVersion(), pdf.getWebsite(),
                 "&7" + Util.implode(pdf.getAuthors(), "&8, &7", " &8& &7"))));
         return true;
     }

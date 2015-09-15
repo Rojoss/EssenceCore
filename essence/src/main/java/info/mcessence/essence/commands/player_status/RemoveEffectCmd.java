@@ -27,7 +27,7 @@ package info.mcessence.essence.commands.player_status;
 
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.MappedListArgument;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
@@ -93,15 +93,15 @@ public class RemoveEffectCmd extends EssenceCommand {
         if (!result.hasModifier("-s")) {
             if (sender.equals(player)) {
                 if (single == true) {
-                    player.sendMessage(ess.getMessages().getMsg(Message.CMD_REMOVEEFFECT, true, effectType.toLowerCase()));
+                    player.sendMessage(Message.CMD_REMOVEEFFECT.msg().getMsg(true, effectType.toLowerCase()));
                 } else {
-                    player.sendMessage(ess.getMessages().getMsg(Message.CMD_REMOVEEFFECT_ALL, true));
+                    player.sendMessage(Message.CMD_REMOVEEFFECT_ALL.msg().getMsg(true));
                 }
             } else {
                 if (single == true) {
-                    player.sendMessage(ess.getMessages().getMsg(Message.CMD_REMOVEEFFECT_OTHER, true, player.getName(), effectType.toLowerCase()));
+                    player.sendMessage(Message.CMD_REMOVEEFFECT_OTHER.msg().getMsg(true, player.getName(), effectType.toLowerCase()));
                 } else {
-                    player.sendMessage(ess.getMessages().getMsg(Message.CMD_REMOVEEFFECT_OTHER_ALL, true));
+                    player.sendMessage(Message.CMD_REMOVEEFFECT_OTHER_ALL.msg().getMsg(true));
                 }
             }
         }

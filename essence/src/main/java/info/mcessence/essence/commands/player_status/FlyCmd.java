@@ -26,7 +26,7 @@
 package info.mcessence.essence.commands.player_status;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.Message;
+import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.BoolArgument;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
@@ -77,9 +77,9 @@ public class FlyCmd extends EssenceCommand {
         player.setAllowFlight(result.hasOptionalArg("allow-fly") ? (Boolean)result.getOptionalArg("allow-fly") : (Boolean)cmdOptions.get("allow-fly").getValue());
 
         if (!result.hasModifier("-s")) {
-            player.sendMessage(ess.getMessages().getMsg(Message.CMD_FLY, true, state.toString()));
+            player.sendMessage(Message.CMD_FLY.msg().getMsg(true, state.toString()));
             if (!sender.equals(player)) {
-                sender.sendMessage(ess.getMessages().getMsg(Message.CMD_FLY_OTHER, true, player.getDisplayName(), state.toString()));
+                sender.sendMessage(Message.CMD_FLY_OTHER.msg().getMsg(true, player.getDisplayName(), state.toString()));
             }
         }
 

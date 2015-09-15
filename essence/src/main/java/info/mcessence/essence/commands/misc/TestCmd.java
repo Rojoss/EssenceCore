@@ -50,7 +50,7 @@ public class TestCmd extends EssenceCommand {
     public TestCmd(Essence ess, String command, String description, String permission, List<String> aliases) {
         super(ess, command, description, permission, aliases);
 
-        List<String> testArgs = Arrays.asList("items");
+        List<String> testArgs = Arrays.asList("items", "itemstring");
 
         cmdArgs = new CmdArgument[] {
                 new ListArgument("type", ArgumentRequirement.REQUIRED, "", testArgs)
@@ -78,6 +78,9 @@ public class TestCmd extends EssenceCommand {
         //Test methods with player
         if (args[0].equalsIgnoreCase("items")) {
             itemTest(player);
+        }
+        if (args[0].equalsIgnoreCase("itemstring")) {
+            itemString(player);
         }
 
         return true;
@@ -116,5 +119,14 @@ public class TestCmd extends EssenceCommand {
         InvUtil.addItems(player.getInventory(), new EItem(Material.PAPER).setLore("lore0", "lore1", "lore2", "lore3").clearLore(2).setLore(0, "0"));
         InvUtil.addItems(player.getInventory(), new EItem(Material.PAPER).setLore(4, "lore4").clearLore(6).addEffect(new PotionEffect(PotionEffectType.SPEED, 20, 20), true));
         InvUtil.addItems(player.getInventory(), new EItem(Material.POTION, 1, (short)8196).addEffect(new PotionEffect(PotionEffectType.SPEED, 100, 3), true).addEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 3), true).setMainEffect(PotionEffectType.REGENERATION));
+    }
+
+    public void itemString(Player player) {
+        ItemParser parser = new ItemParser(player.getItemInHand());
+        if (!parser.isValid()) {
+            player.sendMessage(ess.getMessages().getMsg(parser.getError(), true));
+        } else {
+            player.sendMessage(parser.getString());
+        }
     }
 }

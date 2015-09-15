@@ -677,7 +677,7 @@ public class EItem extends ItemStack {
         setDurability((short)3);
         ItemMeta meta = getItemMeta();
         if (meta instanceof SkullMeta) {
-            setItemMeta(Essence.inst().getNmsUtil().setSkullUrl(textureUrl, (SkullMeta)meta));
+            setItemMeta(Essence.inst().getISkull().setSkullUrl(textureUrl, (SkullMeta)meta));
         }
         return this;
     }

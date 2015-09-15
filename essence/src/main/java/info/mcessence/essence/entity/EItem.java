@@ -70,10 +70,6 @@ public class EItem extends ItemStack {
         super(material, amount, durability);
     }
 
-    public EItem(String string) {
-        this(ItemParser.fromString(string));
-    }
-
 
     // ##################################################
     // #################### GENERAL #####################
@@ -82,14 +78,6 @@ public class EItem extends ItemStack {
     /** Clone the EItem. */
     public EItem clone() {
         return (EItem)super.clone();
-    }
-
-    /**
-     * Convert the item to a string that can be used in configurations and such.
-     * For example: 'diamond 1 name:&bDiamond sharpness:1 lore:&7Shiny_diamond!'
-     */
-    public String toString() {
-        return ItemParser.toString(this);
     }
 
     /**

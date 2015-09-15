@@ -47,6 +47,18 @@ public enum Message {
     TOO_FEW_CHARACTERS(MsgCat.VALIDATION, "&4{0} &cis too short! &7Need at least &8{1} &7characters."),
     TOO_MUCH_CHARACTERS(MsgCat.VALIDATION, "&4{1} &cis too long! &7Can't have more than &8{1} &7characters."),
 
+    //Item parser error messages
+    PARSER_VALID(MsgCat.ITEM_PARSER, "&6This is a valid item."),
+    PARSER_NO_ITEM_SPECIFIED(MsgCat.ITEM_PARSER, "&cNo item specified!"),
+    PARSER_INVALID_ITEM(MsgCat.ITEM_PARSER, "&cThe item &4{0} &cis not a valid item!"),
+    PARSER_INVALID_AMOUNT(MsgCat.ITEM_PARSER, "&c4{0} &cis not a valid item amount!"),
+    NO_META_VALUE(MsgCat.ITEM_PARSER, "No value specified for &4{0}:&c!"),
+    PARSER_INVALID_COLOR(MsgCat.ITEM_PARSER, "&4{0} &cis not a valid color!"),
+    PARSER_INVALID_DYE_COLOR(MsgCat.ITEM_PARSER, "&4{0} &cis not a valid dye color!"),
+    PARSER_INVALID_SHAPE(MsgCat.ITEM_PARSER, "&4{0} &cis not a valid firework shape!"),
+    PARSER_MISSING_FIREWORK_SHAPE(MsgCat.ITEM_PARSER, "&cTo create a firework effect you need to specify the shape!"),
+    PARSER_MISSING_FIREWORK_COLOR(MsgCat.ITEM_PARSER, "&cTo create a firework effect you need to set at least one color!"),
+
     //Main command messages
     CMD_PLAYER_ONLY(MsgCat.COMMAND_OTHER, "&cThis command can only be executed by players."),
     CMD_INVALID_USAGE(MsgCat.COMMAND_OTHER, "&cInvalid usage! &7Command syntax: &8{0}"),
@@ -161,6 +173,7 @@ public enum Message {
         COMMAND_OPTIONS,
         COMMAND_OTHER,
         VALIDATION,
+        ITEM_PARSER,
         OTHER,
         ;
 

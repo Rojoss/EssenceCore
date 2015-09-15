@@ -85,9 +85,24 @@ public class TestCmd extends EssenceCommand {
 
 
     public void itemTest(Player player) {
-        InvUtil.addItems(player.getInventory(), ItemParser.fromString("playerskull 1 texture:cbb311f3ba1c07c3d1147cd210d81fe11fd8ae9e3db212a0fa748946c3633"));
-        InvUtil.addItems(player.getInventory(), ItemParser.fromString("leatherhelmet:10 1 name:&6Golden_helmet protection:1 protection:2 color:#CC9900"));
-        InvUtil.addItems(player.getInventory(), ItemParser.fromString("diamond 1 name:&bDiamond sharpness:1 lore:&3Shiny_diamond!|&7With_lore!"));
+        ItemParser parser = new ItemParser("playerskull 1 texture:cbb311f3ba1c07c3d1147cd210d81fe11fd8ae9e3db212a0fa748946c3633", false);
+        if (!parser.isValid()) {
+            player.sendMessage(ess.getMessages().getMsg(parser.getError(), true));
+        } else {
+            InvUtil.addItems(player.getInventory(), parser.getItem());
+        }
+        parser = new ItemParser("leatherhelmet:10 1 name:&6Golden_helmet protection:1 protection:2 color:#CC9900", false);
+        if (!parser.isValid()) {
+            player.sendMessage(ess.getMessages().getMsg(parser.getError(), true));
+        } else {
+            InvUtil.addItems(player.getInventory(), parser.getItem());
+        }
+        parser = new ItemParser("diamond 1 name:&bDiamond sharpness:1 lore:&3Shiny_diamond!|&7With_lore!", false);
+        if (!parser.isValid()) {
+            player.sendMessage(ess.getMessages().getMsg(parser.getError(), true));
+        } else {
+            InvUtil.addItems(player.getInventory(), parser.getItem());
+        }
         InvUtil.addItems(player.getInventory(), new EItem(Material.SKULL_ITEM).setSkull("Worstboy"));
         InvUtil.addItems(player.getInventory(), new EItem(Material.SKULL_ITEM).setTexture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTU1ZDYxMWE4NzhlODIxMjMxNzQ5YjI5NjU3MDhjYWQ5NDI2NTA2NzJkYjA5ZTI2ODQ3YTg4ZTJmYWMyOTQ2In19fQ=="));
         InvUtil.addItems(player.getInventory(), new EItem(Material.SKULL_ITEM).setTexture("http://textures.minecraft.net/texture/82d8ccac4d982bf3199761c1c74b9aa18e312ff5ca0a6e51b77a87abad610b"));

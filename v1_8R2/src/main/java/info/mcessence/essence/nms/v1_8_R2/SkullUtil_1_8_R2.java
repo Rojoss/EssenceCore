@@ -29,7 +29,7 @@ package info.mcessence.essence.nms.v1_8_R2;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import info.mcessence.essence.nms.api.ISkull;
+import info.mcessence.essence.nms.ISkull;
 import info.mcessence.essence.nms.util.Util;
 import net.minecraft.server.v1_8_R2.BlockPosition;
 import net.minecraft.server.v1_8_R2.TileEntitySkull;

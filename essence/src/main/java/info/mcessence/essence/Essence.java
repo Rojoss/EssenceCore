@@ -33,7 +33,7 @@ import info.mcessence.essence.config.MessagesCfg;
 import info.mcessence.essence.config.ModulesCfg;
 import info.mcessence.essence.config.aliases.ItemAliases;
 import info.mcessence.essence.config.data.Warps;
-import info.mcessence.essence.nms.api.ISkull;
+import info.mcessence.essence.nms.ISkull;
 import info.mcessence.essence.nms.v1_8_R1.SkullUtil_v1_8_R1;
 import info.mcessence.essence.nms.v1_8_R2.SkullUtil_1_8_R2;
 import info.mcessence.essence.nms.v1_8_R3.SkullUtil_1_8_R3;

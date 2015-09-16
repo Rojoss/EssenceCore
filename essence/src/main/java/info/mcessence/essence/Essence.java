@@ -26,11 +26,15 @@
 package info.mcessence.essence;
 
 import com.google.gson.Gson;
+import info.mcessence.essence.aliases.Alias;
+import info.mcessence.essence.aliases.AliasType;
+import info.mcessence.essence.aliases.Aliases;
 import info.mcessence.essence.commands.Commands;
 import info.mcessence.essence.config.CommandOptionsCfg;
 import info.mcessence.essence.config.CommandsCfg;
 import info.mcessence.essence.config.MessagesCfg;
 import info.mcessence.essence.config.ModulesCfg;
+import info.mcessence.essence.config.aliases.AliasesCfg;
 import info.mcessence.essence.config.aliases.ItemAliases;
 import info.mcessence.essence.config.data.Warps;
 import info.mcessence.essence.nms.ISkull;
@@ -40,6 +44,10 @@ import info.mcessence.essence.nms.v1_8_R3.SkullUtil_1_8_R3;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class Essence extends JavaPlugin {
@@ -56,6 +64,7 @@ public class Essence extends JavaPlugin {
     private ISkull iSkull = null;
 
     private ItemAliases itemAliases;
+    private Map<AliasType, AliasesCfg> aliases = new HashMap<AliasType, AliasesCfg>();
 
     private Commands commands;
 
@@ -81,7 +90,7 @@ public class Essence extends JavaPlugin {
         commandsCfg = new CommandsCfg("plugins/Essence/Commands.yml");
         cmdOptionsCfg = new CommandOptionsCfg("plugins/Essence/CommandOptions.yml");
 
-        itemAliases = new ItemAliases("plugins/Essence/aliases/Items.yml");
+        loadAliases();
 
         //TODO: Have a class for modules were it would create the config and such.
         warps = new Warps("plugins/Essence/data/Warps.yml");
@@ -129,6 +138,26 @@ public class Essence extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
     }
 
+    private void loadAliases() {
+        itemAliases = new ItemAliases("plugins/Essence/aliases/Items.yml");
+
+        aliases.put(AliasType.ENCHANTMENT, new AliasesCfg("plugins/Essence/aliases/Enchantments.yml", AliasType.ENCHANTMENT));
+        aliases.put(AliasType.POTION_EFFECT, new AliasesCfg("plugins/Essence/aliases/PotionEffects.yml", AliasType.POTION_EFFECT));
+        aliases.put(AliasType.ENTITY, new AliasesCfg("plugins/Essence/aliases/Entities.yml", AliasType.ENTITY));
+        aliases.put(AliasType.GAME_MODE, new AliasesCfg("plugins/Essence/aliases/GameModes.yml", AliasType.GAME_MODE));
+        aliases.put(AliasType.PAINTING, new AliasesCfg("plugins/Essence/aliases/Paintings.yml", AliasType.PAINTING));
+        aliases.put(AliasType.BIOME, new AliasesCfg("plugins/Essence/aliases/Biomes.yml", AliasType.BIOME));
+        aliases.put(AliasType.DYE_COLOR, new AliasesCfg("plugins/Essence/aliases/DyeColors.yml", AliasType.DYE_COLOR));
+        aliases.put(AliasType.FIREWORK_EFFECT, new AliasesCfg("plugins/Essence/aliases/FireworkEffects.yml", AliasType.FIREWORK_EFFECT));
+        aliases.put(AliasType.HORSE_COLOR, new AliasesCfg("plugins/Essence/aliases/HorseColors.yml", AliasType.HORSE_COLOR));
+        aliases.put(AliasType.HORSE_STYLE, new AliasesCfg("plugins/Essence/aliases/HorseStyles.yml", AliasType.HORSE_STYLE));
+        aliases.put(AliasType.OCELOT_TYPES, new AliasesCfg("plugins/Essence/aliases/OcelotTypes.yml", AliasType.OCELOT_TYPES));
+        aliases.put(AliasType.RABBIT_TYPES, new AliasesCfg("plugins/Essence/aliases/RabbitTypes.yml", AliasType.RABBIT_TYPES));
+        aliases.put(AliasType.BANNER_PATTERNS, new AliasesCfg("plugins/Essence/aliases/BannerPatterns.yml", AliasType.BANNER_PATTERNS));
+        aliases.put(AliasType.TREES, new AliasesCfg("plugins/Essence/aliases/Trees.yml", AliasType.TREES));
+        aliases.put(AliasType.SOUNDS, new AliasesCfg("plugins/Essence/aliases/Sounds.yml", AliasType.SOUNDS));
+    }
+
     public void log(Object msg) {
         log.info("[Essence " + getDescription().getVersion() + "] " + msg.toString());
     }
@@ -139,7 +168,7 @@ public class Essence extends JavaPlugin {
         log.severe("[Essence " + getDescription().getVersion() + "] " + msg.toString());
     }
 
-
+    
     public static Essence inst() {
         return instance;
     }
@@ -147,6 +176,7 @@ public class Essence extends JavaPlugin {
     public Gson getGson() {
         return gson;
     }
+
 
     public ISkull getISkull() {
         return iSkull;

@@ -168,7 +168,7 @@ public class Aliases {
 
     public static String getName(AliasType type, String string) {
         List<Alias> aliases = getAliases(type);
-        string = string.toLowerCase().replaceAll(" ", "");
+        string = string.toLowerCase().replaceAll(" ", "").replaceAll("_", "");
         for (Alias alias : aliases) {
             if (alias.getName().toLowerCase().replaceAll(" ", "").equals(string)) {
                 return alias.getName();
@@ -185,7 +185,7 @@ public class Aliases {
 
     public static List<String> getAliases(AliasType type, String string) {
         List<Alias> aliases = getAliases(type);
-        string = string.toLowerCase().replaceAll(" ", "");
+        string = string.toLowerCase().replaceAll(" ", "").replaceAll("_", "");
         for (Alias alias : aliases) {
             if (alias.getName().toLowerCase().replaceAll(" ", "").equals(string)) {
                 return alias.getAliases();
@@ -202,7 +202,7 @@ public class Aliases {
 
     private static String getKey(AliasType type, String string) {
         List<Alias> aliases = getAliases(type);
-        string = string.toLowerCase().replaceAll(" ", "");
+        string = string.toLowerCase().replaceAll(" ", "").replaceAll("_", "");
         for (Alias alias : aliases) {
             if (alias.getName().toLowerCase().replaceAll(" ", "").equals(string)) {
                 return alias.getKey();

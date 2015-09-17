@@ -26,6 +26,8 @@
 package info.mcessence.essence.util;
 
 import info.mcessence.essence.Essence;
+import info.mcessence.essence.aliases.AliasType;
+import info.mcessence.essence.aliases.Aliases;
 import info.mcessence.essence.message.EMessage;
 import info.mcessence.essence.message.Message;
 import info.mcessence.essence.aliases.ItemAlias;
@@ -37,10 +39,12 @@ import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
@@ -185,7 +189,7 @@ public class ItemParser {
 
         //Banners
         if (metaMap.containsKey("basecolor")) {
-            DyeColor color = DyeColor.WHITE; //TODO: Get color from alias.
+            DyeColor color = Aliases.getDyeColor(metaMap.get("basecolor"));
             if (color == null) {
                 error = Message.PARSER_INVALID_DYE_COLOR.msg().getMsg(true, metaMap.get("basecolor"));
                 if (!ignoreErrors) {
@@ -214,7 +218,7 @@ public class ItemParser {
             metaMap.remove("power");
         }
         if (metaMap.containsKey("shape")) {
-            FireworkEffect.Type shape = FireworkEffect.Type.BALL; //TODO: Get shape from alias
+            FireworkEffect.Type shape = Aliases.getFireworkEffect(metaMap.get("shape"));
             if (shape == null) {
                 error = Message.PARSER_INVALID_SHAPE.msg().getMsg(true, metaMap.get("shape"));
                 if (!ignoreErrors) {
@@ -303,11 +307,46 @@ public class ItemParser {
 
         //If there is any meta remaining do enchants, effects and banner patterns.
         if (metaMap.size() > 0) {
-            //TODO: Parse enchantments from aliases
+            for (Map.Entry<String, String> entry : metaMap.entrySet()) {
+                //Enchantments
+                Enchantment enchant = Aliases.getEnchantment(entry.getKey());
+                if (enchant != null) {
+                    if (NumberUtil.getInt(entry.getValue()) == null) {
+                        error = Message.PARSER_ENCHANT_VALUE.msg().getMsg(true, entry.getValue());
+                        return;
+                    }
+                    item.addEnchant(enchant, NumberUtil.getInt(entry.getValue()));
+                    continue;
+                }
 
-            //TODO: Parse potion effects from aliases
+                //Potion effects
+                PotionEffectType effect = Aliases.getPotionEffect(entry.getKey());
+                if (effect != null) {
+                    String[] split = entry.getValue().split("\\.");
+                    if (split.length < 2) {
+                        error = Message.PARSER_POTION_VALUE.msg().getMsg(true, entry.getValue());
+                        return;
+                    }
+                    if (NumberUtil.getInt(split[0]) == null || NumberUtil.getInt(split[1]) == null) {
+                        error = Message.PARSER_POTION_VALUE.msg().getMsg(true, entry.getValue());
+                        return;
+                    }
+                    item.addEffect(new PotionEffect(effect, NumberUtil.getInt(split[0]), NumberUtil.getInt(split[1])), true);
+                    continue;
+                }
 
-            //TODO: Parse banner patterns from aliases
+                //Banner patterns
+                PatternType pattern = Aliases.getBannerPattern(entry.getKey());
+                if (pattern != null) {
+                    DyeColor color = Aliases.getDyeColor(entry.getValue());
+                    if (color == null) {
+                        error = Message.PARSER_INVALID_DYE_COLOR.msg().getMsg(true, entry.getValue());
+                        return;
+                    }
+                    item.addPattern(pattern, color);
+                    continue;
+                }
+            }
         }
 
         //DONE PARSING!
@@ -373,8 +412,7 @@ public class ItemParser {
         //Enchants
         if (meta.hasEnchants()) {
             for (Map.Entry<Enchantment, Integer> entry : meta.getEnchants().entrySet()) {
-                //TODO: Use default name from alias.
-                components.add(entry.getKey().getName().toLowerCase().replaceAll("_", "") + ":" + entry.getValue());
+                components.add(Aliases.getName(AliasType.ENCHANTMENT, entry.getKey().getName()).replaceAll(" ", "") + ":" + entry.getValue());
             }
         }
 
@@ -421,12 +459,11 @@ public class ItemParser {
         if (meta instanceof BannerMeta) {
             BannerMeta bannerMeta = (BannerMeta)meta;
 
-            //TODO: Use default DyeColor name from alias.
-            components.add("basecolor:" + bannerMeta.getBaseColor().toString().toLowerCase().replaceAll("_", ""));
+            components.add("basecolor:" + Aliases.getName(AliasType.DYE_COLOR, bannerMeta.getBaseColor().toString()).replaceAll(" ", ""));
             if (bannerMeta.getPatterns() != null && bannerMeta.getPatterns().size() > 0) {
                 for (Pattern pattern : bannerMeta.getPatterns()) {
-                    //TODO: Use default Pattern and DyeColor name from alias.
-                    components.add(pattern.getPattern().toString().toLowerCase().replace("_", "") + ":" + pattern.getColor().toString().toLowerCase().replaceAll("_", ""));
+                    components.add(Aliases.getName(AliasType.BANNER_PATTERNS, pattern.getPattern().toString()).replaceAll(" ", "")
+                            + ":" + Aliases.getName(AliasType.DYE_COLOR, pattern.getColor().toString()).replaceAll(" ", ""));
                 }
             }
         }
@@ -438,8 +475,7 @@ public class ItemParser {
 
             if (fireworkMeta.hasEffects()) {
                 for (FireworkEffect effect : fireworkMeta.getEffects()) {
-                    //TODO: Use default Shape/Effect name from alias.
-                    components.add("shape:" + effect.getType().toString().replaceAll("_", ""));
+                    components.add("shape:" + Aliases.getName(AliasType.FIREWORK_EFFECT, effect.getType().toString()).replaceAll(" ", ""));
 
                     components.add("flicker:" + effect.hasFlicker());
                     components.add("trail:" + effect.hasTrail());
@@ -468,8 +504,7 @@ public class ItemParser {
             PotionMeta potionMeta = (PotionMeta)meta;
             if (potionMeta.hasCustomEffects()) {
                 for (PotionEffect effect : potionMeta.getCustomEffects()) {
-                    //TODO: Use default Effect name from alias.
-                    components.add(effect.getType().getName().toLowerCase().replaceAll("_", "") + ":" + effect.getDuration() + "." + effect.getAmplifier());
+                    components.add(Aliases.getName(AliasType.POTION_EFFECT, effect.getType().getName()).replaceAll(" ", "") + ":" + effect.getDuration() + "." + effect.getAmplifier());
                 }
             }
         }

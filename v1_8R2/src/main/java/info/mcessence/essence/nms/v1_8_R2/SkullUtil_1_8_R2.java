@@ -33,14 +33,19 @@ import info.mcessence.essence.nms.ISkull;
 import info.mcessence.essence.nms.util.Util;
 import net.minecraft.server.v1_8_R2.BlockPosition;
 import net.minecraft.server.v1_8_R2.TileEntitySkull;
+import org.apache.commons.codec.binary.Base64;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
 import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
 import org.bukkit.craftbukkit.v1_8_R2.CraftWorld;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -100,6 +105,46 @@ public class SkullUtil_1_8_R2 implements ISkull {
             e.printStackTrace();
         }
         return meta;
+    }
+
+    @Override
+    public String getSkullUrl(SkullMeta meta) {
+        if (meta == null) {
+            return null;
+        }
+
+        String skinUrl = null;
+        try {
+            //Get the profile properties.
+            Field profileField = meta.getClass().getDeclaredField("profile");
+            profileField.setAccessible(true);
+            Collection<Property> properties = ((GameProfile) profileField.get(meta)).getProperties().get("textures");
+
+            //Get the texture property.
+            for (Property prop : properties) {
+                if (prop.getName().equalsIgnoreCase("textures")) {
+                    //Convert the encoded texture string to json.
+                    String jsonString = new String(Base64.decodeBase64(prop.getValue()));
+                    JSONObject json = (JSONObject)new JSONParser().parse(jsonString);
+
+                    //Get the texture code from JSON.
+                    json = (JSONObject)json.get("textures");
+                    json = (JSONObject)json.get("SKIN");
+                    skinUrl = (String)json.get("url");
+
+                    //Get the last bit of the url to get the short code.
+                    String[] split = skinUrl.split("/");
+                    skinUrl = split[split.length - 1];
+                }
+            }
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return skinUrl;
     }
 
 }

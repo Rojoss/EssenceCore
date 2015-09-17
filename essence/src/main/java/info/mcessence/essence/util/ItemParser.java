@@ -25,11 +25,13 @@
 
 package info.mcessence.essence.util;
 
+import info.mcessence.essence.Essence;
 import info.mcessence.essence.message.EMessage;
 import info.mcessence.essence.message.Message;
 import info.mcessence.essence.aliases.ItemAlias;
 import info.mcessence.essence.aliases.Items;
 import info.mcessence.essence.entity.EItem;
+import info.mcessence.essence.nms.ISkull;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
@@ -406,7 +408,9 @@ public class ItemParser {
 
             if (skullMeta.hasOwner()) {
                 if (skullMeta.getOwner() == null) {
-                    //TODO: Get skull texture
+                    if (Essence.inst().getISkull() != null) {
+                        components.add("texture:" + Essence.inst().getISkull().getSkullUrl(skullMeta));
+                    }
                 } else {
                     components.add("player:" + skullMeta.getOwner());
                 }
@@ -480,7 +484,7 @@ public class ItemParser {
      * @return if it parsed successful.
      */
     public boolean isValid() {
-        return item != null && string != null && !error.isEmpty();
+        return item != null && string != null && error.isEmpty();
     }
 
     /**

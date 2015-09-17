@@ -32,6 +32,7 @@ import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
 import info.mcessence.essence.commands.EssenceCommand;
 import info.mcessence.essence.entity.EItem;
+import info.mcessence.essence.nms.v1_8_R3.SkullUtil_1_8_R3;
 import info.mcessence.essence.util.InvUtil;
 import info.mcessence.essence.util.ItemParser;
 import org.bukkit.Material;
@@ -39,6 +40,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 

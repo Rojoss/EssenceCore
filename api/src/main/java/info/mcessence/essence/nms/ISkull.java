@@ -44,4 +44,9 @@ public interface ISkull {
      * It will return the SkullMeta with the texture applied if it was valid.
      */
     public SkullMeta setSkullUrl(String skinUrl, SkullMeta meta);
+
+    /**
+     * Get the texture url code from the skull meta.
+     */
+    public String getSkullUrl(SkullMeta meta);
 }

@@ -49,9 +49,14 @@ public class PlayerArgument extends CmdArgument {
 
     @Override
     public ArgumentParseResult parse(EssenceCommand cmd, CommandSender sender, String arg) {
-        ArgumentParseResult result = super.parse(cmd, sender, arg);
-        if (!result.success) {
-            return result;
+        ArgumentParseResult result = new ArgumentParseResult();
+        if (arg == null || arg.isEmpty()) {
+            if (isRequired(sender)) {
+                sender.sendMessage(Message.CMD_INVALID_USAGE.msg().getMsg(true, cmd.getUsage(sender)));
+                result.success = false;
+                return result;
+            }
+            result.success = true;
         }
 
         Player player = null;
@@ -62,6 +67,15 @@ public class PlayerArgument extends CmdArgument {
             player = Bukkit.getPlayer(arg);
         }
         //TODO: Get player by nick/display name
+
+        //If the specified player is the sender don't do a permission check...
+        if (!sender.equals(player)) {
+            if (!cmd.hasPermission(sender, permission)) {
+                sender.sendMessage(Message.NO_PERM.msg().getMsg(true, cmd.getPermission() + "." + permission));
+                result.success = false;
+                return result;
+            }
+        }
 
         result.setValue(player);
 

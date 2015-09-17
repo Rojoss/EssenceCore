@@ -39,10 +39,12 @@ import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
@@ -187,7 +189,7 @@ public class ItemParser {
 
         //Banners
         if (metaMap.containsKey("basecolor")) {
-            DyeColor color = DyeColor.WHITE; //TODO: Get color from alias.
+            DyeColor color = Aliases.getDyeColor(metaMap.get("basecolor"));
             if (color == null) {
                 error = Message.PARSER_INVALID_DYE_COLOR.msg().getMsg(true, metaMap.get("basecolor"));
                 if (!ignoreErrors) {
@@ -216,7 +218,7 @@ public class ItemParser {
             metaMap.remove("power");
         }
         if (metaMap.containsKey("shape")) {
-            FireworkEffect.Type shape = FireworkEffect.Type.BALL; //TODO: Get shape from alias
+            FireworkEffect.Type shape = Aliases.getFireworkEffect(metaMap.get("shape"));
             if (shape == null) {
                 error = Message.PARSER_INVALID_SHAPE.msg().getMsg(true, metaMap.get("shape"));
                 if (!ignoreErrors) {
@@ -305,11 +307,46 @@ public class ItemParser {
 
         //If there is any meta remaining do enchants, effects and banner patterns.
         if (metaMap.size() > 0) {
-            //TODO: Parse enchantments from aliases
+            for (Map.Entry<String, String> entry : metaMap.entrySet()) {
+                //Enchantments
+                Enchantment enchant = Aliases.getEnchantment(entry.getKey());
+                if (enchant != null) {
+                    if (NumberUtil.getInt(entry.getValue()) == null) {
+                        error = Message.PARSER_ENCHANT_VALUE.msg().getMsg(true, entry.getValue());
+                        return;
+                    }
+                    item.addEnchant(enchant, NumberUtil.getInt(entry.getValue()));
+                    continue;
+                }
 
-            //TODO: Parse potion effects from aliases
+                //Potion effects
+                PotionEffectType effect = Aliases.getPotionEffect(entry.getKey());
+                if (effect != null) {
+                    String[] split = entry.getValue().split("\\.");
+                    if (split.length < 2) {
+                        error = Message.PARSER_POTION_VALUE.msg().getMsg(true, entry.getValue());
+                        return;
+                    }
+                    if (NumberUtil.getInt(split[0]) == null || NumberUtil.getInt(split[1]) == null) {
+                        error = Message.PARSER_POTION_VALUE.msg().getMsg(true, entry.getValue());
+                        return;
+                    }
+                    item.addEffect(new PotionEffect(effect, NumberUtil.getInt(split[0]), NumberUtil.getInt(split[1])), true);
+                    continue;
+                }
 
-            //TODO: Parse banner patterns from aliases
+                //Banner patterns
+                PatternType pattern = Aliases.getBannerPattern(entry.getKey());
+                if (pattern != null) {
+                    DyeColor color = Aliases.getDyeColor(entry.getValue());
+                    if (color == null) {
+                        error = Message.PARSER_INVALID_DYE_COLOR.msg().getMsg(true, entry.getValue());
+                        return;
+                    }
+                    item.addPattern(pattern, color);
+                    continue;
+                }
+            }
         }
 
         //DONE PARSING!

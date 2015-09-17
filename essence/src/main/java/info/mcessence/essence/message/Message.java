@@ -58,6 +58,8 @@ public enum Message {
     PARSER_INVALID_SHAPE(MsgCat.ITEM_PARSER, "&4{0} &cis not a valid firework shape!"),
     PARSER_MISSING_FIREWORK_SHAPE(MsgCat.ITEM_PARSER, "&cTo create a firework effect you need to specify the shape!"),
     PARSER_MISSING_FIREWORK_COLOR(MsgCat.ITEM_PARSER, "&cTo create a firework effect you need to set at least one color!"),
+    PARSER_ENCHANT_VALUE(MsgCat.ITEM_PARSER, "&4{0} &cis not a valid enchantment level."),
+    PARSER_POTION_VALUE(MsgCat.ITEM_PARSER, "&4{0} &cis not a valid potion effect value. It should be {duration}.{amplifier}"),
 
     //Main command messages
     CMD_PLAYER_ONLY(MsgCat.COMMAND_OTHER, "&cThis command can only be executed by players."),

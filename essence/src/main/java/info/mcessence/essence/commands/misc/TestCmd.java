@@ -108,6 +108,12 @@ public class TestCmd extends EssenceCommand {
         } else {
             InvUtil.addItems(player.getInventory(), parser.getItem());
         }
+        parser = new ItemParser("whitebanner 1 basecolor:lime stripes:black bricks:black", false);
+        if (!parser.isValid()) {
+            player.sendMessage(parser.getError());
+        } else {
+            InvUtil.addItems(player.getInventory(), parser.getItem());
+        }
         InvUtil.addItems(player.getInventory(), new EItem(Material.SKULL_ITEM).setSkull("Worstboy"));
         InvUtil.addItems(player.getInventory(), new EItem(Material.SKULL_ITEM).setTexture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTU1ZDYxMWE4NzhlODIxMjMxNzQ5YjI5NjU3MDhjYWQ5NDI2NTA2NzJkYjA5ZTI2ODQ3YTg4ZTJmYWMyOTQ2In19fQ=="));
         InvUtil.addItems(player.getInventory(), new EItem(Material.SKULL_ITEM).setTexture("http://textures.minecraft.net/texture/82d8ccac4d982bf3199761c1c74b9aa18e312ff5ca0a6e51b77a87abad610b"));

@@ -1,11 +1,11 @@
-package info.mcessence.essence.nms.v1_8_R2.util;
+package info.mcessence.essence.nms.v1_8_R3.util;
 
-import net.minecraft.server.v1_8_R2.Packet;
-import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
+import net.minecraft.server.v1_8_R3.Packet;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 /**
- * Handles packet sending for v1_8R2
+ * Handles packet sending for v1_8R3
  */
 public class PacketHandler {
 

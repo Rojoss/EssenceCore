@@ -39,7 +39,9 @@ import info.mcessence.essence.nms.ITitle;
 import info.mcessence.essence.nms.v1_8_R1.SkullUtil_v1_8_R1;
 import info.mcessence.essence.nms.v1_8_R1.Title_1_8_R1;
 import info.mcessence.essence.nms.v1_8_R2.SkullUtil_1_8_R2;
+import info.mcessence.essence.nms.v1_8_R2.Title_1_8_R2;
 import info.mcessence.essence.nms.v1_8_R3.SkullUtil_1_8_R3;
+import info.mcessence.essence.nms.v1_8_R3.Title_1_8_R3;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 

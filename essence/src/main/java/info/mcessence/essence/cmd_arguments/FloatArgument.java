@@ -35,8 +35,8 @@ import org.bukkit.command.CommandSender;
 
 public class FloatArgument extends CmdArgument {
 
-    protected float minValue;
-    protected float maxValue;
+    protected Float minValue;
+    protected Float maxValue;
     protected boolean clampValue;
 
     public FloatArgument(String name, ArgumentRequirement requirement, String permission, float minValue, float maxValue, boolean clampValue) {
@@ -60,7 +60,7 @@ public class FloatArgument extends CmdArgument {
             result.success = false;
             return result;
         }
-        if (value != -1 && value < minValue) {
+        if (minValue != null && value < minValue) {
             if (clampValue) {
                 value = minValue;
             } else {
@@ -69,7 +69,7 @@ public class FloatArgument extends CmdArgument {
                 return result;
             }
         }
-        if (value != -1 && value > maxValue) {
+        if (maxValue != null && value > maxValue) {
             if (clampValue) {
                 value = maxValue;
             } else {
@@ -83,6 +83,20 @@ public class FloatArgument extends CmdArgument {
         result.success = true;
 
         return result;
+    }
+
+    @Override
+    public String getDescription() {
+        if (minValue != null && maxValue != null) {
+            return Message.ARG_DECIMAL_MIN_MAX.msg().getMsg(false, minValue.toString(), maxValue.toString());
+        }
+        if (minValue != null) {
+            return Message.ARG_DECIMAL_MIN.msg().getMsg(false, minValue.toString());
+        }
+        if (maxValue != null) {
+            return Message.ARG_DECIMAL_MAX.msg().getMsg(false, maxValue.toString());
+        }
+        return Message.ARG_DECIMAL.msg().getMsg(false);
     }
     
 }

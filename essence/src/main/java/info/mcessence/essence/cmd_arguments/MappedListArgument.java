@@ -87,4 +87,9 @@ public class MappedListArgument extends CmdArgument {
         }
         return tabComplete;
     }
+
+    @Override
+    public String getDescription() {
+        return Message.ARG_LIST.msg().getMsg(false, Util.implode(strings.keySet(), ","));
+    }
 }

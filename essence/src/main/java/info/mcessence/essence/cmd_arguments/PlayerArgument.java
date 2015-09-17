@@ -102,4 +102,9 @@ public class PlayerArgument extends CmdArgument {
         }
         return playerNames;
     }
+
+    @Override
+    public String getDescription() {
+        return Message.ARG_PLAYER.msg().getMsg(false);
+    }
 }

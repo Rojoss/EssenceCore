@@ -25,6 +25,7 @@
 
 package info.mcessence.essence.cmd_arguments.internal;
 
+import info.mcessence.essence.message.EMessage;
 import info.mcessence.essence.message.Message;
 import info.mcessence.essence.commands.EssenceCommand;
 import org.bukkit.command.CommandSender;
@@ -110,6 +111,10 @@ public abstract class CmdArgument {
                 return "[" + name + "]";
             }
         }
+    }
+
+    public String getDescription() {
+        return Message.ARG_NO_DESC.msg().getMsg(false);
     }
 
     public List<String> tabComplete(CommandSender sender, String message) {

@@ -29,6 +29,8 @@ import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResult;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
 import info.mcessence.essence.commands.EssenceCommand;
+import info.mcessence.essence.message.EMessage;
+import info.mcessence.essence.message.Message;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
 
@@ -48,7 +50,7 @@ public class BoolArgument extends CmdArgument {
             return result;
         }
 
-        if (arg.equalsIgnoreCase("true") || arg.equalsIgnoreCase("yes") || arg.equalsIgnoreCase("1")) {
+        if (arg.equalsIgnoreCase("true") || arg.equalsIgnoreCase("yes") || arg.equalsIgnoreCase("1") || arg.equalsIgnoreCase("y") || arg.equalsIgnoreCase("v")) {
             result.setValue(true);
         } else {
             result.setValue(false);
@@ -68,5 +70,10 @@ public class BoolArgument extends CmdArgument {
             tabComplete.add("false");
         }
         return tabComplete;
+    }
+
+    @Override
+    public String getDescription() {
+        return Message.ARG_BOOL.msg().getMsg(false);
     }
 }

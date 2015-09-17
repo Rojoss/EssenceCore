@@ -64,6 +64,14 @@ public enum Message {
     //Main command messages
     CMD_PLAYER_ONLY(MsgCat.COMMAND_OTHER, "&cThis command can only be executed by players."),
     CMD_INVALID_USAGE(MsgCat.COMMAND_OTHER, "&cInvalid usage! &7Command syntax: &8{0}"),
+    CMD_HELP_ESSENCE(MsgCat.COMMAND_OTHER, "&8===== &4&l{cmd} &8=====\n&7&o{desc}\n&6Usage&8: &7{usage}\n&6Base permission&8: &7{perm}\n&6Aliases&8: &7{aliases}\n" +
+            "&6Modifiers&8: &7{modifiers}\n&6Optional args&8: &7{opt-args}\n&6Options&8: &7{options}"),
+    CMD_HELP_SEPARATOR(MsgCat.COMMAND_OTHER, "&8, &7"),
+    CMD_HELP_NONE(MsgCat.COMMAND_OTHER, "None"),
+    CMD_HELP_MODIFIER(MsgCat.COMMAND_OTHER, "{{&7&o{1}}&7{0}}"),
+    CMD_HELP_OPT_ARG(MsgCat.COMMAND_OTHER, "{{&7&o{1}}&7{0}}"),
+    CMD_HELP_OPTION(MsgCat.COMMAND_OTHER, "{{&7&o{1}}&7{0}&8(&a{2}&8)}"),
+    CMD_HELP_ARG(MsgCat.COMMAND_OTHER, "{{&7&o{1}}&7{0}}"),
 
     //Command messages
     CMD_ESSENCE_INFO(MsgCat.COMMAND, "&8===== &4&lEssence plugin &8=====\n&8&o{0}\n&6Version&8: &7{1}\n&6Website&8: &9{2}\n&6Authors&8: &7{3}"),
@@ -139,6 +147,31 @@ public enum Message {
     OPT_NO_HUNGER_LOSS(MsgCat.COMMAND_OPTIONS, "If enabled you wont lose hunger while in god mode"),
     OPT_NO_DAMAGE(MsgCat.COMMAND_OPTIONS, "If enabled you wont be able to damage other entities wile in god mode"),
     //OPT_FLYING(MsgCat.COMMAND_OPTIONS, "If true it will set the player to currently flying. If false it will stop flight"),
+
+    //Argument descriptions
+    ARG_NO_DESC(MsgCat.COMMAND_ARG, "&cNo description available..."),
+    ARG_PLAYER(MsgCat.COMMAND_ARG, "&7The name, uuid or nickname of an online player."),
+    ARG_OFFLINE_PLAYER(MsgCat.COMMAND_ARG, "&7The name, uuid or nickname of a player."),
+    ARG_BOOL(MsgCat.COMMAND_ARG, "&7Either &atrue &7or &cfalse. &8(&ay&8,&cn&8, &av&8,&cx&8, &ayes&8,&cno&8)"),
+    ARG_DECIMAL(MsgCat.COMMAND_ARG, "&77Any number which can have decimals. &8Example: &76.9"),
+    ARG_DECIMAL_MIN_MAX(MsgCat.COMMAND_ARG, "&77Any number between &a{0} &7and &a{1} &7which can have decimals. &8Example: &76.9"),
+    ARG_DECIMAL_MIN(MsgCat.COMMAND_ARG, "&77Any number above &a{0} &7which can have decimals. &8Example: &76.9"),
+    ARG_DECIMAL_MAX(MsgCat.COMMAND_ARG, "&77Any number below &a{0} &7which can have decimals. &8Example: &76.9"),
+    ARG_INT(MsgCat.COMMAND_ARG, "&7Any number."),
+    ARG_INT_MIN_MAX(MsgCat.COMMAND_ARG, "&7Any number between &a{0} &7and &a{1}&7."),
+    ARG_INT_MIN(MsgCat.COMMAND_ARG, "&7Any number above &a{0}&7."),
+    ARG_INT_MAX(MsgCat.COMMAND_ARG, "&7Any number below &a{0}&7."),
+    ARG_LIST(MsgCat.COMMAND_ARG, "&7Any of these values&8: &a{0}"),
+    ARG_LOCATION(MsgCat.COMMAND_ARG, "&7A location &8(&ax,y,z:world&7, &a@player&7, &a~x,~y,~z:@player&8)"),
+    ARG_STRING(MsgCat.COMMAND_ARG, "&7Any string without spaces."),
+    ARG_STRING_MATCH(MsgCat.COMMAND_ARG, "&7The value needs to match &a{0}"),
+    ARG_STRING_START(MsgCat.COMMAND_ARG, "&7The value needs to start with &a{0}"),
+    ARG_STRING_END(MsgCat.COMMAND_ARG, "&7The value needs to end with &a{0}"),
+    ARG_STRING_START_END(MsgCat.COMMAND_ARG, "&7The value needs to start with &a{0} &7and end with &a{0}"),
+    ARG_STRING_MIN_MAX(MsgCat.COMMAND_ARG, "&7Any string with &a{0} &7to &a{1} &7characters."),
+    ARG_STRING_MIN(MsgCat.COMMAND_ARG, "&7Any string with at least &a{0} &7characters."),
+    ARG_STRING_MAX(MsgCat.COMMAND_ARG, "&7Any string with less than &a{0} &7characters."),
+    ARG_WORLD(MsgCat.COMMAND_ARG, "&7A world name, uuid or id."),
     ;
 
     private EMessage message;

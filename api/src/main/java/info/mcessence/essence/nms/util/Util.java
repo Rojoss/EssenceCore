@@ -54,7 +54,7 @@ public class Util {
             //Texture code split from the url.
             //955d611a878e821231749b2965708cad942650672db09e26847a88e2fac2946
             input = "http://textures.minecraft.net/texture/" + input;
-            return Base64.encodeBase64(String.format("{textures:{SKIN:{url:\"%s\"}}}", input).getBytes());
+            return Base64.encodeBase64(String.format("{\"textures\":{\"SKIN\":{\"url\":\"%s\"}}}", input).getBytes());
         }
     }
 }

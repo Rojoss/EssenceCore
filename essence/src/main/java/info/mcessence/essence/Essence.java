@@ -25,7 +25,6 @@
 
 package info.mcessence.essence;
 
-import com.google.gson.Gson;
 import info.mcessence.essence.aliases.AliasType;
 import info.mcessence.essence.commands.Commands;
 import info.mcessence.essence.config.CommandOptionsCfg;
@@ -36,7 +35,9 @@ import info.mcessence.essence.config.aliases.AliasesCfg;
 import info.mcessence.essence.config.aliases.ItemAliases;
 import info.mcessence.essence.config.data.Warps;
 import info.mcessence.essence.nms.ISkull;
+import info.mcessence.essence.nms.ITitle;
 import info.mcessence.essence.nms.v1_8_R1.SkullUtil_v1_8_R1;
+import info.mcessence.essence.nms.v1_8_R1.Title_1_8_R1;
 import info.mcessence.essence.nms.v1_8_R2.SkullUtil_1_8_R2;
 import info.mcessence.essence.nms.v1_8_R3.SkullUtil_1_8_R3;
 import org.bukkit.plugin.PluginManager;
@@ -49,7 +50,7 @@ import java.util.logging.Logger;
 public class Essence extends JavaPlugin {
 
     private static Essence instance;
-    private Gson gson = new Gson();
+    //private Gson gson = new Gson();
 
     private MessagesCfg messages;
     private ModulesCfg modules;
@@ -58,6 +59,7 @@ public class Essence extends JavaPlugin {
     private Warps warps;
 
     private ISkull iSkull = null;
+    private ITitle iTitle = null;
 
     private ItemAliases itemAliases;
     private Map<AliasType, AliasesCfg> aliases = new HashMap<AliasType, AliasesCfg>();
@@ -108,26 +110,26 @@ public class Essence extends JavaPlugin {
         switch (version) {
             case "v1_8_R1" :
                 iSkull = new SkullUtil_v1_8_R1();
+                iTitle = new Title_1_8_R1();
+                log("This version of Essence is fully compatible with your server version!");
                 break;
             case "v1_8_R2" :
                 iSkull = new SkullUtil_1_8_R2();
+                iTitle = new Title_1_8_R2();
+                log("This version of Essence is fully compatible with your server version!");
                 break;
             case "v1_8_R3" :
                 iSkull = new SkullUtil_1_8_R3();
+                iTitle = new Title_1_8_R3();
+                log("This version of Essence is fully compatible with your server version!");
                 break;
             default:
-                iSkull = null;
-        }
-
-        if (iSkull == null) {
-            warn("This version of Essence is not fully compatible with your server version!");
-            warn("Your server version: " + version);
-            warn("Earliest compatible version: v1_8_R1");
-            warn("Latest compatible version: v1_8_R3");
-            warn("If there is a newer server version we will update the plugin as soon as possible.");
-            warn("Essence will still work fine but certain features will be disabled.");
-        } else {
-            log("This version of Essence is fully compatible with your server version!");
+                warn("This version of Essence is not fully compatible with your server version!");
+                warn("Your server version: " + version);
+                warn("Earliest compatible version: v1_8_R1");
+                warn("Latest compatible version: v1_8_R3");
+                warn("If there is a newer server version we will update the plugin as soon as possible.");
+                warn("Essence will still work fine but certain features will be disabled.");
         }
     }
 
@@ -170,9 +172,9 @@ public class Essence extends JavaPlugin {
         return instance;
     }
 
-    public Gson getGson() {
+    /*public Gson getGson() {
         return gson;
-    }
+    }*/
 
 
     public ISkull getISkull() {
@@ -203,6 +205,10 @@ public class Essence extends JavaPlugin {
 
     public Commands getCommands() {
         return commands;
+    }
+
+    public ITitle getITitle() {
+        return iTitle;
     }
 
 }

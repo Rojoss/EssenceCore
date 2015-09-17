@@ -91,5 +91,19 @@ public class IntArgument extends CmdArgument {
 
         return result;
     }
+
+    @Override
+    public String getDescription() {
+        if (minValue != null && maxValue != null) {
+            return Message.ARG_INT_MIN_MAX.msg().getMsg(false, minValue.toString(), maxValue.toString());
+        }
+        if (minValue != null) {
+            return Message.ARG_INT_MIN.msg().getMsg(false, minValue.toString());
+        }
+        if (maxValue != null) {
+            return Message.ARG_INT_MAX.msg().getMsg(false, maxValue.toString());
+        }
+        return Message.ARG_INT.msg().getMsg(false);
+    }
     
 }

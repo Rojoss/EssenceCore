@@ -31,6 +31,7 @@ import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
 import info.mcessence.essence.commands.EssenceCommand;
 import info.mcessence.essence.util.NumberUtil;
+import info.mcessence.essence.util.Util;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -151,6 +152,11 @@ public class LocationArgument extends CmdArgument {
         result.setValue(new Location(world, newLocValues.get("x").doubleValue(), newLocValues.get("y").doubleValue(), newLocValues.get("z").doubleValue(), newLocValues.get("yaw").floatValue(), newLocValues.get("pitch").floatValue()));
 
         return result;
+    }
+
+    @Override
+    public String getDescription() {
+        return Message.ARG_LOCATION.msg().getMsg(false);
     }
 
 }

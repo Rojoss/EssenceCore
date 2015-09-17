@@ -30,6 +30,7 @@ import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResult;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
 import info.mcessence.essence.commands.EssenceCommand;
+import info.mcessence.essence.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -82,6 +83,11 @@ public class OfflinePlayerArgument extends CmdArgument {
         }
 
         return result;
+    }
+
+    @Override
+    public String getDescription() {
+        return Message.ARG_OFFLINE_PLAYER.msg().getMsg(false);
     }
 
 }

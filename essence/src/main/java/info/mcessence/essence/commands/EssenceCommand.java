@@ -200,6 +200,11 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         List<String> argsList = new ArrayList<String>();
         for (String arg : args) {
             if (arg.startsWith("-") && modifiers.containsKey(arg.toLowerCase())) {
+                if (arg.equalsIgnoreCase("-?")) {
+                    showHelp(sender);
+                    result.success = false;
+                    return result;
+                }
                 result.addModifier(arg);
             } else if (arg.contains(":")) {
                 String[] split = arg.split(":");
@@ -268,6 +273,48 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
             modifier = "-" + modifier;
         }
         modifiers.put(modifier, info);
+    }
+
+    public void showHelp(CommandSender sender) {
+        String str_aliases = Util.implode(getAliases(), Message.CMD_HELP_SEPARATOR.msg().getMsg(false));
+
+        List<String> argList = new ArrayList<String>();
+        for (CmdArgument arg : cmdArgs) {
+            argList.add(Message.CMD_HELP_ARG.msg().getMsg(false, arg.getName(sender), arg.getDescription()));
+        }
+        String str_usage = label + " " + Util.implode(argList, " ");
+
+        List<String> modifierList = new ArrayList<String>();
+        for (Map.Entry<String, EMessage> entry : modifiers.entrySet()) {
+            modifierList.add(Message.CMD_HELP_MODIFIER.msg().getMsg(false, entry.getKey(), entry.getValue().getMsg(false)));
+        }
+        String str_modifiers = Util.implode(modifierList, Message.CMD_HELP_SEPARATOR.msg().getMsg(false));
+
+        List<String> optArgList = new ArrayList<String>();
+        for (Map.Entry<String, CommandOption> entry : optionalArgs.entrySet()) {
+            optArgList.add(Message.CMD_HELP_OPT_ARG.msg().getMsg(false, entry.getKey(), entry.getValue().getInfo().getMsg(false), entry.getValue().getDefaultValue().toString()));
+        }
+        String str_optargs = Util.implode(optArgList, Message.CMD_HELP_SEPARATOR.msg().getMsg(false));
+
+        List<String> optList = new ArrayList<String>();
+        for (Map.Entry<String, CommandOption> entry : cmdOptions.entrySet()) {
+            optList.add(Message.CMD_HELP_OPTION.msg().getMsg(false, entry.getKey(), entry.getValue().getInfo().getMsg(false), entry.getValue().getValue().toString()));
+        }
+        String str_options = Util.implode(optList, Message.CMD_HELP_SEPARATOR.msg().getMsg(false));
+
+        String none = Util.color(Message.CMD_HELP_NONE.msg().getMsg(false));
+
+        HashMap<String, String> values = new HashMap<String, String>();
+        values.put("cmd", label);
+        values.put("desc", Util.color(description));
+        values.put("usage", Util.color(str_usage));
+        values.put("perm", permission.isEmpty() ? none : permission);
+        values.put("aliases", str_aliases.isEmpty() ? none : Util.color(str_aliases));
+        values.put("modifiers", str_modifiers.isEmpty() ? none : Util.color(str_modifiers));
+        values.put("opt-args", str_optargs.isEmpty() ? none : Util.color(str_optargs));
+        values.put("options", str_options.isEmpty() ? none : Util.color(str_options));
+
+        sender.sendMessage(Util.color(Message.CMD_HELP_ESSENCE.msg().getMsg(false, values)));
     }
 
     /** Method to be overwritten by each command */

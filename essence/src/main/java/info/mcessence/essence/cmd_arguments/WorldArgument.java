@@ -86,4 +86,9 @@ public class WorldArgument extends CmdArgument {
         }
         return worldNames;
     }
+
+    @Override
+    public String getDescription() {
+        return Message.ARG_WORLD.msg().getMsg(false);
+    }
 }

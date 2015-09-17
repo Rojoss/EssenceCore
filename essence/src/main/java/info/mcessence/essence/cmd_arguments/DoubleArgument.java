@@ -25,6 +25,7 @@
 
 package info.mcessence.essence.cmd_arguments;
 
+import info.mcessence.essence.message.EMessage;
 import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResult;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
@@ -35,8 +36,8 @@ import org.bukkit.command.CommandSender;
 
 public class DoubleArgument extends CmdArgument {
 
-    protected double minValue;
-    protected double maxValue;
+    protected Double minValue;
+    protected Double maxValue;
     protected boolean clampValue;
 
     public DoubleArgument(String name, ArgumentRequirement requirement, String permission, double minValue, double maxValue, boolean clampValue) {
@@ -44,6 +45,10 @@ public class DoubleArgument extends CmdArgument {
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.clampValue = clampValue;
+    }
+
+    public DoubleArgument(String name, ArgumentRequirement requirement, String permission) {
+        super(name, requirement, permission);
     }
 
 
@@ -60,7 +65,7 @@ public class DoubleArgument extends CmdArgument {
             result.success = false;
             return result;
         }
-        if (value != -1 && value < minValue) {
+        if (minValue != null && value < minValue) {
             if (clampValue) {
                 value = minValue;
             } else {
@@ -69,7 +74,7 @@ public class DoubleArgument extends CmdArgument {
                 return result;
             }
         }
-        if (value != -1 && value > maxValue) {
+        if (maxValue != null && value > maxValue) {
             if (clampValue) {
                 value = maxValue;
             } else {
@@ -83,6 +88,20 @@ public class DoubleArgument extends CmdArgument {
         result.success = true;
 
         return result;
+    }
+
+    @Override
+    public String getDescription() {
+        if (minValue != null && maxValue != null) {
+            return Message.ARG_DECIMAL_MIN_MAX.msg().getMsg(false, minValue.toString(), maxValue.toString());
+        }
+        if (minValue != null) {
+            return Message.ARG_DECIMAL_MIN.msg().getMsg(false, minValue.toString());
+        }
+        if (maxValue != null) {
+            return Message.ARG_DECIMAL_MAX.msg().getMsg(false, maxValue.toString());
+        }
+        return Message.ARG_DECIMAL.msg().getMsg(false);
     }
     
 }

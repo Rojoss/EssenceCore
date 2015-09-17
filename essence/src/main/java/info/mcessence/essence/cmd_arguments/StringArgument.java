@@ -41,8 +41,8 @@ public class StringArgument extends CmdArgument {
     private String match = "";
     private String start = "";
     private String end = "";
-    private int minChars = -1;
-    private int maxChars = -1;
+    private Integer minChars = null;
+    private Integer maxChars = null;
 
     public StringArgument(String name, ArgumentRequirement requirement, String permission) {
         super(name, requirement, permission);
@@ -59,7 +59,7 @@ public class StringArgument extends CmdArgument {
         this.end = end.toLowerCase();
     }
 
-    public StringArgument(String name, ArgumentRequirement requirement, String permission, int minChars, int maxChars) {
+    public StringArgument(String name, ArgumentRequirement requirement, String permission, Integer minChars, Integer maxChars) {
         super(name, requirement, permission);
         this.minChars = minChars;
         this.maxChars = maxChars;
@@ -78,14 +78,14 @@ public class StringArgument extends CmdArgument {
                 result.success = false;
                 return result;
             }
-        } else if (minChars > 0 || maxChars > 0) {
-            if (minChars > 0 && arg.length() < minChars) {
-                sender.sendMessage(Message.TOO_FEW_CHARACTERS.msg().getMsg(true, arg, Integer.toString(minChars)));
+        } else if (minChars != null || maxChars != null) {
+            if (minChars != null && arg.length() < minChars) {
+                sender.sendMessage(Message.TOO_FEW_CHARACTERS.msg().getMsg(true, arg, minChars.toString()));
                 result.success = false;
                 return result;
             }
-            if (maxChars > 0 && arg.length() > maxChars) {
-                sender.sendMessage(Message.TOO_MUCH_CHARACTERS.msg().getMsg(true, arg, Integer.toString(maxChars)));
+            if (maxChars != null && arg.length() > maxChars) {
+                sender.sendMessage(Message.TOO_MUCH_CHARACTERS.msg().getMsg(true, arg, maxChars.toString()));
                 result.success = false;
                 return result;
             }
@@ -113,6 +113,32 @@ public class StringArgument extends CmdArgument {
             return Arrays.asList(match);
         }
         return null;
+    }
+
+    @Override
+    public String getDescription() {
+        if (!match.isEmpty()) {
+            return Message.ARG_STRING_MATCH.msg().getMsg(false, match);
+        }
+        if (!start.isEmpty() && !end.isEmpty()) {
+            return Message.ARG_STRING_START_END.msg().getMsg(false, start, end);
+        }
+        if (!start.isEmpty()) {
+            return Message.ARG_STRING_START.msg().getMsg(false, start);
+        }
+        if (!end.isEmpty()) {
+            return Message.ARG_STRING_END.msg().getMsg(false, end);
+        }
+        if (minChars != null && maxChars != null) {
+            return Message.ARG_STRING_MIN_MAX.msg().getMsg(false, minChars.toString(), maxChars.toString());
+        }
+        if (minChars != null) {
+            return Message.ARG_STRING_MIN.msg().getMsg(false, minChars.toString());
+        }
+        if (maxChars != null) {
+            return Message.ARG_STRING_MAX.msg().getMsg(false, maxChars.toString());
+        }
+        return Message.ARG_STRING.msg().getMsg(false);
     }
     
 }

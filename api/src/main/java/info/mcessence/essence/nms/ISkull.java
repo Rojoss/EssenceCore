@@ -37,16 +37,16 @@ public interface ISkull {
      * Set a specific skin texture to the given skull block.
      * If the block isn't a skull nothing will happen!
      */
-    public void setSkullUrl(String skinUrl, Block block);
+    void setSkullUrl(String skinUrl, Block block);
 
     /**
      * Set a specific skin texture to the given skull meta.
      * It will return the SkullMeta with the texture applied if it was valid.
      */
-    public SkullMeta setSkullUrl(String skinUrl, SkullMeta meta);
+    SkullMeta setSkullUrl(String skinUrl, SkullMeta meta);
 
     /**
      * Get the texture url code from the skull meta.
      */
-    public String getSkullUrl(SkullMeta meta);
+    String getSkullUrl(SkullMeta meta);
 }

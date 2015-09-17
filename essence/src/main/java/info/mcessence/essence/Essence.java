@@ -26,9 +26,7 @@
 package info.mcessence.essence;
 
 import com.google.gson.Gson;
-import info.mcessence.essence.aliases.Alias;
 import info.mcessence.essence.aliases.AliasType;
-import info.mcessence.essence.aliases.Aliases;
 import info.mcessence.essence.commands.Commands;
 import info.mcessence.essence.config.CommandOptionsCfg;
 import info.mcessence.essence.config.CommandsCfg;
@@ -44,9 +42,7 @@ import info.mcessence.essence.nms.v1_8_R3.SkullUtil_1_8_R3;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -73,6 +69,7 @@ public class Essence extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        instance = null;
         log("disabled");
     }
 

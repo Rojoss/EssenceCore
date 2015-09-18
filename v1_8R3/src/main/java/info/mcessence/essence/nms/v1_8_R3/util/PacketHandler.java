@@ -37,4 +37,9 @@ public class PacketHandler {
     public static void sendPacket(Player player, Packet packet) {
         ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
     }
+
+    public static void sendPacket(Player player, Packet packet1, Packet packet2) {
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet1);
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet2);
+    }
 }

@@ -42,6 +42,7 @@ import info.mcessence.essence.nms.v1_8_R2.SkullUtil_1_8_R2;
 import info.mcessence.essence.nms.v1_8_R2.Title_1_8_R2;
 import info.mcessence.essence.nms.v1_8_R3.SkullUtil_1_8_R3;
 import info.mcessence.essence.nms.v1_8_R3.Title_1_8_R3;
+import info.mcessence.essence.player.PlayerManager;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -67,6 +68,8 @@ public class Essence extends JavaPlugin {
     private Map<AliasType, AliasesCfg> aliases = new HashMap<AliasType, AliasesCfg>();
 
     private Commands commands;
+
+    private PlayerManager playerManager;
 
     private final Logger log = Logger.getLogger("Essence");
 
@@ -97,6 +100,8 @@ public class Essence extends JavaPlugin {
         warps = new Warps("plugins/Essence/data/Warps.yml");
 
         commands = new Commands(this);
+
+        playerManager = new PlayerManager(this);
 
         log("loaded successfully");
     }
@@ -202,6 +207,11 @@ public class Essence extends JavaPlugin {
 
     public Warps getWarps() {
         return warps;
+    }
+
+
+    public PlayerManager getPM() {
+        return playerManager;
     }
 
 

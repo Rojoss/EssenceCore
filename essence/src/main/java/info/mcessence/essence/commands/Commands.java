@@ -98,12 +98,12 @@ public class Commands {
      */
     public void registerCommand(Class<? extends EssenceCommand> clazz, String label, String module, String description, String[] aliases) {
         if (!module.isEmpty()) {
-            ess.getmodules().registerModule(ModuleCategory.COMMAND, module);
+            ess.getModuleCfg().registerModule(ModuleCategory.COMMAND, module);
         }
         for (EssenceCommand cmd : commands) {
             if (cmd.getLabel().equals(label)) {
                 cmd.unregister();
-                if (module.isEmpty() || ess.getmodules().isEnabled(ModuleCategory.COMMAND, module)) {
+                if (module.isEmpty() || ess.getModuleCfg().isEnabled(ModuleCategory.COMMAND, module)) {
                     cmd.loadData(cfg.getDescription(label), cfg.getPermission(label), cfg.getAliases(label));
                     cmd.register();
                 } else {
@@ -120,7 +120,7 @@ public class Commands {
         }
 
         cfg.registerCommand(label, description, "essence." + label, aliases);
-        if (!module.isEmpty() && !ess.getmodules().isEnabled(ModuleCategory.COMMAND, module)) {
+        if (!module.isEmpty() && !ess.getModuleCfg().isEnabled(ModuleCategory.COMMAND, module)) {
             return;
         }
 

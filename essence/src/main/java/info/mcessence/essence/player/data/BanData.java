@@ -25,7 +25,7 @@
 
 package info.mcessence.essence.player.data;
 
-import info.mcessence.essence.player.data.internal.Ban;
+import info.mcessence.essence.modules.ban.Ban;
 import info.mcessence.essence.player.data.internal.PlayerData;
 
 import java.sql.Timestamp;

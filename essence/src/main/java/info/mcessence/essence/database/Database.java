@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.database.internal;
+package info.mcessence.essence.database;
 
 import info.mcessence.essence.Essence;
 import org.bukkit.plugin.Plugin;
@@ -89,4 +89,11 @@ public abstract class Database {
         return result;
     }
 
+    public Query createQuery() {
+        return new Query();
+    }
+
+    public Column createColumn(String name) {
+        return new Column(name);
+    }
 }

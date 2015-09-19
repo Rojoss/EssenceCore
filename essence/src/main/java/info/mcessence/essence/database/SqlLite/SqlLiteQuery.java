@@ -23,33 +23,9 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.database;
+package info.mcessence.essence.database.SqlLite;
 
-import info.mcessence.essence.database.internal.Database;
-import org.bukkit.plugin.Plugin;
+import info.mcessence.essence.database.Query;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
-public class SqlLite extends Database {
-
-    private String path;
-
-    public SqlLite(Plugin plugin, String database) {
-        super(plugin, database);
-        type = "SqlLite";
-    }
-
-    @Override
-    public Connection openConnection() throws SQLException, ClassNotFoundException {
-        if (checkConnection()) {
-            return connection;
-        }
-        path = plugin.getDataFolder().getAbsolutePath();
-
-        Class.forName("org.sqlite.JDBC");
-        connection = DriverManager.getConnection("jdbc:sqlite:" + path + "/data/" + database + ".db");
-        return connection;
-    }
+public class SqlLiteQuery extends Query {
 }

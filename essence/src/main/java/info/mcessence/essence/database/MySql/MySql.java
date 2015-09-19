@@ -23,9 +23,9 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.database;
+package info.mcessence.essence.database.MySql;
 
-import info.mcessence.essence.database.internal.Database;
+import info.mcessence.essence.database.Database;
 import org.bukkit.plugin.Plugin;
 
 import java.sql.Connection;

@@ -25,10 +25,6 @@
 
 package info.mcessence.essence.config;
 
-import info.mcessence.essence.message.Message;
-import info.mcessence.essence.message.MsgCat;
-import info.mcessence.essence.util.Util;
-
 import java.util.*;
 
 public class MessagesCfg extends EasyConfig {
@@ -39,57 +35,4 @@ public class MessagesCfg extends EasyConfig {
         this.setFile(fileName);
         load();
     }
-
-    /*
-    @Override
-    public void load() {
-        super.load();
-        int changes = 0;
-
-        //Remove old messages
-        List<String> categories = new ArrayList<>(MESSAGES.keySet());
-        for (String category : categories) {
-            if (MsgCat.fromString(category) == null) {
-                MESSAGES.remove(category);
-                changes++;
-                break;
-            }
-            Map<String, String> messages = MESSAGES.get(category);
-            List<String> keys = new ArrayList<>(messages.keySet());
-            for (String msg : keys) {
-                if (Message.fromString(msg) == null) {
-                    messages.remove(msg);
-                    changes++;
-                }
-            }
-            MESSAGES.put(category, messages);
-        }
-
-        //Add new messages
-        for (Message message : Message.values()) {
-            String cat = message.getCat().toString().toLowerCase().replace("_","-");
-            String msg = message.toString().toLowerCase().replace("_","-");
-            Map<String, String> messages = new HashMap<String, String>();
-            if (MESSAGES.containsKey(cat)) {
-                messages = MESSAGES.get(cat);
-            }
-            if (!messages.containsKey(msg)) {
-                messages.put(msg, message.getDefault());
-                MESSAGES.put(cat, messages);
-                changes++;
-            }
-        }
-
-        if (changes > 0) {
-            //Sort messages
-            for (String category : MESSAGES.keySet()) {
-                MESSAGES.put(category, new TreeMap<String, String>(MESSAGES.get(category)));
-            }
-            save();
-        }
-    }
-    */
-
-
-
 }

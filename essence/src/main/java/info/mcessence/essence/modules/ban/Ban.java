@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.player.data.internal;
+package info.mcessence.essence.modules.ban;
 
 import java.sql.Timestamp;
 import java.util.UUID;

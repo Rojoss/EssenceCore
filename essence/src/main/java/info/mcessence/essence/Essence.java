@@ -31,6 +31,9 @@ import info.mcessence.essence.config.*;
 import info.mcessence.essence.config.aliases.AliasesCfg;
 import info.mcessence.essence.config.aliases.ItemAliases;
 import info.mcessence.essence.config.data.Warps;
+import info.mcessence.essence.database.MySql;
+import info.mcessence.essence.database.SqlLite;
+import info.mcessence.essence.database.internal.Database;
 import info.mcessence.essence.nms.ISkull;
 import info.mcessence.essence.nms.ITitle;
 import info.mcessence.essence.nms.v1_8_R1.SkullUtil_v1_8_R1;
@@ -44,6 +47,11 @@ import info.mcessence.essence.util.Debug;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -52,6 +60,9 @@ public class Essence extends JavaPlugin {
 
     private static Essence instance;
     //private Gson gson = new Gson();
+
+    private Database database;
+    private Connection sql;
 
     private DataStorageCfg dataStorageCfg;
     private MessagesCfg messages;
@@ -84,13 +95,6 @@ public class Essence extends JavaPlugin {
         instance = this;
         log.setParent(this.getLogger());
 
-        setupNMS();
-
-        setupDatabase();
-
-        registerEvents();
-
-        Debug.bc("Creating DataStorage.yml");
         dataStorageCfg = new DataStorageCfg("plugins/Essence/DataStorage.yml");
         messages = new MessagesCfg("plugins/Essence/Messages.yml");
         modules = new ModulesCfg("plugins/Essence/Modules.yml");
@@ -98,6 +102,14 @@ public class Essence extends JavaPlugin {
         cmdOptionsCfg = new CommandOptionsCfg("plugins/Essence/CommandOptions.yml");
 
         loadAliases();
+        setupDatabase();
+        setupNMS();
+        registerEvents();
+
+        Enumeration<Driver> drivers = DriverManager.getDrivers();
+        while (drivers.hasMoreElements()) {
+            Debug.bc(drivers.nextElement().getClass().toString());
+        }
 
         //TODO: Have a class for modules were it would create the config and such.
         warps = new Warps("plugins/Essence/data/Warps.yml");
@@ -144,7 +156,47 @@ public class Essence extends JavaPlugin {
     }
 
     private void setupDatabase() {
+        if (dataStorageCfg.driver.equalsIgnoreCase("sqllite")) {
+            log("Setting up connection with the SqlLite database...");
+            database = new SqlLite(this, dataStorageCfg.database);
+            openDatabaseConnection();
+        } else if (dataStorageCfg.driver.equalsIgnoreCase("mysql")) {
+            log("Setting up connection with the MySql database...");
+            database = new MySql(this, dataStorageCfg.host, dataStorageCfg.database, dataStorageCfg.username, dataStorageCfg.password);
+            openDatabaseConnection();
+        } else {
+            logError("No valid database driver selected!");
+            logError("The driver must be one of these options: 'SqlLite' or 'MySql'");
+            databaseError();
+        }
+    }
 
+    private void openDatabaseConnection() {
+        if (database == null) {
+            databaseError();
+            return;
+        }
+        try {
+            sql = database.openConnection();
+        } catch (SQLException e) {
+            logError("Unable to establish a connection to your " + database.getType() + " database.");
+            logError("Please make sure the details in DataStorage.yml are set up correct.");
+            databaseError();
+        } catch (ClassNotFoundException e) {
+            logError("No database driver found for " + database.getType() + "!");
+            databaseError();
+        }
+    }
+
+    public void databaseError() {
+        if (dataStorageCfg.disable_plugin_without_database_connection) {
+            logError("Disabling the plugin because there is no valid database connection!");
+            setEnabled(false);
+        } else {
+            logError("No valid database connection found!");
+            logError("Because 'disable_plugin_without_database_connection' is set to false the plugin will still work.");
+            logError("This is not recommended and you should attempt to fix the database connection as many features will fail to work!");
+        }
     }
 
     private void registerEvents() {

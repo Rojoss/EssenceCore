@@ -39,19 +39,17 @@ public class DataStorageCfg extends EasyConfig {
     public String table_name = "ess_{type}{suffix}";
     public String username = "";
     public String password = "";
+    public boolean disable_plugin_without_database_connection = true;
     public Map<String, Map<String, String>> storage_modules = new HashMap<String, Map<String, String>>();
 
     public DataStorageCfg(String fileName) {
         this.setFile(fileName);
         load();
-        Debug.bc("Created DataStorage.yml");
     }
 
     @Override
     public void load() {
         super.load();
-
-        Debug.bc("Loading DataStorage.yml");
 
         int changes = 0;
 

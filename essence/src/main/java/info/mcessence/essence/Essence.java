@@ -27,10 +27,7 @@ package info.mcessence.essence;
 
 import info.mcessence.essence.aliases.AliasType;
 import info.mcessence.essence.commands.Commands;
-import info.mcessence.essence.config.CommandOptionsCfg;
-import info.mcessence.essence.config.CommandsCfg;
-import info.mcessence.essence.config.MessagesCfg;
-import info.mcessence.essence.config.ModulesCfg;
+import info.mcessence.essence.config.*;
 import info.mcessence.essence.config.aliases.AliasesCfg;
 import info.mcessence.essence.config.aliases.ItemAliases;
 import info.mcessence.essence.config.data.Warps;
@@ -43,6 +40,7 @@ import info.mcessence.essence.nms.v1_8_R2.Title_1_8_R2;
 import info.mcessence.essence.nms.v1_8_R3.SkullUtil_1_8_R3;
 import info.mcessence.essence.nms.v1_8_R3.Title_1_8_R3;
 import info.mcessence.essence.player.PlayerManager;
+import info.mcessence.essence.util.Debug;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -55,6 +53,7 @@ public class Essence extends JavaPlugin {
     private static Essence instance;
     //private Gson gson = new Gson();
 
+    private DataStorageCfg dataStorageCfg;
     private MessagesCfg messages;
     private ModulesCfg modules;
     private CommandsCfg commandsCfg;
@@ -87,8 +86,12 @@ public class Essence extends JavaPlugin {
 
         setupNMS();
 
+        setupDatabase();
+
         registerEvents();
 
+        Debug.bc("Creating DataStorage.yml");
+        dataStorageCfg = new DataStorageCfg("plugins/Essence/DataStorage.yml");
         messages = new MessagesCfg("plugins/Essence/Messages.yml");
         modules = new ModulesCfg("plugins/Essence/Modules.yml");
         commandsCfg = new CommandsCfg("plugins/Essence/Commands.yml");
@@ -140,6 +143,10 @@ public class Essence extends JavaPlugin {
         }
     }
 
+    private void setupDatabase() {
+
+    }
+
     private void registerEvents() {
         PluginManager pm = getServer().getPluginManager();
     }
@@ -188,6 +195,10 @@ public class Essence extends JavaPlugin {
         return iSkull;
     }
 
+
+    public DataStorageCfg getDataStorageCfg() {
+        return dataStorageCfg;
+    }
 
     public MessagesCfg getMessages() {
         return messages;

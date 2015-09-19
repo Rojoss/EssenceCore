@@ -26,30 +26,36 @@
 package info.mcessence.essence.player.data.internal;
 
 public enum DataType {
-    USER("userlookup"),
-    DATA_SYNC("datasync"),
-    INV_SYNC("invsync"),
-    ENDER_SYNC("endersync"),
-    BACKPACK("backpacks"),
-    NICK("nick"),
-    HOME("homes"),
-    GOD("god"),
-    VANISH("vanish"),
-    POWERTOOL("powertools"),
-    BAN("ban"),
-    MUTE("mute"),
-    JAIL("jail"),
-    FREEZE("freeze"),
-    WARNING("warning"),
+    USER("userlookup", 30),
+    DATA_SYNC("datasync", 10),
+    INV_SYNC("invsync", 10),
+    ENDER_SYNC("endersync", 10),
+    BACKPACK("backpacks", 10),
+    NICK("nick", 30),
+    HOME("homes", 20),
+    GOD("god", 20),
+    VANISH("vanish", 10),
+    POWERTOOL("powertools", 60),
+    BAN("ban", 0),
+    MUTE("mute", 0),
+    JAIL("jail", 0),
+    FREEZE("freeze", 0),
+    WARNING("warning", 10),
     ;
 
     private String module;
+    private int saveDelay;
 
-    DataType(String module) {
+    DataType(String module, int saveDelay) {
         this.module = module;
+        this.saveDelay = saveDelay;
     }
 
     public String getModule() {
         return module;
+    }
+
+    public int getSaveDelay() {
+        return saveDelay;
     }
 }

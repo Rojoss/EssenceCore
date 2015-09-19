@@ -65,6 +65,7 @@ public class MainPluginCmd extends EssenceCommand {
             ess.getCommandsCfg().load();
             ess.getCmdOptions().load();
             ess.getCommands().registerCommands();
+            ess.getModules().registerModules();
 
             if (!result.hasModifier("-s")) {
                 sender.sendMessage(Message.CMD_ESSENCE_RELOAD.msg().getMsg(true));

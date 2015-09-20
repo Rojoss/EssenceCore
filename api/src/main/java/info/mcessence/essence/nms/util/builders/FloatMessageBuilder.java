@@ -25,7 +25,6 @@
 
 package info.mcessence.essence.nms.util.builders;
 
-import com.google.gson.JsonSyntaxException;
 import info.mcessence.essence.nms.util.Util;
 import org.bukkit.ChatColor;
 
@@ -90,15 +89,20 @@ public class FloatMessageBuilder {
     }
 
 
-    public String getMessage() throws Exception {
-        if (grouping) {
-            throw new JsonSyntaxException("The message grouping is not complete. Add the finishGrouping() method before using getMessage() method");
-        } else {
-            if (building) {
-                throw new JsonSyntaxException("The message is still being built. Add the finishBuilding(), then finishGrouping() methods before using getMessage() method");
+    public String getMessage() {
+        try {
+            if (grouping) {
+                throw new Exception("The message grouping is not complete. Add the finishGrouping() method before using getMessage() method");
             } else {
-                return finalMessage;
+                if (building) {
+                    throw new Exception("The message is still being built. Add the finishBuilding(), then finishGrouping() methods before using getMessage() method");
+                } else {
+                    return finalMessage;
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return finalMessage;
         }
     }
 

@@ -27,10 +27,11 @@
 
 package info.mcessence.essence.nms.util;
 
+import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.codec.binary.Base64;
 
 /**
- * @author KingGoesGaming
+ * Misc methods that dont fit anywhere (yet)
  */
 public class Util {
 
@@ -55,6 +56,58 @@ public class Util {
             //955d611a878e821231749b2965708cad942650672db09e26847a88e2fac2946
             input = "http://textures.minecraft.net/texture/" + input;
             return Base64.encodeBase64(String.format("{\"textures\":{\"SKIN\":{\"url\":\"%s\"}}}", input).getBytes());
+        }
+    }
+
+    public static void handleColor(ChatColor chatColor, String color) {
+        switch (chatColor) {
+            case BLACK:
+                color = "black";
+                break;
+            case DARK_BLUE:
+                color = "dark_blue";
+                break;
+            case DARK_GREEN:
+                color = "dark_green";
+                break;
+            case DARK_AQUA:
+                color = "dark_aqua";
+                break;
+            case DARK_RED:
+                color = "dark_red";
+                break;
+            case DARK_PURPLE:
+                color = "dark_purple";
+                break;
+            case GOLD:
+                color = "gold";
+                break;
+            case GRAY:
+                color = "grey";
+                break;
+            case DARK_GRAY:
+                color = "dark_grey";
+                break;
+            case BLUE:
+                color = "blue";
+                break;
+            case GREEN:
+                color = "green";
+                break;
+            case AQUA:
+                color = "aqua";
+                break;
+            case RED:
+                color = "red";
+                break;
+            case LIGHT_PURPLE:
+                color = "light_purple";
+                break;
+            case YELLOW:
+                color = "yellow";
+                break;
+            default:
+                color = "white";
         }
     }
 }

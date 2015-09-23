@@ -49,6 +49,14 @@ public class Modules {
         registerModule(BanModule.class, ModuleCategory.COMMAND, "ban");
     }
 
+    public Module getModule(Class<? extends Module> clazz) {
+        for (Module module : modules) {
+            if (module.getClass().equals(clazz)) {
+                return module;
+            }
+        }
+        return null;
+    }
 
     public void registerModule(Class<? extends Module> clazz, ModuleCategory category, String moduleName) {
         if (!moduleName.isEmpty()) {

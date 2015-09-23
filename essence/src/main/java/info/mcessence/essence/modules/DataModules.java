@@ -23,53 +23,39 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.player.data;
+package info.mcessence.essence.modules;
 
-import info.mcessence.essence.modules.ban.Ban;
-import info.mcessence.essence.player.data.internal.PlayerData;
+public enum DataModules {
+    USER("userlookup", 30),
+    DATA_SYNC("datasync", 10),
+    INV_SYNC("invsync", 10),
+    ENDER_SYNC("endersync", 10),
+    BACKPACK("backpacks", 10),
+    NICK("nick", 30),
+    HOME("homes", 20),
+    GOD("god", 20),
+    VANISH("vanish", 10),
+    POWERTOOL("powertools", 60),
+    BAN("ban", 0),
+    MUTE("mute", 0),
+    JAIL("jail", 0),
+    FREEZE("freeze", 0),
+    WARNING("warning", 10),
+    ;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+    private String module;
+    private int saveDelay;
 
-public class BanData extends PlayerData {
-
-    List<Ban> bans = new ArrayList<Ban>();
-
-    public boolean isBanned() {
-        return getActiveBan() != null;
+    DataModules(String module, int saveDelay) {
+        this.module = module;
+        this.saveDelay = saveDelay;
     }
 
-    public boolean ban(Long duration, UUID punisher, String reason) {
-        if (isBanned()) {
-            return false;
-        }
-        bans.add(new Ban(new Timestamp(System.currentTimeMillis()), duration, punisher, reason));
-        return true;
+    public String getModule() {
+        return module;
     }
 
-    public boolean unban() {
-        if (!isBanned()) {
-            return false;
-        }
-        getActiveBan().setRemainingTime(0l);
-        //TODO: Set it back?
-        return true;
-    }
-
-    public List<Ban> getBans() {
-        return bans;
-    }
-
-    public Ban getActiveBan() {
-        //TODO: Get the time the user has been online.
-        Long onlineTime = 0l;
-        for (Ban ban : bans) {
-            if (ban.isActive(onlineTime)) {
-                return ban;
-            }
-        }
-        return null;
+    public int getSaveDelay() {
+        return saveDelay;
     }
 }

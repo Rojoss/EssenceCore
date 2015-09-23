@@ -25,12 +25,10 @@
 
 package info.mcessence.essence.modules;
 
-import info.mcessence.essence.player.data.internal.DataType;
-
 public interface SqlStorageModule extends StorageModule {
 
     void createTable();
 
-    DataType getDataType();
+    DataModules getDataType();
 
 }

@@ -25,8 +25,7 @@
 
 package info.mcessence.essence.config;
 
-import info.mcessence.essence.player.data.internal.DataType;
-import info.mcessence.essence.util.Debug;
+import info.mcessence.essence.modules.DataModules;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +52,7 @@ public class DataStorageCfg extends EasyConfig {
 
         int changes = 0;
 
-        for (DataType type : DataType.values()) {
+        for (DataModules type : DataModules.values()) {
             String key = type.toString().toLowerCase().replaceAll("_", "-");
             if (!storage_modules.containsKey(key)) {
                 Map<String, String> data = new HashMap<String, String>();

@@ -26,8 +26,6 @@
 package info.mcessence.essence.player;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.player.data.internal.DataType;
-import info.mcessence.essence.player.data.internal.PlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -41,9 +39,6 @@ public class EPlayer {
     private Essence ess;
     private UUID uuid;
 
-    Map<DataType, PlayerData> data = new HashMap<DataType, PlayerData>();
-    private List<DataType> changedData = new ArrayList<DataType>();
-
     public EPlayer(UUID uuid) {
         ess = Essence.inst();
         this.uuid = uuid;
@@ -54,30 +49,6 @@ public class EPlayer {
     // ###################### DATA ######################
     // ##################################################
 
-    public PlayerData getData(DataType type) {
-        if (data.containsKey(type)) {
-            return data.get(type);
-        }
-        return null;
-    }
-
-    public void setData(DataType type, PlayerData data) {
-        this.data.put(type, data);
-        if (!changedData.contains(type)) {
-            changedData.add(type);
-        }
-    }
-
-    public boolean saveData() {
-        if (changedData.size() < 1) {
-            return true;
-        }
-        for (DataType type : changedData) {
-            //TODO: Save the data.
-            changedData.remove(type);
-        }
-        return true;
-    }
 
 
     // ##################################################

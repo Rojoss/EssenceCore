@@ -60,7 +60,7 @@ public class Query {
         return this;
     }
 
-    public Query update(String table, String[] columns, Object[] values) {
+    public Query update(String table) {
         query.add("UPDATE " + table);
         return this;
     }
@@ -75,32 +75,32 @@ public class Query {
         return this;
     }
 
-    public Query values(String[] columns, Object[] values) {
+    public Query values(List<String> columns, List<Object> values) {
         String columns_str = "(";
         String values_str = "(";
-        for (int i = 0; i < columns.length; i++) {
-            columns_str += columns[i] + ",";
-            if (values[i] instanceof String) {
-                values_str += "`" + values[i] + "`,";
+        for (int i = 0; i < columns.size(); i++) {
+            columns_str += columns.get(i) + ",";
+            if (values.get(i) instanceof String) {
+                values_str += "'" + values.get(i) + "',";
             } else {
-                values_str += values[i] + ",";
+                values_str += values.get(i) + ",";
             }
         }
         columns_str = columns_str.substring(0, columns_str.length()-1);
         columns_str += ")";
         values_str = values_str.substring(0, values_str.length()-1);
-        columns_str += ")";
-        query.add(columns_str + " VALUES " + columns_str);
+        values_str += ")";
+        query.add(columns_str + " VALUES " + values_str);
         return this;
     }
 
-    public Query set(String[] columns, Object[] values) {
+    public Query set(List<String> columns, List<Object> values) {
         String str = "SET ";
-        for (int i = 0; i < columns.length; i++) {
-            if (values[i] instanceof String) {
-                str += columns[i] + "=`" + values[i] + "`,";
+        for (int i = 0; i < columns.size(); i++) {
+            if (values.get(i) instanceof String) {
+                str += columns.get(i) + "='" + values.get(i) + "',";
             } else {
-                str += columns[i] + "=" + values[i] + ",";
+                str += columns.get(i) + "=" + values.get(i) + ",";
             }
         }
         str = str.substring(0, str.length()-1);
@@ -110,7 +110,7 @@ public class Query {
 
     public Query where(String column, Operator operator, Object value) {
         if (value instanceof String) {
-            query.add("WHERE " + column + " " + operator.get() + " `" + value + "`");
+            query.add("WHERE " + column + " " + operator.get() + " '" + value + "'");
         } else {
             query.add("WHERE " + column + " " + operator.get() + " " + value);
         }
@@ -119,7 +119,7 @@ public class Query {
 
     public Query and(String column, Operator operator, Object value) {
         if (value instanceof String) {
-            query.add("AND " + column + " " + operator.get() + " `" + value + "`");
+            query.add("AND " + column + " " + operator.get() + " '" + value + "'");
         } else {
             query.add("AND " + column + " " + operator.get() + " " + value);
         }
@@ -128,7 +128,7 @@ public class Query {
 
     public Query or(String column, Operator operator, Object value) {
         if (value instanceof String) {
-            query.add("OR " + column + " " + operator.get() + " `" + value + "`");
+            query.add("OR " + column + " " + operator.get() + " '" + value + "'");
         } else {
             query.add("OR " + column + " " + operator.get() + " " + value);
         }
@@ -140,10 +140,10 @@ public class Query {
         return this;
     }
 
-    public Query orderBy(String[] columns, String[] directions) {
+    public Query orderBy(List<String> columns, List<String> directions) {
         String str = "ORDER BY";
-        for (int i = 0; i < columns.length; i++) {
-            str += " " + columns[i] + " " + directions[i] + ",";
+        for (int i = 0; i < columns.size(); i++) {
+            str += " " + columns.get(i) + " " + directions.get(i) + ",";
         }
         str = str.substring(0, str.length()-1);
         query.add(str);

@@ -36,6 +36,7 @@ import info.mcessence.essence.commands.misc.TestCmd;
 import info.mcessence.essence.commands.player.NicknameCmd;
 import info.mcessence.essence.commands.player.SudoCmd;
 import info.mcessence.essence.commands.plugin.MainPluginCmd;
+import info.mcessence.essence.commands.punishments.BanCmd;
 import info.mcessence.essence.commands.teleport.TpCmd;
 import info.mcessence.essence.commands.teleport.TpHereCmd;
 import info.mcessence.essence.commands.world.LightningCmd;
@@ -88,6 +89,7 @@ public class Commands {
         registerCommand(GodCmd.class, "god", "god", "Turns your or another player's god mode on or off.", new String[] {"immortal", "invulnerable", "immortality", "invulnerability"});
         registerCommand(TpHereCmd.class, "tphere", "tphere", "Teleports a player to your location.", new String[] {});
         registerCommand(SudoCmd.class, "sudo", "sudo", "Execute a command on someone's behalf.", new String[] {});
+        registerCommand(BanCmd.class, "ban", "ban", "Bans a player from the server.", new String[] {});
     }
 
     /**

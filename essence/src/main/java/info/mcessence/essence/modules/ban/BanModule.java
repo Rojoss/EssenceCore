@@ -27,14 +27,14 @@ package info.mcessence.essence.modules.ban;
 
 import info.mcessence.essence.database.Column;
 import info.mcessence.essence.database.Database;
+import info.mcessence.essence.database.Operator;
 import info.mcessence.essence.modules.Module;
 import info.mcessence.essence.modules.SqlStorageModule;
 import info.mcessence.essence.modules.DataModules;
+import info.mcessence.essence.util.Debug;
+import info.mcessence.essence.util.Util;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.*;
 
 public class BanModule extends Module implements SqlStorageModule {
@@ -73,6 +73,66 @@ public class BanModule extends Module implements SqlStorageModule {
             return;
         }
         //TODO: Save local bans to database.
+        Connection sql = ess.getSql();
+        if (sql == null) {
+            //TODO: Better logging system for this. (Want to warn staff in game, save the data in a local file so there is no data loss etc)
+            ess.logError("Failed to save bans data!");
+            return;
+        }
+        Database db = ess.getDB();
+        try {
+            for (Map.Entry<UUID, List<Ban>> entry : bans_local.entrySet()) {
+                if (entry.getValue() == null || entry.getValue().size() < 1) {
+                    continue;
+                }
+                for (Ban ban : entry.getValue()) {
+                    Debug.bc("Checking ban... ");
+                    String table = ess.getDataStorageCfg().table_name.replace("{type}", "ban").replace("{suffix}", ess.getDataStorageCfg().storage_modules.get("ban").get("suffix"));
+                    //If the ban is already in the database update values.
+                    String checkQuery = db.createQuery().select("uuid").from(table)
+                            .where("uuid", Operator.EQUAL, entry.getKey().toString())
+                            .and("timestamp", Operator.EQUAL, ban.getTimestamp().toString())
+                            .and("punisher", Operator.EQUAL, ban.getPunisher().toString())
+                            .and("reason", Operator.EQUAL, ban.getReason()).get();
+                    Debug.bc(checkQuery);
+                    Statement check = sql.createStatement();
+                    ResultSet result = check.executeQuery(checkQuery);
+                    check.close();
+
+                    String query = "";
+                    if (result.next()) {
+                        Debug.bc("Updating ban...");
+                        //Update ban
+                        List<Object> values = new ArrayList<Object>();
+                        values.add(ban.isActive(getOnlineTime(entry.getKey())));
+                        query = db.createQuery().update(table).set(Arrays.asList("state"), values).where("uuid", Operator.EQUAL, entry.getKey().toString())
+                                .and("timestamp", Operator.EQUAL, ban.getTimestamp().toString())
+                                .and("punisher", Operator.EQUAL, ban.getPunisher().toString())
+                                .and("reason", Operator.EQUAL, ban.getReason()).get();
+                    } else {
+                        Debug.bc("Inserting ban...");
+                        //Insert ban
+                        List<Object> values = new ArrayList<Object>();
+                        values.add(entry.getKey().toString());
+                        values.add(Util.getTimeStamp().toString());
+                        values.add(ban.getDuration());
+                        values.add(ban.getPunisher().toString());
+                        values.add(ban.getReason());
+                        values.add(1);
+                        query = db.createQuery().insertInto(table).values(Arrays.asList("uuid", "timestamp", "duration", "punisher", "reason", "state"), values).get();
+                    }
+                    Debug.bc(query);
+
+                    Statement statement = sql.createStatement();
+                    statement.executeUpdate(query);
+                    statement.close();
+                }
+            }
+        } catch (SQLException e) {
+            //TODO: Better logging system for this. (Want to warn staff in game, save the data in a local file so there is no data loss etc)
+            ess.logError("Failed to save bans data!");
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -92,12 +152,13 @@ public class BanModule extends Module implements SqlStorageModule {
         try {
             String table = ess.getDataStorageCfg().table_name.replace("{type}", "ban").replace("{suffix}", ess.getDataStorageCfg().storage_modules.get("ban").get("suffix"));
             String query = db.createQuery().createTable(table, true, new Column[]{
-                    db.createColumn("id").type("INT").notNull().primaryKey().autoIncrement(),
+                    db.createColumn("id").type("INT").primaryKey().autoIncrement(),
                     db.createColumn("uuid").type("CHAR", 36).notNull(),
                     db.createColumn("timestamp").type("TIMESTAMP").notNull(),
                     db.createColumn("duration").type("BIGINT").notNull(),
                     db.createColumn("punisher").type("CHAR", 36),
-                    db.createColumn("reason").type("VARCHAR", 255)
+                    db.createColumn("reason").type("VARCHAR", 255),
+                    db.createColumn("state").type("BOOLEAN").notNull()
             }).get();
 
             Statement statement = sql.createStatement();
@@ -178,6 +239,8 @@ public class BanModule extends Module implements SqlStorageModule {
         playerBans.add(new Ban(new Timestamp(System.currentTimeMillis()), duration, punisher, reason));
         bans.put(uuid, playerBans);
         bans_local.put(uuid, playerBans);
+        //TODO: Remove this when saving is implemented!
+        onSave();
         return true;
     }
 
@@ -193,6 +256,8 @@ public class BanModule extends Module implements SqlStorageModule {
         }
         getActiveBan(uuid).setRemainingTime(0l);
         bans_local.put(uuid, getBans(uuid));
+        //TODO: Remove this when saving is implemented!
+        onSave();
         return true;
     }
 

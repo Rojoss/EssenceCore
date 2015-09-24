@@ -25,7 +25,6 @@
 
 package info.mcessence.essence.util;
 
-import org.apache.commons.codec.binary.Base64;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.potion.PotionEffectType;
@@ -110,30 +109,6 @@ public class Util {
             return null;
         }
         return Color.fromRGB(Math.min(Math.max(red, 0), 255), Math.min(Math.max(green, 0), 255), Math.min(Math.max(blue, 0), 255));
-    }
-
-    /**
-     * Get a Byte[] array with the texture skull url
-     * The input string can be a textures.minecraft.net link, the code from the link only or a Base64 encoded string.
-     * http://heads.freshcoal.com/maincollection.php
-     */
-    public static byte[] getSkullTexture(String input) {
-        if (input.endsWith("=")) {
-            //Encoded texture.
-            //eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTU1ZDYxMWE4NzhlODIxMjMxNzQ5YjI5NjU3MDhjYWQ5NDI2NTA2NzJkYjA5ZTI2ODQ3YTg4ZTJmYWMyOTQ2In19fQ==
-            return input.getBytes();
-        } else {
-            if (input.contains("/")) {
-                //Whole texture url from textures.minecraft.net
-                //http://textures.minecraft.net/texture/955d611a878e821231749b2965708cad942650672db09e26847a88e2fac2946
-                String[] split = input.split("/");
-                input = split[split.length-1];
-            }
-            //Texture code split from the url.
-            //955d611a878e821231749b2965708cad942650672db09e26847a88e2fac2946
-            input = "http://textures.minecraft.net/texture/" + input;
-            return Base64.encodeBase64(String.format("{textures:{SKIN:{url:\"%s\"}}}", input).getBytes());
-        }
     }
 
     public static boolean getBoolean(String input) {

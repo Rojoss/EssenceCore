@@ -34,7 +34,6 @@ import info.mcessence.essence.nms.util.Util;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.TileEntitySkull;
 import org.apache.commons.codec.binary.Base64;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
 import org.bukkit.block.Block;
@@ -93,7 +92,7 @@ public class SkullUtil_1_8_R3 implements ISkull {
 
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);
         profile.getProperties().put("textures", new Property("textures", new String(Util.getSkullTexture(skinUrl))));
-        Field profileField = null;
+        Field profileField;
 
         try {
             profileField = meta.getClass().getDeclaredField("profile");

@@ -31,7 +31,6 @@ import info.mcessence.essence.database.Operator;
 import info.mcessence.essence.modules.Module;
 import info.mcessence.essence.modules.SqlStorageModule;
 import info.mcessence.essence.modules.DataModules;
-import info.mcessence.essence.util.Debug;
 import info.mcessence.essence.util.Util;
 
 import java.sql.*;
@@ -72,7 +71,6 @@ public class BanModule extends Module implements SqlStorageModule {
         if (bans_local.size() < 1) {
             return;
         }
-        //TODO: Save local bans to database.
         Connection sql = ess.getSql();
         if (sql == null) {
             //TODO: Better logging system for this. (Want to warn staff in game, save the data in a local file so there is no data loss etc)
@@ -86,46 +84,35 @@ public class BanModule extends Module implements SqlStorageModule {
                     continue;
                 }
                 for (Ban ban : entry.getValue()) {
-                    Debug.bc("Checking ban... ");
                     String table = ess.getDataStorageCfg().table_name.replace("{type}", "ban").replace("{suffix}", ess.getDataStorageCfg().storage_modules.get("ban").get("suffix"));
-                    //If the ban is already in the database update values.
-                    String checkQuery = db.createQuery().select("uuid").from(table)
-                            .where("uuid", Operator.EQUAL, entry.getKey().toString())
+
+                    //Update ban
+                    List<Object> values = new ArrayList<Object>();
+                    values.add(Boolean.toString(ban.isActive(getOnlineTime(entry.getKey()))));
+                    values.add(Util.getTimeStamp().toString());
+                    String updateQuery = db.createQuery().update(table).set(Arrays.asList("state", "last_update"), values).where("uuid", Operator.EQUAL, entry.getKey().toString())
                             .and("timestamp", Operator.EQUAL, ban.getTimestamp().toString())
                             .and("punisher", Operator.EQUAL, ban.getPunisher().toString())
                             .and("reason", Operator.EQUAL, ban.getReason()).get();
-                    Debug.bc(checkQuery);
-                    Statement check = sql.createStatement();
-                    ResultSet result = check.executeQuery(checkQuery);
-                    check.close();
+                    Statement updateS = sql.createStatement();
+                    int rows = updateS.executeUpdate(updateQuery);
+                    updateS.close();
 
-                    String query = "";
-                    if (result.next()) {
-                        Debug.bc("Updating ban...");
-                        //Update ban
-                        List<Object> values = new ArrayList<Object>();
-                        values.add(ban.isActive(getOnlineTime(entry.getKey())));
-                        query = db.createQuery().update(table).set(Arrays.asList("state"), values).where("uuid", Operator.EQUAL, entry.getKey().toString())
-                                .and("timestamp", Operator.EQUAL, ban.getTimestamp().toString())
-                                .and("punisher", Operator.EQUAL, ban.getPunisher().toString())
-                                .and("reason", Operator.EQUAL, ban.getReason()).get();
-                    } else {
-                        Debug.bc("Inserting ban...");
-                        //Insert ban
-                        List<Object> values = new ArrayList<Object>();
-                        values.add(entry.getKey().toString());
-                        values.add(Util.getTimeStamp().toString());
-                        values.add(ban.getDuration());
-                        values.add(ban.getPunisher().toString());
-                        values.add(ban.getReason());
-                        values.add(1);
-                        query = db.createQuery().insertInto(table).values(Arrays.asList("uuid", "timestamp", "duration", "punisher", "reason", "state"), values).get();
+                    if (rows == 0) {
+                        //Insert if nothing got updated.
+                        List<Object> insertValues = new ArrayList<Object>();
+                        insertValues.add(entry.getKey().toString());
+                        insertValues.add(ban.getTimestamp().toString());
+                        insertValues.add(Util.getTimeStamp().toString());
+                        insertValues.add(ban.getDuration());
+                        insertValues.add(ban.getPunisher().toString());
+                        insertValues.add(ban.getReason());
+                        insertValues.add(Boolean.toString(true));
+                        String insertQuery = db.createQuery().insertInto(table).values(Arrays.asList("uuid", "timestamp", "last_update", "duration", "punisher", "reason", "state"), insertValues).get();
+                        Statement insertS = sql.createStatement();
+                        insertS.executeUpdate(insertQuery);
+                        insertS.close();
                     }
-                    Debug.bc(query);
-
-                    Statement statement = sql.createStatement();
-                    statement.executeUpdate(query);
-                    statement.close();
                 }
             }
         } catch (SQLException e) {
@@ -155,6 +142,7 @@ public class BanModule extends Module implements SqlStorageModule {
                     db.createColumn("id").type("INT").primaryKey().autoIncrement(),
                     db.createColumn("uuid").type("CHAR", 36).notNull(),
                     db.createColumn("timestamp").type("TIMESTAMP").notNull(),
+                    db.createColumn("last_update").type("TIMESTAMP").notNull(),
                     db.createColumn("duration").type("BIGINT").notNull(),
                     db.createColumn("punisher").type("CHAR", 36),
                     db.createColumn("reason").type("VARCHAR", 255),

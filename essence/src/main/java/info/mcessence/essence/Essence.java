@@ -120,6 +120,7 @@ public class Essence extends JavaPlugin {
 
     private void setupNMS() {
         String version;
+        boolean compatible;
         try {
             version = getServer().getClass().getPackage().getName().replace(".",  ",").split(",")[3];
         } catch (ArrayIndexOutOfBoundsException whatVersionAreYouUsingException) {
@@ -130,25 +131,31 @@ public class Essence extends JavaPlugin {
             case "v1_8_R1" :
                 iSkull = new SkullUtil_v1_8_R1();
                 iTitle = new Title_1_8_R1();
-                log("This version of Essence is fully compatible with your server version!");
+                compatible = true;
                 break;
             case "v1_8_R2" :
                 iSkull = new SkullUtil_1_8_R2();
                 iTitle = new Title_1_8_R2();
-                log("This version of Essence is fully compatible with your server version!");
+                compatible = true;
                 break;
             case "v1_8_R3" :
                 iSkull = new SkullUtil_1_8_R3();
                 iTitle = new Title_1_8_R3();
-                log("This version of Essence is fully compatible with your server version!");
+                compatible = true;
                 break;
             default:
-                warn("This version of Essence is not fully compatible with your server version!");
-                warn("Your server version: " + version);
-                warn("Earliest compatible version: v1_8_R1");
-                warn("Latest compatible version: v1_8_R3");
-                warn("If there is a newer server version we will update the plugin as soon as possible.");
-                warn("Essence will still work fine but certain features will be disabled.");
+                compatible = false;
+        }
+
+        if (compatible)
+            log("This version of Essence is fully compatible with your server version!");
+        else {
+            warn("This version of Essence is not fully compatible with your server version!");
+            warn("Your server version: " + version);
+            warn("Earliest compatible version: v1_8_R1");
+            warn("Latest compatible version: v1_8_R3");
+            warn("If there is a newer server version we will update the plugin as soon as possible.");
+            warn("Essence will still work fine but certain features will be disabled.");
         }
     }
 

@@ -23,30 +23,51 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.nms.v1_8_R1.util;
+package info.mcessence.essence.nms.v1_8_R1;
 
-import net.minecraft.server.v1_8_R1.Packet;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
+import info.mcessence.essence.nms.IChat;
+import info.mcessence.essence.nms.v1_8_R1.util.PacketHandler;
+import net.minecraft.server.v1_8_R1.ChatSerializer;
+import net.minecraft.server.v1_8_R1.IChatBaseComponent;
+import net.minecraft.server.v1_8_R1.PacketPlayOutChat;
 import org.bukkit.entity.Player;
 
 /**
- * Handles packet sending for v1_8R1
+ * Handles the chat and actionbar for v1_8R1
  */
-public class PacketHandler {
+public class Chat_1_8_R1 implements IChat {
 
-    public static void sendPacket(Player player, Packet packet) {
-        ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
+    // TODO Make a ChatBuilder to allow for more flexible building
+
+    // TODO Implement the ChatBuilder
+
+    private PacketPlayOutChat packet =  null;
+    private IChatBaseComponent icbc = null;
+    /**
+     * Send actionbar to the player
+     *
+     * @param message
+     * @param player
+     */
+    @Override
+    public void sendActionbar(String message, Player player) {
+        icbc = ChatSerializer.a("{\"text\": \"" + message + "\"}");
+        
+        packet = new PacketPlayOutChat(icbc, (byte) 2);
+
+        PacketHandler.sendPacket(player, packet);
     }
 
-    public static void sendPacket(Player player, Packet packet1, Packet packet2) {
-        ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet1);
-        ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet2);
-    }
-
-    public static void sendPacket(Player player, Packet[] packets) {
-
-        for (Packet packet : packets) {
-            ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
+    /**
+     * Send actionbar to the players
+     *
+     * @param message
+     * @param players
+     */
+    @Override
+    public void sendActionbar(String message, Player[] players) {
+        for (Player p = players[0]; p == players[players.length - 1];) {
+            sendActionbar(message, p);
         }
     }
 }

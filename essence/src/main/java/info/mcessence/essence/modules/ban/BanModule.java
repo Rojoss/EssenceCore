@@ -32,7 +32,6 @@ import info.mcessence.essence.modules.Module;
 import info.mcessence.essence.modules.PlayerStorageModule;
 import info.mcessence.essence.modules.SqlStorageModule;
 import info.mcessence.essence.modules.DataModules;
-import info.mcessence.essence.util.Debug;
 import info.mcessence.essence.util.Util;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerLoginEvent;
@@ -108,7 +107,6 @@ public class BanModule extends Module implements SqlStorageModule, PlayerStorage
 
     @Override
     public void onLoadPlayer(final UUID uuid) {
-        Debug.bc("loadPlayer");
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -136,7 +134,6 @@ public class BanModule extends Module implements SqlStorageModule, PlayerStorage
                         bans.put(uuid, playerBans);
                     }
                     statement.close();
-                    Debug.bc("Player loaded");
                 } catch (SQLException e) {
                     //TODO: Better logging system for this. (Want to warn staff in game etc)
                     ess.logError("Failed to load bans data!");
@@ -366,7 +363,6 @@ public class BanModule extends Module implements SqlStorageModule, PlayerStorage
 
     @EventHandler
     private void login(PlayerLoginEvent event) {
-        Debug.bc("Login");
         Ban activeBan = getActiveBan(event.getPlayer().getUniqueId());
         if (activeBan == null) {
             return;

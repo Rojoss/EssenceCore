@@ -25,6 +25,8 @@
 
 package info.mcessence.essence.modules.ban;
 
+import info.mcessence.essence.util.Debug;
+
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -34,30 +36,36 @@ public class Ban {
     private Long duration;
     private UUID punisher;
     private String reason;
+    private boolean state;
 
-    private Long remainingTime;
-
-    public Ban(Timestamp timestamp, Long duration, UUID punisher, String reason) {
+    public Ban(Timestamp timestamp, Long duration, UUID punisher, String reason, boolean state) {
         this.timestamp = timestamp;
         this.duration = duration;
-        this.remainingTime = duration;
         this.punisher = punisher;
         this.reason = reason;
+        this.state = state;
     }
 
-    public boolean isActive(Long onlineTime) {
-        if (getRemainingTime(onlineTime) <= 0) {
+    public boolean isActive() {
+        if (state == false) {
+            Debug.bc("State: false");
+            return false;
+        }
+        Debug.bc("State: true");
+        if (getRemainingTime() <= 0) {
+            Debug.bc("Time ran out: " + getRemainingTime());
+            state = false;
             return false;
         }
         return true;
     }
 
-    public Long getRemainingTime(Long onlineTime) {
-        return remainingTime - onlineTime;
+    public Long getRemainingTime() {
+        return (timestamp.getTime() + duration) - System.currentTimeMillis();
     }
 
-    public void setRemainingTime(Long remainingTime) {
-        this.remainingTime = remainingTime;
+    public void setState(boolean state) {
+        this.state = state;
     }
 
     public Timestamp getTimestamp() {

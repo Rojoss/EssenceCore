@@ -29,14 +29,18 @@ import info.mcessence.essence.database.Column;
 import info.mcessence.essence.database.Database;
 import info.mcessence.essence.database.Operator;
 import info.mcessence.essence.modules.Module;
+import info.mcessence.essence.modules.PlayerStorageModule;
 import info.mcessence.essence.modules.SqlStorageModule;
 import info.mcessence.essence.modules.DataModules;
+import info.mcessence.essence.util.Debug;
 import info.mcessence.essence.util.Util;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerLoginEvent;
 
 import java.sql.*;
 import java.util.*;
 
-public class BanModule extends Module implements SqlStorageModule {
+public class BanModule extends Module implements SqlStorageModule, PlayerStorageModule {
 
     public Map<UUID, List<Ban>> bans = new HashMap<UUID, List<Ban>>();
     public Map<UUID, List<Ban>> bans_local = new HashMap<UUID, List<Ban>>();
@@ -60,10 +64,75 @@ public class BanModule extends Module implements SqlStorageModule {
 
     }
 
-
     @Override
     public void onLoad() {
-        //TODO: Load bans from database.
+        Map<UUID, List<Ban>> loadedBans = new HashMap<UUID, List<Ban>>();
+        Connection sql = ess.getSql();
+        if (sql == null) {
+            //TODO: Better logging system for this. (Want to warn staff in game etc)
+            ess.logError("Failed to load bans data!");
+            return;
+        }
+        Database db = ess.getDB();
+        try {
+            String table = ess.getDataStorageCfg().table_name.replace("{type}", "ban").replace("{suffix}", ess.getDataStorageCfg().storage_modules.get("ban").get("suffix"));
+            String query = db.createQuery().select("*").from(table).get();
+            Statement statement = sql.createStatement();
+            ResultSet result = statement.executeQuery(query);
+
+            while (result.next()) {
+                UUID uuid = UUID.fromString(result.getString("uuid"));
+                List<Ban> playerBans = new ArrayList<Ban>();
+                if (loadedBans.containsKey(uuid)) {
+                    playerBans = loadedBans.get(uuid);
+                }
+                Ban ban = new Ban(Timestamp.valueOf(result.getString("timestamp")), result.getLong("duration"), UUID.fromString(result.getString("punisher")), result.getString("reason"), Boolean.valueOf(result.getString("state")));
+                playerBans.add(ban);
+                loadedBans.put(uuid, playerBans);
+            }
+
+            bans = loadedBans;
+            statement.close();
+        } catch (SQLException e) {
+            //TODO: Better logging system for this. (Want to warn staff in game etc)
+            ess.logError("Failed to load bans data!");
+            ess.logError(e.getMessage());
+        }
+    }
+
+    @Override
+    public void onLoadPlayer(UUID uuid) {
+        Debug.bc("loadPlayer");
+        List<Ban> playerBans = new ArrayList<Ban>();
+        Connection sql = ess.getSql();
+        if (sql == null) {
+            //TODO: Better logging system for this. (Want to warn staff in game etc)
+            ess.logError("Failed to load users bans data!");
+            return;
+        }
+        Database db = ess.getDB();
+
+        try {
+            String table = ess.getDataStorageCfg().table_name.replace("{type}", "ban").replace("{suffix}", ess.getDataStorageCfg().storage_modules.get("ban").get("suffix"));
+            String query = db.createQuery().select("*").from(table).where("uuid", Operator.EQUAL, uuid.toString()).get();
+            Statement statement = sql.createStatement();
+            ResultSet result = statement.executeQuery(query);
+
+            while (result.next()) {
+                Ban ban = new Ban(Timestamp.valueOf(result.getString("timestamp")), result.getLong("duration"), UUID.fromString(result.getString("punisher")), result.getString("reason"), Boolean.valueOf(result.getString("state")));
+                playerBans.add(ban);
+            }
+
+            if (playerBans.size() > 0) {
+                bans.put(uuid, playerBans);
+            }
+            statement.close();
+            Debug.bc("Player loaded");
+        } catch (SQLException e) {
+            //TODO: Better logging system for this. (Want to warn staff in game etc)
+            ess.logError("Failed to load bans data!");
+            ess.logError(e.getMessage());
+        }
     }
 
     @Override
@@ -77,54 +146,61 @@ public class BanModule extends Module implements SqlStorageModule {
             ess.logError("Failed to save bans data!");
             return;
         }
-        Database db = ess.getDB();
-        try {
-            for (Map.Entry<UUID, List<Ban>> entry : bans_local.entrySet()) {
-                if (entry.getValue() == null || entry.getValue().size() < 1) {
-                    continue;
-                }
-                for (Ban ban : entry.getValue()) {
-                    String table = ess.getDataStorageCfg().table_name.replace("{type}", "ban").replace("{suffix}", ess.getDataStorageCfg().storage_modules.get("ban").get("suffix"));
-
-                    //Update ban
-                    List<Object> values = new ArrayList<Object>();
-                    values.add(Boolean.toString(ban.isActive(getOnlineTime(entry.getKey()))));
-                    values.add(Util.getTimeStamp().toString());
-                    String updateQuery = db.createQuery().update(table).set(Arrays.asList("state", "last_update"), values).where("uuid", Operator.EQUAL, entry.getKey().toString())
-                            .and("timestamp", Operator.EQUAL, ban.getTimestamp().toString())
-                            .and("punisher", Operator.EQUAL, ban.getPunisher().toString())
-                            .and("reason", Operator.EQUAL, ban.getReason()).get();
-                    Statement updateS = sql.createStatement();
-                    int rows = updateS.executeUpdate(updateQuery);
-                    updateS.close();
-
-                    if (rows == 0) {
-                        //Insert if nothing got updated.
-                        List<Object> insertValues = new ArrayList<Object>();
-                        insertValues.add(entry.getKey().toString());
-                        insertValues.add(ban.getTimestamp().toString());
-                        insertValues.add(Util.getTimeStamp().toString());
-                        insertValues.add(ban.getDuration());
-                        insertValues.add(ban.getPunisher().toString());
-                        insertValues.add(ban.getReason());
-                        insertValues.add(Boolean.toString(true));
-                        String insertQuery = db.createQuery().insertInto(table).values(Arrays.asList("uuid", "timestamp", "last_update", "duration", "punisher", "reason", "state"), insertValues).get();
-                        Statement insertS = sql.createStatement();
-                        insertS.executeUpdate(insertQuery);
-                        insertS.close();
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            //TODO: Better logging system for this. (Want to warn staff in game, save the data in a local file so there is no data loss etc)
-            ess.logError("Failed to save bans data!");
-            e.printStackTrace();
+        for (Map.Entry<UUID, List<Ban>> entry : bans_local.entrySet()) {
+            onSavePlayer(entry.getKey());
         }
     }
 
     @Override
-    public DataModules getDataType() {
-        return DataModules.BAN;
+    public void onSavePlayer(UUID uuid) {
+        if (bans_local.size() < 1 || !bans_local.containsKey(uuid) || bans_local.get(uuid).size() < 1) {
+            return;
+        }
+        Connection sql = ess.getSql();
+        if (sql == null) {
+            //TODO: Better logging system for this. (Want to warn staff in game, save the data in a local file so there is no data loss etc)
+            ess.logError("Failed to save users bans data!");
+            return;
+        }
+        Database db = ess.getDB();
+        String table = ess.getDataStorageCfg().table_name.replace("{type}", "ban").replace("{suffix}", ess.getDataStorageCfg().storage_modules.get("ban").get("suffix"));
+
+        try {
+            List<Ban> playerBans = bans_local.get(uuid);
+            for (Ban ban : playerBans) {
+                //Update ban
+                List<Object> values = new ArrayList<Object>();
+                values.add(Boolean.toString(ban.isActive()));
+                values.add(Util.getTimeStamp().toString());
+                String updateQuery = db.createQuery().update(table).set(Arrays.asList("state", "last_update"), values).where("uuid", Operator.EQUAL, uuid.toString())
+                        .and("timestamp", Operator.EQUAL, ban.getTimestamp().toString())
+                        .and("punisher", Operator.EQUAL, ban.getPunisher().toString())
+                        .and("reason", Operator.EQUAL, ban.getReason()).get();
+                Statement updateS = sql.createStatement();
+                int rows = updateS.executeUpdate(updateQuery);
+                updateS.close();
+
+                if (rows == 0) {
+                    //Insert if nothing got updated.
+                    List<Object> insertValues = new ArrayList<Object>();
+                    insertValues.add(uuid.toString());
+                    insertValues.add(ban.getTimestamp().toString());
+                    insertValues.add(Util.getTimeStamp().toString());
+                    insertValues.add(ban.getDuration());
+                    insertValues.add(ban.getPunisher().toString());
+                    insertValues.add(ban.getReason());
+                    insertValues.add(Boolean.toString(true));
+                    String insertQuery = db.createQuery().insertInto(table).values(Arrays.asList("uuid", "timestamp", "last_update", "duration", "punisher", "reason", "state"), insertValues).get();
+                    Statement insertS = sql.createStatement();
+                    insertS.executeUpdate(insertQuery);
+                    insertS.close();
+                }
+            }
+        } catch (SQLException e) {
+            //TODO: Better logging system for this. (Want to warn staff in game, save the data in a local file so there is no data loss etc)
+            ess.logError("Failed to save users bans data!");
+            ess.logError(e.getMessage());
+        }
     }
 
     @Override
@@ -132,6 +208,7 @@ public class BanModule extends Module implements SqlStorageModule {
         Connection sql = ess.getSql();
         if (sql == null) {
             ess.warn("Disabling the ban module because there is no database connection.");
+            //TODO: Disable it properly.
             onDisable();
             return;
         }
@@ -155,8 +232,13 @@ public class BanModule extends Module implements SqlStorageModule {
         } catch (SQLException e) {
             onDisable();
             ess.logError("Disabling the ban module because it failed to create the database table.");
-            e.printStackTrace();
+            ess.logError(e.getMessage());
         }
+    }
+
+    @Override
+    public DataModules getDataType() {
+        return DataModules.BAN;
     }
 
 
@@ -173,9 +255,8 @@ public class BanModule extends Module implements SqlStorageModule {
      */
     public Ban getActiveBan(UUID uuid) {
         if (bans.containsKey(uuid)) {
-            Long onlineTime = getOnlineTime(uuid);
             for (Ban ban : bans.get(uuid)) {
-                if (ban.isActive(onlineTime)) {
+                if (ban.isActive()) {
                     return ban;
                 }
             }
@@ -224,7 +305,7 @@ public class BanModule extends Module implements SqlStorageModule {
         if (bans.containsKey(uuid)) {
             playerBans = bans.get(uuid);
         }
-        playerBans.add(new Ban(new Timestamp(System.currentTimeMillis()), duration, punisher, reason));
+        playerBans.add(new Ban(new Timestamp(System.currentTimeMillis()), duration, punisher, reason, true));
         bans.put(uuid, playerBans);
         bans_local.put(uuid, playerBans);
         //TODO: Remove this when saving is implemented!
@@ -242,7 +323,7 @@ public class BanModule extends Module implements SqlStorageModule {
         if (!isBanned(uuid)) {
             return false;
         }
-        getActiveBan(uuid).setRemainingTime(0l);
+        getActiveBan(uuid).setState(false);
         bans_local.put(uuid, getBans(uuid));
         //TODO: Remove this when saving is implemented!
         onSave();
@@ -252,6 +333,21 @@ public class BanModule extends Module implements SqlStorageModule {
     private Long getOnlineTime(UUID uuid) {
         //TODO: Get the time the player was online.
         return 0l;
+    }
+
+
+    // Listeners
+
+    @EventHandler
+    private void login(PlayerLoginEvent event) {
+        Debug.bc("Login");
+        Ban activeBan = getActiveBan(event.getPlayer().getUniqueId());
+        if (activeBan == null) {
+            return;
+        }
+        //TODO: Get proper message with formatting and punisher/time remaining etc.
+        event.setKickMessage(activeBan.getReason());
+        event.setResult(PlayerLoginEvent.Result.KICK_BANNED);
     }
 
 }

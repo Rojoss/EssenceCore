@@ -34,6 +34,7 @@ import info.mcessence.essence.config.data.Warps;
 import info.mcessence.essence.database.MySql.MySql;
 import info.mcessence.essence.database.SqlLite.SqlLite;
 import info.mcessence.essence.database.Database;
+import info.mcessence.essence.listeners.ModuleListener;
 import info.mcessence.essence.modules.Modules;
 import info.mcessence.essence.nms.ISkull;
 import info.mcessence.essence.nms.ITitle;
@@ -216,6 +217,7 @@ public class Essence extends JavaPlugin {
 
     private void registerEvents() {
         PluginManager pm = getServer().getPluginManager();
+        pm.registerEvents(new ModuleListener(), this);
     }
 
     private void loadAliases() {

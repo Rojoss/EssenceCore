@@ -51,20 +51,6 @@
 
         <dependency>
             <groupId>info.mcessence.essence</groupId>
-            <artifactId>v1_8R1</artifactId>
-            <version>0.0</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>info.mcessence.essence</groupId>
-            <artifactId>v1_8R2</artifactId>
-            <version>0.0</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>info.mcessence.essence</groupId>
             <artifactId>v1_8R3</artifactId>
             <version>0.0</version>
             <scope>compile</scope>

@@ -38,10 +38,6 @@ import info.mcessence.essence.listeners.ModuleListener;
 import info.mcessence.essence.modules.Modules;
 import info.mcessence.essence.nms.ISkull;
 import info.mcessence.essence.nms.ITitle;
-import info.mcessence.essence.nms.v1_8_R1.SkullUtil_v1_8_R1;
-import info.mcessence.essence.nms.v1_8_R1.Title_1_8_R1;
-import info.mcessence.essence.nms.v1_8_R2.SkullUtil_1_8_R2;
-import info.mcessence.essence.nms.v1_8_R2.Title_1_8_R2;
 import info.mcessence.essence.nms.v1_8_R3.SkullUtil_1_8_R3;
 import info.mcessence.essence.nms.v1_8_R3.Title_1_8_R3;
 import info.mcessence.essence.player.PlayerManager;
@@ -121,6 +117,7 @@ public class Essence extends JavaPlugin {
     private void setupNMS() {
         String version;
         boolean compatible;
+
         try {
             version = getServer().getClass().getPackage().getName().replace(".",  ",").split(",")[3];
         } catch (ArrayIndexOutOfBoundsException whatVersionAreYouUsingException) {
@@ -128,16 +125,6 @@ public class Essence extends JavaPlugin {
         }
 
         switch (version) {
-            case "v1_8_R1" :
-                iSkull = new SkullUtil_v1_8_R1();
-                iTitle = new Title_1_8_R1();
-                compatible = true;
-                break;
-            case "v1_8_R2" :
-                iSkull = new SkullUtil_1_8_R2();
-                iTitle = new Title_1_8_R2();
-                compatible = true;
-                break;
             case "v1_8_R3" :
                 iSkull = new SkullUtil_1_8_R3();
                 iTitle = new Title_1_8_R3();

@@ -25,8 +25,6 @@
 
 package info.mcessence.essence.modules.ban;
 
-import info.mcessence.essence.util.Debug;
-
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -48,12 +46,9 @@ public class Ban {
 
     public boolean isActive() {
         if (state == false) {
-            Debug.bc("State: false");
             return false;
         }
-        Debug.bc("State: true");
         if (getRemainingTime() <= 0) {
-            Debug.bc("Time ran out: " + getRemainingTime());
             state = false;
             return false;
         }

@@ -23,16 +23,37 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.config;
+package info.mcessence.essence.database.MySql;
 
-import java.util.*;
+import info.mcessence.essence.database.Database;
+import org.bukkit.plugin.Plugin;
 
-public class MessagesCfg extends EasyConfig {
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
-    public Map<String, Map<String, String>> MESSAGES = new TreeMap<String, Map<String, String>>();
+public class MySql extends Database {
 
-    public MessagesCfg(String fileName) {
-        this.setFile(fileName);
-        load();
+    private String host;
+    private String username;
+    private String password;
+
+    public MySql(Plugin plugin, String host, String database, String username, String password) {
+        super(plugin, database);
+        type = "MySql";
+        this.host = host;
+        this.username = username;
+        this.password = password;
     }
+
+    @Override
+    public Connection openConnection() throws SQLException, ClassNotFoundException {
+        if (checkConnection()) {
+            return connection;
+        }
+        Class.forName("com.mysql.jdbc.Driver");
+        connection = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database, username, password);
+        return connection;
+    }
+
 }

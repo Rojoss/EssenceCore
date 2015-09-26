@@ -29,6 +29,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.potion.PotionEffectType;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -116,6 +117,12 @@ public class Util {
             return true;
         }
         return false;
+    }
+
+
+    public static Timestamp getTimeStamp() {
+        java.util.Date now = new java.util.Date();
+        return new java.sql.Timestamp(now.getTime());
     }
 
 

@@ -23,16 +23,18 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.config;
+package info.mcessence.essence.database.SqlLite;
 
-import java.util.*;
+import info.mcessence.essence.database.Column;
 
-public class MessagesCfg extends EasyConfig {
+public class SqlLiteColumn extends Column {
 
-    public Map<String, Map<String, String>> MESSAGES = new TreeMap<String, Map<String, String>>();
+    SqlLiteColumn(String name) {
+        super(name);
+    }
 
-    public MessagesCfg(String fileName) {
-        this.setFile(fileName);
-        load();
+    @Override
+    public Column autoIncrement() {
+        return this;
     }
 }

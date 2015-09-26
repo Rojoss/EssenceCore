@@ -23,16 +23,9 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.config;
+package info.mcessence.essence.modules;
 
-import java.util.*;
-
-public class MessagesCfg extends EasyConfig {
-
-    public Map<String, Map<String, String>> MESSAGES = new TreeMap<String, Map<String, String>>();
-
-    public MessagesCfg(String fileName) {
-        this.setFile(fileName);
-        load();
-    }
+public interface StorageModule {
+    void onLoad();
+    void onSave();
 }

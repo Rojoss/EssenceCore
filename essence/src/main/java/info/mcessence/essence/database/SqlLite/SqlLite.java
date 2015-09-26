@@ -23,16 +23,46 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.config;
+package info.mcessence.essence.database.SqlLite;
 
-import java.util.*;
+import info.mcessence.essence.database.Column;
+import info.mcessence.essence.database.Database;
+import info.mcessence.essence.database.Query;
+import org.bukkit.plugin.Plugin;
 
-public class MessagesCfg extends EasyConfig {
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
-    public Map<String, Map<String, String>> MESSAGES = new TreeMap<String, Map<String, String>>();
+public class SqlLite extends Database {
 
-    public MessagesCfg(String fileName) {
-        this.setFile(fileName);
-        load();
+    private String path;
+
+    public SqlLite(Plugin plugin, String database) {
+        super(plugin, database);
+        type = "SqlLite";
     }
+
+    @Override
+    public Connection openConnection() throws SQLException, ClassNotFoundException {
+        if (checkConnection()) {
+            return connection;
+        }
+        path = plugin.getDataFolder().getAbsolutePath();
+
+        Class.forName("org.sqlite.JDBC");
+        connection = DriverManager.getConnection("jdbc:sqlite:" + path + "/data/" + database + ".db");
+        return connection;
+    }
+
+    @Override
+    public Query createQuery() {
+        return new SqlLiteQuery();
+    }
+
+    @Override
+    public Column createColumn(String name) {
+        return new SqlLiteColumn(name);
+    }
+
 }

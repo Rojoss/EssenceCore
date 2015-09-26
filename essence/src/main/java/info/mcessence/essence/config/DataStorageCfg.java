@@ -25,14 +25,46 @@
 
 package info.mcessence.essence.config;
 
-import java.util.*;
+import info.mcessence.essence.modules.DataModules;
 
-public class MessagesCfg extends EasyConfig {
+import java.util.HashMap;
+import java.util.Map;
 
-    public Map<String, Map<String, String>> MESSAGES = new TreeMap<String, Map<String, String>>();
+public class DataStorageCfg extends EasyConfig {
 
-    public MessagesCfg(String fileName) {
+    public String driver = "sqllite";
+    public String host = "localhost";
+    public String database = "essence";
+    public String table_name = "ess_{type}{suffix}";
+    public String username = "";
+    public String password = "";
+    public boolean disable_plugin_without_database_connection = true;
+    public Map<String, Map<String, String>> storage_modules = new HashMap<String, Map<String, String>>();
+
+    public DataStorageCfg(String fileName) {
         this.setFile(fileName);
         load();
+    }
+
+    @Override
+    public void load() {
+        super.load();
+
+        int changes = 0;
+
+        for (DataModules type : DataModules.values()) {
+            String key = type.toString().toLowerCase().replaceAll("_", "-");
+            if (!storage_modules.containsKey(key)) {
+                Map<String, String> data = new HashMap<String, String>();
+                data.put("suffix", "");
+                data.put("save-delay", Integer.toString(type.getSaveDelay()));
+                storage_modules.put(key, data);
+                changes++;
+            }
+        }
+
+        if (changes > 0) {
+            save();
+        }
     }
 }

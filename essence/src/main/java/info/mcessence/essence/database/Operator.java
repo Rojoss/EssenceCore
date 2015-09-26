@@ -23,16 +23,27 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.config;
+package info.mcessence.essence.database;
 
-import java.util.*;
+public enum Operator {
+    EQUAL("="),
+    NOT_EQUAL("<>"),
+    GREATER_THAN(">"),
+    LESS_THAN("<"),
+    GREAT_THAN_EQUAL(">="),
+    LESS_THAN_EQUAL("<="),
+    BETWEEN("BETWEEN"),
+    LIKE("LIKE"),
+    IN("IN"),
+    ;
 
-public class MessagesCfg extends EasyConfig {
+    private String operator;
 
-    public Map<String, Map<String, String>> MESSAGES = new TreeMap<String, Map<String, String>>();
+    Operator(String operator) {
+        this.operator = operator;
+    }
 
-    public MessagesCfg(String fileName) {
-        this.setFile(fileName);
-        load();
+    public String get() {
+        return operator;
     }
 }

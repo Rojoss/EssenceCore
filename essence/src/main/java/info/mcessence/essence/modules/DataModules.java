@@ -23,16 +23,39 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.config;
+package info.mcessence.essence.modules;
 
-import java.util.*;
+public enum DataModules {
+    USER("userlookup", 30),
+    DATA_SYNC("datasync", 10),
+    INV_SYNC("invsync", 10),
+    ENDER_SYNC("endersync", 10),
+    BACKPACK("backpacks", 10),
+    NICK("nick", 30),
+    HOME("homes", 20),
+    GOD("god", 20),
+    VANISH("vanish", 10),
+    POWERTOOL("powertools", 60),
+    BAN("ban", 0),
+    MUTE("mute", 0),
+    JAIL("jail", 0),
+    FREEZE("freeze", 0),
+    WARNING("warning", 10),
+    ;
 
-public class MessagesCfg extends EasyConfig {
+    private String module;
+    private int saveDelay;
 
-    public Map<String, Map<String, String>> MESSAGES = new TreeMap<String, Map<String, String>>();
+    DataModules(String module, int saveDelay) {
+        this.module = module;
+        this.saveDelay = saveDelay;
+    }
 
-    public MessagesCfg(String fileName) {
-        this.setFile(fileName);
-        load();
+    public String getModule() {
+        return module;
+    }
+
+    public int getSaveDelay() {
+        return saveDelay;
     }
 }

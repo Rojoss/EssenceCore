@@ -23,16 +23,11 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.config;
+package info.mcessence.essence.modules;
 
-import java.util.*;
+import java.util.UUID;
 
-public class MessagesCfg extends EasyConfig {
-
-    public Map<String, Map<String, String>> MESSAGES = new TreeMap<String, Map<String, String>>();
-
-    public MessagesCfg(String fileName) {
-        this.setFile(fileName);
-        load();
-    }
+public interface PlayerStorageModule {
+    void onLoadPlayer(UUID uuid);
+    void onSavePlayer(UUID uuid);
 }

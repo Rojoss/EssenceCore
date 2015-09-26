@@ -23,16 +23,12 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.config;
+package info.mcessence.essence.modules;
 
-import java.util.*;
+public interface SqlStorageModule extends StorageModule {
 
-public class MessagesCfg extends EasyConfig {
+    void createTable();
 
-    public Map<String, Map<String, String>> MESSAGES = new TreeMap<String, Map<String, String>>();
+    DataModules getDataType();
 
-    public MessagesCfg(String fileName) {
-        this.setFile(fileName);
-        load();
-    }
 }

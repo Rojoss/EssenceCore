@@ -23,16 +23,9 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.config;
+package info.mcessence.essence.database.SqlLite;
 
-import java.util.*;
+import info.mcessence.essence.database.Query;
 
-public class MessagesCfg extends EasyConfig {
-
-    public Map<String, Map<String, String>> MESSAGES = new TreeMap<String, Map<String, String>>();
-
-    public MessagesCfg(String fileName) {
-        this.setFile(fileName);
-        load();
-    }
+public class SqlLiteQuery extends Query {
 }

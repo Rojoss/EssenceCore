@@ -23,16 +23,28 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.config;
+package info.mcessence.essence.modules;
 
-import java.util.*;
+import info.mcessence.essence.Essence;
+import org.bukkit.event.Listener;
 
-public class MessagesCfg extends EasyConfig {
+public abstract class Module implements Listener {
 
-    public Map<String, Map<String, String>> MESSAGES = new TreeMap<String, Map<String, String>>();
+    protected Essence ess = Essence.inst();
+    protected String name;
 
-    public MessagesCfg(String fileName) {
-        this.setFile(fileName);
-        load();
+    public Module(String name) {
+        this.name = name;
     }
+
+    protected abstract void onEnable();
+
+    protected abstract void onDisable();
+
+    protected abstract void onReload();
+
+    public String getName() {
+        return name;
+    }
+
 }

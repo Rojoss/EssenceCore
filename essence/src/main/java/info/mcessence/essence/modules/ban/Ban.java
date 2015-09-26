@@ -23,16 +23,60 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.config;
+package info.mcessence.essence.modules.ban;
 
-import java.util.*;
+import java.sql.Timestamp;
+import java.util.UUID;
 
-public class MessagesCfg extends EasyConfig {
+public class Ban {
 
-    public Map<String, Map<String, String>> MESSAGES = new TreeMap<String, Map<String, String>>();
+    private Timestamp timestamp;
+    private Long duration;
+    private UUID punisher;
+    private String reason;
+    private boolean state;
 
-    public MessagesCfg(String fileName) {
-        this.setFile(fileName);
-        load();
+    public Ban(Timestamp timestamp, Long duration, UUID punisher, String reason, boolean state) {
+        this.timestamp = timestamp;
+        this.duration = duration;
+        this.punisher = punisher;
+        this.reason = reason;
+        this.state = state;
     }
+
+    public boolean isActive() {
+        if (state == false) {
+            return false;
+        }
+        if (getRemainingTime() <= 0) {
+            state = false;
+            return false;
+        }
+        return true;
+    }
+
+    public Long getRemainingTime() {
+        return (timestamp.getTime() + duration) - System.currentTimeMillis();
+    }
+
+    public void setState(boolean state) {
+        this.state = state;
+    }
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public Long getDuration() {
+        return duration;
+    }
+
+    public UUID getPunisher() {
+        return punisher;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
 }

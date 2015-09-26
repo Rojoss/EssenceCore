@@ -23,16 +23,36 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.config;
+package info.mcessence.essence.listeners;
 
-import java.util.*;
+import info.mcessence.essence.Essence;
+import info.mcessence.essence.modules.Module;
+import info.mcessence.essence.modules.Modules;
+import info.mcessence.essence.modules.PlayerStorageModule;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
-public class MessagesCfg extends EasyConfig {
+public class ModuleListener implements Listener {
 
-    public Map<String, Map<String, String>> MESSAGES = new TreeMap<String, Map<String, String>>();
+    @EventHandler
+     private void playerPreLogin(AsyncPlayerPreLoginEvent event) {
+        Modules modules = Essence.inst().getModules();
+        for (Module module : modules.modules) {
+            if (module instanceof PlayerStorageModule) {
+                ((PlayerStorageModule)module).onLoadPlayer(event.getUniqueId());
+            }
+        }
+    }
 
-    public MessagesCfg(String fileName) {
-        this.setFile(fileName);
-        load();
+    @EventHandler
+    private void playerQuit(PlayerQuitEvent event) {
+        Modules modules = Essence.inst().getModules();
+        for (Module module : modules.modules) {
+            if (module instanceof PlayerStorageModule) {
+                ((PlayerStorageModule)module).onSavePlayer(event.getPlayer().getUniqueId());
+            }
+        }
     }
 }

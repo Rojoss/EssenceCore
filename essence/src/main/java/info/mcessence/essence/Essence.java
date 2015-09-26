@@ -27,13 +27,15 @@ package info.mcessence.essence;
 
 import info.mcessence.essence.aliases.AliasType;
 import info.mcessence.essence.commands.Commands;
-import info.mcessence.essence.config.CommandOptionsCfg;
-import info.mcessence.essence.config.CommandsCfg;
-import info.mcessence.essence.config.MessagesCfg;
-import info.mcessence.essence.config.ModulesCfg;
+import info.mcessence.essence.config.*;
 import info.mcessence.essence.config.aliases.AliasesCfg;
 import info.mcessence.essence.config.aliases.ItemAliases;
 import info.mcessence.essence.config.data.Warps;
+import info.mcessence.essence.database.MySql.MySql;
+import info.mcessence.essence.database.SqlLite.SqlLite;
+import info.mcessence.essence.database.Database;
+import info.mcessence.essence.listeners.ModuleListener;
+import info.mcessence.essence.modules.Modules;
 import info.mcessence.essence.nms.ISkull;
 import info.mcessence.essence.nms.ITitle;
 import info.mcessence.essence.nms.v1_8_R1.SkullUtil_v1_8_R1;
@@ -42,9 +44,12 @@ import info.mcessence.essence.nms.v1_8_R2.SkullUtil_1_8_R2;
 import info.mcessence.essence.nms.v1_8_R2.Title_1_8_R2;
 import info.mcessence.essence.nms.v1_8_R3.SkullUtil_1_8_R3;
 import info.mcessence.essence.nms.v1_8_R3.Title_1_8_R3;
+import info.mcessence.essence.player.PlayerManager;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -54,8 +59,12 @@ public class Essence extends JavaPlugin {
     private static Essence instance;
     //private Gson gson = new Gson();
 
+    private Database database;
+    private Connection sql;
+
+    private DataStorageCfg dataStorageCfg;
     private MessagesCfg messages;
-    private ModulesCfg modules;
+    private ModulesCfg modulesCfg;
     private CommandsCfg commandsCfg;
     private CommandOptionsCfg cmdOptionsCfg;
     private Warps warps;
@@ -67,6 +76,9 @@ public class Essence extends JavaPlugin {
     private Map<AliasType, AliasesCfg> aliases = new HashMap<AliasType, AliasesCfg>();
 
     private Commands commands;
+    private Modules modules;
+
+    private PlayerManager playerManager;
 
     private final Logger log = Logger.getLogger("Essence");
 
@@ -82,21 +94,26 @@ public class Essence extends JavaPlugin {
         instance = this;
         log.setParent(this.getLogger());
 
-        setupNMS();
-
-        registerEvents();
-
+        dataStorageCfg = new DataStorageCfg("plugins/Essence/DataStorage.yml");
         messages = new MessagesCfg("plugins/Essence/Messages.yml");
-        modules = new ModulesCfg("plugins/Essence/Modules.yml");
+        modulesCfg = new ModulesCfg("plugins/Essence/Modules.yml");
         commandsCfg = new CommandsCfg("plugins/Essence/Commands.yml");
         cmdOptionsCfg = new CommandOptionsCfg("plugins/Essence/CommandOptions.yml");
 
         loadAliases();
+        if (!setupDatabase()) {
+            return;
+        }
+        setupNMS();
+        registerEvents();
 
         //TODO: Have a class for modules were it would create the config and such.
         warps = new Warps("plugins/Essence/data/Warps.yml");
 
         commands = new Commands(this);
+        modules = new Modules(this);
+
+        playerManager = new PlayerManager(this);
 
         log("loaded successfully");
     }
@@ -142,8 +159,72 @@ public class Essence extends JavaPlugin {
         }
     }
 
+    private boolean setupDatabase() {
+        if (dataStorageCfg.driver.equalsIgnoreCase("sqllite")) {
+            log("Setting up connection with the SqlLite database...");
+            database = new SqlLite(this, dataStorageCfg.database);
+            if (!openDatabaseConnection()) {
+                return false;
+            }
+        } else if (dataStorageCfg.driver.equalsIgnoreCase("mysql")) {
+            log("Setting up connection with the MySql database...");
+            database = new MySql(this, dataStorageCfg.host, dataStorageCfg.database, dataStorageCfg.username, dataStorageCfg.password);
+            if (!openDatabaseConnection()) {
+                return false;
+            }
+        } else {
+            logError("No valid database driver selected!");
+            logError("The driver must be one of these options: 'SqlLite' or 'MySql'");
+            if (databaseError()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean openDatabaseConnection() {
+        if (database == null) {
+            logError("No valid database loaded.");
+            if (databaseError()) {
+                return false;
+            }
+            return true;
+        }
+        try {
+            sql = database.openConnection();
+        } catch (SQLException e) {
+            logError("Unable to establish a connection to your " + database.getType() + " database.");
+            logError("Please make sure the details in DataStorage.yml are set up correct.");
+            logError(e.getMessage());
+            if (databaseError()) {
+                return false;
+            }
+        } catch (ClassNotFoundException e) {
+            logError("No database driver found for " + database.getType() + "!");
+            logError(e.getMessage());
+            if (databaseError()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean databaseError() {
+        if (dataStorageCfg.disable_plugin_without_database_connection) {
+            logError("Disabling the plugin because there is no valid database connection!");
+            setEnabled(false);
+            return true;
+        } else {
+            logError("No valid database connection found!");
+            logError("Because 'disable_plugin_without_database_connection' is set to false the plugin will still work.");
+            logError("This is not recommended and you should attempt to fix the database connection as many features will fail to work!");
+            return false;
+        }
+    }
+
     private void registerEvents() {
         PluginManager pm = getServer().getPluginManager();
+        pm.registerEvents(new ModuleListener(), this);
     }
 
     private void loadAliases() {
@@ -185,18 +266,30 @@ public class Essence extends JavaPlugin {
         return gson;
     }*/
 
+    public Database getDB() {
+        return database;
+    }
+
+    public Connection getSql() {
+        return sql;
+    }
+
 
     public ISkull getISkull() {
         return iSkull;
     }
 
 
+    public DataStorageCfg getDataStorageCfg() {
+        return dataStorageCfg;
+    }
+
     public MessagesCfg getMessages() {
         return messages;
     }
 
-    public ModulesCfg getmodules() {
-        return modules;
+    public ModulesCfg getModuleCfg() {
+        return modulesCfg;
     }
 
     public CommandsCfg getCommandsCfg() {
@@ -212,8 +305,17 @@ public class Essence extends JavaPlugin {
     }
 
 
+    public PlayerManager getPM() {
+        return playerManager;
+    }
+
+
     public Commands getCommands() {
         return commands;
+    }
+
+    public Modules getModules() {
+        return modules;
     }
 
     public ITitle getITitle() {

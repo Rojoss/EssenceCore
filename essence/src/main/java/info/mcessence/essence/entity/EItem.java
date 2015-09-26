@@ -26,7 +26,6 @@
 package info.mcessence.essence.entity;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.util.ItemParser;
 import info.mcessence.essence.util.Util;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;

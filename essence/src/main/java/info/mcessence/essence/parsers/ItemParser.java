@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.util;
+package info.mcessence.essence.parsers;
 
 import info.mcessence.essence.Essence;
 import info.mcessence.essence.aliases.AliasType;
@@ -34,6 +34,8 @@ import info.mcessence.essence.aliases.ItemAlias;
 import info.mcessence.essence.aliases.Items;
 import info.mcessence.essence.entity.EItem;
 import info.mcessence.essence.nms.ISkull;
+import info.mcessence.essence.util.NumberUtil;
+import info.mcessence.essence.util.Util;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;

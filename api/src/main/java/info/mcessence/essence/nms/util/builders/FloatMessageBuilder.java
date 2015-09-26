@@ -25,7 +25,6 @@
 
 package info.mcessence.essence.nms.util.builders;
 
-import info.mcessence.essence.nms.util.Util;
 import org.bukkit.ChatColor;
 
 /**
@@ -37,112 +36,75 @@ public class FloatMessageBuilder {
     private boolean building;
     private boolean grouping;
 
-    public FloatMessageBuilder() {
-    }
+    public FloatMessageBuilder() {}
 
     public FloatMessageBuilder startGrouping() {
-        if (building) {
-            return this;
-        } else {
-            finalMessage += "[\"\"";
-            grouping = true;
-            return this;
-        }
+        BuilderCommons.startGrouping(finalMessage, grouping);
+        return this;
     }
 
     public FloatMessageBuilder startBuilding() {
-
-        if (building) {
-            return this;
-        } else {
-            finalMessage += "{\"\"";
-            building = true;
-            return this;
-        }
+        BuilderCommons.startBuilding(finalMessage, building);
+        return this;
     }
 
     public FloatMessageBuilder finishGrouping() {
-
-        if (building) {
-            finalMessage += "]";
-            grouping = false;
-            return this;
-        } else {
-            return this;
-        }
+        BuilderCommons.finishGrouping(finalMessage, grouping);
+        return this;
     }
 
     public FloatMessageBuilder finishBuilding() {
-
-        if (building) {
-            finalMessage += "}";
-            building = false;
-            return this;
-        } else {
-            return this;
-        }
+        BuilderCommons.finishBuilding(finalMessage, building);
+        return this;
     }
 
     public FloatMessageBuilder append(String message) {
-        finalMessage += "}, " + message;
+        BuilderCommons.append(finalMessage);
         return this;
     }
 
 
     public String getMessage() {
-        try {
-            if (grouping) {
-                throw new Exception("The message grouping is not complete. Add the finishGrouping() method before using getMessage() method");
-            } else {
-                if (building) {
-                    throw new Exception("The message is still being built. Add the finishBuilding(), then finishGrouping() methods before using getMessage() method");
-                } else {
-                    return finalMessage;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return finalMessage;
-        }
+        return BuilderCommons.getMessage(finalMessage, building, grouping);
     }
 
     public FloatMessageBuilder addMessage(String message) {
-        finalMessage += ", \"text\": \"" + message + "\"";
+        BuilderCommons.addMessage(finalMessage, message);
         return this;
     }
 
     public FloatMessageBuilder addColor(ChatColor chatColor) {
-        String color = null;
-        Util.handleColor(chatColor, color);
-
-        finalMessage = ", \"color\": \"" + color + "\"";
-
+       BuilderCommons.addColor(finalMessage, chatColor);
         return this;
     }
 
     public FloatMessageBuilder formatBold(boolean bold) {
-        finalMessage += ", \"bold\": " + bold;
+        BuilderCommons.formatBold(finalMessage, bold);
         return this;
     }
 
     public FloatMessageBuilder formatItalic(boolean italic) {
-        finalMessage += ", \"italic\": " + italic;
+        BuilderCommons.formatItalic(finalMessage, italic);
         return this;
     }
 
     public FloatMessageBuilder formatUnderlined(boolean underlined) {
-        finalMessage += ", \"underlined\": " + underlined;
+        BuilderCommons.formatUnderlined(finalMessage, underlined);
         return this;
     }
 
     public FloatMessageBuilder formatStrikethrough(boolean strikethrough) {
-        finalMessage += ", \"strikethough\": " + strikethrough;
+        BuilderCommons.formatStrikethrough(finalMessage, strikethrough);
         return this;
     }
 
     public FloatMessageBuilder formatObfuscated(boolean obfuscated) {
-        finalMessage += ", \"obfuscated\": " + obfuscated;
+        BuilderCommons.formatObfuscated(finalMessage, obfuscated);
         return this;
     }
 
+    public FloatMessageBuilder resetFormats() {
+        addColor(ChatColor.WHITE).formatBold(false).formatItalic(false).formatUnderlined(false).formatStrikethrough(false).formatObfuscated(false);
+        return this;
+    }
 }

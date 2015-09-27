@@ -290,7 +290,7 @@ public class EEntity {
     }
 
     /** @see Entity#setFireTicks(int) */
-    public EEntity setFireTicks(int ticks) {
+    public EEntity setFireTicks(Integer ticks) {
         entity.setFireTicks(ticks);
         return this;
     }
@@ -306,7 +306,7 @@ public class EEntity {
     }
 
     /** @see Entity#setTicksLived(int) */
-    public EEntity setTicksLived(int ticks) {
+    public EEntity setTicksLived(Integer ticks) {
         entity.setTicksLived(ticks);
         return this;
     }
@@ -575,7 +575,7 @@ public class EEntity {
     }
 
     /** @see LivingEntity#setNoDamageTicks(int) */
-    public EEntity setNoDamageTicks(int ticks) {
+    public EEntity setNoDamageTicks(Integer ticks) {
         if (entity instanceof LivingEntity) {
             ((LivingEntity)entity).setNoDamageTicks(ticks);
         }
@@ -583,7 +583,7 @@ public class EEntity {
     }
 
     /** @see LivingEntity#setMaximumNoDamageTicks(int) */
-    public EEntity setMaxNoDamageTicks(int ticks) {
+    public EEntity setMaxNoDamageTicks(Integer ticks) {
         if (entity instanceof LivingEntity) {
             ((LivingEntity)entity).setMaximumNoDamageTicks(ticks);
         }
@@ -608,7 +608,7 @@ public class EEntity {
 
     //Air
     /** @see LivingEntity#setRemainingAir(int) */
-    public EEntity setAir(int ticks) {
+    public EEntity setAir(Integer ticks) {
         if (entity instanceof LivingEntity) {
             ((LivingEntity)entity).setRemainingAir(ticks);
         }
@@ -625,7 +625,7 @@ public class EEntity {
 
     //Max health
     /** @see LivingEntity#setMaximumAir(int) */
-    public EEntity setMaxAir(int ticks) {
+    public EEntity setMaxAir(Integer ticks) {
         if (entity instanceof LivingEntity) {
             ((LivingEntity)entity).setMaximumAir(ticks);
         }
@@ -709,7 +709,7 @@ public class EEntity {
     }
 
     /** @see Ageable#setAge(int) */
-    public EEntity setAge(int age) {
+    public EEntity setAge(Integer age) {
         if (entity instanceof Ageable) {
             ((Ageable)entity).setAge(age);
         }
@@ -1134,7 +1134,7 @@ public class EEntity {
     }
 
     /** @see Arrow#setKnockbackStrength(int) */
-    public EEntity setKnockbackStrength(int knockback) {
+    public EEntity setKnockbackStrength(Integer knockback) {
         if (entity instanceof Arrow) {
             ((Arrow)entity).setKnockbackStrength(knockback);
         }
@@ -1243,7 +1243,7 @@ public class EEntity {
     }
 
     /** @see ExperienceOrb#setExperience(int) */
-    public EEntity setExperience(int exp) {
+    public EEntity setExperience(Integer exp) {
         if (entity instanceof ExperienceOrb) {
             ((ExperienceOrb)entity).setExperience(exp);
         }
@@ -1352,7 +1352,7 @@ public class EEntity {
     }
 
     /** @see Item#setPickupDelay(int) */
-    public EEntity setPickupDelay(int ticks) {
+    public EEntity setPickupDelay(Integer ticks) {
         if (entity instanceof Item) {
             ((Item)entity).setPickupDelay(ticks);
         }
@@ -1509,7 +1509,7 @@ public class EEntity {
     }
 
     /** @see Minecart#setDisplayBlockOffset(int) */
-    public EEntity setDisplayBlockOffset(int offset) {
+    public EEntity setDisplayBlockOffset(Integer offset) {
         if (entity instanceof Minecart) {
             ((Minecart)entity).setDisplayBlockOffset(offset);
         }
@@ -1578,7 +1578,7 @@ public class EEntity {
     }
 
     /** @see TNTPrimed#setFuseTicks(int) */
-    public EEntity setFuseTicks(int ticks) {
+    public EEntity setFuseTicks(Integer ticks) {
         if (entity instanceof TNTPrimed) {
             ((TNTPrimed)entity).setFuseTicks(ticks);
         }
@@ -1791,7 +1791,7 @@ public class EEntity {
     }
 
     /** @see Horse#setDomestication(int) */
-    public EEntity setDomestication(int knockback) {
+    public EEntity setDomestication(Integer knockback) {
         if (entity instanceof Horse) {
             ((Horse)entity).setDomestication(knockback);
         }
@@ -1807,7 +1807,7 @@ public class EEntity {
     }
 
     /** @see Horse#setMaxDomestication(int) */
-    public EEntity setMaxDomestication(int knockback) {
+    public EEntity setMaxDomestication(Integer knockback) {
         if (entity instanceof Horse) {
             ((Horse)entity).setMaxDomestication(knockback);
         }
@@ -1946,7 +1946,7 @@ public class EEntity {
     }
 
     /** @see PigZombie#setAnger(int) */
-    public EEntity setAnger(int anger) {
+    public EEntity setAnger(Integer anger) {
         if (entity instanceof PigZombie) {
             ((PigZombie)entity).setAnger(anger);
         }
@@ -2050,7 +2050,7 @@ public class EEntity {
     }
 
     /** @see Slime#setSize(int) */
-    public EEntity setSize(int size) {
+    public EEntity setSize(Integer size) {
         if (entity instanceof Slime) {
             ((Slime)entity).setSize(size);
         }

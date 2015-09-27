@@ -93,8 +93,12 @@ public class CommandOptionsCfg extends EasyConfig {
             return;
         }
         if (!options.containsKey(optionKey)) {
-            //Insert option to config.
-            options.put(optionKey, cmdOption.getDefault().toString());
+            //Insert option to config.'-'
+            if (cmdOption.hasDefault()) {
+                options.put(optionKey, cmdOption.getDefault().toString());
+            } else {
+                options.put(optionKey, "");
+            }
             COMMAND_OPTIONS.put(command.getLabel(), options);
             save();
         } else {

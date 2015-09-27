@@ -225,10 +225,12 @@ public class Essence extends JavaPlugin {
         aliases.put(AliasType.BIOME, new AliasesCfg("plugins/Essence/aliases/Biomes.yml", AliasType.BIOME));
         aliases.put(AliasType.DYE_COLOR, new AliasesCfg("plugins/Essence/aliases/DyeColors.yml", AliasType.DYE_COLOR));
         aliases.put(AliasType.FIREWORK_EFFECT, new AliasesCfg("plugins/Essence/aliases/FireworkEffects.yml", AliasType.FIREWORK_EFFECT));
+        aliases.put(AliasType.HORSE_VARIANT, new AliasesCfg("plugins/Essence/aliases/HorseVariants.yml", AliasType.HORSE_VARIANT));
         aliases.put(AliasType.HORSE_COLOR, new AliasesCfg("plugins/Essence/aliases/HorseColors.yml", AliasType.HORSE_COLOR));
         aliases.put(AliasType.HORSE_STYLE, new AliasesCfg("plugins/Essence/aliases/HorseStyles.yml", AliasType.HORSE_STYLE));
         aliases.put(AliasType.OCELOT_TYPES, new AliasesCfg("plugins/Essence/aliases/OcelotTypes.yml", AliasType.OCELOT_TYPES));
         aliases.put(AliasType.RABBIT_TYPES, new AliasesCfg("plugins/Essence/aliases/RabbitTypes.yml", AliasType.RABBIT_TYPES));
+        aliases.put(AliasType.VILLAGER_TYPES, new AliasesCfg("plugins/Essence/aliases/VillagerTypes.yml", AliasType.VILLAGER_TYPES));
         aliases.put(AliasType.BANNER_PATTERNS, new AliasesCfg("plugins/Essence/aliases/BannerPatterns.yml", AliasType.BANNER_PATTERNS));
         aliases.put(AliasType.TREES, new AliasesCfg("plugins/Essence/aliases/Trees.yml", AliasType.TREES));
         aliases.put(AliasType.SOUNDS, new AliasesCfg("plugins/Essence/aliases/Sounds.yml", AliasType.SOUNDS));

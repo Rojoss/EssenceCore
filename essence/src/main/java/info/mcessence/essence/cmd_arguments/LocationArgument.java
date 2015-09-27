@@ -30,18 +30,15 @@ import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResult;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
 import info.mcessence.essence.commands.EssenceCommand;
-import info.mcessence.essence.util.NumberUtil;
-import info.mcessence.essence.util.Util;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.UUID;
 
 public class LocationArgument extends CmdArgument {
 
@@ -57,101 +54,117 @@ public class LocationArgument extends CmdArgument {
             return result;
         }
 
-        //Formats:  x,y,z
-        //          x,y,z          :world
-        //          x,y,z,yaw
-        //          x,y,z,yaw      :world
-        //          x,y,z,yaw,pitch
-        //          x,y,z,yaw,pitch:world
+        Location location = new Location(null, 0, 0, 0, 0, 0);
 
-        World world;
-
-        // Check if a world is specified
-        if (StringUtils.countMatches(arg, ":") > 1) {
-            result.success = false;
-            return result;
-        } else if (StringUtils.countMatches(arg, ":") == 0) {
-            // Check if the sender is a player
-            if (sender instanceof Player) {
-                Player player = (Player) sender;
-                world = player.getWorld();
+        // If player and not location
+        if (arg.startsWith("@")) {
+            Player player = null;
+            String[] components = arg.split("-");
+            if (components.length == 5) {
+                location = Bukkit.getPlayer(UUID.fromString(arg.replace("@", ""))).getLocation();
             } else {
+                location = Bukkit.getPlayer(arg.replace("@", "")).getLocation();
+            }
+
+            if (location == null) {
+                result.success = false;
+                sender.sendMessage(Message.INVALID_PLAYER.msg().getMsg(true, arg));
+            }
+
+            result.setValue(location);
+            return result;
+        }
+
+        // If world not specified or used relative locations by Console
+        if (!arg.contains(":") || arg.contains("~")) {
+            if (sender instanceof ConsoleCommandSender) {
                 result.success = false;
                 return result;
             }
-        } else {
-            world = Bukkit.getWorld(arg.split(":")[1]);
         }
 
-        // Check if the world exists
-        if (world == null) {
-            result.success = false;
-            return result;
-        }
+        // Set the location's world
+        if (arg.contains(":")) {
+            String worldName = arg.substring(arg.indexOf(":"));
+            World world = Bukkit.getWorld(worldName);
 
-        String[] components = arg.split(":")[0].split(",");
-        Map<String, Number> newLocValues = new HashMap<>();
-        newLocValues.put("x", 0d);
-        newLocValues.put("y", 0d);
-        newLocValues.put("z", 0d);
-        newLocValues.put("yaw", 0f);
-        newLocValues.put("pitch", 0f);
-
-        if (components.length < 3 || components.length > 5) {
-            result.success = false;
-            sender.sendMessage(Message.INVALID_LOCATION.msg().getMsg(true, arg));
-            return result;
-        }
-
-        Map<String, Object> selectorLoc = null;
-
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            selectorLoc = player.getLocation().serialize();
-        } else if (sender instanceof BlockCommandSender) {
-            BlockCommandSender blockSender = (BlockCommandSender)sender;
-            selectorLoc = blockSender.getBlock().getLocation().serialize();
-        }
-
-        int index = 0;
-        for (String key : newLocValues.keySet()) {
-
-            if (index == components.length) break;
-
-            if (components[index].startsWith("~")) {
-                if (selectorLoc != null) {
-                    Double val = NumberUtil.getDouble(components[index].substring(1));
-                    if (val == null) {
-                        result.success = false;
-                        sender.sendMessage(Message.NOT_A_NUMBER.msg().getMsg(true, components[index].substring(1)));
-                        return result;
-                    }
-                    if (selectorLoc.containsKey(key) && selectorLoc.get(key) instanceof Double) {
-                        val += (Double) selectorLoc.get(key);
-                    }
-                    newLocValues.put(key, val);
-                } else {
-                    result.success = false;
-                    sender.sendMessage(Message.CANT_USE_RELATIVE_COORDS.msg().getMsg(true));
-                    return result;
-                }
-            } else {
-                Double val = NumberUtil.getDouble(components[index]);
-                if (val == null) {
-                    result.success = false;
-                    sender.sendMessage(Message.NOT_A_NUMBER.msg().getMsg(true, components[index].substring(1)));
-                    return result;
-                }
-
-                newLocValues.put(key, val);
+            // If the world doesn't exist
+            if (world == null) {
+                result.success = false;
+                return result;
             }
 
-            index++;
+            location.setWorld(world);
+        } else {
+            location.setWorld(getLocation(sender).getWorld());
         }
 
-        result.setValue(new Location(world, newLocValues.get("x").doubleValue(), newLocValues.get("y").doubleValue(), newLocValues.get("z").doubleValue(), newLocValues.get("yaw").floatValue(), newLocValues.get("pitch").floatValue()));
+        // Get x, y, z, yaw and pitch components
+        String[] components = arg.split(":")[0].split(",");
+
+        Object[] keySet = getLocation(sender).serialize().keySet().toArray();
+
+        // Adds the relative location and removes ~'s
+        for (int i = 1; i < components.length; i++) {
+            if (components[i - 1].contains("~")) {
+                float value = (float)keySet[i];
+                addToLocation(location, new float[] {value}, i, i);
+                components[i - 1].replace("~", "");
+            }
+        }
+
+        if (components.length >= 3 && components.length <= 5) {
+            float[] parsedValues = parseValues(components);
+
+            if (parsedValues == null) {
+                result.success = false;
+                return result;
+            }
+
+            addToLocation(location, parsedValues, 1, components.length);
+        } else {
+            result.success = false;
+            return result;
+        }
+
+        result.setValue(location);
 
         return result;
+    }
+
+    public Location getLocation(CommandSender sender) {
+        if (sender instanceof BlockCommandSender) {
+            return ((BlockCommandSender)sender).getBlock().getLocation();
+        } else /*if (sender instanceof Player)*/ {
+            return ((Player)sender).getLocation();
+        }
+    }
+
+    public void addToLocation(Location location, float[] vec, int minLimit, int maxLimit) {
+        if (minLimit <= 1 && maxLimit >= 1)
+            location.setX(location.getX() + vec[minLimit - 1]);
+        if (minLimit <= 2 && maxLimit >= 2)
+            location.setY(location.getY() + vec[minLimit - 2]);
+        if (minLimit <= 3 && maxLimit >= 3)
+            location.setZ(location.getZ() + vec[minLimit - 3]);
+        if (minLimit <= 4 && maxLimit >= 4)
+            location.setYaw(location.getYaw() + vec[minLimit - 4]);
+        if (minLimit <= 5 && maxLimit >= 5)
+            location.setPitch(location.getPitch() + vec[minLimit - 5]);
+    }
+
+    public float[] parseValues(String[] components) {
+        float parsed[] = {0, 0, 0, 0, 0};
+
+        for (int i = 0; i < 6; i++) {
+            try {
+                parsed[i] = Float.valueOf(components[i]);
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }
+
+        return parsed;
     }
 
     @Override

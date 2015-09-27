@@ -80,7 +80,7 @@ public class EEntity {
      * @param amount The amount of entities to spawn.
      * @return List<EEntity> with all the EEntity instances.
      */
-    public static List<EEntity> create(EntityType type, Location location, int amount) {
+    public static List<EEntity> create(EntityType type, Location location, Integer amount) {
         List<EEntity> spawned = new ArrayList<EEntity>();
         for (int i = 0 ; i < amount; i++) {
             if (type.isSpawnable()) {
@@ -103,7 +103,7 @@ public class EEntity {
 
 
 
-    //region Main interfaces (Bukkit methods)
+    //region Main Integererfaces (Bukkit methods)
     // ##################################################
     // ################## ALL ENTITIES ##################
     // ##################################################
@@ -121,7 +121,7 @@ public class EEntity {
     }
 
     /** @see Entity#getUniqueId()  */
-    public int getID() {
+    public Integer getID() {
         return entity.getEntityId();
     }
 
@@ -137,17 +137,17 @@ public class EEntity {
 
     //CHECKS
     /** @see Entity#isValid()  */
-    public boolean isValid() {
+    public Boolean isValid() {
         return entity.isValid();
     }
 
     /** @see Entity#isDead()  */
-    public boolean isDead() {
+    public Boolean isDead() {
         return entity.isDead();
     }
 
     /** @see Entity#isOnGround()  */
-    public boolean isGrounded() {
+    public Boolean isGrounded() {
         return entity.isOnGround();
     }
 
@@ -216,7 +216,7 @@ public class EEntity {
     }
 
     /** @see Entity#setVelocity(Vector) */
-    public EEntity setVelocity(float x, float y, float z) {
+    public EEntity setVelocity(Float x, Float y, Float z) {
         if (entity instanceof Vehicle) {
             ((Vehicle)entity).setVelocity(new Vector(x,y,z));
         } else {
@@ -235,7 +235,7 @@ public class EEntity {
 
     //PASSENGER
     /** @see Entity#eject() */
-    public boolean eject() {
+    public Boolean eject() {
         return entity.eject();
     }
 
@@ -262,24 +262,24 @@ public class EEntity {
     }
 
     /** @see Entity#leaveVehicle() */
-    public boolean leaveVehicle() {
+    public Boolean leaveVehicle() {
         return entity.leaveVehicle();
     }
 
     /** @see Entity#isEmpty()  */
-    public boolean isEmpty() {
+    public Boolean isEmpty() {
         return entity.isEmpty();
     }
 
     //STATUS
     /** @see Entity#setFallDistance(float) */
-    public EEntity setFallDistance(float distance) {
+    public EEntity setFallDistance(Float distance) {
         entity.setFallDistance(distance);
         return this;
     }
 
     /** @see Entity#getFallDistance() */
-    public float getFallDistance() {
+    public Float getFallDistance() {
         return entity.getFallDistance();
     }
 
@@ -290,12 +290,12 @@ public class EEntity {
     }
 
     /** @see Entity#getFireTicks() */
-    public int getFireTicks() {
+    public Integer getFireTicks() {
         return entity.getFireTicks();
     }
 
     /** @see Entity#getMaxFireTicks() */
-    public int getMaxFireTicks() {
+    public Integer getMaxFireTicks() {
         return entity.getMaxFireTicks();
     }
 
@@ -306,7 +306,7 @@ public class EEntity {
     }
 
     /** @see Entity#getTicksLived() */
-    public int getTicksLived() {
+    public Integer getTicksLived() {
         return entity.getTicksLived();
     }
 
@@ -335,13 +335,13 @@ public class EEntity {
     }
 
     /** @see Entity#setCustomNameVisible(boolean) */
-    public EEntity setCustomNameVisible(boolean flag) {
+    public EEntity setCustomNameVisible(Boolean flag) {
         entity.setCustomNameVisible(flag);
         return this;
     }
 
     /** @see Entity#isCustomNameVisible() */
-    public boolean isCustomNameVisible() {
+    public Boolean isCustomNameVisible() {
         return entity.isCustomNameVisible();
     }
     //endregion
@@ -354,7 +354,7 @@ public class EEntity {
 
     //Health
     /** @see Damageable#setHealth(double) */
-    public EEntity setHealth(double amount) {
+    public EEntity setHealth(Double amount) {
         if (entity instanceof Damageable) {
             ((Damageable)entity).setHealth(amount);
         }
@@ -371,7 +371,7 @@ public class EEntity {
 
     //Max health
     /** @see Damageable#setMaxHealth(double) */
-    public EEntity setMaxHealth(double amount) {
+    public EEntity setMaxHealth(Double amount) {
         if (entity instanceof Damageable) {
             ((Damageable)entity).setMaxHealth(amount);
         }
@@ -396,7 +396,7 @@ public class EEntity {
 
     //Damage
     /** @see Damageable#damage(double, Entity) */
-    public EEntity damage(double amount, Entity entity) {
+    public EEntity damage(Double amount, Entity entity) {
         if (entity instanceof Damageable) {
             ((Damageable)entity).damage(amount, entity);
         }
@@ -404,7 +404,7 @@ public class EEntity {
     }
 
     /** @see Damageable#damage(double, Entity) */
-    public EEntity damage(double amount, EEntity entity) {
+    public EEntity damage(Double amount, EEntity entity) {
         if (entity instanceof Damageable) {
             ((Damageable)entity).damage(amount, entity.bukkit());
         }
@@ -429,7 +429,7 @@ public class EEntity {
     }
 
     /** @see LivingEntity#addPotionEffect(PotionEffect, boolean) */
-    public EEntity addPotionEffect(PotionEffect effect, boolean force) {
+    public EEntity addPotionEffect(PotionEffect effect, Boolean force) {
         if (entity instanceof LivingEntity) {
             ((LivingEntity)entity).addPotionEffect(effect, force);
         }
@@ -453,7 +453,7 @@ public class EEntity {
     }
 
     /** @see LivingEntity#hasPotionEffect(PotionEffectType) */
-    public boolean hasPotionEffect(PotionEffectType type) {
+    public Boolean hasPotionEffect(PotionEffectType type) {
         if (entity instanceof LivingEntity) {
             return ((LivingEntity)entity).hasPotionEffect(type);
         }
@@ -470,7 +470,7 @@ public class EEntity {
 
     //Removal
     /** @see LivingEntity#getRemoveWhenFarAway() */
-    public boolean getRemoveWhenFarAway(Entity other) {
+    public Boolean getRemoveWhenFarAway(Entity other) {
         if (entity instanceof LivingEntity) {
             return ((LivingEntity)entity).getRemoveWhenFarAway();
         }
@@ -478,7 +478,7 @@ public class EEntity {
     }
 
     /** @see LivingEntity#setRemoveWhenFarAway(boolean) */
-    public EEntity setRemoveWhenFarAway(boolean remove) {
+    public EEntity setRemoveWhenFarAway(Boolean remove) {
         if (entity instanceof LivingEntity) {
             ((LivingEntity)entity).setRemoveWhenFarAway(remove);
         }
@@ -495,7 +495,7 @@ public class EEntity {
     }
 
     /** @see LivingEntity#setCanPickupItems(boolean) */
-    public EEntity setCanPickupItems(boolean pickup) {
+    public EEntity setCanPickupItems(Boolean pickup) {
         if (entity instanceof LivingEntity) {
             ((LivingEntity)entity).setCanPickupItems(pickup);
         }
@@ -503,7 +503,7 @@ public class EEntity {
     }
 
     /** @see LivingEntity#getCanPickupItems() */
-    public boolean getCanPickupItems() {
+    public Boolean getCanPickupItems() {
         if (entity instanceof LivingEntity) {
             return ((LivingEntity)entity).getCanPickupItems();
         }
@@ -512,7 +512,7 @@ public class EEntity {
 
     //Leash
     /** @see LivingEntity#isLeashed() */
-    public boolean isLeashed() {
+    public Boolean isLeashed() {
         if (entity instanceof LivingEntity) {
             return ((LivingEntity)entity).isLeashed();
         }
@@ -553,7 +553,7 @@ public class EEntity {
     }
 
     /** @see LivingEntity#getNoDamageTicks() */
-    public int getNoDamageTicks() {
+    public Integer getNoDamageTicks() {
         if (entity instanceof LivingEntity) {
             return ((LivingEntity)entity).getNoDamageTicks();
         }
@@ -561,7 +561,7 @@ public class EEntity {
     }
 
     /** @see LivingEntity#getMaximumNoDamageTicks() */
-    public int getMaxNoDamageTicks() {
+    public Integer getMaxNoDamageTicks() {
         if (entity instanceof LivingEntity) {
             return ((LivingEntity)entity).getMaximumNoDamageTicks();
         }
@@ -585,15 +585,15 @@ public class EEntity {
     }
 
     /** @see LivingEntity#getLastDamage() */
-    public double getLastDamage() {
+    public Double getLastDamage() {
         if (entity instanceof LivingEntity) {
             return ((LivingEntity)entity).getLastDamage();
         }
-        return 0;
+        return null;
     }
 
     /** @see LivingEntity#setLastDamage(double) */
-    public EEntity setLastDamage(double amount) {
+    public EEntity setLastDamage(Double amount) {
         if (entity instanceof LivingEntity) {
             ((LivingEntity)entity).setLastDamage(amount);
         }
@@ -636,7 +636,7 @@ public class EEntity {
 
     //LOS
     /** @see LivingEntity#getLineOfSight(Set, int) */
-    public List<Block> getLineOfSight(Set<Material> transparent, int maxDistance) {
+    public List<Block> getLineOfSight(Set<Material> transparent, Integer maxDistance) {
         if (entity instanceof LivingEntity) {
             return ((LivingEntity)entity).getLineOfSight(transparent, maxDistance);
         }
@@ -644,7 +644,7 @@ public class EEntity {
     }
 
     /** @see LivingEntity#hasLineOfSight(Entity) */
-    public boolean hasLineOfSight(Entity other) {
+    public Boolean hasLineOfSight(Entity other) {
         if (entity instanceof LivingEntity) {
             return ((LivingEntity)entity).hasLineOfSight(other);
         }
@@ -654,7 +654,7 @@ public class EEntity {
     //TODO: Method to check line of sight with location.
 
     /** @see LivingEntity#getTargetBlock(Set, int) */
-    public Block getTargetBlock(Set<Material> transparent, int maxDistance) {
+    public Block getTargetBlock(Set<Material> transparent, Integer maxDistance) {
         if (entity instanceof LivingEntity) {
             return ((LivingEntity)entity).getTargetBlock(transparent, maxDistance);
         }
@@ -662,7 +662,7 @@ public class EEntity {
     }
 
     /** @see LivingEntity#getLastTwoTargetBlocks(Set, int) */
-    public List<Block> getLastTwoTargetBlocks(Set<Material> transparent, int maxDistance) {
+    public List<Block> getLastTwoTargetBlocks(Set<Material> transparent, Integer maxDistance) {
         if (entity instanceof LivingEntity) {
             return ((LivingEntity)entity).getLastTwoTargetBlocks(transparent, maxDistance);
         }
@@ -711,7 +711,7 @@ public class EEntity {
     }
 
     /** @see Ageable#getAgeLock() */
-    public boolean isAgeLocked() {
+    public Boolean isAgeLocked() {
         if (entity instanceof Ageable) {
             return ((Ageable)entity).getAgeLock();
         }
@@ -719,7 +719,7 @@ public class EEntity {
     }
 
     /** @see Ageable#setAgeLock(boolean) */
-    public EEntity setAgeLock(boolean lock) {
+    public EEntity setAgeLock(Boolean lock) {
         if (entity instanceof Ageable) {
             ((Ageable)entity).setAgeLock(lock);
         }
@@ -751,7 +751,7 @@ public class EEntity {
     }
 
     /** @see Ageable#isAdult() */
-    public boolean isAdult() {
+    public Boolean isAdult() {
         if (entity instanceof Ageable) {
             return ((Ageable)entity).isAdult();
         } else if (entity instanceof Zombie) {
@@ -764,7 +764,7 @@ public class EEntity {
 
     //BREED
     /** @see Ageable#canBreed() */
-    public boolean canBreed() {
+    public Boolean canBreed() {
         if (entity instanceof Ageable) {
             return ((Ageable)entity).canBreed();
         }
@@ -772,7 +772,7 @@ public class EEntity {
     }
 
     /** @see Ageable#setBreed(boolean) */
-    public EEntity setBreed(boolean breed) {
+    public EEntity setBreed(Boolean breed) {
         if (entity instanceof Ageable) {
             ((Ageable)entity).setBreed(breed);
         }
@@ -827,7 +827,7 @@ public class EEntity {
     }
 
     /** @see Projectile#doesBounce() */
-    public boolean doesBounce() {
+    public Boolean doesBounce() {
         if (entity instanceof Projectile) {
             return ((Projectile)entity).doesBounce();
         }
@@ -835,7 +835,7 @@ public class EEntity {
     }
 
     /** @see Projectile#setBounce(boolean) */
-    public EEntity setBounce(boolean bounce) {
+    public EEntity setBounce(Boolean bounce) {
         if (entity instanceof Projectile) {
             ((Projectile)entity).setBounce(bounce);
         }
@@ -867,7 +867,7 @@ public class EEntity {
     //region Hanging entities
 
     /** @see Hanging#setFacingDirection(BlockFace, boolean) */
-    public EEntity setFacingDirection(BlockFace face, boolean force) {
+    public EEntity setFacingDirection(BlockFace face, Boolean force) {
         if (entity instanceof Hanging) {
             ((Hanging)entity).setFacingDirection(face, force);
         }
@@ -894,7 +894,7 @@ public class EEntity {
     }
 
     /** @see ArmorStand#setItemInHand(ItemStack) */
-    public EEntity setItemInHand(ItemStack item) {
+    public EEntity setItemInHand(EItem item) {
         if (entity instanceof ArmorStand) {
             ((ArmorStand)entity).setItemInHand(item);
         }
@@ -910,7 +910,7 @@ public class EEntity {
     }
 
     /** @see ArmorStand#setBoots(ItemStack) */
-    public EEntity setBoots(ItemStack item) {
+    public EEntity setBoots(EItem item) {
         if (entity instanceof ArmorStand) {
             ((ArmorStand)entity).setBoots(item);
         }
@@ -926,7 +926,7 @@ public class EEntity {
     }
 
     /** @see ArmorStand#setLeggings(ItemStack) */
-    public EEntity setLeggings(ItemStack item) {
+    public EEntity setLeggings(EItem item) {
         if (entity instanceof ArmorStand) {
             ((ArmorStand)entity).setLeggings(item);
         }
@@ -942,7 +942,7 @@ public class EEntity {
     }
 
     /** @see ArmorStand#setChestplate(ItemStack) */
-    public EEntity setChestplate(ItemStack item) {
+    public EEntity setChestplate(EItem item) {
         if (entity instanceof ArmorStand) {
             ((ArmorStand)entity).setChestplate(item);
         }
@@ -958,7 +958,7 @@ public class EEntity {
     }
 
     /** @see ArmorStand#setHelmet(ItemStack) */
-    public EEntity setHelmet(ItemStack item) {
+    public EEntity setHelmet(EItem item) {
         if (entity instanceof ArmorStand) {
             ((ArmorStand)entity).setHelmet(item);
         }
@@ -1064,7 +1064,7 @@ public class EEntity {
 
     //BASEPLATE
     /** @see ArmorStand#hasBasePlate() */
-    public boolean hasBasePlate() {
+    public Boolean hasBasePlate() {
         if (entity instanceof ArmorStand) {
             return ((ArmorStand)entity).hasBasePlate();
         }
@@ -1072,7 +1072,7 @@ public class EEntity {
     }
 
     /** @see ArmorStand#setBasePlate(boolean) */
-    public EEntity setBasePlate(boolean plate) {
+    public EEntity setBasePlate(Boolean plate) {
         if (entity instanceof ArmorStand) {
             ((ArmorStand)entity).setBasePlate(plate);
         }
@@ -1081,7 +1081,7 @@ public class EEntity {
 
     //GRAVITY
     /** @see ArmorStand#hasGravity() */
-    public boolean hasGravity() {
+    public Boolean hasGravity() {
         if (entity instanceof ArmorStand) {
             return ((ArmorStand)entity).hasGravity();
         }
@@ -1089,7 +1089,7 @@ public class EEntity {
     }
 
     /** @see ArmorStand#setGravity(boolean) */
-    public EEntity setGravity(boolean gravity) {
+    public EEntity setGravity(Boolean gravity) {
         if (entity instanceof ArmorStand) {
             ((ArmorStand)entity).setGravity(gravity);
         }
@@ -1098,7 +1098,7 @@ public class EEntity {
 
     //VISIBILITY
     /** @see ArmorStand#isVisible() */
-    public boolean isVisible() {
+    public Boolean isVisible() {
         if (entity instanceof ArmorStand) {
             return ((ArmorStand)entity).isVisible();
         }
@@ -1106,7 +1106,7 @@ public class EEntity {
     }
 
     /** @see ArmorStand#setVisible(boolean) */
-    public EEntity setVisible(boolean visible) {
+    public EEntity setVisible(Boolean visible) {
         if (entity instanceof ArmorStand) {
             ((ArmorStand)entity).setVisible(visible);
         }
@@ -1115,7 +1115,7 @@ public class EEntity {
 
     //ARMS
     /** @see ArmorStand#hasArms() */
-    public boolean hasArms() {
+    public Boolean hasArms() {
         if (entity instanceof ArmorStand) {
             return ((ArmorStand)entity).hasArms();
         }
@@ -1123,7 +1123,7 @@ public class EEntity {
     }
 
     /** @see ArmorStand#setArms(boolean) */
-    public EEntity setArms(boolean arms) {
+    public EEntity setArms(Boolean arms) {
         if (entity instanceof ArmorStand) {
             ((ArmorStand)entity).setArms(arms);
         }
@@ -1132,7 +1132,7 @@ public class EEntity {
 
     //SMALL
     /** @see ArmorStand#isSmall() */
-    public boolean isSmall() {
+    public Boolean isSmall() {
         if (entity instanceof ArmorStand) {
             return ((ArmorStand)entity).isSmall();
         }
@@ -1140,7 +1140,7 @@ public class EEntity {
     }
 
     /** @see ArmorStand#setSmall(boolean) */
-    public EEntity setSmall(boolean small) {
+    public EEntity setSmall(Boolean small) {
         if (entity instanceof ArmorStand) {
             ((ArmorStand)entity).setSmall(small);
         }
@@ -1149,7 +1149,7 @@ public class EEntity {
 
     //MARKER
     /** @see ArmorStand#isSmall() */
-    public boolean isMarker() {
+    public Boolean isMarker() {
         if (entity instanceof ArmorStand) {
             return ((ArmorStand)entity).isMarker();
         }
@@ -1157,7 +1157,7 @@ public class EEntity {
     }
 
     /** @see ArmorStand#setMarker(boolean) */
-    public EEntity setMarker(boolean marker) {
+    public EEntity setMarker(Boolean marker) {
         if (entity instanceof ArmorStand) {
             ((ArmorStand)entity).setMarker(marker);
         }
@@ -1172,7 +1172,7 @@ public class EEntity {
     //region Arrows
 
     /** @see Arrow#isCritical() */
-    public boolean isCritical() {
+    public Boolean isCritical() {
         if (entity instanceof Arrow) {
             return ((Arrow)entity).isCritical();
         }
@@ -1180,7 +1180,7 @@ public class EEntity {
     }
 
     /** @see Arrow#setCritical(boolean) */
-    public EEntity setCritical(boolean critical) {
+    public EEntity setCritical(Boolean critical) {
         if (entity instanceof Arrow) {
             ((Arrow)entity).setCritical(critical);
         }
@@ -1211,7 +1211,7 @@ public class EEntity {
     //region Boats
 
     /** @see Boat#getWorkOnLand() */
-    public boolean getWorkOnLand() {
+    public Boolean getWorkOnLand() {
         if (entity instanceof Boat) {
             return ((Boat)entity).getWorkOnLand();
         }
@@ -1219,7 +1219,7 @@ public class EEntity {
     }
 
     /** @see Boat#setWorkOnLand(boolean) */
-    public EEntity setWorkOnLand(boolean workOnLand) {
+    public EEntity setWorkOnLand(Boolean workOnLand) {
         if (entity instanceof Boat) {
             ((Boat)entity).setWorkOnLand(workOnLand);
         }
@@ -1235,7 +1235,7 @@ public class EEntity {
     }
 
     /** @see Boat#setUnoccupiedDeceleration(double) */
-    public EEntity setUnoccupiedDeceleration(double rate) {
+    public EEntity setUnoccupiedDeceleration(Double rate) {
         if (entity instanceof Boat) {
             ((Boat)entity).setUnoccupiedDeceleration(rate);
         }
@@ -1251,7 +1251,7 @@ public class EEntity {
     }
 
     /** @see Boat#setOccupiedDeceleration(double) */
-    public EEntity setOccupiedDeceleration(double rate) {
+    public EEntity setOccupiedDeceleration(Double rate) {
         if (entity instanceof Boat) {
             ((Boat)entity).setOccupiedDeceleration(rate);
         }
@@ -1305,9 +1305,9 @@ public class EEntity {
     }
 
     /** @see ExperienceOrb#setExperience(int) */
-    public EEntity setExperience(int knockback) {
+    public EEntity setExperience(int exp) {
         if (entity instanceof ExperienceOrb) {
-            ((ExperienceOrb)entity).setExperience(knockback);
+            ((ExperienceOrb)entity).setExperience(exp);
         }
         return this;
     }
@@ -1320,7 +1320,7 @@ public class EEntity {
     //region Falling blocks
 
     /** @see FallingBlock#getDropItem() */
-    public boolean getDropItem() {
+    public Boolean getDropItem() {
         if (entity instanceof FallingBlock) {
             return ((FallingBlock)entity).getDropItem();
         }
@@ -1328,7 +1328,7 @@ public class EEntity {
     }
 
     /** @see FallingBlock#setDropItem(boolean) */
-    public EEntity setDropItem(boolean drop) {
+    public EEntity setDropItem(Boolean drop) {
         if (entity instanceof FallingBlock) {
             ((FallingBlock)entity).setDropItem(drop);
         }
@@ -1336,7 +1336,7 @@ public class EEntity {
     }
 
     /** @see FallingBlock#canHurtEntities() */
-    public boolean canHurtEntities() {
+    public Boolean canHurtEntities() {
         if (entity instanceof FallingBlock) {
             return ((FallingBlock)entity).canHurtEntities();
         }
@@ -1344,7 +1344,7 @@ public class EEntity {
     }
 
     /** @see FallingBlock#setHurtEntities(boolean) */
-    public EEntity setHurtEntities(boolean hurtEntities) {
+    public EEntity setHurtEntities(Boolean hurtEntities) {
         if (entity instanceof FallingBlock) {
             ((FallingBlock)entity).setHurtEntities(hurtEntities);
         }
@@ -1376,6 +1376,7 @@ public class EEntity {
 
     /** @see Fireball#getDirection() */
     public Vector getDirection() {
+        //TODO: Use getvelocity for this.
         if (entity instanceof Fireball) {
             return ((Fireball)entity).getDirection();
         }
@@ -1384,6 +1385,7 @@ public class EEntity {
 
     /** @see Fireball#setDirection(Vector) */
     public EEntity setDirection(Vector direction) {
+        //TODO: Use setvelocity for this.
         if (entity instanceof Fireball) {
             ((Fireball)entity).setDirection(direction);
         }
@@ -1391,7 +1393,8 @@ public class EEntity {
     }
 
     /** @see Fireball#setDirection(Vector) */
-    public EEntity setDirection(float x, float y, float z) {
+    public EEntity setDirection(Float x, Float y, Float z) {
+        //TODO: Use setvelocity for this.
         if (entity instanceof Fireball) {
             ((Fireball)entity).setDirection(new Vector(x,y,z));
         }
@@ -1483,7 +1486,7 @@ public class EEntity {
     //region Lightning strikes
 
     /** @see LightningStrike#isEffect() */
-    public boolean isEffect() {
+    public Boolean isEffect() {
         if (entity instanceof LightningStrike) {
             return ((LightningStrike)entity).isEffect();
         }
@@ -1498,7 +1501,7 @@ public class EEntity {
     //region Minecarts
 
     /** @see Minecart#isSlowWhenEmpty() */
-    public boolean isSlowWhenEmpty() {
+    public Boolean isSlowWhenEmpty() {
         if (entity instanceof Minecart) {
             return ((Minecart)entity).isSlowWhenEmpty();
         }
@@ -1506,9 +1509,9 @@ public class EEntity {
     }
 
     /** @see Minecart#setSlowWhenEmpty(boolean) */
-    public EEntity setSlowWhenEmpty(boolean critical) {
+    public EEntity setSlowWhenEmpty(Boolean slow) {
         if (entity instanceof Minecart) {
-            ((Minecart)entity).setSlowWhenEmpty(critical);
+            ((Minecart)entity).setSlowWhenEmpty(slow);
         }
         return this;
     }
@@ -1522,7 +1525,7 @@ public class EEntity {
     }
 
     /** @see Minecart#setDamage(double) */
-    public EEntity setDamage(double damage) {
+    public EEntity setDamage(Double damage) {
         if (entity instanceof Minecart) {
             ((Minecart)entity).setDamage(damage);
         }
@@ -1546,7 +1549,7 @@ public class EEntity {
     }
 
     /** @see Minecart#setFlyingVelocityMod(Vector) */
-    public EEntity setFlyingVelocityMod(float x, float y, float z) {
+    public EEntity setFlyingVelocityMod(Float x, Float y, Float z) {
         if (entity instanceof Minecart) {
             ((Minecart)entity).setFlyingVelocityMod(new Vector(x,y,z));
         }
@@ -1570,7 +1573,7 @@ public class EEntity {
     }
 
     /** @see Minecart#setDerailedVelocityMod(Vector) */
-    public EEntity setDerailedVelocityMod(float x, float y, float z) {
+    public EEntity setDerailedVelocityMod(Float x, Float y, Float z) {
         if (entity instanceof Minecart) {
             ((Minecart)entity).setDerailedVelocityMod(new Vector(x, y, z));
         }
@@ -1633,7 +1636,7 @@ public class EEntity {
     }
 
     /** @see Painting#setArt(Art, boolean) */
-    public EEntity setArt(Art art, boolean force) {
+    public EEntity setArt(Art art, Boolean force) {
         if (entity instanceof Painting) {
             ((Painting)entity).setArt(art, force);
         }
@@ -1694,7 +1697,7 @@ public class EEntity {
     //region Wither skulls
 
     /** @see WitherSkull#isCharged() */
-    public boolean isCharged() {
+    public Boolean isCharged() {
         if (entity instanceof WitherSkull) {
             return ((WitherSkull)entity).isCharged();
         }
@@ -1702,7 +1705,7 @@ public class EEntity {
     }
 
     /** @see WitherSkull#setCharged(boolean) */
-    public EEntity setCharged(boolean powered) {
+    public EEntity setCharged(Boolean powered) {
         if (entity instanceof WitherSkull) {
             ((WitherSkull)entity).setCharged(powered);
         }
@@ -1720,7 +1723,7 @@ public class EEntity {
     //region Bats
 
     /** @see Bat#isAwake() */
-    public boolean isAwake() {
+    public Boolean isAwake() {
         if (entity instanceof Bat) {
             return ((Bat)entity).isAwake();
         }
@@ -1728,7 +1731,7 @@ public class EEntity {
     }
 
     /** @see Bat#setAwake(boolean) */
-    public EEntity setAwake(boolean awake) {
+    public EEntity setAwake(Boolean awake) {
         if (entity instanceof Bat) {
             ((Bat)entity).setAwake(awake);
         }
@@ -1743,7 +1746,7 @@ public class EEntity {
     //region Creepers
 
     /** @see Creeper#isPowered() */
-    public boolean isPowered() {
+    public Boolean isPowered() {
         if (entity instanceof Creeper) {
             return ((Creeper)entity).isPowered();
         }
@@ -1751,7 +1754,7 @@ public class EEntity {
     }
 
     /** @see Creeper#setPowered(boolean) */
-    public EEntity setPowered(boolean powered) {
+    public EEntity setPowered(Boolean powered) {
         if (entity instanceof Creeper) {
             ((Creeper)entity).setPowered(powered);
         }
@@ -1789,7 +1792,7 @@ public class EEntity {
     //region Guardians
 
     /** @see Guardian#isElder() */
-    public boolean isElder() {
+    public Boolean isElder() {
         if (entity instanceof Guardian) {
             return ((Guardian)entity).isElder();
         }
@@ -1797,7 +1800,7 @@ public class EEntity {
     }
 
     /** @see Guardian#setElder(boolean) */
-    public EEntity setElder(boolean eldar) {
+    public EEntity setElder(Boolean eldar) {
         if (entity instanceof Guardian) {
             ((Guardian)entity).setElder(eldar);
         }
@@ -1860,7 +1863,7 @@ public class EEntity {
     }
 
     /** @see Horse#isCarryingChest() */
-    public boolean isCarryingChest() {
+    public Boolean isCarryingChest() {
         if (entity instanceof Horse) {
             return ((Horse)entity).isCarryingChest();
         }
@@ -1868,7 +1871,7 @@ public class EEntity {
     }
 
     /** @see Horse#setCarryingChest(boolean) */
-    public EEntity setCarryingChest(boolean chest) {
+    public EEntity setCarryingChest(Boolean chest) {
         if (entity instanceof Horse) {
             ((Horse)entity).setCarryingChest(chest);
         }
@@ -1916,7 +1919,7 @@ public class EEntity {
     }
 
     /** @see Horse#setJumpStrength(double) */
-    public EEntity setJumpStrength(double strength) {
+    public EEntity setJumpStrength(Double strength) {
         if (entity instanceof Horse) {
             ((Horse)entity).setJumpStrength(strength);
         }
@@ -1985,7 +1988,7 @@ public class EEntity {
     //region Iron golems
 
     /** @see IronGolem#isPlayerCreated() */
-    public boolean isPlayerCreated() {
+    public Boolean isPlayerCreated() {
         if (entity instanceof IronGolem) {
             return ((IronGolem)entity).isPlayerCreated();
         }
@@ -1993,9 +1996,9 @@ public class EEntity {
     }
 
     /** @see IronGolem#setPlayerCreated(boolean) */
-    public EEntity setPlayerCreated(boolean eldar) {
+    public EEntity setPlayerCreated(Boolean playerCreated) {
         if (entity instanceof IronGolem) {
-            ((IronGolem)entity).setPlayerCreated(eldar);
+            ((IronGolem)entity).setPlayerCreated(playerCreated);
         }
         return this;
     }
@@ -2031,7 +2034,7 @@ public class EEntity {
     //region Pigs
 
     /** @see Pig#hasSaddle() */
-    public boolean hasSaddle() {
+    public Boolean hasSaddle() {
         if (entity instanceof Pig) {
             return ((Pig)entity).hasSaddle();
         }
@@ -2039,7 +2042,7 @@ public class EEntity {
     }
 
     /** @see Pig#setSaddle(boolean) */
-    public EEntity setSaddle(boolean saddle) {
+    public EEntity setSaddle(Boolean saddle) {
         if (entity instanceof Pig) {
             ((Pig)entity).setSaddle(saddle);
         }
@@ -2100,7 +2103,7 @@ public class EEntity {
     //region Sheeps
 
     /** @see Sheep#isSheared() */
-    public boolean isSheared() {
+    public Boolean isSheared() {
         if (entity instanceof Sheep) {
             return ((Sheep)entity).isSheared();
         }
@@ -2108,7 +2111,7 @@ public class EEntity {
     }
 
     /** @see Sheep#setSheared(boolean) */
-    public EEntity setSheared(boolean saddle) {
+    public EEntity setSheared(Boolean saddle) {
         if (entity instanceof Sheep) {
             ((Sheep)entity).setSheared(saddle);
         }
@@ -2154,9 +2157,9 @@ public class EEntity {
     }
 
     /** @see Slime#setSize(int) */
-    public EEntity setSize(int anger) {
+    public EEntity setSize(int size) {
         if (entity instanceof Slime) {
-            ((Slime)entity).setSize(anger);
+            ((Slime)entity).setSize(size);
         }
         return this;
     }
@@ -2215,7 +2218,7 @@ public class EEntity {
     //region Zombies
 
     /** @see Zombie#isVillager() */
-    public boolean isVillager() {
+    public Boolean isVillager() {
         if (entity instanceof Zombie) {
             return ((Zombie)entity).isVillager();
         }
@@ -2223,7 +2226,7 @@ public class EEntity {
     }
 
     /** @see Zombie#setVillager(boolean) */
-    public EEntity setVillager(boolean villager) {
+    public EEntity setVillager(Boolean villager) {
         if (entity instanceof Zombie) {
             ((Zombie)entity).setVillager(villager);
         }
@@ -2240,7 +2243,7 @@ public class EEntity {
      * @see PigZombie#isAngry()
      * @see Wolf#isAngry()
      */
-    public boolean isAngry() {
+    public Boolean isAngry() {
         if (entity instanceof PigZombie) {
             return ((PigZombie)entity).isAngry();
         } else if (entity instanceof Wolf) {
@@ -2253,7 +2256,7 @@ public class EEntity {
      * @see PigZombie#setAngry(boolean)
      * @see Wolf#setAngry(boolean)
      */
-    public EEntity setAngry(boolean angry) {
+    public EEntity setAngry(Boolean angry) {
         if (entity instanceof PigZombie) {
             ((PigZombie)entity).setAngry(angry);
         } else if (entity instanceof Wolf) {
@@ -2266,7 +2269,7 @@ public class EEntity {
      * @see Ocelot#isSitting()
      * @see Wolf#isSitting()
      */
-    public boolean isSitting() {
+    public Boolean isSitting() {
         if (entity instanceof Ocelot) {
             return ((Ocelot)entity).isSitting();
         } else if (entity instanceof Wolf) {
@@ -2279,7 +2282,7 @@ public class EEntity {
      * @see Ocelot#setSitting(boolean)
      * @see Wolf#setSitting(boolean)
      */
-    public EEntity setSitting(boolean sitting) {
+    public EEntity setSitting(Boolean sitting) {
         if (entity instanceof Ocelot) {
             ((Ocelot)entity).setSitting(sitting);
         } else if (entity instanceof Wolf) {
@@ -2305,7 +2308,7 @@ public class EEntity {
      * @see Boat#setMaxSpeed(double)
      * @see Minecart#setMaxSpeed(double)
      */
-    public EEntity setMaxSpeed(double rate) {
+    public EEntity setMaxSpeed(Double rate) {
         if (entity instanceof Boat) {
             ((Boat)entity).setMaxSpeed(rate);
         } else if (entity instanceof Minecart) {
@@ -2358,6 +2361,8 @@ public class EEntity {
     //TODO: Equipment etc.
 
     //TODO: Set baby
+
+    //TODO: Velocity
     //endregion
 
 

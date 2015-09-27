@@ -35,11 +35,11 @@ public class IntArg extends Argument {
         super(name);
     }
 
-    public IntArg(int defaultValue) {
+    public IntArg(Integer defaultValue) {
         super(defaultValue);
     }
 
-    public IntArg(String name, int defaultValue) {
+    public IntArg(String name, Integer defaultValue) {
         super(name, defaultValue);
     }
 
@@ -62,11 +62,16 @@ public class IntArg extends Argument {
 
     @Override
      public IntArg clone() {
-        return new IntArg(name, (Integer)defaultValue);
+        return new IntArg(name, defaultValue == null ? null : (Integer)defaultValue);
     }
 
     @Override
     public String getDescription() {
         return Message.ARG_INT.msg().getMsg(false);
+    }
+
+    @Override
+    public Class getRawClass() {
+        return Integer.class;
     }
 }

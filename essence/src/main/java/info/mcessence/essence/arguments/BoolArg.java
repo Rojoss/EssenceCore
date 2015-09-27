@@ -34,11 +34,11 @@ public class BoolArg extends Argument {
         super(name);
     }
 
-    public BoolArg(boolean defaultValue) {
+    public BoolArg(Boolean defaultValue) {
         super(defaultValue);
     }
 
-    public BoolArg(String name, boolean defaultValue) {
+    public BoolArg(String name, Boolean defaultValue) {
         super(name, defaultValue);
     }
 
@@ -65,11 +65,16 @@ public class BoolArg extends Argument {
 
     @Override
     public BoolArg clone() {
-        return new BoolArg(name, (Boolean)defaultValue);
+        return new BoolArg(name, defaultValue == null ? null : (Boolean)defaultValue);
     }
 
     @Override
     public String getDescription() {
         return Message.ARG_BOOL.msg().getMsg(false);
+    }
+
+    @Override
+    public Class getRawClass() {
+        return Boolean.class;
     }
 }

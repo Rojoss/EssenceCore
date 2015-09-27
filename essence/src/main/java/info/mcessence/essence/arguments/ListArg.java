@@ -71,11 +71,16 @@ public class ListArg extends Argument {
 
     @Override
     public ListArg clone() {
-        return new ListArg(name, (String)defaultValue, new ArrayList<String>(values));
+        return new ListArg(name, defaultValue == null ? null : (String)defaultValue, new ArrayList<String>(values));
     }
 
     @Override
     public String getDescription() {
         return Message.ARG_LIST.msg().getMsg(false, Util.implode(values, ","));
+    }
+
+    @Override
+    public Class getRawClass() {
+        return String.class;
     }
 }

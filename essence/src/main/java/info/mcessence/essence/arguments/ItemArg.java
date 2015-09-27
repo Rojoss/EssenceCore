@@ -70,11 +70,16 @@ public class ItemArg extends Argument {
 
     @Override
     public ItemArg clone() {
-        return new ItemArg(name, ((EItem)defaultValue).clone());
+        return new ItemArg(name, defaultValue == null ? null : ((EItem)defaultValue).clone());
     }
 
     @Override
     public String getDescription() {
         return Message.ARG_ITEM.msg().getMsg(false);
+    }
+
+    @Override
+    public Class getRawClass() {
+        return EItem.class;
     }
 }

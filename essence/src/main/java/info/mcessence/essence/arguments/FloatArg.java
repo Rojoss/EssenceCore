@@ -35,11 +35,11 @@ public class FloatArg extends Argument {
         super(name);
     }
 
-    public FloatArg(float defaultValue) {
+    public FloatArg(Float defaultValue) {
         super(defaultValue);
     }
 
-    public FloatArg(String name, float defaultValue) {
+    public FloatArg(String name, Float defaultValue) {
         super(name, defaultValue);
     }
 
@@ -62,11 +62,16 @@ public class FloatArg extends Argument {
 
     @Override
     public FloatArg clone() {
-        return new FloatArg(name, (Float)defaultValue);
+        return new FloatArg(name, defaultValue == null ? null : (Float)defaultValue);
     }
 
     @Override
     public String getDescription() {
         return Message.ARG_DECIMAL.msg().getMsg(false);
+    }
+
+    @Override
+    public Class getRawClass() {
+        return Float.class;
     }
 }

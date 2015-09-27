@@ -88,11 +88,16 @@ public class VectorArg extends Argument {
 
     @Override
      public VectorArg clone() {
-        return new VectorArg(name, ((Vector)defaultValue).clone());
+        return new VectorArg(name, defaultValue == null ? null : ((Vector)defaultValue).clone());
     }
 
     @Override
     public String getDescription() {
         return Message.ARG_VECTOR.msg().getMsg(false);
+    }
+
+    @Override
+    public Class getRawClass() {
+        return Vector.class;
     }
 }

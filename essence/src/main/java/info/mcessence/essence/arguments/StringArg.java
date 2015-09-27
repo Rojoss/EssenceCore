@@ -52,11 +52,16 @@ public class StringArg extends Argument {
 
     @Override
      public StringArg clone() {
-        return new StringArg(name, (String)defaultValue);
+        return new StringArg(name, defaultValue == null ? null : (String)defaultValue);
     }
 
     @Override
     public String getDescription() {
         return Message.ARG_STRING.msg().getMsg(false);
+    }
+
+    @Override
+    public Class getRawClass() {
+        return String.class;
     }
 }

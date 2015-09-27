@@ -56,6 +56,8 @@ public abstract class Argument {
 
     public abstract Argument clone();
 
+    public abstract Class getRawClass();
+
 
     public boolean isValid() {
         return success;

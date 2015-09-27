@@ -65,11 +65,16 @@ public class MaterialArg extends Argument {
 
     @Override
     public MaterialArg clone() {
-        return new MaterialArg(name, ((MaterialData)defaultValue).clone());
+        return new MaterialArg(name, defaultValue == null ? null : ((MaterialData)defaultValue).clone());
     }
 
     @Override
     public String getDescription() {
         return Message.ARG_MATERIAL.msg().getMsg(false);
+    }
+
+    @Override
+    public Class getRawClass() {
+        return MaterialData.class;
     }
 }

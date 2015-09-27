@@ -79,11 +79,16 @@ public class MappedListArg extends Argument {
 
     @Override
      public MappedListArg clone() {
-        return new MappedListArg(name, (String)defaultValue, new HashMap<String, List<String>>(values));
+        return new MappedListArg(name, defaultValue == null ? null : (String)defaultValue, new HashMap<String, List<String>>(values));
     }
 
     @Override
     public String getDescription() {
         return Message.ARG_LIST.msg().getMsg(false, Util.implode(values.keySet(), ","));
+    }
+
+    @Override
+    public Class getRawClass() {
+        return String.class;
     }
 }

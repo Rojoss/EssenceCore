@@ -35,11 +35,11 @@ public class DoubleArg extends Argument {
         super(name);
     }
 
-    public DoubleArg(double defaultValue) {
+    public DoubleArg(Double defaultValue) {
         super(defaultValue);
     }
 
-    public DoubleArg(String name, double defaultValue) {
+    public DoubleArg(String name, Double defaultValue) {
         super(name, defaultValue);
     }
 
@@ -62,11 +62,16 @@ public class DoubleArg extends Argument {
 
     @Override
     public DoubleArg clone() {
-        return new DoubleArg(name, (Double)defaultValue);
+        return new DoubleArg(name, defaultValue == null ? null : defaultValue == null ? null : (Double)defaultValue);
     }
 
     @Override
     public String getDescription() {
         return Message.ARG_DECIMAL.msg().getMsg(false);
+    }
+
+    @Override
+    public Class getRawClass() {
+        return Double.class;
     }
 }

@@ -32,6 +32,7 @@ import info.mcessence.essence.commands.location.DelWarpCmd;
 import info.mcessence.essence.commands.location.SetWarpCmd;
 import info.mcessence.essence.commands.location.WarpCmd;
 import info.mcessence.essence.commands.location.WarpsCmd;
+import info.mcessence.essence.commands.misc.SummonCmd;
 import info.mcessence.essence.commands.misc.TestCmd;
 import info.mcessence.essence.commands.player.NicknameCmd;
 import info.mcessence.essence.commands.player.SudoCmd;
@@ -90,6 +91,7 @@ public class Commands {
         registerCommand(TpHereCmd.class, "tphere", "tphere", "Teleports a player to your location.", new String[] {});
         registerCommand(SudoCmd.class, "sudo", "sudo", "Execute a command on someone's behalf.", new String[] {});
         registerCommand(BanCmd.class, "ban", "ban", "Bans a player from the server.", new String[] {});
+        registerCommand(SummonCmd.class, "summon", "summon", "Summons any entity with any specified data.", new String[] {"spawnmob", "sm", "spawnentity", "se"});
     }
 
     /**

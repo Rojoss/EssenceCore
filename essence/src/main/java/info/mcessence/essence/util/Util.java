@@ -27,6 +27,7 @@ package info.mcessence.essence.util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+import org.bukkit.Rotation;
 import org.bukkit.potion.PotionEffectType;
 
 import java.sql.Timestamp;
@@ -117,6 +118,27 @@ public class Util {
             return true;
         }
         return false;
+    }
+
+    public static Rotation getRotation(int degrees) {
+        if (degrees >= 337.5 && degrees < 22.5) {
+            return Rotation.NONE;
+        } else if (degrees >= 22.5 && degrees < 67.5) {
+            return Rotation.CLOCKWISE_45;
+        } else if (degrees >= 67.5 && degrees < 112.5) {
+            return Rotation.CLOCKWISE;
+        } else if (degrees >= 112.5 && degrees < 157.5) {
+            return Rotation.CLOCKWISE_135;
+        } else if (degrees >= 157.5 && degrees < 202.5) {
+            return Rotation.FLIPPED;
+        } else if (degrees >= 202.5 && degrees < 247.5) {
+            return Rotation.FLIPPED_45;
+        } else if (degrees >= 247.5 && degrees < 292.5) {
+            return Rotation.COUNTER_CLOCKWISE;
+        } else if (degrees >= 292.5 && degrees < 337.5) {
+            return Rotation.COUNTER_CLOCKWISE_45;
+        }
+        return Rotation.NONE;
     }
 
 

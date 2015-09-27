@@ -26,6 +26,7 @@
 package info.mcessence.essence.commands.player_status;
 
 import info.mcessence.essence.Essence;
+import info.mcessence.essence.commands.CommandOption;
 import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.IntArgument;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
@@ -33,8 +34,9 @@ import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
 import info.mcessence.essence.commands.EssenceCommand;
-import info.mcessence.essence.cmd_options.BoolOption;
-import info.mcessence.essence.cmd_options.IntOption;
+import info.mcessence.essence.arguments.BoolArg;
+import info.mcessence.essence.arguments.IntArg;
+import info.mcessence.essence.util.Debug;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -52,8 +54,8 @@ public class FeedCmd extends EssenceCommand {
                 new IntArgument("amount", ArgumentRequirement.OPTIONAL, "", 0, 20, false)
         };
 
-        addCommandOption("saturation", new IntOption(5, Message.OPT_FEED_SATURATION.msg()));
-        addCommandOption("exhaustion", new BoolOption(true, Message.OPT_FEED_EXHAUSTION.msg()));
+        addCommandOption("saturation", Message.OPT_FEED_SATURATION.msg(), new IntArg(5));
+        addCommandOption("exhaustion", Message.OPT_FEED_EXHAUSTION.msg(), new BoolArg(true));
 
         register();
     }
@@ -76,9 +78,8 @@ public class FeedCmd extends EssenceCommand {
         }
 
         player.setFoodLevel(amount);
-
-        player.setSaturation(result.hasOptionalArg("saturation") ? (Integer)result.getOptionalArg("saturation") : (Integer)cmdOptions.get("saturation").getValue());
-        if (result.hasOptionalArg("exhaustion") ? (Boolean)result.getOptionalArg("exhaustion") : (Boolean)cmdOptions.get("exhaustion").getValue()) {
+        player.setSaturation((Integer)result.getOptionalArg("saturation"));
+        if ((Boolean)result.getOptionalArg("exhaustion")) {
             player.setExhaustion(0F);
         }
 

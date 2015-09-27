@@ -31,7 +31,8 @@ import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResult;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
-import info.mcessence.essence.cmd_options.CommandOption;
+import info.mcessence.essence.arguments.internal.Argument;
+import info.mcessence.essence.util.Debug;
 import info.mcessence.essence.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
@@ -55,7 +56,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     protected CmdArgument[] cmdArgs;
     public Map<String, EMessage> modifiers = new HashMap<String, EMessage>();
     public Map<String, CommandOption> cmdOptions = new HashMap<String, CommandOption>();
-    public Map<String, CommandOption> optionalArgs = new HashMap<String, CommandOption>();
+    public Map<String, Argument> optionalArgs = new HashMap<String, Argument>();
 
     protected static CommandMap commandMap;
 
@@ -197,6 +198,12 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
 
     public ArgumentParseResults parseArgs(EssenceCommand cmd, CommandSender sender, String[] args) {
         ArgumentParseResults result = new ArgumentParseResults();
+        for (Map.Entry<String, Argument> entry : optionalArgs.entrySet()) {
+            if (entry.getValue().hasDefault()) {
+                result.addOptionalArg(entry.getKey(), entry.getValue().getDefault());
+            }
+        }
+
         List<String> argsList = new ArrayList<String>();
         for (String arg : args) {
             if (arg.startsWith("-") && modifiers.containsKey(arg.toLowerCase())) {
@@ -206,21 +213,26 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                     return result;
                 }
                 result.addModifier(arg);
-            } else if (arg.contains(":")) {
+            } else {
                 String[] split = arg.split(":");
-                if (split.length > 1 && !split[0].isEmpty() && !split[1].isEmpty() && optionalArgs.containsKey(split[0])) {
-                    if (!optionalArgs.get(split[0]).isValid(split[1])) {
-                        sender.sendMessage(Message.INVALID_OPTIONAL_ARGUMENT.msg().getMsg(true, split[0], optionalArgs.get(split[0]).getClass().getSimpleName(), split[1]));
-                        result.success = false;
-                        return result;
+                if (optionalArgs.containsKey(split[0].toLowerCase())) {
+                    Argument optionalArg = optionalArgs.get(split[0]);
+                    optionalArg.parse(split.length > 1 ? split[1] : "");
+                    if (!optionalArg.isValid()) {
+                        if (!optionalArg.hasDefault() || (split.length > 1 && !split[1].isEmpty())) {
+                            sender.sendMessage(optionalArg.getError());
+                            result.success = false;
+                            return result;
+                        }
                     }
-                    optionalArgs.get(split[0]).setValue(split[1]);
-                    result.addOptionalArg(split[0], optionalArgs.get(split[0]).getValue());
+                    if (optionalArg.getValue() != null) {
+                        result.addOptionalArg(split[0], optionalArg.getValue());
+                    } else {
+                        result.addOptionalArg(split[0], optionalArg.getDefault());
+                    }
                 } else {
                     argsList.add(arg);
                 }
-            } else {
-                argsList.add(arg);
             }
         }
         args = argsList.toArray(new String[argsList.size()]);
@@ -252,19 +264,19 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         return result;
     }
 
-    public void addCommandOption(String key, CommandOption optionType) {
-        addCommandOption(key, optionType, true);
+    public void addCommandOption(String key, EMessage infoMessage, Argument optionType) {
+        addCommandOption(key, infoMessage, optionType, true);
     }
 
-    public void addCommandOption(String key, CommandOption optionType, boolean addAsArgument) {
-        cmdOptions.put(key, optionType);
+    public void addCommandOption(String key, EMessage infoMessage, Argument argument, boolean addAsArgument) {
+        cmdOptions.put(key, new CommandOption(infoMessage, argument));
         if (addAsArgument) {
-            optionalArgs.put(key, optionType);
+            optionalArgs.put(key, argument.clone());
         }
         ess.getCmdOptions().registerOption(this, key);
     }
 
-    public void addOptionalArgument(String key, CommandOption argumentType) {
+    public void addOptionalArgument(String key, Argument argumentType) {
         optionalArgs.put(key, argumentType);
     }
 
@@ -291,14 +303,14 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         String str_modifiers = Util.implode(modifierList, Message.CMD_HELP_SEPARATOR.msg().getMsg(false));
 
         List<String> optArgList = new ArrayList<String>();
-        for (Map.Entry<String, CommandOption> entry : optionalArgs.entrySet()) {
-            optArgList.add(Message.CMD_HELP_OPT_ARG.msg().getMsg(false, entry.getKey(), entry.getValue().getInfo().getMsg(false), entry.getValue().getDefaultValue().toString()));
+        for (Map.Entry<String, Argument> entry : optionalArgs.entrySet()) {
+            optArgList.add(Message.CMD_HELP_OPT_ARG.msg().getMsg(false, entry.getKey(), entry.getValue().getDescription(), entry.getValue().getDefault().toString()));
         }
         String str_optargs = Util.implode(optArgList, Message.CMD_HELP_SEPARATOR.msg().getMsg(false));
 
         List<String> optList = new ArrayList<String>();
         for (Map.Entry<String, CommandOption> entry : cmdOptions.entrySet()) {
-            optList.add(Message.CMD_HELP_OPTION.msg().getMsg(false, entry.getKey(), entry.getValue().getInfo().getMsg(false), entry.getValue().getValue().toString()));
+            optList.add(Message.CMD_HELP_OPTION.msg().getMsg(false, entry.getKey(), entry.getValue().getInfo().getMsg(false), entry.getValue().getArg().getValue().toString()));
         }
         String str_options = Util.implode(optList, Message.CMD_HELP_SEPARATOR.msg().getMsg(false));
 

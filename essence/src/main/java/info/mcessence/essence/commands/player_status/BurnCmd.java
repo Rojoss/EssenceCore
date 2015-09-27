@@ -26,13 +26,13 @@
 package info.mcessence.essence.commands.player_status;
 
 import info.mcessence.essence.Essence;
+import info.mcessence.essence.arguments.BoolArg;
 import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.IntArgument;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
-import info.mcessence.essence.cmd_options.BoolOption;
 import info.mcessence.essence.commands.EssenceCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -52,7 +52,7 @@ public class BurnCmd extends EssenceCommand {
 
         addModifier("-i", Message.MOD_BURN_INCREMENT.msg());
 
-        addCommandOption("ticks-instead-of-seconds", new BoolOption(true, Message.OPT_BURN_TICKS.msg()));
+        addCommandOption("ticks-instead-of-seconds", Message.OPT_BURN_TICKS.msg(), new BoolArg(true));
 
         register();
 
@@ -66,13 +66,11 @@ public class BurnCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        int duration = (int)result.getValue(0).getValue();
         Player player = result.getValue(1).getValue() == null ? (Player)sender : (Player)result.getValue(1).getValue();
 
-        int ticks = duration;
-
-        if (!result.hasOptionalArg("ticks-instead-of-seconds")) {
-            ticks = duration * 20;
+        int ticks = (int)result.getValue(0).getValue() * 20;
+        if ((Boolean)result.getOptionalArg("ticks-instead-of-seconds")) {
+            ticks /= 20;
         }
 
         if (ticks < 0) {
@@ -88,9 +86,9 @@ public class BurnCmd extends EssenceCommand {
         }
 
         if (!result.hasModifier("-s")) {
-            player.sendMessage(Message.CMD_BURN.msg().getMsg(true, Integer.toString(duration)));
+            player.sendMessage(Message.CMD_BURN.msg().getMsg(true, Integer.toString(ticks)));
             if (!sender.equals(player)) {
-                sender.sendMessage(Message.CMD_HEAL_OTHER.msg().getMsg(true, player.getDisplayName(), Integer.toString(duration)));
+                sender.sendMessage(Message.CMD_HEAL_OTHER.msg().getMsg(true, player.getDisplayName(), Integer.toString(ticks)));
             }
         }
 

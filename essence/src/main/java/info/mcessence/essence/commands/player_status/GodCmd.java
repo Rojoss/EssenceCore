@@ -32,7 +32,7 @@ import info.mcessence.essence.cmd_arguments.PlayerArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
-import info.mcessence.essence.cmd_options.BoolOption;
+import info.mcessence.essence.arguments.BoolArg;
 import info.mcessence.essence.commands.EssenceCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -53,8 +53,8 @@ public class GodCmd extends EssenceCommand {
         };
 
         addModifier("-r", Message.MOD_GOD_RESET.msg());
-        addCommandOption("no-hunger-loss", new BoolOption(true, Message.OPT_NO_HUNGER_LOSS.msg()));
-        addCommandOption("no-damage", new BoolOption(true, Message.OPT_NO_DAMAGE.msg()));
+        addCommandOption("no-hunger-loss", Message.OPT_NO_HUNGER_LOSS.msg(), new BoolArg(true));
+        addCommandOption("no-damage", Message.OPT_NO_DAMAGE.msg(), new BoolArg(true));
 
         register();
 

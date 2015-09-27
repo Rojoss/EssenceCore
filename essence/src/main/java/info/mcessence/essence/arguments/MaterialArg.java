@@ -23,52 +23,53 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.cmd_options;
+package info.mcessence.essence.arguments;
 
-import info.mcessence.essence.message.EMessage;
-import info.mcessence.essence.util.NumberUtil;
+import info.mcessence.essence.aliases.Items;
+import info.mcessence.essence.arguments.internal.Argument;
+import info.mcessence.essence.message.Message;
+import org.bukkit.material.MaterialData;
 
-public class IntOption implements CommandOption {
+public class MaterialArg extends Argument {
 
-    private EMessage info;
-    private Integer defaultValue;
-    private Integer value;
-
-    public IntOption(int defaultValue, EMessage info) {
-        this.defaultValue = defaultValue;
-        this.info = info;
+    public MaterialArg(String name) {
+        super(name);
     }
 
-    public boolean isValid(String input) {
+    public MaterialArg(MaterialData defaultValue) {
+        super(defaultValue);
+    }
+
+    public MaterialArg(String name, MaterialData defaultValue) {
+        super(name, defaultValue);
+    }
+
+    @Override
+    public boolean parse(String input) {
+        success = true;
         if (input == null || input.isEmpty()) {
-            return false;
+            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().getMsg(true, name) : Message.NO_ARG_VALUE.msg().getMsg(true);
+            success = false;
+            return success;
         }
-        if (NumberUtil.getInt(input) == null) {
-            return false;
-        }
-        return true;
-    }
 
-    public boolean setValue(String input) {
-        if (NumberUtil.getInt(input) != null) {
-            this.value = NumberUtil.getInt(input);
-            return true;
-        }
-        return false;
-    }
-
-    public Object getValue() {
+        value = Items.getMaterialData(input);
         if (value == null) {
-            return defaultValue;
+            error = Message.NOT_A_MATERIAL.msg().getMsg(true, input);
+            success = false;
+            return success;
         }
-        return value;
+
+        return success;
     }
 
-    public Object getDefaultValue() {
-        return defaultValue;
+    @Override
+    public MaterialArg clone() {
+        return new MaterialArg(name, ((MaterialData)defaultValue).clone());
     }
 
-    public EMessage getInfo() {
-        return info;
+    @Override
+    public String getDescription() {
+        return Message.ARG_MATERIAL.msg().getMsg(false);
     }
 }

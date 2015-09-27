@@ -23,45 +23,50 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.cmd_options;
+package info.mcessence.essence.arguments;
 
-import info.mcessence.essence.message.EMessage;
+import info.mcessence.essence.arguments.internal.Argument;
+import info.mcessence.essence.message.Message;
+import info.mcessence.essence.util.NumberUtil;
 
-public class StringOption implements CommandOption {
+public class FloatArg extends Argument {
 
-    private EMessage info;
-    private String defaultValue;
-    private String value;
-
-    public StringOption(String defaultValue, EMessage info) {
-        this.defaultValue = defaultValue;
-        this.info = info;
+    public FloatArg(String name) {
+        super(name);
     }
 
-    public boolean isValid(String input) {
+    public FloatArg(float defaultValue) {
+        super(defaultValue);
+    }
+
+    public FloatArg(String name, float defaultValue) {
+        super(name, defaultValue);
+    }
+
+    @Override
+    public boolean parse(String input) {
+        success = true;
         if (input == null || input.isEmpty()) {
-            return false;
+            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().getMsg(true, name) : Message.NO_ARG_VALUE.msg().getMsg(true);
+            success = false;
+            return success;
         }
-        return true;
-    }
-
-    public boolean setValue(String input) {
-        this.value = input;
-        return true;
-    }
-
-    public Object getValue() {
-        if (value == null || value.isEmpty()) {
-            return defaultValue;
+        value = NumberUtil.getFloat(input);
+        if (value == null) {
+            error = Message.NOT_A_DECIMAL.msg().getMsg(true, input);
+            success = false;
+            return success;
         }
-        return value;
+        return success;
     }
 
-    public Object getDefaultValue() {
-        return defaultValue;
+    @Override
+    public FloatArg clone() {
+        return new FloatArg(name, (Float)defaultValue);
     }
 
-    public EMessage getInfo() {
-        return info;
+    @Override
+    public String getDescription() {
+        return Message.ARG_DECIMAL.msg().getMsg(false);
     }
 }

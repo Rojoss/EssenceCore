@@ -26,6 +26,7 @@
 package info.mcessence.essence.aliases;
 
 import org.bukkit.Material;
+import org.bukkit.material.MaterialData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,6 +78,14 @@ public class Items {
             return getItem(match.getType(), (short)0);
         }
         return dataMatch;
+    }
+
+    public static MaterialData getMaterialData(String string) {
+        ItemAlias alias = getItem(string);
+        if (alias == null) {
+            return null;
+        }
+        return new MaterialData(alias.getType(), (byte)alias.getData());
     }
 
 

@@ -32,7 +32,7 @@ import info.mcessence.essence.cmd_arguments.StringArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
-import info.mcessence.essence.cmd_options.BoolOption;
+import info.mcessence.essence.arguments.BoolArg;
 import info.mcessence.essence.commands.EssenceCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -50,7 +50,7 @@ public class WarpCmd extends EssenceCommand {
                 new PlayerArgument("player", ArgumentRequirement.REQUIRED_CONSOLE, "others")
         };
 
-        addCommandOption("permission-based-warps", new BoolOption(true, Message.OPT_WARP_PERM_BASED.msg()), false);
+        addCommandOption("permission-based-warps", Message.OPT_WARP_PERM_BASED.msg(), new BoolArg(true), false);
 
         register();
     }
@@ -71,7 +71,7 @@ public class WarpCmd extends EssenceCommand {
             return true;
         }
 
-        if ((Boolean)cmdOptions.get("permission-based-warps").getValue()) {
+        if ((Boolean)cmdOptions.get("permission-based-warps").getArg().getValue()) {
             if (!sender.hasPermission("essence.*") && !sender.hasPermission("essence.warps.*") && !sender.hasPermission("essence.warps." + name)) {
                 player.sendMessage(Message.NO_PERM.msg().getMsg(true, "essence.warps." + name));
                 return true;

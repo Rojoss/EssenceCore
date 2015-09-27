@@ -32,8 +32,8 @@ import info.mcessence.essence.cmd_arguments.StringArgument;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
-import info.mcessence.essence.cmd_options.IntOption;
-import info.mcessence.essence.cmd_options.StringOption;
+import info.mcessence.essence.arguments.IntArg;
+import info.mcessence.essence.arguments.StringArg;
 import info.mcessence.essence.commands.EssenceCommand;
 import info.mcessence.essence.util.Util;
 import org.bukkit.command.Command;
@@ -47,12 +47,12 @@ public class NicknameCmd extends EssenceCommand {
     public NicknameCmd(Essence ess, String command, String description, String permission, List<String> aliases) {
         super(ess, command, description, permission, aliases);
 
-        addCommandOption("prefix", new StringOption("~", Message.OPT_NICK_PREFIX.msg()), false);
-        addCommandOption("min-characters", new IntOption(3, Message.OPT_NICK_MIN_CHARS.msg()), false);
-        addCommandOption("max-characters", new IntOption(16, Message.OPT_NICK_MAX_CHARS.msg()), false);
+        addCommandOption("prefix", Message.OPT_NICK_PREFIX.msg(), new StringArg("~"), false);
+        addCommandOption("min-characters", Message.OPT_NICK_MIN_CHARS.msg(), new IntArg(3), false);
+        addCommandOption("max-characters", Message.OPT_NICK_MAX_CHARS.msg(), new IntArg(16), false);
 
         cmdArgs = new CmdArgument[] {
-                new StringArgument("nickname", ArgumentRequirement.REQUIRED, "", (Integer)cmdOptions.get("min-characters").getValue(), (Integer)cmdOptions.get("max-characters").getValue()),
+                new StringArgument("nickname", ArgumentRequirement.REQUIRED, "", (Integer)cmdOptions.get("min-characters").getArg().getValue(), (Integer)cmdOptions.get("max-characters").getArg().getValue()),
                 new PlayerArgument("player", ArgumentRequirement.REQUIRED_CONSOLE, "others")
         };
 
@@ -73,9 +73,9 @@ public class NicknameCmd extends EssenceCommand {
         Player player = result.getValue(1).getValue() == null ? (Player)sender : (Player)result.getValue(1).getValue();
 
         if (hasPermission(sender, "color")) {
-            player.setDisplayName(Util.color((String)cmdOptions.get("prefix").getValue() + nick));
+            player.setDisplayName(Util.color((String)cmdOptions.get("prefix").getArg().getValue() + nick));
         } else {
-            player.setDisplayName((String)cmdOptions.get("prefix").getValue() + nick);
+            player.setDisplayName((String)cmdOptions.get("prefix").getArg().getValue() + nick);
         }
 
         if (!result.hasModifier("-s")) {

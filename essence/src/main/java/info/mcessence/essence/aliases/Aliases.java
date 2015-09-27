@@ -34,10 +34,7 @@ import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Rabbit;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Aliases {
 
@@ -51,6 +48,16 @@ public class Aliases {
         return new ArrayList<Alias>();
     }
 
+    public static Map<String, List<String>> getAliasesMap(AliasType aliasType) {
+        if (aliases.containsKey(aliasType)) {
+            Map<String, List<String>> resultMap = new HashMap<String, List<String>>();
+            for (Alias alias : aliases.get(aliasType)) {
+                resultMap.put(alias.getName(), alias.getAliases());
+            }
+            return resultMap;
+        }
+        return Collections.emptyMap();
+    }
 
     public static Enchantment getEnchantment(String string) {
         try {
@@ -289,7 +296,7 @@ public class Aliases {
         //Game modes
         list.clear();
         currentType = AliasType.GAME_MODE;
-        list.add(getAlias(GameMode.SURVIVAL, "Surival", new String[] {"0", "sur", "s", "main", "survive"}));
+        list.add(getAlias(GameMode.SURVIVAL, "Survival", new String[] {"0", "sur", "s", "main", "survive"}));
         list.add(getAlias(GameMode.CREATIVE, "Creative", new String[]{"1", "cre", "c", "crea"}));
         list.add(getAlias(GameMode.ADVENTURE, "Adventure", new String[]{"2", "adv", "a"}));
         list.add(getAlias(GameMode.SPECTATOR, "Spectator", new String[]{"3", "spe", "sp", "spec"}));

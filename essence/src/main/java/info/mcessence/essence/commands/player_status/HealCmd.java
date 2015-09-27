@@ -26,6 +26,7 @@
 package info.mcessence.essence.commands.player_status;
 
 import info.mcessence.essence.Essence;
+import info.mcessence.essence.arguments.BoolArg;
 import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.DoubleArgument;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
@@ -33,7 +34,6 @@ import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
 import info.mcessence.essence.commands.EssenceCommand;
-import info.mcessence.essence.cmd_options.BoolOption;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -52,9 +52,9 @@ public class HealCmd extends EssenceCommand {
                 new DoubleArgument("max", ArgumentRequirement.OPTIONAL, "max", 1, 2048, false)
         };
 
-        addCommandOption("feed", new BoolOption(true, Message.OPT_HEAL_FEED.msg()));
-        addCommandOption("clear-effects", new BoolOption(true, Message.OPT_HEAL_CLEAR_EFFECTS.msg()));
-        addCommandOption("extinguish", new BoolOption(true, Message.OPT_HEAL_EXTINGUISH.msg()));
+        addCommandOption("feed", Message.OPT_HEAL_FEED.msg(), new BoolArg(true));
+        addCommandOption("clear-effects", Message.OPT_HEAL_CLEAR_EFFECTS.msg(), new BoolArg(true));
+        addCommandOption("extinguish", Message.OPT_HEAL_EXTINGUISH.msg(), new BoolArg(true));
 
         addModifier("-h", Message.MOD_HEAL_ONLY.msg());
         addModifier("-m", Message.MOD_HEAL_MAX_ONLY.msg());
@@ -92,14 +92,14 @@ public class HealCmd extends EssenceCommand {
             }
         }
 
-        if (result.hasOptionalArg("feed") ? (Boolean)result.getOptionalArg("feed") : (Boolean)cmdOptions.get("feed").getValue()) {
+        if ((Boolean)result.getOptionalArg("feed")) {
             player.setFoodLevel(20);
         }
 
-        if (result.hasOptionalArg("extinguish") ? (Boolean)result.getOptionalArg("extinguish") : (Boolean)cmdOptions.get("extinguish").getValue()) {
+        if ((Boolean)result.getOptionalArg("extinguish")) {
             player.setFireTicks(0);
         }
-        if (result.hasOptionalArg("clear-effects") ? (Boolean)result.getOptionalArg("clear-effects") : (Boolean)cmdOptions.get("clear-effects").getValue()) {
+        if ((Boolean)result.getOptionalArg("clear-effects")) {
             for (PotionEffect effect : player.getActivePotionEffects()) {
                 player.removePotionEffect(effect.getType());
             }

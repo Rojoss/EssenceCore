@@ -23,19 +23,26 @@
  * THE SOFTWARE.
  */
 
-package info.mcessence.essence.cmd_options;
+package info.mcessence.essence.commands;
 
+import info.mcessence.essence.arguments.internal.Argument;
 import info.mcessence.essence.message.EMessage;
 
-public interface CommandOption {
+public class CommandOption {
 
-    boolean isValid(String input);
+    private EMessage infoMessage;
+    private Argument argument;
 
-    boolean setValue(String input);
+    public CommandOption(EMessage infoMessage, Argument argument) {
+        this.infoMessage = infoMessage;
+        this.argument = argument;
+    }
 
-    Object getValue();
+    public EMessage getInfo() {
+        return infoMessage;
+    }
 
-    Object getDefaultValue();
-
-    EMessage getInfo();
+    public Argument getArg() {
+        return argument;
+    }
 }

@@ -30,17 +30,13 @@ import info.mcessence.essence.cmd_arguments.*;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
-import info.mcessence.essence.cmd_options.BoolOption;
 import info.mcessence.essence.commands.EssenceCommand;
-import info.mcessence.essence.message.Message;
 import info.mcessence.essence.modules.Module;
 import info.mcessence.essence.modules.ban.BanModule;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityRegainHealthEvent;
-import org.bukkit.potion.PotionEffect;
 
 import java.util.List;
 

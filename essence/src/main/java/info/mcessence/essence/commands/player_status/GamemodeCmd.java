@@ -26,6 +26,8 @@
 package info.mcessence.essence.commands.player_status;
 
 import info.mcessence.essence.Essence;
+import info.mcessence.essence.aliases.AliasType;
+import info.mcessence.essence.aliases.Aliases;
 import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.MappedListArgument;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
@@ -49,14 +51,8 @@ public class GamemodeCmd extends EssenceCommand {
     public GamemodeCmd(Essence ess, String command, String description, String permission, List<String> aliases) {
         super(ess, command, description, permission, aliases);
 
-        Map<String, List<String>> modes = new HashMap<String, List<String>>();
-        modes.put("survival", Arrays.asList("survival", "0", "sur", "s"));
-        modes.put("creative", Arrays.asList("creative", "1", "crea", "c"));
-        modes.put("adventure", Arrays.asList("adventure", "2", "adv", "a"));
-        modes.put("spectator", Arrays.asList("spectator", "3", "spec", "sp"));
-
         cmdArgs = new CmdArgument[] {
-                new MappedListArgument("mode", ArgumentRequirement.REQUIRED, "", modes),
+                new MappedListArgument("mode", ArgumentRequirement.REQUIRED, "", Aliases.getAliasesMap(AliasType.GAME_MODE)),
                 new PlayerArgument("player", ArgumentRequirement.OPTIONAL, "others")
         };
 

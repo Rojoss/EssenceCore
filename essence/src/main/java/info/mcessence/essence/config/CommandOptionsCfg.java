@@ -26,8 +26,9 @@
 package info.mcessence.essence.config;
 
 import info.mcessence.essence.Essence;
+import info.mcessence.essence.commands.CommandOption;
 import info.mcessence.essence.commands.EssenceCommand;
-import info.mcessence.essence.cmd_options.CommandOption;
+import info.mcessence.essence.arguments.internal.Argument;
 
 import java.util.HashMap;
 import java.util.List;
@@ -87,24 +88,26 @@ public class CommandOptionsCfg extends EasyConfig {
     }
 
     public void registerOption(EssenceCommand command, String optionKey, Map<String, String> options) {
-        CommandOption cmdOption = command.cmdOptions.get(optionKey);
+        Argument cmdOption = command.cmdOptions.get(optionKey).getArg();
         if (cmdOption == null) {
             return;
         }
         if (!options.containsKey(optionKey)) {
             //Insert option to config.
-            options.put(optionKey, cmdOption.getDefaultValue().toString());
+            options.put(optionKey, cmdOption.getDefault().toString());
             COMMAND_OPTIONS.put(command.getLabel(), options);
             save();
         } else {
             //Update option value with config value if it's valid.
-            if (cmdOption.isValid(options.get(optionKey))) {
-                cmdOption.setValue(options.get(optionKey));
-            } else {
+            cmdOption.parse(options.get(optionKey));
+            if (!cmdOption.isValid()) {
                 //Send an error to the console (it will use the default value)
                 Essence.inst().warn("Invalid command option specified for command " + command.getLabel() + "!");
-                Essence.inst().warn("Expecting a " + cmdOption.getClass().getName().replace("Option","") + " for the option " + optionKey + " but found '" + options.get(optionKey) + "'");
+                Essence.inst().warn(cmdOption.getError());
             }
+        }
+        if (command.optionalArgs.containsKey(optionKey)) {
+            command.optionalArgs.get(optionKey).setDefault(cmdOption.getValue());
         }
     }
 

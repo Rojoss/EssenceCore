@@ -27,6 +27,8 @@ package info.mcessence.essence.commands.player_status;
 
 
 import info.mcessence.essence.Essence;
+import info.mcessence.essence.aliases.AliasType;
+import info.mcessence.essence.aliases.Aliases;
 import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.MappedListArgument;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
@@ -48,11 +50,7 @@ public class RemoveEffectCmd extends EssenceCommand {
     public RemoveEffectCmd(Essence ess, String command, String description, String permission, List<String> aliases) {
         super(ess, command, description, permission, aliases);
 
-        Map<String, List<String>> effects = new HashMap<String, List<String>>();
-        effects.put("BLINDNESS", Arrays.asList("blindness"));
-        effects.put("FIRE_RESISTANCE", Arrays.asList("fire_resistance"));
-        effects.put("DAMAGE_RESISTANCE", Arrays.asList("damage_resistance", "resistance"));
-        effects.put("FAST_DIGGING", Arrays.asList("fast_digging", "haste"));
+        Map<String, List<String>> effects = Aliases.getAliasesMap(AliasType.POTION_EFFECT);
         effects.put("ALL", Arrays.asList("all", "*"));
 
         cmdArgs = new CmdArgument[] {

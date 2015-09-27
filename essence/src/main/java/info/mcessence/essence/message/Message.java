@@ -52,6 +52,7 @@ public enum Message {
     TOO_MUCH_CHARACTERS(MsgCat.VALIDATION, "&4{1} &cis too long! &7Can't have more than &8{1} &7characters."),
     NO_ARG_VALUE_NAME(MsgCat.VALIDATION, "&cMissing value for argument &4{0}&c! &7Specify the value after the semicolon!"),
     NO_ARG_VALUE(MsgCat.VALIDATION, "&cMissing argument value after the semicolon!"),
+    INVALID_ENITY_TYPE(MsgCat.VALIDATION, "&4{0} &cis not a valid entity type! &7&l/entities &cfor a list!"),
 
     //Item parser error messages
     PARSER_VALID(MsgCat.ITEM_PARSER, "&6This is a valid item."),

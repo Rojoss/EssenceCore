@@ -32,13 +32,17 @@ import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
 import info.mcessence.essence.commands.EssenceCommand;
 import info.mcessence.essence.entity.EItem;
+import info.mcessence.essence.entity.EntityTag;
+import info.mcessence.essence.parsers.EntityParser;
+import info.mcessence.essence.util.Debug;
 import info.mcessence.essence.util.InvUtil;
 import info.mcessence.essence.parsers.ItemParser;
+import info.mcessence.essence.util.Util;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -50,7 +54,7 @@ public class TestCmd extends EssenceCommand {
     public TestCmd(Essence ess, String command, String description, String permission, List<String> aliases) {
         super(ess, command, description, permission, aliases);
 
-        List<String> testArgs = Arrays.asList("items", "itemstring");
+        List<String> testArgs = Arrays.asList("items", "itemstring", "entity");
 
         cmdArgs = new CmdArgument[] {
                 new ListArgument("type", ArgumentRequirement.REQUIRED, "", testArgs)
@@ -81,6 +85,10 @@ public class TestCmd extends EssenceCommand {
         }
         if (args[0].equalsIgnoreCase("itemstring")) {
             itemString(player);
+        }
+        if (args[0].equalsIgnoreCase("entity")) {
+            entityParseTest(player);
+            return true;
         }
 
         return true;
@@ -135,4 +143,10 @@ public class TestCmd extends EssenceCommand {
             player.sendMessage(parser.getString());
         }
     }
+
+    public void entityParseTest(Player player) {
+        new EntityParser("blaze(health:1)>spider(health:200)>armorstand(marker:true,name:\"&a&lExample > test\",namevisible:true,helmet:\"humanhead 1 player:Worstboy\",baseplate:false)", player.getLocation(), false);
+        Debug.bc(Util.implode(EntityTag.getTags(EntityType.ARMOR_STAND), "&8,&7"));
+    }
+
 }

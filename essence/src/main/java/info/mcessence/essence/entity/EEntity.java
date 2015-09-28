@@ -68,6 +68,10 @@ public class EEntity {
     public static EEntity create(EntityType type, Location location) {
         if (type.isSpawnable()) {
             return new EEntity(location.getWorld().spawnEntity(location, type));
+        } else if (type == EntityType.DROPPED_ITEM) {
+            return new EEntity(location.getWorld().dropItem(location, new EItem(Material.STONE)));
+        } else if (type == EntityType.FALLING_BLOCK) {
+            return new EEntity(location.getWorld().spawnFallingBlock(location, Material.SAND, (byte) 0));
         } else {
             return new EEntity(location.getWorld().spawn(location, type.getEntityClass()));
         }

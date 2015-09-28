@@ -82,7 +82,7 @@ public class EntityParser {
             if (chars[i] == '"') {
                 quote = !quote;
             }
-            if ((chars[i] == '>' || chars[i] == '-') && (!quote && prev != '\\')) {
+            if ((chars[i] == '>' || chars[i] == '=') && (!quote && prev != '\\')) {
                 connections.add(chars[i]);
                 sections.add(str);
                 str = "";

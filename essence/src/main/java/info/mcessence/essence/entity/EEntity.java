@@ -68,6 +68,10 @@ public class EEntity {
     public static EEntity create(EntityType type, Location location) {
         if (type.isSpawnable()) {
             return new EEntity(location.getWorld().spawnEntity(location, type));
+        } else if (type == EntityType.DROPPED_ITEM) {
+            return new EEntity(location.getWorld().dropItem(location, new EItem(Material.STONE)));
+        } else if (type == EntityType.FALLING_BLOCK) {
+            return new EEntity(location.getWorld().spawnFallingBlock(location, Material.SAND, (byte) 0));
         } else {
             return new EEntity(location.getWorld().spawn(location, type.getEntityClass()));
         }
@@ -209,6 +213,8 @@ public class EEntity {
     public EEntity setVelocity(Vector velocity) {
         if (entity instanceof Vehicle) {
             ((Vehicle)entity).setVelocity(velocity);
+        } else if (entity instanceof Fireball) {
+            ((Fireball)entity).setDirection(velocity);
         } else {
             entity.setVelocity(velocity);
         }
@@ -219,6 +225,8 @@ public class EEntity {
     public EEntity setVelocity(Float x, Float y, Float z) {
         if (entity instanceof Vehicle) {
             ((Vehicle)entity).setVelocity(new Vector(x,y,z));
+        } else if (entity instanceof Fireball) {
+            ((Fireball)entity).setDirection(new Vector(x, y, z));
         } else {
             entity.setVelocity(new Vector(x,y,z));
         }
@@ -229,6 +237,8 @@ public class EEntity {
     public Vector getVelocity() {
         if (entity instanceof Vehicle) {
             return ((Vehicle)entity).getVelocity();
+        } else if (entity instanceof Fireball) {
+            return ((Fireball)entity).getDirection();
         }
         return entity.getVelocity();
     }
@@ -284,7 +294,7 @@ public class EEntity {
     }
 
     /** @see Entity#setFireTicks(int) */
-    public EEntity setFireTicks(int ticks) {
+    public EEntity setFireTicks(Integer ticks) {
         entity.setFireTicks(ticks);
         return this;
     }
@@ -300,7 +310,7 @@ public class EEntity {
     }
 
     /** @see Entity#setTicksLived(int) */
-    public EEntity setTicksLived(int ticks) {
+    public EEntity setTicksLived(Integer ticks) {
         entity.setTicksLived(ticks);
         return this;
     }
@@ -569,7 +579,7 @@ public class EEntity {
     }
 
     /** @see LivingEntity#setNoDamageTicks(int) */
-    public EEntity setNoDamageTicks(int ticks) {
+    public EEntity setNoDamageTicks(Integer ticks) {
         if (entity instanceof LivingEntity) {
             ((LivingEntity)entity).setNoDamageTicks(ticks);
         }
@@ -577,7 +587,7 @@ public class EEntity {
     }
 
     /** @see LivingEntity#setMaximumNoDamageTicks(int) */
-    public EEntity setMaxNoDamageTicks(int ticks) {
+    public EEntity setMaxNoDamageTicks(Integer ticks) {
         if (entity instanceof LivingEntity) {
             ((LivingEntity)entity).setMaximumNoDamageTicks(ticks);
         }
@@ -602,7 +612,7 @@ public class EEntity {
 
     //Air
     /** @see LivingEntity#setRemainingAir(int) */
-    public EEntity setAir(int ticks) {
+    public EEntity setAir(Integer ticks) {
         if (entity instanceof LivingEntity) {
             ((LivingEntity)entity).setRemainingAir(ticks);
         }
@@ -619,7 +629,7 @@ public class EEntity {
 
     //Max health
     /** @see LivingEntity#setMaximumAir(int) */
-    public EEntity setMaxAir(int ticks) {
+    public EEntity setMaxAir(Integer ticks) {
         if (entity instanceof LivingEntity) {
             ((LivingEntity)entity).setMaximumAir(ticks);
         }
@@ -703,7 +713,7 @@ public class EEntity {
     }
 
     /** @see Ageable#setAge(int) */
-    public EEntity setAge(int age) {
+    public EEntity setAge(Integer age) {
         if (entity instanceof Ageable) {
             ((Ageable)entity).setAge(age);
         }
@@ -722,6 +732,19 @@ public class EEntity {
     public EEntity setAgeLock(Boolean lock) {
         if (entity instanceof Ageable) {
             ((Ageable)entity).setAgeLock(lock);
+        }
+        return this;
+    }
+
+    /**
+     * @see #setBaby()
+     * @see #setAdult()
+     */
+    public EEntity setBaby(Boolean baby) {
+        if (baby) {
+            setBaby();
+        } else {
+            setAdult();
         }
         return this;
     }
@@ -883,87 +906,6 @@ public class EEntity {
     // ################## ARMOR STAND ###################
     // ##################################################
     //region Armor stands
-
-    //ITEMS
-    /** @see ArmorStand#getItemInHand() */
-    public ItemStack getItemInHand() {
-        if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).getItemInHand();
-        }
-        return null;
-    }
-
-    /** @see ArmorStand#setItemInHand(ItemStack) */
-    public EEntity setItemInHand(EItem item) {
-        if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setItemInHand(item);
-        }
-        return this;
-    }
-
-    /** @see ArmorStand#getBoots() */
-    public ItemStack getBoots() {
-        if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).getBoots();
-        }
-        return null;
-    }
-
-    /** @see ArmorStand#setBoots(ItemStack) */
-    public EEntity setBoots(EItem item) {
-        if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setBoots(item);
-        }
-        return this;
-    }
-
-    /** @see ArmorStand#getLeggings() */
-    public ItemStack getLeggings() {
-        if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).getLeggings();
-        }
-        return null;
-    }
-
-    /** @see ArmorStand#setLeggings(ItemStack) */
-    public EEntity setLeggings(EItem item) {
-        if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setLeggings(item);
-        }
-        return this;
-    }
-
-    /** @see ArmorStand#getChestplate() */
-    public ItemStack getChestplate() {
-        if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).getChestplate();
-        }
-        return null;
-    }
-
-    /** @see ArmorStand#setChestplate(ItemStack) */
-    public EEntity setChestplate(EItem item) {
-        if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setChestplate(item);
-        }
-        return this;
-    }
-
-    /** @see ArmorStand#getHelmet() */
-    public ItemStack getHelmet() {
-        if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).getHelmet();
-        }
-        return null;
-    }
-
-    /** @see ArmorStand#setHelmet(ItemStack) */
-    public EEntity setHelmet(EItem item) {
-        if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setHelmet(item);
-        }
-        return this;
-    }
 
     //POSE
     /** @see ArmorStand#getBodyPose() */
@@ -1196,7 +1138,7 @@ public class EEntity {
     }
 
     /** @see Arrow#setKnockbackStrength(int) */
-    public EEntity setKnockbackStrength(int knockback) {
+    public EEntity setKnockbackStrength(Integer knockback) {
         if (entity instanceof Arrow) {
             ((Arrow)entity).setKnockbackStrength(knockback);
         }
@@ -1305,7 +1247,7 @@ public class EEntity {
     }
 
     /** @see ExperienceOrb#setExperience(int) */
-    public EEntity setExperience(int exp) {
+    public EEntity setExperience(Integer exp) {
         if (entity instanceof ExperienceOrb) {
             ((ExperienceOrb)entity).setExperience(exp);
         }
@@ -1370,40 +1312,6 @@ public class EEntity {
 
 
     // ##################################################
-    // #################### FIREBALL ####################
-    // ##################################################
-    //region Fireballs
-
-    /** @see Fireball#getDirection() */
-    public Vector getDirection() {
-        //TODO: Use getvelocity for this.
-        if (entity instanceof Fireball) {
-            return ((Fireball)entity).getDirection();
-        }
-        return null;
-    }
-
-    /** @see Fireball#setDirection(Vector) */
-    public EEntity setDirection(Vector direction) {
-        //TODO: Use setvelocity for this.
-        if (entity instanceof Fireball) {
-            ((Fireball)entity).setDirection(direction);
-        }
-        return this;
-    }
-
-    /** @see Fireball#setDirection(Vector) */
-    public EEntity setDirection(Float x, Float y, Float z) {
-        //TODO: Use setvelocity for this.
-        if (entity instanceof Fireball) {
-            ((Fireball)entity).setDirection(new Vector(x,y,z));
-        }
-        return this;
-    }
-    //endregion
-
-
-    // ##################################################
     // #################### FIREWORK ####################
     // ##################################################
     //region Firework rockets
@@ -1448,7 +1356,7 @@ public class EEntity {
     }
 
     /** @see Item#setPickupDelay(int) */
-    public EEntity setPickupDelay(int ticks) {
+    public EEntity setPickupDelay(Integer ticks) {
         if (entity instanceof Item) {
             ((Item)entity).setPickupDelay(ticks);
         }
@@ -1605,7 +1513,7 @@ public class EEntity {
     }
 
     /** @see Minecart#setDisplayBlockOffset(int) */
-    public EEntity setDisplayBlockOffset(int offset) {
+    public EEntity setDisplayBlockOffset(Integer offset) {
         if (entity instanceof Minecart) {
             ((Minecart)entity).setDisplayBlockOffset(offset);
         }
@@ -1674,7 +1582,7 @@ public class EEntity {
     }
 
     /** @see TNTPrimed#setFuseTicks(int) */
-    public EEntity setFuseTicks(int ticks) {
+    public EEntity setFuseTicks(Integer ticks) {
         if (entity instanceof TNTPrimed) {
             ((TNTPrimed)entity).setFuseTicks(ticks);
         }
@@ -1887,7 +1795,7 @@ public class EEntity {
     }
 
     /** @see Horse#setDomestication(int) */
-    public EEntity setDomestication(int knockback) {
+    public EEntity setDomestication(Integer knockback) {
         if (entity instanceof Horse) {
             ((Horse)entity).setDomestication(knockback);
         }
@@ -1903,7 +1811,7 @@ public class EEntity {
     }
 
     /** @see Horse#setMaxDomestication(int) */
-    public EEntity setMaxDomestication(int knockback) {
+    public EEntity setMaxDomestication(Integer knockback) {
         if (entity instanceof Horse) {
             ((Horse)entity).setMaxDomestication(knockback);
         }
@@ -2029,29 +1937,6 @@ public class EEntity {
 
 
     // ##################################################
-    // ###################### PIG #######################
-    // ##################################################
-    //region Pigs
-
-    /** @see Pig#hasSaddle() */
-    public Boolean hasSaddle() {
-        if (entity instanceof Pig) {
-            return ((Pig)entity).hasSaddle();
-        }
-        return false;
-    }
-
-    /** @see Pig#setSaddle(boolean) */
-    public EEntity setSaddle(Boolean saddle) {
-        if (entity instanceof Pig) {
-            ((Pig)entity).setSaddle(saddle);
-        }
-        return this;
-    }
-    //endregion
-
-
-    // ##################################################
     // ################### PIG ZOMBIE ###################
     // ##################################################
     //region Pig zombies
@@ -2065,7 +1950,7 @@ public class EEntity {
     }
 
     /** @see PigZombie#setAnger(int) */
-    public EEntity setAnger(int anger) {
+    public EEntity setAnger(Integer anger) {
         if (entity instanceof PigZombie) {
             ((PigZombie)entity).setAnger(anger);
         }
@@ -2140,6 +2025,18 @@ public class EEntity {
         }
         return this;
     }
+
+    /** @see Skeleton#setSkeletonType(Skeleton.SkeletonType) */
+    public EEntity makeWitherSkeleton(boolean wither) {
+        if (entity instanceof Skeleton) {
+            if (wither) {
+                ((Skeleton)entity).setSkeletonType(Skeleton.SkeletonType.WITHER);
+            } else {
+                ((Skeleton)entity).setSkeletonType(Skeleton.SkeletonType.NORMAL);
+            }
+        }
+        return this;
+    }
     //endregion
 
 
@@ -2157,7 +2054,7 @@ public class EEntity {
     }
 
     /** @see Slime#setSize(int) */
-    public EEntity setSize(int size) {
+    public EEntity setSize(Integer size) {
         if (entity instanceof Slime) {
             ((Slime)entity).setSize(size);
         }
@@ -2357,12 +2254,148 @@ public class EEntity {
         return this;
     }
 
+    /**
+     * @see Pig#hasSaddle()
+     * For horses it will return true if the horse has an item in the saddle slot.
+     */
+    public Boolean hasSaddle() {
+        if (entity instanceof Pig) {
+            return ((Pig)entity).hasSaddle();
+        } else if (entity instanceof Horse) {
+            return ((Horse)entity).getInventory().getSaddle() != null;
+        }
+        return false;
+    }
 
-    //TODO: Equipment etc.
+    /**
+     * @see Pig#setSaddle(boolean)
+     * For horses it will set a saddle item in the saddle inventory slot or set it to air.
+     */
+    public EEntity setSaddle(Boolean saddle) {
+        if (entity instanceof Pig) {
+            ((Pig)entity).setSaddle(saddle);
+        } else if (entity instanceof Horse) {
+            if (saddle) {
+                ((Horse)entity).getInventory().setSaddle(new EItem(Material.SADDLE));
+            } else {
+                ((Horse)entity).getInventory().setSaddle(EItem.AIR);
+            }
+        }
+        return this;
+    }
 
-    //TODO: Set baby
+    //ITEMS
+    /**
+     * @see ArmorStand#getItemInHand()
+     * @see EntityEquipment#getItemInHand()
+     */
+    public ItemStack getItemInHand() {
+        if (entity instanceof ArmorStand) {
+            return ((ArmorStand)entity).getItemInHand();
+        } else if (entity instanceof LivingEntity) {
+            return ((LivingEntity)entity).getEquipment().getItemInHand();
+        }
+        return null;
+    }
 
-    //TODO: Velocity
+    /**
+     * @see ArmorStand#setItemInHand(ItemStack)
+     * @see EntityEquipment#setItemInHand(ItemStack)
+     */
+    public EEntity setItemInHand(EItem item) {
+        if (entity instanceof ArmorStand) {
+            ((ArmorStand)entity).setItemInHand(item);
+        }
+        return this;
+    }
+
+    /**
+     * @see ArmorStand#getBoots()
+     * @see EntityEquipment#getBoots()
+     */
+    public ItemStack getBoots() {
+        if (entity instanceof ArmorStand) {
+            return ((ArmorStand)entity).getBoots();
+        }
+        return null;
+    }
+
+    /**
+     * @see ArmorStand#setBoots(ItemStack)
+     * @see ArmorStand#setBoots(ItemStack)
+     */
+    public EEntity setBoots(EItem item) {
+        if (entity instanceof ArmorStand) {
+            ((ArmorStand)entity).setBoots(item);
+        }
+        return this;
+    }
+
+    /**
+     * @see ArmorStand#getLeggings()
+     * @see EntityEquipment#getLeggings()
+     */
+    public ItemStack getLeggings() {
+        if (entity instanceof ArmorStand) {
+            return ((ArmorStand)entity).getLeggings();
+        }
+        return null;
+    }
+
+    /**
+     * @see ArmorStand#setLeggings(ItemStack)
+     * @see EntityEquipment#setLeggings(ItemStack)
+     */
+    public EEntity setLeggings(EItem item) {
+        if (entity instanceof ArmorStand) {
+            ((ArmorStand)entity).setLeggings(item);
+        }
+        return this;
+    }
+
+    /**
+     * @see ArmorStand#getChestplate()
+     * @see EntityEquipment#getChestplate()
+     */
+    public ItemStack getChestplate() {
+        if (entity instanceof ArmorStand) {
+            return ((ArmorStand)entity).getChestplate();
+        }
+        return null;
+    }
+
+    /**
+     * @see ArmorStand#setChestplate(ItemStack)
+     * @see EntityEquipment#setChestplate(ItemStack)
+     */
+    public EEntity setChestplate(EItem item) {
+        if (entity instanceof ArmorStand) {
+            ((ArmorStand)entity).setChestplate(item);
+        }
+        return this;
+    }
+
+    /**
+     * @see ArmorStand#getHelmet()
+     * @see EntityEquipment#getHelmet()
+     */
+    public ItemStack getHelmet() {
+        if (entity instanceof ArmorStand) {
+            return ((ArmorStand)entity).getHelmet();
+        }
+        return null;
+    }
+
+    /**
+     * @see ArmorStand#setHelmet(ItemStack)
+     * @see EntityEquipment#setHelmet(ItemStack)
+     */
+    public EEntity setHelmet(EItem item) {
+        if (entity instanceof ArmorStand) {
+            ((ArmorStand)entity).setHelmet(item);
+        }
+        return this;
+    }
     //endregion
 
 

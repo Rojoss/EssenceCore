@@ -52,6 +52,7 @@ public enum Message {
     TOO_MUCH_CHARACTERS(MsgCat.VALIDATION, "&4{1} &cis too long! &7Can't have more than &8{1} &7characters."),
     NO_ARG_VALUE_NAME(MsgCat.VALIDATION, "&cMissing value for argument &4{0}&c! &7Specify the value after the semicolon!"),
     NO_ARG_VALUE(MsgCat.VALIDATION, "&cMissing argument value after the semicolon!"),
+    INVALID_ENITY_TYPE(MsgCat.VALIDATION, "&4{0} &cis not a valid entity type! &7&l/entities &cfor a list!"),
 
     //Item parser error messages
     PARSER_VALID(MsgCat.ITEM_PARSER, "&6This is a valid item."),
@@ -124,6 +125,7 @@ public enum Message {
     CMD_ENDERCHEST_OTHER(MsgCat.COMMAND, "&cYou cannot view &a{0}&c's enderchest."),
     CMD_TPHERE(MsgCat.COMMAND, "&6You have teleported &a{0} &6here."),
     CMD_SUDO(MsgCat.COMMAND, "&6You made &a{0} &6run &a{1}&c."),
+    CMD_SUMMON(MsgCat.COMMAND, "&6Entitie(s) summoned!"),
 
 
     //Command modifiers
@@ -137,6 +139,7 @@ public enum Message {
     MOD_REMOVEEFFECT_POSITIVE(MsgCat.COMMAND_MODIFIERS, "Will ignore all negative potion effects and only remove the positive ones"),
     MOD_BURN_INCREMENT(MsgCat.COMMAND_MODIFIERS, "Increment the duration if the player is already burning"),
     MOD_GOD_RESET(MsgCat.COMMAND_MODIFIERS, "Reset any remaining effects like fire ticks, negative potion effects and so on"),
+    MOD_RIDE_ENTITY(MsgCat.COMMAND_MODIFIERS, "Ride on top of the summoned entity."),
 
     //Command options/optional arguments
     OPT_HEAL_FEED(MsgCat.COMMAND_OPTIONS, "Restore hunger?"),

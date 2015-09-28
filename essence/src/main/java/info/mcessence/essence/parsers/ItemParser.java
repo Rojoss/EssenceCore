@@ -298,7 +298,7 @@ public class ItemParser {
                         return;
                     }
                 }
-                if (!hasShape) {
+                if (!hasColor) {
                     error = Message.PARSER_MISSING_FIREWORK_COLOR.msg().getMsg(true);
                     if (!ignoreErrors) {
                         return;

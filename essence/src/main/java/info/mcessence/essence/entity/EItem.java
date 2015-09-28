@@ -51,6 +51,8 @@ import java.util.Map;
  */
 public class EItem extends ItemStack {
 
+    public static EItem AIR = new EItem(Material.AIR);
+
     // Constructors
 
     public EItem(ItemStack itemStack) {

@@ -29,9 +29,7 @@ import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Horse;
-import org.bukkit.entity.Ocelot;
-import org.bukkit.entity.Rabbit;
+import org.bukkit.entity.*;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
@@ -75,7 +73,13 @@ public class Aliases {
         }
     }
 
-    //TODO: Get custom entity
+    public static EntityType getEntity(String string) {
+        try {
+            return EntityType.valueOf(getKey(AliasType.ENTITY, string));
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     public static GameMode getGameMode(String string) {
         try {
@@ -117,6 +121,14 @@ public class Aliases {
         }
     }
 
+    public static Horse.Variant getHorsVariant(String string) {
+        try {
+            return Horse.Variant.valueOf(getKey(AliasType.HORSE_VARIANT, string));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public static Horse.Color getHorseColor(String string) {
         try {
             return Horse.Color.valueOf(getKey(AliasType.HORSE_COLOR, string));
@@ -144,6 +156,14 @@ public class Aliases {
     public static Rabbit.Type getRabitType(String string) {
         try {
             return Rabbit.Type.valueOf(getKey(AliasType.RABBIT_TYPES, string));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static Villager.Profession getVillagerType(String string) {
+        try {
+            return Villager.Profession.valueOf(getKey(AliasType.VILLAGER_TYPES, string));
         } catch (Exception e) {
             return null;
         }
@@ -290,7 +310,7 @@ public class Aliases {
         //Entities
         list.clear();
         currentType = AliasType.ENTITY;
-        //TODO: Use custom entity enum/system for things like WITHER_SKELETON, ZOMBIE_VILLAGER, SKELETON_HORSE etc.
+        //TODO: Add EntityTypes
         aliases.put(currentType, new ArrayList<Alias>(list));
 
         //Game modes
@@ -430,6 +450,16 @@ public class Aliases {
         list.add(getAlias(FireworkEffect.Type.STAR, "Star", new String[] {"sta", "st", "*"}));
         aliases.put(currentType, new ArrayList<Alias>(list));
 
+        //Horse Variants
+        list.clear();
+        currentType = AliasType.HORSE_VARIANT;
+        list.add(getAlias(Horse.Variant.DONKEY, "Donkey", new String[] {"donk", "don", "do"}));
+        list.add(getAlias(Horse.Variant.HORSE, "Horse", new String[] {"regular", "normal", "vanilla", "hor", "ho"}));
+        list.add(getAlias(Horse.Variant.MULE, "Mule", new String[] {"mul", "mu"}));
+        list.add(getAlias(Horse.Variant.SKELETON_HORSE, "Skeleton Horse", new String[] {"skeleton", "skeli", "skeletonh", "shorse", "sh"}));
+        list.add(getAlias(Horse.Variant.UNDEAD_HORSE, "Undead Horse", new String[]{"zombie", "zombiehorse", "zombieh", "undeadh", "undead", "uhorse", "zhorse", "uh", "zh"}));
+        aliases.put(currentType, new ArrayList<Alias>(list));
+
         //Horse Colors
         list.clear();
         currentType = AliasType.HORSE_COLOR;
@@ -471,6 +501,16 @@ public class Aliases {
         list.add(getAlias(Rabbit.Type.SALT_AND_PEPPER, "Salt and Pepper", new String[] {"sap", "sandp", "sp", "saltpepper", "peppersalt", "pepperandsalt"}));
         list.add(getAlias(Rabbit.Type.THE_KILLER_BUNNY, "Killer Bunny", new String[] {"kill", "thekillerbunny", "killer", "redeye", "reye", "kb", "tkb"}));
         list.add(getAlias(Rabbit.Type.WHITE, "White", new String[] {"wh", "w"}));
+        aliases.put(currentType, new ArrayList<Alias>(list));
+
+        //Villager Types/Professions
+        list.clear();
+        currentType = AliasType.VILLAGER_TYPES;
+        list.add(getAlias(Villager.Profession.BLACKSMITH, "Blacksmith", new String[] {"bl", "blacks", "bsmith", "smith", "armorer", "gray", "grey"}));
+        list.add(getAlias(Villager.Profession.BUTCHER, "Butcher", new String[] {"bu", "leatherworker", "lworker", "leatherw", "leather", "killer"}));
+        list.add(getAlias(Villager.Profession.FARMER, "Farmer", new String[] {"fa", "farm", "regular", "vanilla", "normal", "brown", "fisherman", "shepherd", "fletcher"}));
+        list.add(getAlias(Villager.Profession.LIBRARIAN, "Librarian", new String[] {"li", "library", "white"}));
+        list.add(getAlias(Villager.Profession.PRIEST, "Priest", new String[] {"pr", "cleric", "purple", "magenta", "red"}));
         aliases.put(currentType, new ArrayList<Alias>(list));
 
         //Banner patterns

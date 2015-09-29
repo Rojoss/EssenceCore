@@ -66,9 +66,9 @@ public class BurnCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        Player player = result.getValue(1).getValue() == null ? (Player)sender : (Player)result.getValue(1).getValue();
+        Player player = result.getArg(1).getValue() == null ? (Player)sender : (Player)result.getArg(1).getValue();
 
-        int ticks = (int)result.getValue(0).getValue() * 20;
+        int ticks = (int)result.getArg(0).getValue() * 20;
         if ((Boolean)result.getOptionalArg("ticks-instead-of-seconds")) {
             ticks /= 20;
         }

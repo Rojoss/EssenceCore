@@ -64,10 +64,10 @@ public class TreeCmd extends EssenceCommand {
             return true;
         }
 
-        TreeType type = TreeType.valueOf(result.getValue(0).getValue().toString());
-        Location location = (Location)result.getValue(1).getValue();
+        TreeType type = TreeType.valueOf(result.getArg(0).getValue().toString());
+        Location location = (Location)result.getArg(1).getValue();
 
-        if (result.getValue(1).getValue() == null) {
+        if (result.getArg(1).getValue() == null) {
             location = ((Player)sender).getTargetBlock((HashSet<Byte>)null, 100).getRelative(BlockFace.UP).getLocation();
         }
 

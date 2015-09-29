@@ -41,10 +41,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GamemodeCmd extends EssenceCommand {
 
@@ -67,8 +64,8 @@ public class GamemodeCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        String mode = (String)result.getValue(0).getValue();
-        Player player = result.getValue(1).getValue() == null ? (Player)sender : (Player)result.getValue(1).getValue();
+        String mode = (String)result.getArg(0).getValue();
+        Player player = result.getArg(1).getValue() == null ? (Player)sender : (Player)result.getArg(1).getValue();
 
         GameMode gm = null;
         for (GameMode gameMode : GameMode.values()) {

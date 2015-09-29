@@ -26,7 +26,6 @@
 package info.mcessence.essence.commands.player_status;
 
 import info.mcessence.essence.Essence;
-import info.mcessence.essence.commands.CommandOption;
 import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.IntArgument;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
@@ -36,7 +35,6 @@ import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
 import info.mcessence.essence.commands.EssenceCommand;
 import info.mcessence.essence.arguments.BoolArg;
 import info.mcessence.essence.arguments.IntArg;
-import info.mcessence.essence.util.Debug;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -68,8 +66,8 @@ public class FeedCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        Player player = result.getValue(0).getValue() == null ? (Player)sender : (Player)result.getValue(0).getValue();
-        int amount = result.getValue(1).getValue() == null ?  20 : (Integer)result.getValue(1).getValue();
+        Player player = result.getArg(0).getValue() == null ? (Player)sender : (Player)result.getArg(0).getValue();
+        int amount = result.getArg(1).getValue() == null ?  20 : (Integer)result.getArg(1).getValue();
 
         FoodLevelChangeEvent foodLevelChangeEvent = new FoodLevelChangeEvent(player, amount);
         ess.getServer().getPluginManager().callEvent(foodLevelChangeEvent);

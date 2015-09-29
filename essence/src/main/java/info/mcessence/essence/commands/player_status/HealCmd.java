@@ -40,6 +40,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.potion.PotionEffect;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HealCmd extends EssenceCommand {
@@ -58,6 +59,7 @@ public class HealCmd extends EssenceCommand {
 
         addModifier("-h", Message.MOD_HEAL_ONLY.msg());
         addModifier("-m", Message.MOD_HEAL_MAX_ONLY.msg());
+        addModifier("-a", Message.MOD_HEAL_ALL.msg());
 
         register();
     }
@@ -70,45 +72,59 @@ public class HealCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        Player player = result.getValue(0).getValue() == null ? (Player)sender : (Player)result.getValue(0).getValue();
-        double max = result.getValue(1).getValue() == null ? player.getMaxHealth() : (Double)result.getValue(1).getValue();
-
-        if (player.isDead() || player.getHealth() == 0) {
-            sender.sendMessage(Message.DEAD_PLAYER.msg().getMsg(true, args[0]));
-            return true;
+        List<Player> players = new ArrayList<Player>();
+        if (result.hasModifier("-a")) {
+            players.addAll(ess.getServer().getOnlinePlayers());
+        } else {
+            players.add(result.getArg(0).getValue() == null ? (Player)sender : (Player)result.getArg(0).getValue());
         }
 
-        if (!result.hasModifier("-h")) {
-            player.setMaxHealth(max);
-        }
+        for (Player player : players) {
+            double max = result.getArg(1).getValue() == null ? player.getMaxHealth() : (Double)result.getArg(1).getValue();
 
-        if (!result.hasModifier("-m")) {
-            max = Math.min(player.getMaxHealth(), max);
-            double amount = max - player.getHealth();
-            EntityRegainHealthEvent regainHealthEvent = new EntityRegainHealthEvent(player, amount, EntityRegainHealthEvent.RegainReason.CUSTOM);
-            ess.getServer().getPluginManager().callEvent(regainHealthEvent);
-            if (!regainHealthEvent.isCancelled()) {
-                player.setHealth(max);
+            if (player.isDead() || player.getHealth() == 0) {
+                if (!result.hasModifier("-a")) {
+                    sender.sendMessage(Message.DEAD_PLAYER.msg().getMsg(true, args[0]));
+                }
+                return true;
+            }
+
+            if (!result.hasModifier("-h")) {
+                player.setMaxHealth(max);
+            }
+
+            if (!result.hasModifier("-m")) {
+                max = Math.min(player.getMaxHealth(), max);
+                double amount = max - player.getHealth();
+                EntityRegainHealthEvent regainHealthEvent = new EntityRegainHealthEvent(player, amount, EntityRegainHealthEvent.RegainReason.CUSTOM);
+                ess.getServer().getPluginManager().callEvent(regainHealthEvent);
+                if (!regainHealthEvent.isCancelled()) {
+                    player.setHealth(max);
+                }
+            }
+
+            if ((Boolean)result.getOptionalArg("feed")) {
+                player.setFoodLevel(20);
+            }
+
+            if ((Boolean)result.getOptionalArg("extinguish")) {
+                player.setFireTicks(0);
+            }
+            if ((Boolean)result.getOptionalArg("clear-effects")) {
+                for (PotionEffect effect : player.getActivePotionEffects()) {
+                    player.removePotionEffect(effect.getType());
+                }
+            }
+
+            if (!result.hasModifier("-s")) {
+                player.sendMessage(Message.CMD_HEAL_HEALED.msg().getMsg(true));
             }
         }
-
-        if ((Boolean)result.getOptionalArg("feed")) {
-            player.setFoodLevel(20);
-        }
-
-        if ((Boolean)result.getOptionalArg("extinguish")) {
-            player.setFireTicks(0);
-        }
-        if ((Boolean)result.getOptionalArg("clear-effects")) {
-            for (PotionEffect effect : player.getActivePotionEffects()) {
-                player.removePotionEffect(effect.getType());
-            }
-        }
-
-        if (!result.hasModifier("-s")) {
-            player.sendMessage(Message.CMD_HEAL_HEALED.msg().getMsg(true));
-            if (!sender.equals(player)) {
-                sender.sendMessage(Message.CMD_HEAL_OTHER.msg().getMsg(true, player.getDisplayName()));
+        if (result.hasModifier("-a")) {
+            sender.sendMessage(Message.CMD_HEAL_ALL.msg().getMsg(true));
+        } else {
+            if (!sender.equals(players.get(0))) {
+                sender.sendMessage(Message.CMD_HEAL_OTHER.msg().getMsg(true, players.get(0).getDisplayName()));
             }
         }
         return true;

@@ -63,7 +63,7 @@ public class TpHereCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        Player target = (Player)result.getValue(0).getValue();
+        Player target = (Player)result.getArg(0).getValue();
         Player player = (Player)sender;
 
         target.teleport(player);

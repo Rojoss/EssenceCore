@@ -57,7 +57,7 @@ public class KillCmd extends EssenceCommand {
             return true;
         }
 
-        Player player = (Player)result.getValue(0).getValue();
+        Player player = (Player)result.getArg(0).getValue();
 
         if (hasPermission(player, "exempt")) {
             sender.sendMessage(Message.CMD_KILL_EXEMPT.msg().getMsg(true, player.getName()));

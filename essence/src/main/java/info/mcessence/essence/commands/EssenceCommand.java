@@ -32,7 +32,6 @@ import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResult;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResults;
 import info.mcessence.essence.cmd_arguments.internal.CmdArgument;
 import info.mcessence.essence.arguments.internal.Argument;
-import info.mcessence.essence.util.Debug;
 import info.mcessence.essence.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
@@ -198,6 +197,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
 
     public ArgumentParseResults parseArgs(EssenceCommand cmd, CommandSender sender, String[] args) {
         ArgumentParseResults result = new ArgumentParseResults();
+        //Add optional args with default values from command options.
         for (Map.Entry<String, Argument> entry : optionalArgs.entrySet()) {
             if (entry.getValue().hasDefault()) {
                 result.addOptionalArg(entry.getKey(), entry.getValue().getDefault());
@@ -205,19 +205,26 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         }
 
         List<String> argsList = new ArrayList<String>();
+        //Loop through all the args filtering out all modifiers and optional arguments.
         for (String arg : args) {
             if (arg.startsWith("-") && modifiers.containsKey(arg.toLowerCase())) {
+                //Show help when the -? modifier is used.
                 if (arg.equalsIgnoreCase("-?")) {
                     showHelp(sender);
                     result.success = false;
                     return result;
                 }
+                //Add the modifier to the result.
                 result.addModifier(arg);
             } else {
                 String[] split = arg.split(":");
+                //Make sure the argument specified is a valid argument for the command.
                 if (optionalArgs.containsKey(split[0].toLowerCase())) {
+                    //Get the arg and parse it.
                     Argument optionalArg = optionalArgs.get(split[0]);
                     optionalArg.parse(split.length > 1 ? split[1] : "");
+                    //If he parsing wasn't successful send an error and fail.
+                    //It will allow empty arguments if there is a default or cached value.
                     if (!optionalArg.isValid()) {
                         if (!optionalArg.hasDefault() || (split.length > 1 && !split[1].isEmpty())) {
                             sender.sendMessage(optionalArg.getError());
@@ -225,29 +232,37 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                             return result;
                         }
                     }
+                    //Set the optional argument in the result.
                     if (optionalArg.getValue() != null) {
                         result.addOptionalArg(split[0], optionalArg.getValue());
                     } else {
                         result.addOptionalArg(split[0], optionalArg.getDefault());
                     }
                 } else {
+                    //Add it to args list if it's not a modifier or optional arg.
                     argsList.add(arg);
                 }
             }
         }
+        //Set the args back to an array with arguments that don't have any modifiers/optional args in it.
         args = argsList.toArray(new String[argsList.size()]);
         result.setArgs(args);
 
+        //Go through all the main command args and parse them.
         int index = 0;
         for (CmdArgument cmdArg : cmdArgs) {
+            //Check if an argument is specified in the command for this argument.
             if (args.length > index) {
+                //Parse the value specified.
                 ArgumentParseResult parsed = cmdArg.parse(cmd, sender, args.length > index ? args[index] : "");
                 if (!parsed.success) {
                     result.success = false;
                     return result;
                 }
-                result.setValue(index, parsed);
+                result.setArg(index, parsed);
             } else {
+                //If there is no value specified for this argument and it's a required argument send and error.
+                //If it's an optional argument the value will be set to null.
                 if (cmdArg.isRequired(sender)) {
                     sender.sendMessage(Message.CMD_INVALID_USAGE.msg().getMsg(true, cmd.getUsage(sender)));
                     result.success = false;
@@ -256,7 +271,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                     ArgumentParseResult parsed = new ArgumentParseResult();
                     parsed.success = true;
                     parsed.setValue(null);
-                    result.setValue(index, parsed);
+                    result.setArg(index, parsed);
                 }
             }
             index++;

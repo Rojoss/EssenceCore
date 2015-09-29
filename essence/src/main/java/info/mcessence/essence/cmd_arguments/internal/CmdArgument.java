@@ -90,6 +90,10 @@ public abstract class CmdArgument {
         return false;
     }
 
+    public void setRequirement(ArgumentRequirement requirement) {
+        this.requirement = requirement;
+    }
+
     public String getName(boolean format) {
         if (!format) {
             return name;

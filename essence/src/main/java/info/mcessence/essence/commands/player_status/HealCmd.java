@@ -27,6 +27,7 @@ package info.mcessence.essence.commands.player_status;
 
 import info.mcessence.essence.Essence;
 import info.mcessence.essence.arguments.BoolArg;
+import info.mcessence.essence.cmd_links.RemoveLink;
 import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.DoubleArgument;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
@@ -60,6 +61,8 @@ public class HealCmd extends EssenceCommand {
         addModifier("-h", Message.MOD_HEAL_ONLY.msg());
         addModifier("-m", Message.MOD_HEAL_MAX_ONLY.msg());
         addModifier("-a", Message.MOD_HEAL_ALL.msg());
+
+        addLink(new RemoveLink("-a", "player"));
 
         register();
     }

@@ -26,6 +26,11 @@
 package info.mcessence.essence.commands;
 
 import info.mcessence.essence.Essence;
+import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
+import info.mcessence.essence.cmd_links.MakeOptionalLink;
+import info.mcessence.essence.cmd_links.RemoveLink;
+import info.mcessence.essence.cmd_links.ShiftLink;
+import info.mcessence.essence.cmd_links.internal.CommandLink;
 import info.mcessence.essence.message.EMessage;
 import info.mcessence.essence.message.Message;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentParseResult;
@@ -39,10 +44,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Listener {
 
@@ -56,6 +58,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     public Map<String, EMessage> modifiers = new HashMap<String, EMessage>();
     public Map<String, CommandOption> cmdOptions = new HashMap<String, CommandOption>();
     public Map<String, Argument> optionalArgs = new HashMap<String, Argument>();
+    public List<CommandLink> links = new ArrayList<CommandLink>();
 
     protected static CommandMap commandMap;
 
@@ -205,6 +208,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         }
 
         List<String> argsList = new ArrayList<String>();
+        List<String> keys = new ArrayList<String>();
         //Loop through all the args filtering out all modifiers and optional arguments.
         for (String arg : args) {
             if (arg.startsWith("-") && modifiers.containsKey(arg.toLowerCase())) {
@@ -216,6 +220,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                 }
                 //Add the modifier to the result.
                 result.addModifier(arg);
+                keys.add(arg);
             } else {
                 String[] split = arg.split(":");
                 //Make sure the argument specified is a valid argument for the command.
@@ -232,6 +237,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                             return result;
                         }
                     }
+                    keys.add(split[0]);
                     //Set the optional argument in the result.
                     if (optionalArg.getValue() != null) {
                         result.addOptionalArg(split[0], optionalArg.getValue());
@@ -248,9 +254,42 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         args = argsList.toArray(new String[argsList.size()]);
         result.setArgs(args);
 
+        //Handle all links that modify command arguments before parsing them.
+        List<CmdArgument> cmdArgsClone = new ArrayList<CmdArgument>(Arrays.asList(cmdArgs.clone()));
+        for (CommandLink link : links) {
+            //Skip all links that don't modify command args.
+            if (!(link instanceof RemoveLink) && !(link instanceof ShiftLink) && !(link instanceof MakeOptionalLink)) {
+                continue;
+            }
+            //Make sure the first value for the link has been specified.
+            if (!keys.contains(link.getFirst())) {
+                continue;
+            }
+            //Go through all args and check if any match with the second value of the link.
+            for (int i = 0; i < cmdArgs.length; i++) {
+                CmdArgument cmdArg = cmdArgs[i];
+                if (link.getSecond().equalsIgnoreCase(cmdArg.getName(false))) {
+                    //Remove the argument
+                    if (link instanceof RemoveLink) {
+                        cmdArgsClone.remove(i);
+                    }
+                    //Make optional
+                    if (link instanceof MakeOptionalLink) {
+                        cmdArg.setRequirement(ArgumentRequirement.OPTIONAL);
+                    }
+                    //Shift to other index.
+                    if (link instanceof ShiftLink) {
+                        cmdArgsClone.remove(i);
+                        cmdArgsClone.add(((ShiftLink)link).getIndex(), cmdArg);
+                    }
+                    break;
+                }
+            }
+        }
+
         //Go through all the main command args and parse them.
         int index = 0;
-        for (CmdArgument cmdArg : cmdArgs) {
+        for (CmdArgument cmdArg : cmdArgsClone) {
             //Check if an argument is specified in the command for this argument.
             if (args.length > index) {
                 //Parse the value specified.
@@ -300,6 +339,20 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
             modifier = "-" + modifier;
         }
         modifiers.put(modifier, info);
+    }
+
+    public void addLink(CommandLink link) {
+        links.add(link);
+    }
+
+    private List<CommandLink> getLinks(String key) {
+        List<CommandLink> commandLinks = new ArrayList<CommandLink>();
+        for (CommandLink link : links) {
+            if (link.getFirst().equalsIgnoreCase(key) || link.getSecond().equalsIgnoreCase(key)) {
+                commandLinks.add(link);
+            }
+        }
+        return commandLinks;
     }
 
     public void showHelp(CommandSender sender) {

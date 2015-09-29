@@ -74,7 +74,7 @@ public class SummonCmd extends EssenceCommand {
         }
 
         if (result.hasModifier("-r") && sender instanceof Player) {
-            entityParser.getEntities().get(entityParser.getEntities().size()-1).setPassenger((Player)sender);
+            entityParser.getEntities().get(0).get(entityParser.getEntities().size()-1).setPassenger((Player)sender);
         }
 
         if (!result.hasModifier("-s")) {

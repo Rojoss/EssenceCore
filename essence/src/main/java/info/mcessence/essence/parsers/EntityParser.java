@@ -37,6 +37,7 @@ import info.mcessence.essence.util.NumberUtil;
 import info.mcessence.essence.util.Util;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.util.*;
 import org.bukkit.util.Vector;
@@ -55,7 +56,7 @@ import java.util.*;
 public class EntityParser {
 
     private String string = null;
-    private List<EEntity> entities = new ArrayList<EEntity>();
+    private List<List<EEntity>> entities = new ArrayList<List<EEntity>>();
 
     private String error = "";
 
@@ -99,7 +100,7 @@ public class EntityParser {
         }
 
         //Get the amount and location from the last section if specified.
-        int amount;
+        int amount = 1;
         if (sections.size() > 0) {
             String lastSection = sections.get(sections.size() - 1);
             String data = "";
@@ -123,6 +124,7 @@ public class EntityParser {
                     error = Message.PARSER_INVALID_AMOUNT.msg().getMsg(true, split[0]);
                     return;
                 }
+                amount = NumberUtil.getInt(split[0]);
                 if (split.length > 1) {
                     LocationArg locArg = new LocationArg();
                     locArg.parse(split[1]);
@@ -197,91 +199,95 @@ public class EntityParser {
             entityMap.put(type, dataMap);
         }
 
-        entities.clear();
-        for (Map.Entry<EntityType, Map<String, String>> entry : entityMap.entrySet()) {
-            EEntity entity = EEntity.create(entry.getKey(), location);
+        this.entities.clear();
+        for (int i = 0; i < amount; i++) {
+            List<EEntity> entities = new ArrayList<EEntity>();
+            for (Map.Entry<EntityType, Map<String, String>> entry : entityMap.entrySet()) {
+                EEntity entity = EEntity.create(entry.getKey(), location);
 
-            for (Map.Entry<String, String> data : entry.getValue().entrySet()) {
-                EntityTag tag = EntityTag.fromString(data.getKey());
-                if (tag != null) {
-                    Argument arg = tag.getArg().clone();
-                    arg.parse(data.getValue());
-                    if ((!arg.isValid() && !data.getValue().isEmpty()) || (!arg.hasDefault() && data.getValue().isEmpty())) {
-                        error = arg.getError();
-                        if (!ignoreErrors) {
-                            return;
+                for (Map.Entry<String, String> data : entry.getValue().entrySet()) {
+                    EntityTag tag = EntityTag.fromString(data.getKey());
+                    if (tag != null) {
+                        Argument arg = tag.getArg().clone();
+                        arg.parse(data.getValue());
+                        if ((!arg.isValid() && !data.getValue().isEmpty()) || (!arg.hasDefault() && data.getValue().isEmpty())) {
+                            error = arg.getError();
+                            if (!ignoreErrors) {
+                                return;
+                            }
                         }
-                    }
-                    Object val = arg.getValue();
-                    if (val == null) {
-                        val = arg.getDefault();
-                    }
+                        Object val = arg.getValue();
+                        if (val == null) {
+                            val = arg.getDefault();
+                        }
 
-                    //Manual method calls.
-                    if (tag == EntityTag.HEALTH) {
-                        if (entity.getMaxHealth() < (Double)val) {
-                            entity.setMaxHealth((Double)val);
+                        //Manual method calls.
+                        if (tag == EntityTag.HEALTH) {
+                            if (entity.getMaxHealth() < (Double)val) {
+                                entity.setMaxHealth((Double)val);
+                            }
+                        } else if (tag == EntityTag.DOMESTICATION) {
+                            if (entity.getMaxDomestication() < (Integer)val) {
+                                entity.setMaxDomestication((Integer) val);
+                            }
+                        } else if (tag == EntityTag.DIR) {
+                            BlockFace dir = BlockFace.valueOf((String)val);
+                            entity.setFacingDirection(dir, true);
+                            continue;
                         }
-                    } else if (tag == EntityTag.DOMESTICATION) {
-                        if (entity.getMaxDomestication() < (Integer)val) {
-                            entity.setMaxDomestication((Integer) val);
+
+                        //Parse any extra data..
+                        if (tag == EntityTag.ROTATION) {
+                            val = Util.getRotation(NumberUtil.getInt((String)val));
+                        } else if (tag == EntityTag.POSE || tag == EntityTag.HEAD || tag == EntityTag.LARM || tag == EntityTag.RARM || tag == EntityTag.LLEG || tag == EntityTag.RLEG) {
+                            Vector v = (Vector)val;
+                            val = new EulerAngle(v.getX(), v.getY(), v.getZ());
+                        } else if (tag == EntityTag.ART) {
+                            val = Aliases.getPainting((String)val);
+                        } else if (tag == EntityTag.VARIANT) {
+                            val = Aliases.getHorsVariant((String) val);
+                        } else if (tag == EntityTag.STYLE) {
+                            val = Aliases.getHorseStyle((String) val);
+                        } else if (tag == EntityTag.COLOR) {
+                            val = Aliases.getHorseColor((String) val);
+                        } else if (tag == EntityTag.CATTYPE) {
+                            val = Aliases.getOcelotType((String) val);
+                        } else if (tag == EntityTag.RABITTYPE) {
+                            val = Aliases.getRabitType((String) val);
+                        } else if (tag == EntityTag.PROFESSION) {
+                            val = Aliases.getVillagerType((String) val);
+                        } else if (tag == EntityTag.COLLAR) {
+                            val = Aliases.getDyeColor((String) val);
                         }
-                    } else if (tag == EntityTag.DIR) {
-                        BlockFace dir = BlockFace.valueOf((String)val);
-                        entity.setFacingDirection(dir, true);
+
+                        //Apply the data to the entity.
+                        try {
+                            Method method = entity.getClass().getMethod(tag.getMethod(), val.getClass());
+                            method.invoke(entity, val);
+                        } catch (NoSuchMethodException e) {
+                            Essence.inst().logError("No entity method for " + tag.getMethod() + " for the tag " + tag.toString() + "!");
+                        } catch (IllegalAccessException e) {
+                            Essence.inst().logError("The entity method " + tag.getMethod() + " can't be accessed!");
+                        } catch (InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
                         continue;
                     }
 
-                    //Parse any extra data..
-                    if (tag == EntityTag.ROTATION) {
-                        val = Util.getRotation(NumberUtil.getInt((String)val));
-                    } else if (tag == EntityTag.POSE || tag == EntityTag.HEAD || tag == EntityTag.LARM || tag == EntityTag.RARM || tag == EntityTag.LLEG || tag == EntityTag.RLEG) {
-                        Vector v = (Vector)val;
-                        val = new EulerAngle(v.getX(), v.getY(), v.getZ());
-                    } else if (tag == EntityTag.ART) {
-                        val = Aliases.getPainting((String)val);
-                    } else if (tag == EntityTag.VARIANT) {
-                        val = Aliases.getHorsVariant((String) val);
-                    } else if (tag == EntityTag.STYLE) {
-                        val = Aliases.getHorseStyle((String) val);
-                    } else if (tag == EntityTag.COLOR) {
-                        val = Aliases.getHorseColor((String) val);
-                    } else if (tag == EntityTag.CATTYPE) {
-                        val = Aliases.getOcelotType((String) val);
-                    } else if (tag == EntityTag.RABITTYPE) {
-                        val = Aliases.getRabitType((String) val);
-                    } else if (tag == EntityTag.PROFESSION) {
-                        val = Aliases.getVillagerType((String) val);
-                    } else if (tag == EntityTag.COLLAR) {
-                        val = Aliases.getDyeColor((String) val);
-                    }
-
-                    //Apply the data to the entity.
-                    try {
-                        Method method = entity.getClass().getMethod(tag.getMethod(), val.getClass());
-                        method.invoke(entity, val);
-                    } catch (NoSuchMethodException e) {
-                        Essence.inst().logError("No entity method for " + tag.getMethod() + " for the tag " + tag.toString() + "!");
-                    } catch (IllegalAccessException e) {
-                        Essence.inst().logError("The entity method " + tag.getMethod() + " can't be accessed!");
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                    continue;
+                    //Do the same for potion effects by key.
+                    //TODO: Potion effects as tags.
                 }
 
-                //Do the same for potion effects by key.
-                //TODO: Potion effects as tags.
-            }
-
-            entities.add(entity);
-            if (entities.size() > 1) {
-                if (connections.get(entities.size()-2) == '>') {
-                    entities.get(entities.size()-2).setPassenger(entities.get(entities.size()-1));
-                } else {
-                    entities.get(entities.size()-2).setLeashHolder(entities.get(entities.size()-1));
+                entities.add(entity);
+                if (entities.size() > 1) {
+                    if (connections.get(entities.size()-2) == '>') {
+                        entities.get(entities.size()-2).setPassenger(entities.get(entities.size()-1));
+                    } else {
+                        entities.get(entities.size()-2).setLeashHolder(entities.get(entities.size()-1));
+                    }
                 }
             }
+            this.entities.add(entities);
         }
     }
 
@@ -299,7 +305,7 @@ public class EntityParser {
      * @param entities list of EEntity instances that will be parsed.
      */
     public EntityParser(List<EEntity> entities) {
-        this.entities = entities;
+
     }
 
     /**
@@ -329,22 +335,10 @@ public class EntityParser {
 
     /**
      * Get the parsed EEntity list value.
+     * When stacked the inner list will contain all the stacked entities where index 0 is the bottom entity.
      * @return List with EEntity instances that have all data parsed.
      */
-    public List<EEntity> getEntities() {
+    public List<List<EEntity>> getEntities() {
         return entities;
-    }
-
-    /**
-     * Get the parsed EEntity value.
-     * This will return the entity that is on the bottom.
-     * If there are multiple entities you can use .getPassenger() or just call getEntities() to get the full list.
-     * @return EEntity instance that is on the bottom from the parsed data.
-     */
-    public EEntity getEntity() {
-        if (entities != null && entities.size() > 0) {
-            return entities.get(0);
-        }
-        return null;
     }
 }

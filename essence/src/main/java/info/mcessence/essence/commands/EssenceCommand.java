@@ -298,7 +298,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                     result.success = false;
                     return result;
                 }
-                result.setArg(index, parsed.getValue());
+                result.setArg(cmdArg.getName(false), parsed.getValue());
             } else {
                 //If there is no value specified for this argument and it's a required argument send and error.
                 //If it's an optional argument the value will be set to null.
@@ -310,7 +310,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                     ArgumentParseResult parsed = new ArgumentParseResult();
                     parsed.success = true;
                     parsed.setValue(null);
-                    result.setArg(index, parsed.getValue());
+                    result.setArg(cmdArg.getName(false), parsed.getValue());
                 }
             }
             index++;

@@ -44,7 +44,7 @@ public class TpHereCmd extends EssenceCommand {
         super(ess, command, description, permission, aliases);
 
         cmdArgs = new CmdArgument[] {
-                new PlayerArgument("target", ArgumentRequirement.REQUIRED, ""),
+                new PlayerArgument("player", ArgumentRequirement.REQUIRED, ""),
         };
 
         register();
@@ -63,7 +63,7 @@ public class TpHereCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        Player target = (Player)result.getArg(0);
+        Player target = (Player)result.getArg("player");
         Player player = (Player)sender;
 
         target.teleport(player);

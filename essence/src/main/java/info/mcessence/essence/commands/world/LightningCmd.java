@@ -44,7 +44,7 @@ public class LightningCmd extends EssenceCommand {
         super(ess, command, description, permission, aliases);
 
         cmdArgs = new CmdArgument[] {
-                new LocationArgument("location|player", ArgumentRequirement.REQUIRED, "")
+                new LocationArgument("location", ArgumentRequirement.REQUIRED, "")
         };
 
         register();
@@ -58,7 +58,7 @@ public class LightningCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        Location location = (Location) result.getArg(0);
+        Location location = (Location) result.getArg("location");
         location.setY(location.getWorld().getHighestBlockAt(location).getY());
 
         location.getWorld().strikeLightning(location);

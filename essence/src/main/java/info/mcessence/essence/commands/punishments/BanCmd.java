@@ -65,11 +65,11 @@ public class BanCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        OfflinePlayer player = (OfflinePlayer)result.getArg(0);
+        OfflinePlayer player = (OfflinePlayer)result.getArg("player");
         //TODO: Get default duration.
-        int duration = result.getArg(1) == null ? 30000 : (Integer)result.getArg(1);
+        int duration = result.getArg("duration") == null ? 30000 : (Integer)result.getArg("duration");
         //TODO: Get default reason.
-        String reason = result.getArg(2) == null ? "IT WORKS!" : (String)result.getArg(2);
+        String reason = result.getArg("reason") == null ? "IT WORKS!" : (String)result.getArg("reason");
 
         Module module = ess.getModules().getModule(BanModule.class);
         if (module == null) {

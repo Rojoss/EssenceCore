@@ -25,10 +25,7 @@
 
 package info.mcessence.essence.cmd_arguments.internal;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * An instance of this will be returned when parsing command arguments.
@@ -44,7 +41,7 @@ import java.util.Map;
  */
 public class ArgumentParseResults {
     public boolean success = true;
-    private List<Object> argument = new ArrayList<Object>();
+    private Map<String, Object> arguments = new HashMap<String, Object>();
     private String[] args = null;
     private List<String> modifiers = new ArrayList<String>();
     private Map<String, Object> optionalArgs = new HashMap<String, Object>();
@@ -53,26 +50,25 @@ public class ArgumentParseResults {
     /**
      * Set the command argument parse result value for the given argument.
      * This is used by the parser and it's not recommended to manually call this unless you know what you're doing.
-     * @param argumentIndex The index for the argument to set.
+     * @param key The key or name of the argument to set.
      * @param value A object which is the value of the argument.
      */
-    public void setArg(int argumentIndex, Object value) {
-        argument.add(argumentIndex, value);
+    public void setArg(String key, Object value) {
+        arguments.put(key.toLowerCase(), value);
     }
 
     /**
      * Get an argument value from the parsed command arguments.
-     * The specified index needs to match with the order command arguments are defined in the constructor.
      * If an argument is required the value for this argument will always be set and it wont ever be null so then it's safe to cast it directly.
      * However, if the argument is optional or required console the value can be null.
      * For example if the first argument is a PlayerArgument which is REQUIRED_CONSOLE you would do something like this to get the player.
-     * result.getArg(0) == null ? (Player)sender : (Player)result.getArg(0)
-     * @param argumentIndex The index for the argument to retrieve. (Order of argument definition in the constructor!)
+     * result.getArg("player") == null ? (Player)sender : (Player)result.getArg("player")
+     * @param key They key or name of the argument to retreive the value from.
      * @return A Object containing the value.
      */
-    public Object getArg(int argumentIndex) {
-        if (argument.size() >= argumentIndex) {
-            return argument.get(argumentIndex);
+    public Object getArg(String key) {
+        if (arguments.containsKey(key.toLowerCase())) {
+            return arguments.get(key);
         }
         return null;
     }

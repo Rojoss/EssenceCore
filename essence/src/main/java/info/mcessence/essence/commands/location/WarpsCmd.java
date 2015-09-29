@@ -61,7 +61,7 @@ public class WarpsCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        World world = result.getArg(0) == null ? null : (World)result.getArg(0);
+        World world = result.getArg("world") == null ? null : (World)result.getArg("world");
 
         List<String> warps = ess.getWarps().getWarpNames();
         if (world != null) {

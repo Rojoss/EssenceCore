@@ -58,7 +58,7 @@ public class ItemInfoCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        String itemString = (String)result.getArg(0);
+        String itemString = (String)result.getArg("[item[:data]]");
 
         ItemAlias item = Items.getItem(itemString);
         if (item == null) {

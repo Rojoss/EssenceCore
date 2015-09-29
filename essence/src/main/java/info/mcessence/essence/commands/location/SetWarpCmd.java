@@ -47,7 +47,7 @@ public class SetWarpCmd extends EssenceCommand {
 
         cmdArgs = new CmdArgument[] {
                 new StringArgument("name", ArgumentRequirement.REQUIRED, "", 2, 32),
-                new LocationArgument("location|player", ArgumentRequirement.REQUIRED_CONSOLE, "location")
+                new LocationArgument("location", ArgumentRequirement.REQUIRED_CONSOLE, "location")
         };
 
         register();
@@ -61,8 +61,8 @@ public class SetWarpCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        String name = (String)result.getArg(0);
-        Location location = result.getArg(1) == null ? ((Player)sender).getLocation() : (Location) result.getArg(1);
+        String name = (String)result.getArg("name");
+        Location location = result.getArg("location") == null ? ((Player)sender).getLocation() : (Location) result.getArg("location");
 
         ess.getWarps().setWarp(name, location);
         if (!result.hasModifier("-s")) {

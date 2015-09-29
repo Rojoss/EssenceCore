@@ -66,7 +66,7 @@ public class DelWarpCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        String name = (String)result.getArg(0);
+        String name = (String)result.getArg("name");
         if (!ess.getWarps().delWarp(name)) {
             sender.sendMessage(Message.CMD_WARP_INVALID.msg().getMsg(true, name));
             return true;

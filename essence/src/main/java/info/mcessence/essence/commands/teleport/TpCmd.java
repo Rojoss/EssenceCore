@@ -59,8 +59,8 @@ public class TpCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        Player target = (Player)result.getArg(0);
-        Player player = result.getArg(1) == null ? (Player)sender : (Player)result.getArg(1);
+        Player target = (Player)result.getArg("player");
+        Player player = result.getArg("playerToTp") == null ? (Player)sender : (Player)result.getArg("playerToTp");
 
         player.teleport(target);
         if (!result.hasModifier("-s")) {

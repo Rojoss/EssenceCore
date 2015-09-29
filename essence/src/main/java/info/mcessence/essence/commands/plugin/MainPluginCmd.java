@@ -59,7 +59,7 @@ public class MainPluginCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        String option = result.getArg(0) == null ? "" : (String)result.getArg(0);
+        String option = result.getArg("reload") == null ? "" : (String)result.getArg("reload");
         if (option.equalsIgnoreCase("reload")) {
             ess.getMessages().load();
             ess.getModuleCfg().load();

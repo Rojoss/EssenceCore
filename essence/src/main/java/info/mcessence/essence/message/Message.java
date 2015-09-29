@@ -25,6 +25,8 @@
 
 package info.mcessence.essence.message;
 
+import info.mcessence.essence.util.Util;
+
 public enum Message {
     //Main messages
     PREFIX(MsgCat.GENERAL, "&8[&4Essence&8] &6"),
@@ -131,6 +133,7 @@ public enum Message {
     CMD_TPHERE(MsgCat.COMMAND, "&6You have teleported &a{0} &6here."),
     CMD_SUDO(MsgCat.COMMAND, "&6You made &a{0} &6run &a{1}&c."),
     CMD_SUMMON(MsgCat.COMMAND, "&6Entitie(s) summoned!"),
+    CMD_MESSAGE(MsgCat.COMMAND, "&6To&c: &a{0}&c &6From&c: &a{1}&c &e{2}"),
 
 
     //Command modifiers

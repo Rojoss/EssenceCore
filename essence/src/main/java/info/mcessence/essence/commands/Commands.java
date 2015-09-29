@@ -34,6 +34,7 @@ import info.mcessence.essence.commands.location.WarpCmd;
 import info.mcessence.essence.commands.location.WarpsCmd;
 import info.mcessence.essence.commands.misc.SummonCmd;
 import info.mcessence.essence.commands.misc.TestCmd;
+import info.mcessence.essence.commands.player.MessageCmd;
 import info.mcessence.essence.commands.player.NicknameCmd;
 import info.mcessence.essence.commands.player.SudoCmd;
 import info.mcessence.essence.commands.plugin.MainPluginCmd;
@@ -92,6 +93,7 @@ public class Commands {
         registerCommand(SudoCmd.class, "sudo", "sudo", "Execute a command on someone's behalf.", new String[] {});
         registerCommand(BanCmd.class, "ban", "ban", "Bans a player from the server.", new String[] {});
         registerCommand(SummonCmd.class, "summon", "summon", "Summons any entity with any specified data.", new String[] {"spawnmob", "sm", "spawnentity", "se"});
+        registerCommand(MessageCmd.class, "message", "message", "Sends a private message to another online player.", new String[] {"msg", "tell"});
     }
 
     /**

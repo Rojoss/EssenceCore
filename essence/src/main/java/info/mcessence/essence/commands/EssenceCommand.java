@@ -27,9 +27,7 @@ package info.mcessence.essence.commands;
 
 import info.mcessence.essence.Essence;
 import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
-import info.mcessence.essence.cmd_links.MakeOptionalLink;
-import info.mcessence.essence.cmd_links.RemoveLink;
-import info.mcessence.essence.cmd_links.ShiftLink;
+import info.mcessence.essence.cmd_links.*;
 import info.mcessence.essence.cmd_links.internal.CommandLink;
 import info.mcessence.essence.message.EMessage;
 import info.mcessence.essence.message.Message;
@@ -299,6 +297,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                     result.success = false;
                     return result;
                 }
+                keys.add(cmdArg.getName(false));
                 result.setArg(cmdArg.getName(false), parsed.getValue());
             } else {
                 //If there is no value specified for this argument and it's a required argument send and error.
@@ -316,6 +315,31 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
             }
             index++;
         }
+
+        //Lastly we need to check for any conflicts with links that have conflict or link mode.
+        for (CommandLink link : links) {
+            if (link instanceof ConflictLink) {
+                //If both are specified send an error.
+                if (keys.contains(link.getFirst()) && keys.contains(link.getSecond())) {
+                    sender.sendMessage(Message.CMD_LINK_CONFLICT.msg().getMsg(true, link.getFirst(), link.getSecond()));
+                    result.success = false;
+                    return result;
+                }
+            }
+            if (link instanceof LinkLink) {
+                //If one of these isn't specified and the other is send an error.
+                if (keys.contains(link.getFirst()) && !keys.contains(link.getSecond())) {
+                    sender.sendMessage(Message.CMD_LINK_LINK.msg().getMsg(true, link.getFirst(), link.getSecond()));
+                    result.success = false;
+                    return result;
+                } else if (keys.contains(link.getSecond()) && !keys.contains(link.getFirst())) {
+                    sender.sendMessage(Message.CMD_LINK_LINK.msg().getMsg(true, link.getSecond(), link.getFirst()));
+                    result.success = false;
+                    return result;
+                }
+            }
+        }
+
         return result;
     }
 

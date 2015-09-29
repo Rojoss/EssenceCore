@@ -83,6 +83,8 @@ public enum Message {
     CMD_HELP_OPT_ARG(MsgCat.COMMAND_OTHER, "{{&7&o{1}}&7{0}}"),
     CMD_HELP_OPTION(MsgCat.COMMAND_OTHER, "{{&7&o{1}}&7{0}&8(&a{2}&8)}"),
     CMD_HELP_ARG(MsgCat.COMMAND_OTHER, "{{&7&o{1}}&7{0}}"),
+    CMD_LINK_CONFLICT(MsgCat.COMMAND_OTHER, "&cYou can't use &4{0} &ctogether with &4{1}&c!"),
+    CMD_LINK_LINK(MsgCat.COMMAND_OTHER, "&cTo use &4{0} &cyou have to specify &4{1}&c!"),
 
     //Command messages
     CMD_ESSENCE_INFO(MsgCat.COMMAND, "&8===== &4&lEssence plugin &8=====\n&8&o{0}\n&6Version&8: &7{1}\n&6Website&8: &9{2}\n&6Authors&8: &7{3}"),

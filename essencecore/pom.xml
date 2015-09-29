@@ -3,7 +3,7 @@
   ~ /*
   ~  * The MIT License (MIT)
   ~  *
-  ~  * Copyright (c) 2015 Essence <http://www.mc-essence.info>
+  ~  * Copyright (c) 2015 EssenceCore <http://www.mc-essence.info>
   ~  * Copyright (c) 2015 contributors
   ~  *
   ~  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -37,16 +37,63 @@
         <version>parent</version>
     </parent>
 
-    <artifactId>api</artifactId>
-    <version>0.0</version>
+    <artifactId>EssenceCore</artifactId>
+    <version>0.1</version>
+
 
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
+            <artifactId>spigot-api</artifactId>
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.essencemc.essencecore</groupId>
+            <artifactId>v1_8R3</artifactId>
+            <version>0.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.essencemc.essencecore</groupId>
+            <artifactId>api</artifactId>
+            <version>0.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
+
+    <build>
+        <finalName>EssenceCore</finalName>
+        <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+        <resources>
+            <resource>
+                <targetPath>.</targetPath>
+                <filtering>true</filtering>
+                <directory>${basedir}/src/main/resources/</directory>
+                <includes>
+                    <include>plugin.yml</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     
 </project>

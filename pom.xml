@@ -31,12 +31,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>info.mcessence.essence</groupId>
+    <groupId>org.essencemc.essencecore</groupId>
     <artifactId>parent</artifactId>
-    <name>Essence</name>
+    <name>EssenceCore</name>
     <version>parent</version>
-    <description>Essentials plugin with lots of commands and utilities.</description>
-    <url>http://mc-essence.info/</url>
+    <description>Essence core plugin which contains many useful API's used by Essence.</description>
+    <url>http://essencemc.org</url>
 
     <packaging>pom</packaging>
 
@@ -66,7 +66,7 @@
     </repositories>
 
     <modules>
-        <module>essence</module>
+        <module>essencecore</module>
         <module>v1_8R3</module>
         <module>api</module>
     </modules>

@@ -79,11 +79,11 @@ public class HealCmd extends EssenceCommand {
         if (result.hasModifier("-a")) {
             players.addAll(ess.getServer().getOnlinePlayers());
         } else {
-            players.add(result.getArg("player") == null ? (Player)sender : (Player)result.getArg("player"));
+            players.add((Player)result.getArg("player", castPlayer(sender)));
         }
 
         for (Player player : players) {
-            double max = result.getArg("max") == null ? player.getMaxHealth() : (Double)result.getArg("max");
+            double max = (Double)result.getArg("max", player.getMaxHealth());
 
             if (player.isDead() || player.getHealth() == 0) {
                 if (!result.hasModifier("-a")) {

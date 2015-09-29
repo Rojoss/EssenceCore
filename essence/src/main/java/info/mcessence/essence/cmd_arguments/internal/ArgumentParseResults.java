@@ -25,6 +25,9 @@
 
 package info.mcessence.essence.cmd_arguments.internal;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
 import java.util.*;
 
 /**
@@ -63,11 +66,30 @@ public class ArgumentParseResults {
      * However, if the argument is optional or required console the value can be null.
      * For example if the first argument is a PlayerArgument which is REQUIRED_CONSOLE you would do something like this to get the player.
      * result.getArg("player") == null ? (Player)sender : (Player)result.getArg("player")
+     * Alternatively you can pass in the player as object tot his method to return that as value if it's null.
+     * @see #getArg(String, Object)
      * @param key They key or name of the argument to retreive the value from.
      * @return A Object containing the value.
      */
     public Object getArg(String key) {
         if (arguments.containsKey(key.toLowerCase())) {
+            return arguments.get(key);
+        }
+        return null;
+    }
+
+    /**
+     * @see #getArg(String)
+     * @param valueIfNull If the argument value is null this value will be returned instead of null.
+     * This can be usefull so you don't have to do null checks before casting the return value.
+     * You could do something like:
+     * result.getArg("player", (Player)sender);
+     */
+    public Object getArg(String key, Object valueIfNull) {
+        if (arguments.containsKey(key.toLowerCase())) {
+            if (arguments.get(key) == null) {
+                return valueIfNull;
+            }
             return arguments.get(key);
         }
         return null;

@@ -59,8 +59,8 @@ public class WalkspeedCmd extends EssenceCommand {
             return true;
         }
 
-        Float speed = result.getArg("speed") == null ? 0.2F : (Integer)result.getArg("speed") / 100F;
-        Player player = result.getArg("player") == null ? (Player)sender : (Player)result.getArg("player");
+        Float speed = (Float)result.getArg("speed", 20) / 100F;
+        Player player = (Player)result.getArg("player", castPlayer(sender));
 
         player.setWalkSpeed(speed);
 

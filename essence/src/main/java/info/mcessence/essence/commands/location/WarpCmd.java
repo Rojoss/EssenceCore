@@ -64,7 +64,7 @@ public class WarpCmd extends EssenceCommand {
         args = result.getArgs();
 
         String name = (String)result.getArg("name");
-        Player player = result.getArg("player") == null ? (Player)sender : (Player)result.getArg("player");
+        Player player = (Player)result.getArg("player", castPlayer(sender));
 
         if (ess.getWarps().getWarp(name) == null) {
             sender.sendMessage(Message.CMD_WARP_INVALID.msg().getMsg(true, name));

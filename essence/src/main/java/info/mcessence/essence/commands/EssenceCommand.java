@@ -40,6 +40,7 @@ import info.mcessence.essence.arguments.internal.Argument;
 import info.mcessence.essence.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
@@ -395,6 +396,13 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         values.put("options", str_options.isEmpty() ? none : Util.color(str_options));
 
         sender.sendMessage(Util.color(Message.CMD_HELP_ESSENCE.msg().getMsg(false, values)));
+    }
+
+    protected Player castPlayer(CommandSender sender) {
+        if (sender instanceof Player) {
+            return (Player)sender;
+        }
+        return null;
     }
 
     /** Method to be overwritten by each command */

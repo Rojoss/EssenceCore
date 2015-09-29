@@ -65,8 +65,8 @@ public class FlyCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        Player player = result.getArg("player") == null ? (Player)sender : (Player)result.getArg("player");
-        Boolean state = result.getArg("state") == null ? !player.isFlying() : (Boolean)result.getArg("state");
+        Player player = (Player)result.getArg("player", castPlayer(sender));
+        Boolean state = (Boolean)result.getArg("state", !player.isFlying());
 
         PlayerToggleFlightEvent event = new PlayerToggleFlightEvent(player, state);
         ess.getServer().getPluginManager().callEvent(event);

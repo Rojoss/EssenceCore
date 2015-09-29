@@ -805,6 +805,45 @@ public class EEntity {
 
 
     // ##################################################
+    // #################### TAMABLE #####################
+    // ##################################################
+    //region Tamable
+
+    /** @see Tameable#setTamed(boolean) */
+    public EEntity setTamed(Boolean tamed) {
+        if (entity instanceof Tameable) {
+            ((Tameable)entity).setTamed(tamed);
+        }
+        return this;
+    }
+
+    /** @see Tameable#isTamed() */
+    public Boolean isTamed() {
+        if (entity instanceof Tameable) {
+            return ((Tameable)entity).isTamed();
+        }
+        return false;
+    }
+
+    /** @see Tameable#setOwner(AnimalTamer) */
+    public EEntity setOwner(Player player) {
+        if (entity instanceof Tameable) {
+            ((Tameable)entity).setOwner(player);
+        }
+        return this;
+    }
+
+    /** @see Tameable#getOwner() */
+    public AnimalTamer getOwner() {
+        if (entity instanceof Tameable) {
+            return ((Tameable)entity).getOwner();
+        }
+        return null;
+    }
+    //endregion
+
+
+    // ##################################################
     // ################### CREATURES ####################
     // ##################################################
     //region Creatures
@@ -2305,6 +2344,8 @@ public class EEntity {
     public EEntity setItemInHand(EItem item) {
         if (entity instanceof ArmorStand) {
             ((ArmorStand)entity).setItemInHand(item);
+        } else if (entity instanceof LivingEntity) {
+            ((LivingEntity)entity).getEquipment().setItemInHand(item);
         }
         return this;
     }
@@ -2316,6 +2357,8 @@ public class EEntity {
     public ItemStack getBoots() {
         if (entity instanceof ArmorStand) {
             return ((ArmorStand)entity).getBoots();
+        } else if (entity instanceof LivingEntity) {
+            ((LivingEntity)entity).getEquipment().getBoots();
         }
         return null;
     }
@@ -2327,6 +2370,8 @@ public class EEntity {
     public EEntity setBoots(EItem item) {
         if (entity instanceof ArmorStand) {
             ((ArmorStand)entity).setBoots(item);
+        } else if (entity instanceof LivingEntity) {
+            ((LivingEntity)entity).getEquipment().setBoots(item);
         }
         return this;
     }
@@ -2338,6 +2383,8 @@ public class EEntity {
     public ItemStack getLeggings() {
         if (entity instanceof ArmorStand) {
             return ((ArmorStand)entity).getLeggings();
+        } else if (entity instanceof LivingEntity) {
+            ((LivingEntity)entity).getEquipment().getLeggings();
         }
         return null;
     }
@@ -2349,6 +2396,8 @@ public class EEntity {
     public EEntity setLeggings(EItem item) {
         if (entity instanceof ArmorStand) {
             ((ArmorStand)entity).setLeggings(item);
+        } else if (entity instanceof LivingEntity) {
+            ((LivingEntity)entity).getEquipment().setLeggings(item);
         }
         return this;
     }
@@ -2360,6 +2409,8 @@ public class EEntity {
     public ItemStack getChestplate() {
         if (entity instanceof ArmorStand) {
             return ((ArmorStand)entity).getChestplate();
+        } else if (entity instanceof LivingEntity) {
+            ((LivingEntity)entity).getEquipment().getChestplate();
         }
         return null;
     }
@@ -2371,6 +2422,8 @@ public class EEntity {
     public EEntity setChestplate(EItem item) {
         if (entity instanceof ArmorStand) {
             ((ArmorStand)entity).setChestplate(item);
+        } else if (entity instanceof LivingEntity) {
+            ((LivingEntity)entity).getEquipment().setChestplate(item);
         }
         return this;
     }
@@ -2382,6 +2435,8 @@ public class EEntity {
     public ItemStack getHelmet() {
         if (entity instanceof ArmorStand) {
             return ((ArmorStand)entity).getHelmet();
+        } else if (entity instanceof LivingEntity) {
+            ((LivingEntity)entity).getEquipment().getHelmet();
         }
         return null;
     }
@@ -2393,6 +2448,8 @@ public class EEntity {
     public EEntity setHelmet(EItem item) {
         if (entity instanceof ArmorStand) {
             ((ArmorStand)entity).setHelmet(item);
+        } else if (entity instanceof LivingEntity) {
+            ((LivingEntity)entity).getEquipment().setHelmet(item);
         }
         return this;
     }

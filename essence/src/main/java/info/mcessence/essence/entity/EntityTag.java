@@ -58,6 +58,10 @@ public enum EntityTag {
     BABY(new BoolArg("baby", true), "setBaby", Ageable.class),
     BREED(new BoolArg("breed", true), "setBreed", Ageable.class),
 
+    //Tamable
+    TAMED(new BoolArg("tamed", true), "setTamed", Tameable.class),
+    OWNER(new PlayerArg("owner"), "setOwner", Tameable.class),
+
     //Projectile
     BOUNCE(new BoolArg("bounce", true), "setBounce", Projectile.class),
 
@@ -196,13 +200,13 @@ public enum EntityTag {
     private String method;
     private Class<? extends Entity>[] classes;
 
-    EntityTag(Argument argument, String method, Class<? extends Entity>... classes) {
+    EntityTag(Argument argument, String method, Class... classes) {
         this.argument = argument;
         this.method = method;
         this.classes = classes;
     }
 
-    public Class<? extends Entity>[] getClasses() {
+    public Class[] getClasses() {
         return classes;
     }
 

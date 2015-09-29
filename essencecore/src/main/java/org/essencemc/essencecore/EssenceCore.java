@@ -32,7 +32,6 @@ import org.essencemc.essencecore.commands.Commands;
 import org.essencemc.essencecore.config.*;
 import org.essencemc.essencecore.config.aliases.AliasesCfg;
 import org.essencemc.essencecore.config.aliases.ItemAliases;
-import org.essencemc.essencecore.config.data.Warps;
 import org.essencemc.essencecore.database.Database;
 import org.essencemc.essencecore.database.MySql.MySql;
 import org.essencemc.essencecore.database.SqlLite.SqlLite;
@@ -63,7 +62,6 @@ public class EssenceCore extends JavaPlugin {
     private ModulesCfg modulesCfg;
     private CommandsCfg commandsCfg;
     private CommandOptionsCfg cmdOptionsCfg;
-    private Warps warps;
 
     private ISkull iSkull = null;
     private ITitle iTitle = null;
@@ -102,9 +100,6 @@ public class EssenceCore extends JavaPlugin {
         }
         setupNMS();
         registerEvents();
-
-        //TODO: Have a class for modules were it would create the config and such.
-        warps = new Warps("plugins/Essence/data/Warps.yml");
 
         commands = new Commands(this);
         modules = new Modules(this);
@@ -287,10 +282,6 @@ public class EssenceCore extends JavaPlugin {
 
     public CommandOptionsCfg getCmdOptions() {
         return cmdOptionsCfg;
-    }
-
-    public Warps getWarps() {
-        return warps;
     }
 
 

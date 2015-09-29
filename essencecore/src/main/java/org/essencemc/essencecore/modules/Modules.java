@@ -28,7 +28,6 @@ package org.essencemc.essencecore.modules;
 import org.bukkit.event.HandlerList;
 import org.essencemc.essencecore.EssenceCore;
 import org.essencemc.essencecore.ModuleCategory;
-import org.essencemc.essencecore.modules.ban.BanModule;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -41,12 +40,6 @@ public class Modules {
 
     public Modules(EssenceCore ess) {
         this.ess = ess;
-        registerModules();
-    }
-
-    /** Register all EssenceCore modules */
-    public void registerModules() {
-        registerModule(BanModule.class, ModuleCategory.COMMAND, "ban");
     }
 
     public Module getModule(Class<? extends Module> clazz) {

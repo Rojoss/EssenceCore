@@ -29,12 +29,9 @@ import info.mcessence.essence.Essence;
 import info.mcessence.essence.aliases.Aliases;
 import info.mcessence.essence.arguments.LocationArg;
 import info.mcessence.essence.arguments.internal.Argument;
-import info.mcessence.essence.cmd_arguments.LocationArgument;
-import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.entity.EEntity;
 import info.mcessence.essence.entity.EntityTag;
 import info.mcessence.essence.message.Message;
-import info.mcessence.essence.util.Debug;
 import info.mcessence.essence.util.NumberUtil;
 import info.mcessence.essence.util.Util;
 import org.bukkit.Location;
@@ -107,16 +104,12 @@ public class EntityParser {
             String data = "";
             if (lastSection.contains(")")) {
                 String[] split = lastSection.split("\\) ", 2);
-                Debug.bc("1:", split[0]);
-                Debug.bc("1:", split[1]);
                 if (split.length > 1) {
                     data = split[1];
                 }
                 sections.set(sections.size() - 1, split[0].trim() + ")");
             } else {
                 String[] split = lastSection.split(" ", 2);
-                Debug.bc("2:", split[0]);
-                Debug.bc("2:", split[1]);
                 if (split.length > 1) {
                     data = split[1];
                 }

@@ -54,7 +54,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     protected String permission;
 
     protected CmdArgument[] cmdArgs;
-    public Map<String, EMessage> modifiers = new HashMap<String, EMessage>();
+    public Map<String, CommandModifier> modifiers = new HashMap<String, CommandModifier>();
     public Map<String, CommandOption> cmdOptions = new HashMap<String, CommandOption>();
     public Map<String, Argument> optionalArgs = new HashMap<String, Argument>();
     public List<CommandLink> links = new ArrayList<CommandLink>();
@@ -65,8 +65,8 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         this.ess = ess;
         this.label = label;
 
-        modifiers.put("-?", Message.MOD_HELP.msg());
-        modifiers.put("-s", Message.MOD_SILENT.msg());
+        addModifier("-?", Message.MOD_HELP.msg());
+        addModifier("-s", Message.MOD_SILENT.msg());
 
         loadData(description, permission, aliases);
     }
@@ -225,6 +225,12 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                     result.success = false;
                     return result;
                 }
+                String perm = modifiers.get(arg).getPerm();
+                if (!hasPermission(sender, perm)) {
+                    sender.sendMessage(Message.NO_PERM.msg().getMsg(true, perm.startsWith("essence.") ? perm : permission + "." + perm));
+                    result.success = false;
+                    return result;
+                }
                 //Add the modifier to the result.
                 result.addModifier(arg);
                 keys.add(arg);
@@ -368,10 +374,14 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     }
 
     public void addModifier(String modifier, EMessage info) {
+        addModifier(modifier, info, "");
+    }
+
+    public void addModifier(String modifier, EMessage info, String permission) {
         if (!modifier.startsWith("-")) {
             modifier = "-" + modifier;
         }
-        modifiers.put(modifier, info);
+        modifiers.put(modifier, new CommandModifier(info, permission));
     }
 
     public void addLink(CommandLink link) {
@@ -398,8 +408,8 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         String str_usage = label + " " + Util.implode(argList, " ");
 
         List<String> modifierList = new ArrayList<String>();
-        for (Map.Entry<String, EMessage> entry : modifiers.entrySet()) {
-            modifierList.add(Message.CMD_HELP_MODIFIER.msg().getMsg(false, entry.getKey(), entry.getValue().getMsg(false)));
+        for (Map.Entry<String, CommandModifier> entry : modifiers.entrySet()) {
+            modifierList.add(Message.CMD_HELP_MODIFIER.msg().getMsg(false, entry.getKey(), entry.getValue().getInfo().getMsg(false)));
         }
         String str_modifiers = Util.implode(modifierList, Message.CMD_HELP_SEPARATOR.msg().getMsg(false));
 

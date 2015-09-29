@@ -53,12 +53,13 @@ public enum Message {
     NO_ARG_VALUE_NAME(MsgCat.VALIDATION, "&cMissing value for argument &4{0}&c! &7Specify the value after the semicolon!"),
     NO_ARG_VALUE(MsgCat.VALIDATION, "&cMissing argument value after the semicolon!"),
     INVALID_ENITY_TYPE(MsgCat.VALIDATION, "&4{0} &cis not a valid entity type! &7&l/entities &cfor a list!"),
+    MISSING_XYZ_LOCATION(MsgCat.VALIDATION, "&4{0} &cis not a valid location! &7You have to set the x,y,z values."),
 
     //Item parser error messages
     PARSER_VALID(MsgCat.ITEM_PARSER, "&6This is a valid item."),
     PARSER_NO_ITEM_SPECIFIED(MsgCat.ITEM_PARSER, "&cNo item specified!"),
     PARSER_INVALID_ITEM(MsgCat.ITEM_PARSER, "&cThe item &4{0} &cis not a valid item!"),
-    PARSER_INVALID_AMOUNT(MsgCat.ITEM_PARSER, "&c4{0} &cis not a valid item amount!"),
+    PARSER_INVALID_AMOUNT(MsgCat.ITEM_PARSER, "&c4{0} &cis not a valid amount!"),
     NO_META_VALUE(MsgCat.ITEM_PARSER, "No value specified for &4{0}:&c!"),
     PARSER_INVALID_COLOR(MsgCat.ITEM_PARSER, "&4{0} &cis not a valid color!"),
     PARSER_INVALID_DYE_COLOR(MsgCat.ITEM_PARSER, "&4{0} &cis not a valid dye color!"),

@@ -207,11 +207,21 @@ public class EntityParser {
                 for (Map.Entry<String, String> data : entry.getValue().entrySet()) {
                     EntityTag tag = EntityTag.fromString(data.getKey());
                     if (tag != null) {
+                        if (!EntityTag.getTags(entry.getKey()).contains(tag)) {
+                            //TODO: Get name from alias.
+                            error = Message.INVALID_ENTITY_TAG_ENTITY.msg().getMsg(true, data.getKey(), entry.getKey().getName());
+                            if (!ignoreErrors) {
+                                entity.remove();
+                                return;
+                            }
+                        }
+
                         Argument arg = tag.getArg().clone();
                         arg.parse(data.getValue());
                         if ((!arg.isValid() && !data.getValue().isEmpty()) || (!arg.hasDefault() && data.getValue().isEmpty())) {
                             error = arg.getError();
                             if (!ignoreErrors) {
+                                entity.remove();
                                 return;
                             }
                         }
@@ -275,6 +285,12 @@ public class EntityParser {
 
                     //Do the same for potion effects by key.
                     //TODO: Potion effects as tags.
+
+                    error = Message.INVALID_ENTITY_TAG.msg().getMsg(true, data.getKey());
+                    if (!ignoreErrors) {
+                        entity.remove();
+                        return;
+                    }
                 }
 
                 entities.add(entity);

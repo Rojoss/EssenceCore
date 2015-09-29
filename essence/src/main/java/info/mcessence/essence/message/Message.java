@@ -53,6 +53,8 @@ public enum Message {
     NO_ARG_VALUE_NAME(MsgCat.VALIDATION, "&cMissing value for argument &4{0}&c! &7Specify the value after the semicolon!"),
     NO_ARG_VALUE(MsgCat.VALIDATION, "&cMissing argument value after the semicolon!"),
     INVALID_ENITY_TYPE(MsgCat.VALIDATION, "&4{0} &cis not a valid entity type! &7&l/entities &cfor a list!"),
+    INVALID_ENTITY_TAG(MsgCat.VALIDATION, "&4{0} &cis not a valid entity tag. &7&l/entities <entity> &cfor a list. "),
+    INVALID_ENTITY_TAG_ENTITY(MsgCat.VALIDATION, "&4{0} &ccan not be used for &4{1}&c. &7&l/entities <entity> &cfor a list of tags you can use. "),
     MISSING_XYZ_LOCATION(MsgCat.VALIDATION, "&4{0} &cis not a valid location! &7You have to set the x,y,z values."),
     ENTITY_NO_LOCATION(MsgCat.VALIDATION, "&cMissing location for entity."),
 

@@ -30,6 +30,10 @@ import info.mcessence.essence.message.Message;
 
 public class BoolArg extends Argument {
 
+    public BoolArg() {
+        super();
+    }
+
     public BoolArg(String name) {
         super(name);
     }

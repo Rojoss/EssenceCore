@@ -31,6 +31,10 @@ import info.mcessence.essence.util.NumberUtil;
 
 public class IntArg extends Argument {
 
+    public IntArg() {
+        super();
+    }
+
     public IntArg(String name) {
         super(name);
     }

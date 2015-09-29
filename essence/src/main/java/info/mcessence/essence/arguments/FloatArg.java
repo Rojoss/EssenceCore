@@ -31,6 +31,10 @@ import info.mcessence.essence.util.NumberUtil;
 
 public class FloatArg extends Argument {
 
+    public FloatArg() {
+        super();
+    }
+
     public FloatArg(String name) {
         super(name);
     }

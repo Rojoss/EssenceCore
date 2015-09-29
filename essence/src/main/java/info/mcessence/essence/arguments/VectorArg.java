@@ -33,6 +33,10 @@ import org.bukkit.util.Vector;
 
 public class VectorArg extends Argument {
 
+    public VectorArg() {
+        super();
+    }
+
     public VectorArg(String name) {
         super(name);
     }

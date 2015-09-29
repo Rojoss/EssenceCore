@@ -32,6 +32,10 @@ import org.bukkit.material.MaterialData;
 
 public class MaterialArg extends Argument {
 
+    public MaterialArg() {
+        super();
+    }
+
     public MaterialArg(String name) {
         super(name);
     }

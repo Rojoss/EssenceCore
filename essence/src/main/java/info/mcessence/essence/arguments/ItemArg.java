@@ -32,6 +32,10 @@ import info.mcessence.essence.parsers.ItemParser;
 
 public class ItemArg extends Argument {
 
+    public ItemArg() {
+        super();
+    }
+
     public ItemArg(String name) {
         super(name);
     }

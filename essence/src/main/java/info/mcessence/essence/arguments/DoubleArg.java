@@ -31,6 +31,10 @@ import info.mcessence.essence.util.NumberUtil;
 
 public class DoubleArg extends Argument {
 
+    public DoubleArg() {
+        super();
+    }
+
     public DoubleArg(String name) {
         super(name);
     }

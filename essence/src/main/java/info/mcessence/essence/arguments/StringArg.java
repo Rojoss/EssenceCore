@@ -30,6 +30,10 @@ import info.mcessence.essence.message.Message;
 
 public class StringArg extends Argument {
 
+    public StringArg() {
+        super();
+    }
+
     public StringArg(String defaultValue) {
         super(defaultValue);
     }

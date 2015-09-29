@@ -60,7 +60,7 @@ public class HealCmd extends EssenceCommand {
 
         addModifier("-h", Message.MOD_HEAL_ONLY.msg());
         addModifier("-m", Message.MOD_HEAL_MAX_ONLY.msg());
-        addModifier("-a", Message.MOD_HEAL_ALL.msg());
+        addModifier("-a", Message.MOD_HEAL_ALL.msg(), "all");
 
         addLink(new RemoveLink("-a", "player"));
 

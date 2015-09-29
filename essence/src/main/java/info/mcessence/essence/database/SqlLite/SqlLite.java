@@ -51,7 +51,7 @@ public class SqlLite extends Database {
         path = plugin.getDataFolder().getAbsolutePath();
 
         Class.forName("org.sqlite.JDBC");
-        connection = DriverManager.getConnection("jdbc:sqlite:" + path + "/data/" + database + ".db");
+        connection = DriverManager.getConnection("jdbc:sqlite:" + path + "\\data\\" + database + ".db");
         return connection;
     }
 

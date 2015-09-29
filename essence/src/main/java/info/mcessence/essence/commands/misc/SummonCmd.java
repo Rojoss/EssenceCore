@@ -26,6 +26,7 @@
 package info.mcessence.essence.commands.misc;
 
 import info.mcessence.essence.Essence;
+import info.mcessence.essence.cmd_arguments.IntArgument;
 import info.mcessence.essence.cmd_arguments.LocationArgument;
 import info.mcessence.essence.cmd_arguments.PlayerArgument;
 import info.mcessence.essence.cmd_arguments.StringArgument;
@@ -50,8 +51,7 @@ public class SummonCmd extends EssenceCommand {
         super(ess, command, description, permission, aliases);
 
         cmdArgs = new CmdArgument[] {
-                new StringArgument("entity[(data)][(>|-)entity(>|-)...]", ArgumentRequirement.REQUIRED, ""),
-                //new LocationArgument("location", ArgumentRequirement.OPTIONAL, ""),
+                new StringArgument("entity[(data)][(>|-)entity(>|-)...] [amount] [location]", ArgumentRequirement.REQUIRED, ""),
         };
 
         addModifier("-r", Message.MOD_RIDE_ENTITY.msg());
@@ -67,18 +67,7 @@ public class SummonCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        String str = Util.implode(args, " ", " ", 0, args.length-1);
-        LocationArgument locArg = new LocationArgument("location", ArgumentRequirement.OPTIONAL, "");
-        ArgumentParseResult parsed = locArg.parse(this, sender, args[args.length - 1]);
-
-        Location location = ess.getServer().getWorlds().get(0).getSpawnLocation();
-        if (parsed.success && parsed.getValue() != null) {
-            location = (Location)parsed.getValue();
-        } else if (sender instanceof Player) {
-            location = ((Player)sender).getLocation();
-        }
-
-        EntityParser entityParser = new EntityParser(str, location, false);
+        EntityParser entityParser = new EntityParser(Util.implode(args, " "), sender instanceof Player ? ((Player)sender).getLocation() : null, false);
         if (!entityParser.isValid()) {
             sender.sendMessage(entityParser.getError());
             return true;

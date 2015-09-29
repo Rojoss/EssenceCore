@@ -27,7 +27,10 @@ package info.mcessence.essence.parsers;
 
 import info.mcessence.essence.Essence;
 import info.mcessence.essence.aliases.Aliases;
+import info.mcessence.essence.arguments.LocationArg;
 import info.mcessence.essence.arguments.internal.Argument;
+import info.mcessence.essence.cmd_arguments.LocationArgument;
+import info.mcessence.essence.cmd_arguments.internal.ArgumentRequirement;
 import info.mcessence.essence.entity.EEntity;
 import info.mcessence.essence.entity.EntityTag;
 import info.mcessence.essence.message.Message;
@@ -97,6 +100,51 @@ public class EntityParser {
             }
         }
 
+        //Get the amount and location from the last section if specified.
+        int amount;
+        if (sections.size() > 0) {
+            String lastSection = sections.get(sections.size() - 1);
+            String data = "";
+            if (lastSection.contains(")")) {
+                String[] split = lastSection.split("\\) ", 2);
+                Debug.bc("1:", split[0]);
+                Debug.bc("1:", split[1]);
+                if (split.length > 1) {
+                    data = split[1];
+                }
+                sections.set(sections.size() - 1, split[0].trim() + ")");
+            } else {
+                String[] split = lastSection.split(" ", 2);
+                Debug.bc("2:", split[0]);
+                Debug.bc("2:", split[1]);
+                if (split.length > 1) {
+                    data = split[1];
+                }
+                sections.set(sections.size() - 1, split[0].trim());
+            }
+            data = data.trim();
+            if (!data.isEmpty()) {
+                String[] split = data.split(" ");
+                if (NumberUtil.getInt(split[0]) == null) {
+                    error = Message.PARSER_INVALID_AMOUNT.msg().getMsg(true, split[0]);
+                    return;
+                }
+                if (split.length > 1) {
+                    LocationArg locArg = new LocationArg();
+                    locArg.parse(split[1]);
+                    if (!locArg.isValid()) {
+                        error = locArg.getError();
+                        return;
+                    }
+                    location = (Location)locArg.getValue();
+                }
+            }
+        }
+        //If there is no location specified as param and none in the entity string use default world spawn location.
+        if (location == null) {
+            Location loc = Essence.inst().getServer().getWorlds().get(0).getSpawnLocation();
+        }
+
         //Get a map with the EntityType as key and a map with key values for all extra data.
         Map<EntityType, Map<String, String>> entityMap = new HashMap<EntityType, Map<String, String>>();
         for (String section : sections) {
@@ -149,15 +197,9 @@ public class EntityParser {
             entityMap.put(type, dataMap);
         }
 
-        Location loc = new Location(Essence.inst().getServer().getWorlds().get(0), 0,0,0);
-        if (location != null) {
-            loc = location;
-        }
-        //TODO: Get location from string.
-
         entities.clear();
         for (Map.Entry<EntityType, Map<String, String>> entry : entityMap.entrySet()) {
-            EEntity entity = EEntity.create(entry.getKey(), loc);
+            EEntity entity = EEntity.create(entry.getKey(), location);
 
             for (Map.Entry<String, String> data : entry.getValue().entrySet()) {
                 EntityTag tag = EntityTag.fromString(data.getKey());

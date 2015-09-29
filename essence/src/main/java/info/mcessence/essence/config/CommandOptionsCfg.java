@@ -111,7 +111,7 @@ public class CommandOptionsCfg extends EasyConfig {
             }
         }
         if (command.optionalArgs.containsKey(optionKey)) {
-            command.optionalArgs.get(optionKey).setDefault(cmdOption.getValue());
+            command.optionalArgs.get(optionKey).getArg().setDefault(cmdOption.getValue());
         }
     }
 

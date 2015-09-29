@@ -56,7 +56,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     protected CmdArgument[] cmdArgs;
     public Map<String, CommandModifier> modifiers = new HashMap<String, CommandModifier>();
     public Map<String, CommandOption> cmdOptions = new HashMap<String, CommandOption>();
-    public Map<String, Argument> optionalArgs = new HashMap<String, Argument>();
+    public Map<String, CommandOptionalArg> optionalArgs = new HashMap<String, CommandOptionalArg>();
     public List<CommandLink> links = new ArrayList<CommandLink>();
 
     protected static CommandMap commandMap;
@@ -208,9 +208,9 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     public ArgumentParseResults parseArgs(EssenceCommand cmd, CommandSender sender, String[] args) {
         ArgumentParseResults result = new ArgumentParseResults();
         //Add optional args with default values from command options.
-        for (Map.Entry<String, Argument> entry : optionalArgs.entrySet()) {
-            if (entry.getValue().hasDefault()) {
-                result.addOptionalArg(entry.getKey(), entry.getValue().getDefault());
+        for (Map.Entry<String, CommandOptionalArg> entry : optionalArgs.entrySet()) {
+            if (entry.getValue().getArg().hasDefault()) {
+                result.addOptionalArg(entry.getKey(), entry.getValue().getArg().getDefault());
             }
         }
 
@@ -239,7 +239,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                 //Make sure the argument specified is a valid argument for the command.
                 if (optionalArgs.containsKey(split[0].toLowerCase())) {
                     //Get the arg and parse it.
-                    Argument optionalArg = optionalArgs.get(split[0]);
+                    Argument optionalArg = optionalArgs.get(split[0]).getArg();
                     optionalArg.parse(split.length > 1 ? split[1] : "");
                     //If he parsing wasn't successful send an error and fail.
                     //It will allow empty arguments if there is a default or cached value.
@@ -364,13 +364,25 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     public void addCommandOption(String key, EMessage infoMessage, Argument argument, boolean addAsArgument) {
         cmdOptions.put(key, new CommandOption(infoMessage, argument));
         if (addAsArgument) {
-            optionalArgs.put(key, argument.clone());
+            addOptionalArgument(key, argument.clone(), infoMessage);
         }
         ess.getCmdOptions().registerOption(this, key);
     }
 
     public void addOptionalArgument(String key, Argument argumentType) {
-        optionalArgs.put(key, argumentType);
+        addOptionalArgument(key, argumentType, null, "");
+    }
+
+    public void addOptionalArgument(String key, Argument argumentType, String permission) {
+        addOptionalArgument(key, argumentType, null, permission);
+    }
+
+    public void addOptionalArgument(String key, Argument argumentType, EMessage info) {
+        addOptionalArgument(key, argumentType, info, "");
+    }
+
+    public void addOptionalArgument(String key, Argument argumentType, EMessage info, String permission) {
+        optionalArgs.put(key, new CommandOptionalArg(info, argumentType, permission));
     }
 
     public void addModifier(String modifier, EMessage info) {
@@ -414,8 +426,8 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         String str_modifiers = Util.implode(modifierList, Message.CMD_HELP_SEPARATOR.msg().getMsg(false));
 
         List<String> optArgList = new ArrayList<String>();
-        for (Map.Entry<String, Argument> entry : optionalArgs.entrySet()) {
-            optArgList.add(Message.CMD_HELP_OPT_ARG.msg().getMsg(false, entry.getKey(), entry.getValue().getDescription(), entry.getValue().getDefault().toString()));
+        for (Map.Entry<String, CommandOptionalArg> entry : optionalArgs.entrySet()) {
+            optArgList.add(Message.CMD_HELP_OPT_ARG.msg().getMsg(false, entry.getKey(), entry.getValue().getArg().getDescription(), entry.getValue().getArg().getDefault().toString()));
         }
         String str_optargs = Util.implode(optArgList, Message.CMD_HELP_SEPARATOR.msg().getMsg(false));
 

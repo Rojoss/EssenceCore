@@ -32,6 +32,7 @@ import info.mcessence.essence.arguments.internal.Argument;
 import info.mcessence.essence.entity.EEntity;
 import info.mcessence.essence.entity.EntityTag;
 import info.mcessence.essence.message.Message;
+import info.mcessence.essence.util.Debug;
 import info.mcessence.essence.util.NumberUtil;
 import info.mcessence.essence.util.Util;
 import org.bukkit.Location;
@@ -133,9 +134,15 @@ public class EntityParser {
                 }
             }
         }
-        //If there is no location specified as param and none in the entity string use default world spawn location.
+
         if (location == null) {
-            Location loc = Essence.inst().getServer().getWorlds().get(0).getSpawnLocation();
+            if (!ignoreErrors) {
+                error = Message.ENTITY_NO_LOCATION.msg().getMsg(true);
+                return;
+            }
+
+            //If there is no location specified as param and none in the entity string use default world spawn location.
+            location = Essence.inst().getServer().getWorlds().get(0).getSpawnLocation();
         }
 
         //Get a map with the EntityType as key and a map with key values for all extra data.

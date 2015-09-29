@@ -180,8 +180,16 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
      * The sub permission will be appended to the permission.
      * Example: If you specify 'others' it would be 'essence.heal.others' on the heal command.
      * If the player has essence.* or essence.heal.* or essence.heal.others it will return true otherwise false.
+     * If the sub permission starts with essence. it will not append the permission and it's a regular permission check.
+     * So if you pass in essence.meta.name it would return true if the player has essence.meta.name or essence.*
      */
     public boolean hasPermission(CommandSender sender, String subPermission) {
+        if (subPermission.contains("essence.")) {
+            if (sender.hasPermission("essence.*") || sender.hasPermission(subPermission)) {
+                return true;
+            }
+            return false;
+        }
         if (permission == null || permission.isEmpty()) {
             return true;
         }

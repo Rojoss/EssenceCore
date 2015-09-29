@@ -66,8 +66,8 @@ public class FeedCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        Player player = result.getArg(0).getValue() == null ? (Player)sender : (Player)result.getArg(0).getValue();
-        int amount = result.getArg(1).getValue() == null ?  20 : (Integer)result.getArg(1).getValue();
+        Player player = result.getArg(0) == null ? (Player)sender : (Player)result.getArg(0);
+        int amount = result.getArg(1) == null ?  20 : (Integer)result.getArg(1);
 
         FoodLevelChangeEvent foodLevelChangeEvent = new FoodLevelChangeEvent(player, amount);
         ess.getServer().getPluginManager().callEvent(foodLevelChangeEvent);

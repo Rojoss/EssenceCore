@@ -68,9 +68,9 @@ public class GodCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        Player player = result.getArg(0).getValue() == null ? (Player) sender : (Player) result.getArg(0).getValue();
+        Player player = result.getArg(0) == null ? (Player) sender : (Player) result.getArg(0);
         // TODO: Check current god mode state
-        boolean state = (boolean) result.getArg(1).getValue();
+        boolean state = (boolean) result.getArg(1);
 
         return true;
     }

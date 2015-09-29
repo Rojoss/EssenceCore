@@ -69,8 +69,8 @@ public class NicknameCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        String nick = (String)result.getArg(0).getValue();
-        Player player = result.getArg(1).getValue() == null ? (Player)sender : (Player)result.getArg(1).getValue();
+        String nick = (String)result.getArg(0);
+        Player player = result.getArg(1) == null ? (Player)sender : (Player)result.getArg(1);
 
         if (hasPermission(sender, "color")) {
             player.setDisplayName(Util.color((String)cmdOptions.get("prefix").getArg().getValue() + nick));

@@ -40,11 +40,11 @@ import java.util.Map;
  * if (!result.success) {
  *     return true;
  * }
- * result.getArg(0).getValue() would return the value specified in the first argument.
+ * result.getArg(0) would return the value specified in the first argument.
  */
 public class ArgumentParseResults {
     public boolean success = true;
-    private List<ArgumentParseResult> parseResults = new ArrayList<ArgumentParseResult>();
+    private List<Object> argument = new ArrayList<Object>();
     private String[] args = null;
     private List<String> modifiers = new ArrayList<String>();
     private Map<String, Object> optionalArgs = new HashMap<String, Object>();
@@ -54,10 +54,10 @@ public class ArgumentParseResults {
      * Set the command argument parse result value for the given argument.
      * This is used by the parser and it's not recommended to manually call this unless you know what you're doing.
      * @param argumentIndex The index for the argument to set.
-     * @param parseResult A ArgumentParseResult containing the value.
+     * @param value A object which is the value of the argument.
      */
-    public void setArg(int argumentIndex, ArgumentParseResult parseResult) {
-        parseResults.add(argumentIndex, parseResult);
+    public void setArg(int argumentIndex, Object value) {
+        argument.add(argumentIndex, value);
     }
 
     /**
@@ -66,13 +66,13 @@ public class ArgumentParseResults {
      * If an argument is required the value for this argument will always be set and it wont ever be null so then it's safe to cast it directly.
      * However, if the argument is optional or required console the value can be null.
      * For example if the first argument is a PlayerArgument which is REQUIRED_CONSOLE you would do something like this to get the player.
-     * result.getArg(0).getValue() == null ? (Player)sender : (Player)result.getArg(0).getValue()
+     * result.getArg(0) == null ? (Player)sender : (Player)result.getArg(0)
      * @param argumentIndex The index for the argument to retrieve. (Order of argument definition in the constructor!)
-     * @return A ArgumentParseResult. (Use getValue() on this to get the actual argument value)
+     * @return A Object containing the value.
      */
-    public ArgumentParseResult getArg(int argumentIndex) {
-        if (parseResults.size() >= argumentIndex) {
-            return parseResults.get(argumentIndex);
+    public Object getArg(int argumentIndex) {
+        if (argument.size() >= argumentIndex) {
+            return argument.get(argumentIndex);
         }
         return null;
     }

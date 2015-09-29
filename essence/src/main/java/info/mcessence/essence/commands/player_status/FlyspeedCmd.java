@@ -60,8 +60,8 @@ public class FlyspeedCmd extends EssenceCommand {
             return true;
         }
 
-        Float speed = result.getArg(0).getValue() == null ? 0.2F : (Integer)result.getArg(0).getValue() / 100F;
-        Player player = result.getArg(1).getValue() == null ? (Player)sender : (Player)result.getArg(1).getValue();
+        Float speed = result.getArg(0) == null ? 0.2F : (Integer)result.getArg(0) / 100F;
+        Player player = result.getArg(1) == null ? (Player)sender : (Player)result.getArg(1);
 
         player.setFlySpeed(speed);
 

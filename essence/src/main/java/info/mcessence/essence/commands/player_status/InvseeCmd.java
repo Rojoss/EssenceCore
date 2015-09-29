@@ -63,7 +63,7 @@ public class InvseeCmd extends EssenceCommand {
         }
 
         Player player = (Player)sender;
-        Player invOwner = (Player)result.getArg(0).getValue();
+        Player invOwner = (Player)result.getArg(0);
 
         // TODO: Find a way to call InventoryOpenEvent.
 

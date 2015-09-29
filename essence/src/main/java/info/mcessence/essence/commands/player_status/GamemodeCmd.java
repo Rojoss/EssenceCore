@@ -64,8 +64,8 @@ public class GamemodeCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        String mode = (String)result.getArg(0).getValue();
-        Player player = result.getArg(1).getValue() == null ? (Player)sender : (Player)result.getArg(1).getValue();
+        String mode = (String)result.getArg(0);
+        Player player = result.getArg(1) == null ? (Player)sender : (Player)result.getArg(1);
 
         GameMode gm = null;
         for (GameMode gameMode : GameMode.values()) {

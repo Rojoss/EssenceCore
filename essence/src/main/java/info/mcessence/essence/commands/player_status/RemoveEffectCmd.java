@@ -72,8 +72,8 @@ public class RemoveEffectCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        String effectType = (String)result.getArg(0).getValue();
-        Player player = result.getArg(1).getValue() == null ? (Player)sender : (Player)result.getArg(1).getValue();
+        String effectType = (String)result.getArg(0);
+        Player player = result.getArg(1) == null ? (Player)sender : (Player)result.getArg(1);
         boolean single = true;
 
         if (effectType.equals("ALL")) single = false;

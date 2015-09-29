@@ -60,7 +60,7 @@ public class SudoCmd extends EssenceCommand {
             return true;
         }
 
-        Player target = (Player)result.getArg(0).getValue();
+        Player target = (Player)result.getArg(0);
         String command = Util.implode(args, " ", 1);
 
         ess.getServer().dispatchCommand(target, command);

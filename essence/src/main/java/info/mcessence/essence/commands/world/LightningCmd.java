@@ -58,7 +58,7 @@ public class LightningCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        Location location = (Location) result.getArg(0).getValue();
+        Location location = (Location) result.getArg(0);
         location.setY(location.getWorld().getHighestBlockAt(location).getY());
 
         location.getWorld().strikeLightning(location);

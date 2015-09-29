@@ -61,8 +61,8 @@ public class SetWarpCmd extends EssenceCommand {
         }
         args = result.getArgs();
 
-        String name = (String)result.getArg(0).getValue();
-        Location location = result.getArg(1).getValue() == null ? ((Player)sender).getLocation() : (Location) result.getArg(1).getValue();
+        String name = (String)result.getArg(0);
+        Location location = result.getArg(1) == null ? ((Player)sender).getLocation() : (Location) result.getArg(1);
 
         ess.getWarps().setWarp(name, location);
         if (!result.hasModifier("-s")) {

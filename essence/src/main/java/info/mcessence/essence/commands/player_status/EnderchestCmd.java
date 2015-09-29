@@ -65,7 +65,7 @@ public class EnderchestCmd extends EssenceCommand {
         // TODO: Offline player support
 
         Player player = (Player)sender;
-        Player targetPlayer = result.getArg(0).getValue() == null ? (Player)sender : (Player)result.getArg(0).getValue();
+        Player targetPlayer = result.getArg(0) == null ? (Player)sender : (Player)result.getArg(0);
 
         player.openInventory(targetPlayer.getEnderChest());
 

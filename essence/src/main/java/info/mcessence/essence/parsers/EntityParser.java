@@ -32,12 +32,10 @@ import info.mcessence.essence.arguments.internal.Argument;
 import info.mcessence.essence.entity.EEntity;
 import info.mcessence.essence.entity.EntityTag;
 import info.mcessence.essence.message.Message;
-import info.mcessence.essence.util.Debug;
 import info.mcessence.essence.util.NumberUtil;
 import info.mcessence.essence.util.Util;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.util.*;
 import org.bukkit.util.Vector;
@@ -47,11 +45,11 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 /**
- * The EntityParser can be used to parse strings to EEntity's and the other way around.
- * To parse an item or string you just create an instance of this class and pass a string or EEntity in.
+ * The EntityParser can be used to parse strings to EEntity's.
+ * To parse a string you just create an instance of this class and pass a string in.
  * Then you can use isValid() to check if the parsing was successful.
  * If not you can call getError() to get the error message which you should display to the user.
- * And then finally getEntities() or getString() to get the value.
+ * And then finally getEntities() to get the value.
  */
 public class EntityParser {
 
@@ -66,6 +64,7 @@ public class EntityParser {
      * If ignoreErrors is set to true it will still set the errors but it will try to continue parsing the rest.
      * It would still fail in some cases for example if there is an invalid entity specified.
      * @param string with all entity data.
+     * @param location Optional location which will be used as default if there is no location specified in the entity string.
      * @param ignoreErrors If true it will continue parsing even when there is an error.
      */
     public EntityParser(String string, Location location, boolean ignoreErrors) {
@@ -289,23 +288,6 @@ public class EntityParser {
             }
             this.entities.add(entities);
         }
-    }
-
-    /**
-     * Parses the given EEntity in to a string.
-     * @param entity EEntity instance that will be parsed.
-     */
-    public EntityParser(EEntity entity) {
-        this(Arrays.asList(entity));
-    }
-
-    /**
-     * Parses the given EEntity list in to a string.
-     * If there are multiple entities in the list the first entity will be on the bottom and the second stacked on top of that etc...
-     * @param entities list of EEntity instances that will be parsed.
-     */
-    public EntityParser(List<EEntity> entities) {
-
     }
 
     /**

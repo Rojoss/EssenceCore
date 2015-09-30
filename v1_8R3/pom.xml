@@ -36,7 +36,7 @@
     </parent>
 
     <artifactId>v1_8R3</artifactId>
-    <version>0.0</version>
+    <version>1</version>
 
     <dependencies>
         <dependency>

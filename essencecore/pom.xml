@@ -50,14 +50,14 @@
         <dependency>
             <groupId>org.essencemc</groupId>
             <artifactId>v1_8R3</artifactId>
-            <version>0.0</version>
+            <version>1</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.essencemc</groupId>
             <artifactId>api</artifactId>
-            <version>0.0</version>
+            <version>0.1</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

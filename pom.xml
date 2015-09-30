@@ -54,8 +54,15 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>
 
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ftp</artifactId>
+                <version>1.0-alpha-6</version>
+            </extension>
+        </extensions>
+    </build>
 
     <repositories>
         <repository>
@@ -63,6 +70,13 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
     </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>essence-repo</id>
+            <url>ftp://ftp.essencemc.org/maven2</url>
+        </repository>
+    </distributionManagement>
 
     <modules>
         <module>essencecore</module>

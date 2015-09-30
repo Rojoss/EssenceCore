@@ -30,6 +30,7 @@ import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.essencemc.essencecore.EssenceCore;
 import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.commands.arguments.internal.ArgumentParseResult;
@@ -47,7 +48,7 @@ import java.util.*;
 
 public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Listener {
 
-    protected final EssenceCore ess;
+    protected final Plugin plugin;
     protected final String label;
     protected String description;
     protected List<String> aliases;
@@ -61,8 +62,8 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
 
     protected static CommandMap commandMap;
 
-    public EssenceCommand(EssenceCore ess, String label, String description, String permission, List<String> aliases) {
-        this.ess = ess;
+    public EssenceCommand(Plugin plugin, String label, String description, String permission, List<String> aliases) {
+        this.plugin = plugin;
         this.label = label;
 
         addModifier("-?", Message.MOD_HELP.msg());
@@ -86,7 +87,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         if (getUsage() != null) cmd.setUsage(this.getUsage());
         getCommandMap().register("", cmd);
         cmd.setExecutor(this);
-        ess.getServer().getPluginManager().registerEvents(this, ess);
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     /** Unregister the command and all aliases from the server */
@@ -134,8 +135,8 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     }
 
     /** Get the main EssenceCore plugin instance */
-    public EssenceCore getEss() {
-        return ess;
+    public Plugin getPlugin() {
+        return plugin;
     }
 
 
@@ -366,7 +367,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         if (addAsArgument) {
             addOptionalArgument(key, argument.clone(), infoMessage);
         }
-        ess.getCmdOptions().registerOption(this, key);
+        EssenceCore.inst().getCmdOptions().registerOption(this, key);
     }
 
     public void addOptionalArgument(String key, Argument argumentType) {

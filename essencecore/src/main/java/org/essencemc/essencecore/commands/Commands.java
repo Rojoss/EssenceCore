@@ -25,6 +25,7 @@
 
 package org.essencemc.essencecore.commands;
 
+import org.bukkit.plugin.Plugin;
 import org.essencemc.essencecore.EssenceCore;
 import org.essencemc.essencecore.ModuleCategory;
 import org.essencemc.essencecore.config.CommandsCfg;
@@ -51,7 +52,7 @@ public class Commands {
      * It will only register the command if it's enabled in the config.
      * If the command is already registered and disabled in the config it will be unregistered.
      */
-    public void registerCommand(Class<? extends EssenceCommand> clazz, String label, String module, String description, String[] aliases) {
+    public void registerCommand(Plugin plugin, Class<? extends EssenceCommand> clazz, String label, String module, String description, String[] aliases) {
         if (!module.isEmpty()) {
             ess.getModuleCfg().registerModule(ModuleCategory.COMMAND, module);
         }
@@ -80,7 +81,7 @@ public class Commands {
         }
 
         try {
-            EssenceCommand cmd = clazz.getConstructor(EssenceCore.class, String.class, String.class, String.class, List.class).newInstance(ess, label, cfg.getDescription(label), cfg.getPermission(label), cfg.getAliases(label));
+            EssenceCommand cmd = clazz.getConstructor(Plugin.class, String.class, String.class, String.class, List.class).newInstance(plugin, label, cfg.getDescription(label), cfg.getPermission(label), cfg.getAliases(label));
             commands.add(cmd);
         } catch (InstantiationException e) {
             ess.logError("Failed to register the command " + label);

@@ -23,23 +23,22 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.nms.v1_8_R3.util;
+package org.essencemc.essencecore.api;
 
-import net.minecraft.server.v1_8_R3.Packet;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 /**
- * Handles packet sending for v1_8R3
+ * Interface for handling actionbars and chat
  */
-public class PacketHandler {
+public interface IChat {
 
-    public static void sendPacket(Player player, Packet packet) {
-        ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
-    }
+    /**
+     * Send actionbar to the player
+     */
+    void sendActionbar(String message, Player player);
 
-    public static void sendPacket(Player player, Packet packet1, Packet packet2) {
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet1);
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet2);
-    }
+    /**
+     * Send actionbar to the players
+     */
+    void sendActionbar(String message, Player[] players);
 }

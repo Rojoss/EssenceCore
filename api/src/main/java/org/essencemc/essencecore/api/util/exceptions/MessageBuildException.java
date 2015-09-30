@@ -23,30 +23,14 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.nms;
-
-import org.bukkit.block.Block;
-import org.bukkit.inventory.meta.SkullMeta;
+package org.essencemc.essencecore.api.util.exceptions;
 
 /**
- * Interface for skull player data handling
+ * Custom exception for building json messages
  */
-public interface ISkull {
+public class MessageBuildException extends Exception {
 
-    /**
-     * Set a specific skin texture to the given skull block.
-     * If the block isn't a skull nothing will happen!
-     */
-    void setSkullUrl(String skinUrl, Block block);
-
-    /**
-     * Set a specific skin texture to the given skull meta.
-     * It will return the SkullMeta with the texture applied if it was valid.
-     */
-    SkullMeta setSkullUrl(String skinUrl, SkullMeta meta);
-
-    /**
-     * Get the texture url code from the skull meta.
-     */
-    String getSkullUrl(SkullMeta meta);
+    public MessageBuildException(String message) {
+        super(message);
+    }
 }

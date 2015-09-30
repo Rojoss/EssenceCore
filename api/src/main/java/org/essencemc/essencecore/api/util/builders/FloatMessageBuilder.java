@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.nms.util.builders;
+package org.essencemc.essencecore.api.util.builders;
 
 import org.bukkit.ChatColor;
 

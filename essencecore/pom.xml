@@ -30,13 +30,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.essencemc.essencecore</groupId>
-        <artifactId>parent</artifactId>
+        <groupId>org.essencemc</groupId>
+        <artifactId>essence-parent</artifactId>
         <version>parent</version>
     </parent>
 
-    <artifactId>EssenceCore</artifactId>
-    <version>0.1</version>
+    <artifactId>essence-core</artifactId>
+    <version>0.0.1.0-SNAPSHOT</version>
 
 
     <dependencies>
@@ -48,14 +48,14 @@
         </dependency>
 
         <dependency>
-            <groupId>org.essencemc.essencecore</groupId>
+            <groupId>org.essencemc</groupId>
             <artifactId>v1_8R3</artifactId>
             <version>0.0</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.essencemc.essencecore</groupId>
+            <groupId>org.essencemc</groupId>
             <artifactId>api</artifactId>
             <version>0.0</version>
             <scope>compile</scope>

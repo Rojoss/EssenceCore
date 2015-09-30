@@ -23,14 +23,23 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.nms.util.exceptions;
+package org.essencemc.essencecore.v1_8R3.util;
+
+import net.minecraft.server.v1_8_R3.Packet;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 
 /**
- * Custom exception for building json messages
+ * Handles packet sending for v1_8R3
  */
-public class MessageBuildException extends Exception {
+public class PacketHandler {
 
-    public MessageBuildException(String message) {
-        super(message);
+    public static void sendPacket(Player player, Packet packet) {
+        ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
+    }
+
+    public static void sendPacket(Player player, Packet packet1, Packet packet2) {
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet1);
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet2);
     }
 }

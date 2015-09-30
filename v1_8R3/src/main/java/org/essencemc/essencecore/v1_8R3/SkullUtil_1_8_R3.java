@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.nms.v1_8_R3;
+package org.essencemc.essencecore.v1_8R3;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -36,8 +36,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.essencemc.essencecore.nms.ISkull;
-import org.essencemc.essencecore.nms.util.Util;
+import org.essencemc.essencecore.api.ISkull;
+import org.essencemc.essencecore.api.util.Util;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;

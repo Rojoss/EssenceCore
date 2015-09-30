@@ -23,11 +23,11 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.nms.util.builders;
+package org.essencemc.essencecore.api.util.builders;
 
 
 import org.bukkit.ChatColor;
-import org.essencemc.essencecore.nms.util.Util;
+import org.essencemc.essencecore.api.util.Util;
 
 /**
  * All methods common between all builders

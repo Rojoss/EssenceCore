@@ -37,10 +37,10 @@ import org.essencemc.essencecore.database.MySql.MySql;
 import org.essencemc.essencecore.database.SqlLite.SqlLite;
 import org.essencemc.essencecore.listeners.ModuleListener;
 import org.essencemc.essencecore.modules.Modules;
-import org.essencemc.essencecore.nms.ISkull;
-import org.essencemc.essencecore.nms.ITitle;
-import org.essencemc.essencecore.nms.v1_8_R3.SkullUtil_1_8_R3;
-import org.essencemc.essencecore.nms.v1_8_R3.Title_1_8_R3;
+import org.essencemc.essencecore.api.ISkull;
+import org.essencemc.essencecore.api.ITitle;
+import org.essencemc.essencecore.v1_8R3.SkullUtil_1_8_R3;
+import org.essencemc.essencecore.v1_8R3.Title_1_8_R3;
 import org.essencemc.essencecore.player.PlayerManager;
 
 import java.sql.Connection;

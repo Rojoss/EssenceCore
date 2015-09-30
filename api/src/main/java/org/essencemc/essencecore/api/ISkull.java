@@ -23,22 +23,30 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.nms;
+package org.essencemc.essencecore.api;
 
-import org.bukkit.entity.Player;
+import org.bukkit.block.Block;
+import org.bukkit.inventory.meta.SkullMeta;
 
 /**
- * Interface for handling actionbars and chat
+ * Interface for skull player data handling
  */
-public interface IChat {
+public interface ISkull {
 
     /**
-     * Send actionbar to the player
+     * Set a specific skin texture to the given skull block.
+     * If the block isn't a skull nothing will happen!
      */
-    void sendActionbar(String message, Player player);
+    void setSkullUrl(String skinUrl, Block block);
 
     /**
-     * Send actionbar to the players
+     * Set a specific skin texture to the given skull meta.
+     * It will return the SkullMeta with the texture applied if it was valid.
      */
-    void sendActionbar(String message, Player[] players);
+    SkullMeta setSkullUrl(String skinUrl, SkullMeta meta);
+
+    /**
+     * Get the texture url code from the skull meta.
+     */
+    String getSkullUrl(SkullMeta meta);
 }

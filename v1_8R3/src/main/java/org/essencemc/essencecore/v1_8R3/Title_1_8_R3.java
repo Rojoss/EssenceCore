@@ -23,14 +23,14 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.nms.v1_8_R3;
+package org.essencemc.essencecore.v1_8R3;
 
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.essencemc.essencecore.nms.ITitle;
-import org.essencemc.essencecore.nms.v1_8_R3.util.PacketHandler;
+import org.essencemc.essencecore.api.ITitle;
+import org.essencemc.essencecore.v1_8R3.util.PacketHandler;
 
 /**
  * Handles the titles and subtitles for v1_8R3

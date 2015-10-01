@@ -1,5 +1,5 @@
-main : ${project.groupId}.EssenceCore
-name: ${project.name}
+main : ${project.groupId}.essencecore.EssenceCore
+name: EssenceCore
 version: ${project.version}
 description: ${project.description}
 website: ${project.url}

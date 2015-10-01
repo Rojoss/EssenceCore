@@ -30,6 +30,7 @@ import org.essencemc.essencecore.database.Column;
 import org.essencemc.essencecore.database.Database;
 import org.essencemc.essencecore.database.Query;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -48,10 +49,14 @@ public class SqlLite extends Database {
         if (checkConnection()) {
             return connection;
         }
-        path = plugin.getDataFolder().getAbsolutePath();
+        File file = new File(plugin.getDataFolder().getAbsoluteFile().getParent(), "Essence");
+        file.mkdir();
+        file = new File(file, "data");
+        file.mkdir();
+        path = file.getAbsolutePath();
 
         Class.forName("org.sqlite.JDBC");
-        connection = DriverManager.getConnection("jdbc:sqlite:" + path + "\\data\\" + database + ".db");
+        connection = DriverManager.getConnection("jdbc:sqlite:" + path + File.separator + database + ".db");
         return connection;
     }
 

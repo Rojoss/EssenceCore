@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.api;
+package org.essencemc.essencecore.nms;
 
 import org.bukkit.block.Block;
 import org.bukkit.inventory.meta.SkullMeta;

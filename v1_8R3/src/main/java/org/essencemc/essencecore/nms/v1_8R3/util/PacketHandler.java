@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.v1_8R3.util;
+package org.essencemc.essencecore.nms.v1_8R3.util;
 
 import net.minecraft.server.v1_8_R3.Packet;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;

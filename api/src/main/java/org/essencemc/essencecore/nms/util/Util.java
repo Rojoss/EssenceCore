@@ -23,10 +23,9 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.api.util;
+package org.essencemc.essencecore.nms.util;
 
 import org.apache.commons.codec.binary.Base64;
-import org.bukkit.ChatColor;
 
 /**
  * Misc methods that dont fit anywhere (yet)

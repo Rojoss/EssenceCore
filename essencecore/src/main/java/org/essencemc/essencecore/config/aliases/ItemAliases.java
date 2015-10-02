@@ -27,7 +27,7 @@ package org.essencemc.essencecore.config.aliases;
 
 import org.essencemc.essencecore.aliases.ItemAlias;
 import org.essencemc.essencecore.aliases.Items;
-import org.essencemc.essencecore.config.EasyConfig;
+import org.essencemc.essencecore.config.internal.EasyConfig;
 
 import java.util.ArrayList;
 import java.util.Arrays;

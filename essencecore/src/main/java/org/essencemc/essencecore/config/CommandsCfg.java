@@ -25,6 +25,7 @@
 
 package org.essencemc.essencecore.config;
 
+import org.essencemc.essencecore.config.internal.EasyConfig;
 import org.essencemc.essencecore.util.Util;
 
 import java.util.*;

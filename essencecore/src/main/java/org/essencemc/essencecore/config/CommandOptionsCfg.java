@@ -29,6 +29,7 @@ import org.essencemc.essencecore.EssenceCore;
 import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.commands.CommandOption;
 import org.essencemc.essencecore.commands.EssenceCommand;
+import org.essencemc.essencecore.config.internal.EasyConfig;
 
 import java.util.HashMap;
 import java.util.List;

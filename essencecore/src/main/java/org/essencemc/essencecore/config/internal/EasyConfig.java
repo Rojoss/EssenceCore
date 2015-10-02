@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.config;
+package org.essencemc.essencecore.config.internal;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

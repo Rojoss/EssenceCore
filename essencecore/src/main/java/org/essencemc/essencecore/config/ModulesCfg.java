@@ -25,6 +25,8 @@
 
 package org.essencemc.essencecore.config;
 
+import org.essencemc.essencecore.config.internal.EasyConfig;
+
 import java.util.HashMap;
 import java.util.Map;
 

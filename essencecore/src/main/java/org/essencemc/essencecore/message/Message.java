@@ -25,6 +25,8 @@
 
 package org.essencemc.essencecore.message;
 
+import org.essencemc.essencecore.EssenceCore;
+
 public enum Message {
     //Main messages
     PREFIX(MsgCat.GENERAL, "&8[&4Essence&8] &6"),
@@ -121,7 +123,7 @@ public enum Message {
     private EMessage message;
 
     Message(MsgCat category, String defaultMsg) {
-        message = new EMessage(category, this.toString(), defaultMsg);
+        message = new EMessage(category, this.toString(), defaultMsg, EssenceCore.inst().getMessages());
     }
 
     public EMessage msg() {

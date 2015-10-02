@@ -35,6 +35,7 @@ public enum MsgCat {
     VALIDATION,
     ITEM_PARSER,
     OTHER,
+    EXTERNAL,
     ;
 
     public static MsgCat fromString(String name) {

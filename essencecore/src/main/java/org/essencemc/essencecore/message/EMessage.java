@@ -26,7 +26,9 @@
 package org.essencemc.essencecore.message;
 
 import org.essencemc.essencecore.EssenceCore;
+import org.essencemc.essencecore.config.internal.EasyConfig;
 import org.essencemc.essencecore.config.MessagesCfg;
+import org.essencemc.essencecore.config.internal.MessageConfig;
 import org.essencemc.essencecore.util.Util;
 
 import java.util.HashMap;
@@ -45,6 +47,7 @@ public class EMessage {
     private MsgCat category;
     private String key;
     private String defaultMsg;
+    private MessageConfig config;
 
     private String message;
 
@@ -56,26 +59,29 @@ public class EMessage {
      * However, these placeholders will only get formatted if the proper getMsg() method is called.
      * In most cases indexed placeholders should be used since it's the most simple to use.
      */
-    public EMessage(MsgCat category, String key, String defaultMsg) {
+    public EMessage(MsgCat category, String key, String defaultMsg, MessageConfig config) {
         this.category = category;
         this.key = key;
         this.defaultMsg = defaultMsg;
+        this.config = config;
         updateMessage();
     }
 
     private void updateMessage() {
+        Map<String, Map<String, String>> messageMap = config.getMessages();
+
         MessagesCfg msgCfg = EssenceCore.inst().getMessages();
         String category = getCategory().toString().toLowerCase().replace("_","-");
         String key = getKey().toLowerCase().replace("_","-");
 
         Map<String, String> messages = new HashMap<String, String>();
-        if (msgCfg.MESSAGES.containsKey(category)) {
-            messages = msgCfg.MESSAGES.get(category);
+        if (messageMap.containsKey(category)) {
+            messages = messageMap.get(category);
         }
         if (!messages.containsKey(key)) {
             messages.put(key, getDefault());
-            msgCfg.MESSAGES.put(category, new TreeMap<String, String>(messages));
-            msgCfg.save();
+            messageMap.put(category, new TreeMap<String, String>(messages));
+            config.setMessages(messageMap);
         }
         message = messages.get(key);
     }

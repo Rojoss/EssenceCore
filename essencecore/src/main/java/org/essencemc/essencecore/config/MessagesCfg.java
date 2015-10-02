@@ -25,15 +25,29 @@
 
 package org.essencemc.essencecore.config;
 
+import org.essencemc.essencecore.config.internal.EasyConfig;
+import org.essencemc.essencecore.config.internal.MessageConfig;
+
 import java.util.Map;
 import java.util.TreeMap;
 
-public class MessagesCfg extends EasyConfig {
+public class MessagesCfg extends EasyConfig implements MessageConfig {
 
     public Map<String, Map<String, String>> MESSAGES = new TreeMap<String, Map<String, String>>();
 
     public MessagesCfg(String fileName) {
         this.setFile(fileName);
         load();
+    }
+
+    @Override
+    public Map<String, Map<String, String>> getMessages() {
+        return MESSAGES;
+    }
+
+    @Override
+    public void setMessages(Map<String, Map<String, String>> messages) {
+        MESSAGES = messages;
+        save();
     }
 }

@@ -25,8 +25,6 @@
 
 package org.essencemc.essencecore.config;
 
-import org.essencemc.essencecore.ModuleCategory;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,20 +38,26 @@ public class ModulesCfg extends EasyConfig {
     }
 
     /**
-     * Register a new module an enable it by default.
-     * If there is a module registered already in the same category with the same name it will return false.
+     * Register a new module.
+     * If the parent is null or empty it will set the parent to the module itself.
+     * The state is the initial module state so if it's enabled or not.
+     * It's recommended to keep all modules disabled on first load so that there aren't any configurations and such created.
+     * @return true if it registered and false if there is a module registered with this name already.
      */
-    public boolean registerModule(ModuleCategory category, String module) {
-        String cat = category.toString().toLowerCase().replace("_","-");
+    public boolean registerModule(String parent, String module, boolean state) {
+        if (parent == null || parent.isEmpty()) {
+            parent = module;
+        }
+        parent = parent.toUpperCase();
         module = module.toLowerCase();
         Map<String, Boolean> moduleList = new HashMap<String, Boolean>();
-        if (modules.containsKey(cat)) {
-            moduleList = modules.get(cat);
+        if (modules.containsKey(parent)) {
+            moduleList = modules.get(parent);
         }
 
         if (!moduleList.containsKey(module)) {
-            moduleList.put(module, true);
-            modules.put(cat, moduleList);
+            moduleList.put(module, state);
+            modules.put(parent, moduleList);
             save();
             return true;
         }
@@ -62,35 +66,44 @@ public class ModulesCfg extends EasyConfig {
 
     /**
      * Check if the specified module is enabled or not.
+     * If the parent is null or empty it will set the parent to the module itself.
      * If the module isn't registered it will return false.
      */
-    public boolean isEnabled(ModuleCategory category, String module) {
-        String cat = category.toString().toLowerCase().replace("_","-");
-        if (!modules.containsKey(cat)) {
+    public boolean isEnabled(String parent, String module) {
+        if (parent == null || parent.isEmpty()) {
+            parent = module;
+        }
+        parent = parent.toUpperCase();
+        module = module.toLowerCase();
+        if (!modules.containsKey(parent)) {
             return false;
         }
         module = module.toLowerCase();
-        if (modules.get(cat).containsKey(module)) {
-            return modules.get(cat).get(module);
+        if (modules.get(parent).containsKey(module)) {
+            return modules.get(parent).get(module);
         }
         return false;
     }
 
     /**
      * Enable/disable modules through code.
+     * If the parent is null or empty it will set the parent to the module itself.
      * Users can still re-enable modules in the config so don't use this to remove/disable things.
      */
-    public void setEnabled(ModuleCategory category, String module, boolean state) {
-        String cat = category.toString().toLowerCase().replace("_","-");
+    public void setEnabled(String parent, String module, boolean state) {
+        if (parent == null || parent.isEmpty()) {
+            parent = module;
+        }
+        parent = parent.toUpperCase();
         module = module.toLowerCase();
         Map<String, Boolean> moduleList = new HashMap<String, Boolean>();
-        if (modules.containsKey(cat)) {
-            moduleList = modules.get(cat);
+        if (modules.containsKey(parent)) {
+            moduleList = modules.get(parent);
         }
 
         if (moduleList.containsKey(module)) {
             moduleList.put(module, state);
-            modules.put(cat, moduleList);
+            modules.put(parent, moduleList);
             save();
         }
     }

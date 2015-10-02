@@ -27,7 +27,6 @@ package org.essencemc.essencecore.modules;
 
 import org.bukkit.event.HandlerList;
 import org.essencemc.essencecore.EssenceCore;
-import org.essencemc.essencecore.ModuleCategory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -51,13 +50,13 @@ public class Modules {
         return null;
     }
 
-    public void registerModule(Class<? extends Module> clazz, ModuleCategory category, String moduleName) {
+    public void registerModule(Class<? extends Module> clazz, String parentModule, String moduleName) {
         if (!moduleName.isEmpty()) {
-            ess.getModuleCfg().registerModule(category, moduleName);
+            ess.getModuleCfg().registerModule(parentModule, moduleName, false);
         }
         for (Module module : modules) {
             if (module.getName().equalsIgnoreCase(moduleName)) {
-                if (!moduleName.isEmpty() && !ess.getModuleCfg().isEnabled(category, moduleName)) {
+                if (!moduleName.isEmpty() && !ess.getModuleCfg().isEnabled(parentModule, moduleName)) {
                     if (module instanceof StorageModule) {
                         ((SqlStorageModule)module).onSave();
                     }
@@ -71,7 +70,7 @@ public class Modules {
             }
         }
 
-        if (!moduleName.isEmpty() && !ess.getModuleCfg().isEnabled(category, moduleName)) {
+        if (!moduleName.isEmpty() && !ess.getModuleCfg().isEnabled(parentModule, moduleName)) {
             return;
         }
 

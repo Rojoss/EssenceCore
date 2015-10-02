@@ -27,7 +27,6 @@ package org.essencemc.essencecore.commands;
 
 import org.bukkit.plugin.Plugin;
 import org.essencemc.essencecore.EssenceCore;
-import org.essencemc.essencecore.ModuleCategory;
 import org.essencemc.essencecore.config.CommandsCfg;
 
 import java.lang.reflect.InvocationTargetException;
@@ -52,14 +51,14 @@ public class Commands {
      * It will only register the command if it's enabled in the config.
      * If the command is already registered and disabled in the config it will be unregistered.
      */
-    public void registerCommand(Plugin plugin, Class<? extends EssenceCommand> clazz, String label, String module, String description, String[] aliases) {
+    public void registerCommand(Plugin plugin, Class<? extends EssenceCommand> clazz, String label, String parentModule, String module, String description, String[] aliases) {
         if (!module.isEmpty()) {
-            ess.getModuleCfg().registerModule(ModuleCategory.COMMAND, module);
+            ess.getModuleCfg().registerModule(parentModule, module, false);
         }
         for (EssenceCommand cmd : commands) {
             if (cmd.getLabel().equals(label)) {
                 cmd.unregister();
-                if (module.isEmpty() || ess.getModuleCfg().isEnabled(ModuleCategory.COMMAND, module)) {
+                if (module.isEmpty() || ess.getModuleCfg().isEnabled(parentModule, module)) {
                     cmd.loadData(cfg.getDescription(label), cfg.getPermission(label), cfg.getAliases(label));
                     cmd.register();
                 } else {
@@ -76,7 +75,7 @@ public class Commands {
         }
 
         cfg.registerCommand(label, description, "essence." + label, aliases);
-        if (!module.isEmpty() && !ess.getModuleCfg().isEnabled(ModuleCategory.COMMAND, module)) {
+        if (!module.isEmpty() && !ess.getModuleCfg().isEnabled(parentModule, module)) {
             return;
         }
 

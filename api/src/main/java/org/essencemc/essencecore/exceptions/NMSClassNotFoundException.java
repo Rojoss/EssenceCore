@@ -23,26 +23,14 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.nms;
-
-import org.bukkit.GameMode;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
+package org.essencemc.essencecore.exceptions;
 
 /**
- * Interface for handling any visuals that are only visible to a particular player only
+ * Exception for indicating a supporting nms handler is not found
  */
-public interface IPlayerScreenVisuals {
+public class NMSClassNotFoundException extends NullPointerException {
 
-    IPlayerScreenVisuals setPlayerDimension(World.Environment environment, Player player);
-
-    IPlayerScreenVisuals setPlayerDimension(World.Environment environment, Player[] players);
-
-    IPlayerScreenVisuals setPlayerGamemode(GameMode gameMode, Player player);
-
-    IPlayerScreenVisuals setPlayerGamemode(GameMode gameMode, Player[] players);
-
-    IPlayerScreenVisuals setPlayerReducedInfo(boolean reducedInfo, Player player);
-
-    IPlayerScreenVisuals setPlayerReducedInfo(boolean reducedInfo, Player[] players);
+    public NMSClassNotFoundException(String message) {
+        super(message);
+    }
 }

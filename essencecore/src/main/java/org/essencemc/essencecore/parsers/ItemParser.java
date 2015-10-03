@@ -446,8 +446,8 @@ public class ItemParser {
 
             if (skullMeta.hasOwner()) {
                 if (skullMeta.getOwner() == null) {
-                    if (EssenceCore.inst().getISkull() != null) {
-                        components.add("texture:" + EssenceCore.inst().getISkull().getSkullUrl(skullMeta));
+                    if (EssenceCore.inst().getSkull() != null) {
+                        components.add("texture:" + EssenceCore.inst().getSkull().getSkullUrl(skullMeta));
                     }
                 } else {
                     components.add("player:" + skullMeta.getOwner());

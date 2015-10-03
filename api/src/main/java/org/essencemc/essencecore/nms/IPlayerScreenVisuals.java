@@ -23,23 +23,26 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.nms.v1_8R3.util;
+package org.essencemc.essencecore.nms;
 
-import net.minecraft.server.v1_8_R3.Packet;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.GameMode;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 /**
- * Handles packet sending for v1_8R3
+ * Interface for handling any visuals that are only visible to a particular player only
  */
-public class PacketHandler {
+public interface IPlayerScreenVisuals {
 
-    public static void sendPacket(Player player, Packet packet) {
-        ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
-    }
+    IPlayerScreenVisuals setPlayerDimension(World.Environment environment, Player player);
 
-    public static void sendPacket(Player player, Packet packet1, Packet packet2) {
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet1);
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet2);
-    }
+    IPlayerScreenVisuals setPlayerDimension(World.Environment environment, Player[] players);
+
+    IPlayerScreenVisuals setPlayerGamemode(GameMode gameMode, Player player);
+
+    IPlayerScreenVisuals setPlayerGamemode(GameMode gameMode, Player[] players);
+
+    IPlayerScreenVisuals setPlayerReducedInfo(boolean reducedInfo, Player player);
+
+    IPlayerScreenVisuals setPlayerReducedInfo(boolean reducedInfo, Player[] players);
 }

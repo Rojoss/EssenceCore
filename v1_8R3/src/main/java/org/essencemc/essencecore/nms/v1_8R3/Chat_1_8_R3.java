@@ -29,7 +29,7 @@ import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import org.bukkit.entity.Player;
 import org.essencemc.essencecore.nms.IChat;
-import org.essencemc.essencecore.nms.v1_8R3.util.PacketHandler;
+import org.essencemc.essencecore.nms.v1_8R3.util.Util;
 
 /**
  * Handles the chat and actionbars for v1_8R3
@@ -46,7 +46,7 @@ public class Chat_1_8_R3 implements IChat {
     public void sendActionbar(String message, Player player) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(message);
         PacketPlayOutChat actionbarPacket = new PacketPlayOutChat(icbc, (byte) 2);
-        PacketHandler.sendPacket(player, actionbarPacket);
+        Util.sendPacket(player, actionbarPacket);
     }
 
     /**
@@ -61,7 +61,7 @@ public class Chat_1_8_R3 implements IChat {
         PacketPlayOutChat actionbarPacket = new PacketPlayOutChat(icbc, (byte) 2);
 
         for (Player player : players) {
-            PacketHandler.sendPacket(player, actionbarPacket);
+            Util.sendPacket(player, actionbarPacket);
         }
     }
 
@@ -75,7 +75,7 @@ public class Chat_1_8_R3 implements IChat {
     public void sendChat(String message, Player player) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(message);
         PacketPlayOutChat chatPacket = new PacketPlayOutChat(icbc, (byte) 0);
-        PacketHandler.sendPacket(player, chatPacket);
+        Util.sendPacket(player, chatPacket);
     }
 
     /**
@@ -90,7 +90,7 @@ public class Chat_1_8_R3 implements IChat {
         PacketPlayOutChat chatPacket = new PacketPlayOutChat(icbc, (byte) 0);
 
         for (Player p: players) {
-            PacketHandler.sendPacket(p, chatPacket);
+            Util.sendPacket(p, chatPacket);
         }
     }
 

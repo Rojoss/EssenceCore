@@ -37,10 +37,6 @@ import org.essencemc.essencecore.nms.v1_8R3.util.PacketHandler;
  */
 public class Title_1_8_R3 implements ITitle {
 
-    // TODO Make a ChatBuilder to allow for more flexible building
-
-    // TODO Implement the ChatBuilder
-
     /**
      * Send the player only the title message
      *

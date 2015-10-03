@@ -37,10 +37,12 @@ import org.essencemc.essencecore.database.MySql.MySql;
 import org.essencemc.essencecore.database.SqlLite.SqlLite;
 import org.essencemc.essencecore.listeners.ModuleListener;
 import org.essencemc.essencecore.modules.Modules;
+import org.essencemc.essencecore.nms.IChat;
 import org.essencemc.essencecore.nms.ISkull;
 import org.essencemc.essencecore.nms.ITitle;
 import org.essencemc.essencecore.nms.v1_8R3.SkullUtil_1_8_R3;
 import org.essencemc.essencecore.nms.v1_8R3.Title_1_8_R3;
+import org.essencemc.essencecore.nms.v1_8R3.Chat_1_8_R3;
 import org.essencemc.essencecore.player.PlayerManager;
 
 import java.sql.Connection;
@@ -65,6 +67,7 @@ public class EssenceCore extends JavaPlugin {
 
     private ISkull iSkull = null;
     private ITitle iTitle = null;
+    private IChat iChat = null;
 
     private ItemAliases itemAliases;
     private Map<AliasType, AliasesCfg> aliases = new HashMap<AliasType, AliasesCfg>();
@@ -75,7 +78,6 @@ public class EssenceCore extends JavaPlugin {
     private PlayerManager playerManager;
 
     private final Logger log = Logger.getLogger("EssenceCore");
-
 
     @Override
     public void onDisable() {
@@ -123,6 +125,7 @@ public class EssenceCore extends JavaPlugin {
             case "v1_8_R3" :
                 iSkull = new SkullUtil_1_8_R3();
                 iTitle = new Title_1_8_R3();
+                iChat = new Chat_1_8_R3();
                 compatible = true;
                 break;
             default:
@@ -259,7 +262,7 @@ public class EssenceCore extends JavaPlugin {
     }
 
 
-    public ISkull getISkull() {
+    public ISkull getSkull() {
         return iSkull;
     }
 
@@ -298,8 +301,11 @@ public class EssenceCore extends JavaPlugin {
         return modules;
     }
 
-    public ITitle getITitle() {
+    public ITitle getTitle() {
         return iTitle;
     }
 
+    public IChat getChat() {
+        return iChat;
+    }
 }

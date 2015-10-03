@@ -30,6 +30,8 @@ package org.essencemc.essencecore.exceptions;
  */
 public class NMSClassNotFoundException extends NullPointerException {
 
+    private NMSClassNotFoundException(){}
+
     public NMSClassNotFoundException(String message) {
         super(message);
     }

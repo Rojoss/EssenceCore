@@ -41,4 +41,14 @@ public interface IChat {
      * Send actionbar to the players
      */
     void sendActionbar(String message, Player[] players);
+
+    /**
+     * Send custom chat to the player
+     */
+    void sendChat(String message, Player player);
+
+    /**
+     * Send chat to the players
+     */
+    void sendChat(String message, Player[] players);
 }

@@ -43,11 +43,6 @@ public interface ITitle {
     void sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Player[] players);
 
     /**
-     * Send all players only the title message
-     */
-    void sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut);
-
-    /**
      * Send the player only the subtitle message
      */
     void sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Player player);
@@ -55,12 +50,7 @@ public interface ITitle {
     /**
      * Send the players only the subtitle message
      */
-    void sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Player[] player);
-
-    /**
-     * Send all players only the subtitle message
-     */
-    void sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut);
+    void sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Player[] players);
 
     /**
      * Send the player the title and subtitle messages
@@ -70,10 +60,5 @@ public interface ITitle {
     /**
      * Send the players the title and subtitle messages
      */
-    void sendWholeTitle(String titleMessage, String subtitleMessage, int fadeIn, int stay, int fadeOut, Player[] player);
-
-    /**
-     * Send all players the title and subtitle messages
-     */
-    void sendWholeTitle(String titleMessage, String subtitleMessage, int fadeIn, int stay, int fadeOut);
+    void sendWholeTitle(String titleMessage, String subtitleMessage, int fadeIn, int stay, int fadeOut, Player[] players);
 }

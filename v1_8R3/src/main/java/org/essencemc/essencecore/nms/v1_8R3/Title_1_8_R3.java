@@ -27,10 +27,9 @@ package org.essencemc.essencecore.nms.v1_8R3;
 
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.essencemc.essencecore.nms.ITitle;
-import org.essencemc.essencecore.nms.v1_8R3.util.PacketHandler;
+import org.essencemc.essencecore.nms.v1_8R3.util.Util;
 
 /**
  * Handles the titles and subtitles for v1_8R3
@@ -50,7 +49,7 @@ public class Title_1_8_R3 implements ITitle {
     public void sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Player player) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(titleMessage);
         PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, icbc, fadeIn, stay, fadeOut);
-        PacketHandler.sendPacket(player, titlePacket);
+        Util.sendPacket(player, titlePacket);
     }
 
     /**
@@ -68,25 +67,7 @@ public class Title_1_8_R3 implements ITitle {
         PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, icbc, fadeIn, stay, fadeOut);
 
         for (Player p: players) {
-            PacketHandler.sendPacket(p, titlePacket);
-        }
-    }
-
-    /**
-     * Send all players only the title message
-     *
-     * @param titleMessage
-     * @param fadeIn
-     * @param stay
-     * @param fadeOut
-     */
-    @Override
-    public void sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut) {
-        IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(titleMessage);
-        PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, icbc, fadeIn, stay, fadeOut);
-
-        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-            PacketHandler.sendPacket(p, titlePacket);
+            Util.sendPacket(p, titlePacket);
         }
     }
 
@@ -103,7 +84,7 @@ public class Title_1_8_R3 implements ITitle {
     public void sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Player player) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(subtitleMessage);
         PacketPlayOutTitle subtitlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, icbc, fadeIn, stay, fadeOut);
-        PacketHandler.sendPacket(player, subtitlePacket);
+        Util.sendPacket(player, subtitlePacket);
     }
 
     /**
@@ -121,25 +102,7 @@ public class Title_1_8_R3 implements ITitle {
         PacketPlayOutTitle subtitlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, icbc, fadeIn, stay, fadeOut);
 
         for (Player p: players) {
-            PacketHandler.sendPacket(p, subtitlePacket);
-        }
-    }
-
-    /**
-     * Send all players only the subtitle message
-     *
-     * @param subtitleMessage
-     * @param fadeIn
-     * @param stay
-     * @param fadeOut
-     */
-    @Override
-    public void sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut) {
-        IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(subtitleMessage);
-        PacketPlayOutTitle subtitlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, icbc, fadeIn, stay, fadeOut);
-
-        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-            PacketHandler.sendPacket(p, subtitlePacket);
+            Util.sendPacket(p, subtitlePacket);
         }
     }
 
@@ -158,9 +121,9 @@ public class Title_1_8_R3 implements ITitle {
     public void sendWholeTitle(String titleMessage, String subtitleMessage, int fadeIn, int stay, int fadeOut, Player player) {
         IChatBaseComponent titleIcbc = IChatBaseComponent.ChatSerializer.a(titleMessage);
         IChatBaseComponent subtitleIcbc = IChatBaseComponent.ChatSerializer.a(subtitleMessage);
-        PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, titleIcbc, fadeIn, stay, fadeOut);
+        PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, titleIcbc, fadeIn, stay, fadeOut);
         PacketPlayOutTitle subtitlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, subtitleIcbc, fadeIn, stay, fadeOut);
-        PacketHandler.sendPacket(player, titlePacket, subtitlePacket);
+        Util.sendPacket(player, titlePacket, subtitlePacket);
     }
 
     /**
@@ -177,33 +140,13 @@ public class Title_1_8_R3 implements ITitle {
     public void sendWholeTitle(String titleMessage, String subtitleMessage, int fadeIn, int stay, int fadeOut, Player[] players) {
         IChatBaseComponent titleIcbc = IChatBaseComponent.ChatSerializer.a(titleMessage);
         IChatBaseComponent subtitleIcbc = IChatBaseComponent.ChatSerializer.a(subtitleMessage);
-        PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, titleIcbc, fadeIn, stay, fadeOut);
+        PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, titleIcbc, fadeIn, stay, fadeOut);
         PacketPlayOutTitle subtitlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, subtitleIcbc, fadeIn, stay, fadeOut);
 
         for (Player p : players) {
-            PacketHandler.sendPacket(p, titlePacket, subtitlePacket);
-            PacketHandler.sendPacket(p, titlePacket, subtitlePacket);
+            Util.sendPacket(p, titlePacket, subtitlePacket);
+            Util.sendPacket(p, titlePacket, subtitlePacket);
         }
     }
 
-    /**
-     * Send all players the title and subtitle messages
-     *
-     * @param titleMessage
-     * @param subtitleMessage
-     * @param fadeIn
-     * @param stay
-     * @param fadeOut
-     */
-    @Override
-    public void sendWholeTitle(String titleMessage, String subtitleMessage, int fadeIn, int stay, int fadeOut) {
-        IChatBaseComponent titleIcbc = IChatBaseComponent.ChatSerializer.a(titleMessage);
-        IChatBaseComponent subtitleIcbc = IChatBaseComponent.ChatSerializer.a(subtitleMessage);
-        PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, titleIcbc, fadeIn, stay, fadeOut);
-        PacketPlayOutTitle subtitlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, subtitleIcbc, fadeIn, stay, fadeOut);
-
-        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-            PacketHandler.sendPacket(p, titlePacket, subtitlePacket);
-        }
-    }
 }

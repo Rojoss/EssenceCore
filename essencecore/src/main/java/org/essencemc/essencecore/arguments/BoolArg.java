@@ -81,4 +81,19 @@ public class BoolArg extends Argument {
     public Class getRawClass() {
         return Boolean.class;
     }
+
+    public static Boolean Parse(String input) {
+        BoolArg arg = new BoolArg();
+        if (arg.parse(input)) {
+            return (Boolean)arg.value;
+        }
+        return null;
+    }
+
+    public static String Parse(Boolean input) {
+        if (input == null) {
+            return null;
+        }
+        return input.toString();
+    }
 }

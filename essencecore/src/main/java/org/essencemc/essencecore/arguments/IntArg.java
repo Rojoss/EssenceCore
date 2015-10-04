@@ -78,4 +78,19 @@ public class IntArg extends Argument {
     public Class getRawClass() {
         return Integer.class;
     }
+
+    public static Integer Parse(String input) {
+        IntArg arg = new IntArg();
+        if (arg.parse(input)) {
+            return (Integer)arg.value;
+        }
+        return null;
+    }
+
+    public static String Parse(Integer input) {
+        if (input == null) {
+            return null;
+        }
+        return input.toString();
+    }
 }

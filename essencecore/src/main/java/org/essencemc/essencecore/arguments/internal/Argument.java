@@ -79,6 +79,17 @@ public abstract class Argument {
         return value;
     }
 
+    @Override
+    public String toString() {
+        if (value != null) {
+            return value.toString();
+        }
+        if (defaultValue != null) {
+            return defaultValue.toString();
+        }
+        return null;
+    }
+
     public String getError() {
         return error;
     }

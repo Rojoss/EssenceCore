@@ -95,6 +95,11 @@ public class VectorArg extends Argument {
     }
 
     @Override
+    public String toString() {
+        return VectorArg.Parse(value == null ? (defaultValue == null ? null : (Vector) defaultValue) : (Vector) value);
+    }
+
+    @Override
     public String getDescription() {
         return Message.ARG_VECTOR.msg().getMsg(false);
     }
@@ -102,5 +107,20 @@ public class VectorArg extends Argument {
     @Override
     public Class getRawClass() {
         return Vector.class;
+    }
+
+    public static Vector Parse(String input) {
+        VectorArg arg = new VectorArg();
+        if (arg.parse(input)) {
+            return (Vector)arg.value;
+        }
+        return null;
+    }
+
+    public static String Parse(Vector input) {
+        if (input == null) {
+            return null;
+        }
+        return input.getX() + "," + input.getY() + "," + input.getZ();
     }
 }

@@ -78,6 +78,11 @@ public class ItemArg extends Argument {
     }
 
     @Override
+    public String toString() {
+        return ItemArg.Parse(value == null ? (defaultValue == null ? null : (EItem)defaultValue) : (EItem)value);
+    }
+
+    @Override
     public String getDescription() {
         return Message.ARG_ITEM.msg().getMsg(false);
     }
@@ -85,5 +90,20 @@ public class ItemArg extends Argument {
     @Override
     public Class getRawClass() {
         return EItem.class;
+    }
+
+    public static EItem Parse(String input) {
+        ItemArg arg = new ItemArg();
+        if (arg.parse(input)) {
+            return (EItem)arg.value;
+        }
+        return null;
+    }
+
+    public static String Parse(EItem input) {
+        if (input == null) {
+            return null;
+        }
+        return new ItemParser(input).getString();
     }
 }

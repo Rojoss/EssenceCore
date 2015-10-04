@@ -89,6 +89,11 @@ public class WorldArg extends Argument {
     }
 
     @Override
+    public String toString() {
+        return WorldArg.Parse(value == null ? (defaultValue == null ? null : (World) defaultValue) : (World) value);
+    }
+
+    @Override
     public String getDescription() {
         return Message.ARG_WORLD.msg().getMsg(false);
     }
@@ -96,5 +101,20 @@ public class WorldArg extends Argument {
     @Override
     public Class getRawClass() {
         return World.class;
+    }
+
+    public static World Parse(String input) {
+        WorldArg arg = new WorldArg();
+        if (arg.parse(input)) {
+            return (World)arg.value;
+        }
+        return null;
+    }
+
+    public static String Parse(World input) {
+        if (input == null) {
+            return null;
+        }
+        return input.getName();
     }
 }

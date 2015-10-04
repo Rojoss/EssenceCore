@@ -41,10 +41,10 @@ public class TextParser {
             if (isFormatting) {
                 curSection.add(word);
                 //Reduce the end characters needed.
-                endCharsNeeded -= countChars(word, format);
+                endCharsNeeded -= Util.countChars(word, format);
                 //If all end characters have been added end the current section and start a new one.
                 if (endCharsNeeded <= 0) {
-                    if (!curSection.isEmpty()  & !curSection.get(0).isEmpty()) {
+                    if (!curSection.isEmpty() && !curSection.get(0).isEmpty()) {
                         sections.add(Util.implode(curSection, " "));
                     }
                     curSection.clear();
@@ -83,10 +83,10 @@ public class TextParser {
             } else if (type == '<') {
                 format = '>';
             }
-            endCharsNeeded = countChars(word, type);
+            endCharsNeeded = Util.countChars(word, type);
 
             //Check if the current word already contains all the end chars.
-            endCharsNeeded -= countChars(word, format);
+            endCharsNeeded -= Util.countChars(word, format);
             if (endCharsNeeded <= 0) {
                 if (!word.isEmpty()) {
                     sections.add(word);
@@ -125,18 +125,6 @@ public class TextParser {
         }
 
         json = "[" + Util.implode(sections, ", ") + "]";
-    }
-
-
-    private int countChars(String string, char ch) {
-        int count = 0;
-        char[] chars = string.toCharArray();
-        for (char c : chars) {
-            if (c == ch) {
-                count++;
-            }
-        }
-        return count;
     }
 
     private String formatHover(String text) {

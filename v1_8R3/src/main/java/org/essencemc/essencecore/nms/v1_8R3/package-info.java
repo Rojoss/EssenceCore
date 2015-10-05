@@ -24,6 +24,6 @@
  */
 
 /**
- * Contains all the stuff related to NMS from Titles and Chat to Custom Entities (coming soon)
+ * Contains all the stuff related to NMS from Titles and Chat to Custom Entities(coming soon) for NMS version 1_8R3
  */
-package org.essencemc.essencecore.nms;
+package org.essencemc.essencecore.nms.v1_8R3;

@@ -51,8 +51,10 @@ public class EEntity {
     private Entity entity;
 
     //region Constructor and static methods.
+
     /**
      * Create a new EEntity from a Bukkit Entity.
+     *
      * @param entity A Bukkit Entity.
      */
     public EEntity(Entity entity) {
@@ -61,7 +63,8 @@ public class EEntity {
 
     /**
      * Spawns an Entity at the given location.
-     * @param type The base entity type to spawn.
+     *
+     * @param type     The base entity type to spawn.
      * @param location The location where the entity needs to be spawned.
      * @return EEntity instance.
      */
@@ -79,14 +82,15 @@ public class EEntity {
 
     /**
      * Spawns multiple entities at the given location.
-     * @param type The base entity type to spawn.
+     *
+     * @param type     The base entity type to spawn.
      * @param location The location where the entity needs to be spawned.
-     * @param amount The amount of entities to spawn.
-     * @return List<EEntity> with all the EEntity instances.
+     * @param amount   The amount of entities to spawn.
+     * @return List with all the EEntity instances.
      */
     public static List<EEntity> create(EntityType type, Location location, Integer amount) {
         List<EEntity> spawned = new ArrayList<EEntity>();
-        for (int i = 0 ; i < amount; i++) {
+        for (int i = 0; i < amount; i++) {
             if (type.isSpawnable()) {
                 spawned.add(new EEntity(location.getWorld().spawnEntity(location, type)));
             } else {
@@ -98,13 +102,13 @@ public class EEntity {
 
     /**
      * Get the Bukkit Entity instance.
+     *
      * @return Entity instance.
      */
     public Entity bukkit() {
         return entity;
     }
     //endregion
-
 
 
     //region Main Integererfaces (Bukkit methods)
@@ -114,244 +118,333 @@ public class EEntity {
     //region All entities.
 
     //MISC
-    /** @see Entity#getType()  */
+
+    /**
+     * @see Entity#getType()
+     */
     public EntityType getType() {
         return entity.getType();
     }
 
-    /** @see Entity#getUniqueId()  */
+    /**
+     * @see Entity#getUniqueId()
+     */
     public UUID getUUID() {
         return entity.getUniqueId();
     }
 
-    /** @see Entity#getUniqueId()  */
+    /**
+     * @see Entity#getUniqueId()
+     */
     public Integer getID() {
         return entity.getEntityId();
     }
 
-    /** @see Entity#spigot() */
+    /**
+     * @see Entity#spigot()
+     */
     public Entity.Spigot getSpigot() {
         return entity.spigot();
     }
 
-    /** @see Entity#remove() */
+    /**
+     * @see Entity#remove()
+     */
     public void remove() {
         entity.remove();
     }
 
     //CHECKS
-    /** @see Entity#isValid()  */
+
+    /**
+     * @see Entity#isValid()
+     */
     public Boolean isValid() {
         return entity.isValid();
     }
 
-    /** @see Entity#isDead()  */
+    /**
+     * @see Entity#isDead()
+     */
     public Boolean isDead() {
         return entity.isDead();
     }
 
-    /** @see Entity#isOnGround()  */
+    /**
+     * @see Entity#isOnGround()
+     */
     public Boolean isGrounded() {
         return entity.isOnGround();
     }
 
     //LOCATION
-    /** @see Entity#getLocation() */
+
+    /**
+     * @see Entity#getLocation()
+     */
     public Location getLocation() {
         return entity.getLocation();
     }
 
-    /** @see Entity#getLocation(Location) */
+    /**
+     * @see Entity#getLocation(Location)
+     */
     public Location getLocation(Location loc) {
         return entity.getLocation(loc);
     }
 
-    /** @see Entity#getWorld() */
+    /**
+     * @see Entity#getWorld()
+     */
     public World getWorld() {
         return entity.getWorld();
     }
 
     //TELEPORT
-    /** @see Entity#teleport(Location) */
+
+    /**
+     * @see Entity#teleport(Location)
+     */
     public EEntity teleport(Location target) {
         entity.teleport(target);
         return this;
     }
 
-    /** @see Entity#teleport(Location, org.bukkit.event.player.PlayerTeleportEvent.TeleportCause) */
+    /**
+     * @see Entity#teleport(Location, org.bukkit.event.player.PlayerTeleportEvent.TeleportCause)
+     */
     public EEntity teleport(Location target, PlayerTeleportEvent.TeleportCause cause) {
         entity.teleport(target, cause);
         return this;
     }
 
-    /** @see Entity#teleport(Entity) */
+    /**
+     * @see Entity#teleport(Entity)
+     */
     public EEntity teleport(Entity target) {
         entity.teleport(target);
         return this;
     }
 
-    /** @see Entity#teleport(Entity, org.bukkit.event.player.PlayerTeleportEvent.TeleportCause) */
+    /**
+     * @see Entity#teleport(Entity, org.bukkit.event.player.PlayerTeleportEvent.TeleportCause)
+     */
     public EEntity teleport(Entity target, PlayerTeleportEvent.TeleportCause cause) {
         entity.teleport(target, cause);
         return this;
     }
 
-    /** @see Entity#teleport(Entity) */
+    /**
+     * @see Entity#teleport(Entity)
+     */
     public EEntity teleport(EEntity target) {
         entity.teleport(target.bukkit());
         return this;
     }
 
-    /** @see Entity#teleport(Entity, org.bukkit.event.player.PlayerTeleportEvent.TeleportCause) */
+    /**
+     * @see Entity#teleport(Entity, org.bukkit.event.player.PlayerTeleportEvent.TeleportCause)
+     */
     public EEntity teleport(EEntity target, PlayerTeleportEvent.TeleportCause cause) {
         entity.teleport(target.bukkit(), cause);
         return this;
     }
 
     //VELOCITY
-    /** @see Entity#setVelocity(Vector) */
+
+    /**
+     * @see Entity#setVelocity(Vector)
+     */
+    public EEntity setVelocity(Float x, Float y, Float z) {
+        if (entity instanceof Vehicle) {
+            ((Vehicle) entity).setVelocity(new Vector(x, y, z));
+        } else if (entity instanceof Fireball) {
+            ((Fireball) entity).setDirection(new Vector(x, y, z));
+        } else {
+            entity.setVelocity(new Vector(x, y, z));
+        }
+        return this;
+    }
+
+    /**
+     * @see Entity#getVelocity()
+     */
+    public Vector getVelocity() {
+        if (entity instanceof Vehicle) {
+            return ((Vehicle) entity).getVelocity();
+        } else if (entity instanceof Fireball) {
+            return ((Fireball) entity).getDirection();
+        }
+        return entity.getVelocity();
+    }
+
+    /**
+     * @see Entity#setVelocity(Vector)
+     */
     public EEntity setVelocity(Vector velocity) {
         if (entity instanceof Vehicle) {
-            ((Vehicle)entity).setVelocity(velocity);
+            ((Vehicle) entity).setVelocity(velocity);
         } else if (entity instanceof Fireball) {
-            ((Fireball)entity).setDirection(velocity);
+            ((Fireball) entity).setDirection(velocity);
         } else {
             entity.setVelocity(velocity);
         }
         return this;
     }
 
-    /** @see Entity#setVelocity(Vector) */
-    public EEntity setVelocity(Float x, Float y, Float z) {
-        if (entity instanceof Vehicle) {
-            ((Vehicle)entity).setVelocity(new Vector(x,y,z));
-        } else if (entity instanceof Fireball) {
-            ((Fireball)entity).setDirection(new Vector(x, y, z));
-        } else {
-            entity.setVelocity(new Vector(x,y,z));
-        }
-        return this;
-    }
-
-    /** @see Entity#getVelocity() */
-    public Vector getVelocity() {
-        if (entity instanceof Vehicle) {
-            return ((Vehicle)entity).getVelocity();
-        } else if (entity instanceof Fireball) {
-            return ((Fireball)entity).getDirection();
-        }
-        return entity.getVelocity();
-    }
-
     //PASSENGER
-    /** @see Entity#eject() */
+
+    /**
+     * @see Entity#eject()
+     */
     public Boolean eject() {
         return entity.eject();
     }
 
-    /** @see Entity#setPassenger(Entity) */
+    /**
+     * @see Entity#setPassenger(Entity)
+     */
     public EEntity setPassenger(Entity passenger) {
         entity.setPassenger(passenger);
         return this;
     }
 
-    /** @see Entity#setPassenger(Entity) */
+    /**
+     * @see Entity#getPassenger()
+     */
+    public EEntity getPassenger() {
+        return new EEntity(entity.getPassenger());
+    }
+
+    /**
+     * @see Entity#setPassenger(Entity)
+     */
     public EEntity setPassenger(EEntity passenger) {
         entity.setPassenger(passenger.bukkit());
         return this;
     }
 
-    /** @see Entity#getPassenger() */
-    public EEntity getPassenger() {
-        return new EEntity(entity.getPassenger());
-    }
-
-    /** @see Entity#getVehicle() */
+    /**
+     * @see Entity#getVehicle()
+     */
     public EEntity getVehicle() {
         return new EEntity(entity.getVehicle());
     }
 
-    /** @see Entity#leaveVehicle() */
+    /**
+     * @see Entity#leaveVehicle()
+     */
     public Boolean leaveVehicle() {
         return entity.leaveVehicle();
     }
 
-    /** @see Entity#isEmpty()  */
+    /**
+     * @see Entity#isEmpty()
+     */
     public Boolean isEmpty() {
         return entity.isEmpty();
     }
 
     //STATUS
-    /** @see Entity#setFallDistance(float) */
+
+    /**
+     * @see Entity#getFallDistance()
+     */
+    public Float getFallDistance() {
+        return entity.getFallDistance();
+    }
+
+    /**
+     * @see Entity#setFallDistance(float)
+     */
     public EEntity setFallDistance(Float distance) {
         entity.setFallDistance(distance);
         return this;
     }
 
-    /** @see Entity#getFallDistance() */
-    public Float getFallDistance() {
-        return entity.getFallDistance();
+    /**
+     * @see Entity#getFireTicks()
+     */
+    public Integer getFireTicks() {
+        return entity.getFireTicks();
     }
 
-    /** @see Entity#setFireTicks(int) */
+    /**
+     * @see Entity#setFireTicks(int)
+     */
     public EEntity setFireTicks(Integer ticks) {
         entity.setFireTicks(ticks);
         return this;
     }
 
-    /** @see Entity#getFireTicks() */
-    public Integer getFireTicks() {
-        return entity.getFireTicks();
-    }
-
-    /** @see Entity#getMaxFireTicks() */
+    /**
+     * @see Entity#getMaxFireTicks()
+     */
     public Integer getMaxFireTicks() {
         return entity.getMaxFireTicks();
     }
 
-    /** @see Entity#setTicksLived(int) */
+    /**
+     * @see Entity#getTicksLived()
+     */
+    public Integer getTicksLived() {
+        return entity.getTicksLived();
+    }
+
+    /**
+     * @see Entity#setTicksLived(int)
+     */
     public EEntity setTicksLived(Integer ticks) {
         entity.setTicksLived(ticks);
         return this;
     }
 
-    /** @see Entity#getTicksLived() */
-    public Integer getTicksLived() {
-        return entity.getTicksLived();
+    //DAMAGE CAUSE
+
+    /**
+     * @see Entity#getLastDamageCause()
+     */
+    public EntityDamageEvent getLastDamageCause() {
+        return entity.getLastDamageCause();
     }
 
-    //DAMAGE CAUSE
-    /** @see Entity#setLastDamageCause(EntityDamageEvent) */
+    /**
+     * @see Entity#setLastDamageCause(EntityDamageEvent)
+     */
     public EEntity setLastDamageCause(EntityDamageEvent event) {
         entity.setLastDamageCause(event);
         return this;
     }
 
-    /** @see Entity#getLastDamageCause() */
-    public EntityDamageEvent getLastDamageCause() {
-        return entity.getLastDamageCause();
+    //NAME
+
+    /**
+     * @see Entity#getCustomName()
+     */
+    public String getCustomName() {
+        return entity.getCustomName();
     }
 
-    //NAME
-    /** @see Entity#setCustomName(String) */
+    /**
+     * @see Entity#setCustomName(String)
+     */
     public EEntity setCustomName(String name) {
         entity.setCustomName(Util.color(name));
         return this;
     }
 
-    /** @see Entity#getCustomName() */
-    public String getCustomName() {
-        return entity.getCustomName();
-    }
-
-    /** @see Entity#setCustomNameVisible(boolean) */
+    /**
+     * @see Entity#setCustomNameVisible(boolean)
+     */
     public EEntity setCustomNameVisible(Boolean flag) {
         entity.setCustomNameVisible(flag);
         return this;
     }
 
-    /** @see Entity#isCustomNameVisible() */
-    public Boolean isCustomNameVisible() {
+    /**
+     * @see Entity#isCustomNameVisible()
+     */
+    public boolean isCustomNameVisible() {
         return entity.isCustomNameVisible();
     }
     //endregion
@@ -363,15 +456,10 @@ public class EEntity {
     //region Damagable entities.
 
     //Health
-    /** @see Damageable#setHealth(double) */
-    public EEntity setHealth(Double amount) {
-        if (entity instanceof Damageable) {
-            ((Damageable)entity).setHealth(amount);
-        }
-        return this;
-    }
 
-    /** @see Damageable#getHealth() */
+    /**
+     * @see Damageable#getHealth()
+     */
     public Double getHealth() {
         if (entity instanceof Damageable) {
             return ((Damageable) entity).getHealth();
@@ -379,49 +467,70 @@ public class EEntity {
         return null;
     }
 
-    //Max health
-    /** @see Damageable#setMaxHealth(double) */
-    public EEntity setMaxHealth(Double amount) {
+    /**
+     * @see Damageable#setHealth(double)
+     */
+    public EEntity setHealth(Double amount) {
         if (entity instanceof Damageable) {
-            ((Damageable)entity).setMaxHealth(amount);
+            ((Damageable) entity).setHealth(amount);
         }
         return this;
     }
 
-    /** @see Damageable#getMaxHealth() */
+    //Max health
+
+    /**
+     * @see Damageable#getMaxHealth()
+     */
     public Double getMaxHealth() {
         if (entity instanceof Damageable) {
-            return ((Damageable)entity).getMaxHealth();
+            return ((Damageable) entity).getMaxHealth();
         }
         return null;
     }
 
-    /** @see Damageable#resetMaxHealth() */
+    /**
+     * @see Damageable#setMaxHealth(double)
+     */
+    public EEntity setMaxHealth(Double amount) {
+        if (entity instanceof Damageable) {
+            ((Damageable) entity).setMaxHealth(amount);
+        }
+        return this;
+    }
+
+    /**
+     * @see Damageable#resetMaxHealth()
+     */
     public EEntity resetMaxHealth() {
         if (entity instanceof Damageable) {
-            ((Damageable)entity).resetMaxHealth();
+            ((Damageable) entity).resetMaxHealth();
         }
         return this;
     }
 
     //Damage
-    /** @see Damageable#damage(double, Entity) */
+
+    /**
+     * @see Damageable#damage(double, Entity)
+     */
     public EEntity damage(Double amount, Entity entity) {
         if (entity instanceof Damageable) {
-            ((Damageable)entity).damage(amount, entity);
+            ((Damageable) entity).damage(amount, entity);
         }
         return this;
     }
 
-    /** @see Damageable#damage(double, Entity) */
+    /**
+     * @see Damageable#damage(double, Entity)
+     */
     public EEntity damage(Double amount, EEntity entity) {
         if (entity instanceof Damageable) {
-            ((Damageable)entity).damage(amount, entity.bukkit());
+            ((Damageable) entity).damage(amount, entity.bukkit());
         }
         return this;
     }
     //endregion
-
 
 
     // ##################################################
@@ -430,196 +539,240 @@ public class EEntity {
     //region Living entities.
 
     //Potion effects
-    /** @see LivingEntity#addPotionEffect(PotionEffect) */
+
+    /**
+     * @see LivingEntity#addPotionEffect(PotionEffect)
+     */
     public EEntity addPotionEffect(PotionEffect effect) {
         if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).addPotionEffect(effect);
+            ((LivingEntity) entity).addPotionEffect(effect);
         }
         return this;
     }
 
-    /** @see LivingEntity#addPotionEffect(PotionEffect, boolean) */
+    /**
+     * @see LivingEntity#addPotionEffect(PotionEffect, boolean)
+     */
     public EEntity addPotionEffect(PotionEffect effect, Boolean force) {
         if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).addPotionEffect(effect, force);
+            ((LivingEntity) entity).addPotionEffect(effect, force);
         }
         return this;
     }
 
-    /** @see LivingEntity#addPotionEffects(Collection<PotionEffect>) */
+    /**
+     * Add potion effects to the entity.
+     */
     public EEntity addPotionEffects(Collection<PotionEffect> effects) {
         if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).addPotionEffects(effects);
+            ((LivingEntity) entity).addPotionEffects(effects);
         }
         return this;
     }
 
-    /** @see LivingEntity#removePotionEffect(PotionEffectType) */
+    /**
+     * @see org.bukkit.entity.LivingEntity#removePotionEffect(PotionEffectType)
+     */
     public EEntity removePotionEffect(PotionEffectType type) {
         if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).removePotionEffect(type);
+            ((LivingEntity) entity).removePotionEffect(type);
         }
         return this;
     }
 
-    /** @see LivingEntity#hasPotionEffect(PotionEffectType) */
+    /**
+     * @see org.bukkit.entity.LivingEntity#hasPotionEffect(PotionEffectType)
+     */
     public Boolean hasPotionEffect(PotionEffectType type) {
         if (entity instanceof LivingEntity) {
-            return ((LivingEntity)entity).hasPotionEffect(type);
+            return ((LivingEntity) entity).hasPotionEffect(type);
         }
         return false;
     }
 
-    /** @see LivingEntity#getActivePotionEffects() */
+    /**
+     * @see org.bukkit.entity.LivingEntity#getActivePotionEffects()
+     */
     public Collection<PotionEffect> getActivePotionEffects() {
         if (entity instanceof LivingEntity) {
-            return ((LivingEntity)entity).getActivePotionEffects();
+            return ((LivingEntity) entity).getActivePotionEffects();
         }
         return Collections.EMPTY_LIST;
     }
 
     //Removal
-    /** @see LivingEntity#getRemoveWhenFarAway() */
+
+    /**
+     * @see org.bukkit.entity.LivingEntity#getRemoveWhenFarAway()
+     */
     public Boolean getRemoveWhenFarAway(Entity other) {
         if (entity instanceof LivingEntity) {
-            return ((LivingEntity)entity).getRemoveWhenFarAway();
+            return ((LivingEntity) entity).getRemoveWhenFarAway();
         }
         return false;
     }
 
-    /** @see LivingEntity#setRemoveWhenFarAway(boolean) */
+    /**
+     * @see org.bukkit.entity.LivingEntity#setRemoveWhenFarAway(boolean)
+     */
     public EEntity setRemoveWhenFarAway(Boolean remove) {
         if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).setRemoveWhenFarAway(remove);
+            ((LivingEntity) entity).setRemoveWhenFarAway(remove);
         }
         return this;
     }
 
     //Equipment
-    /** @see LivingEntity#getEquipment() */
+
+    /**
+     * @see org.bukkit.entity.LivingEntity#getEquipment()
+     */
     public EntityEquipment getEquipment() {
         if (entity instanceof LivingEntity) {
-            return ((LivingEntity)entity).getEquipment();
+            return ((LivingEntity) entity).getEquipment();
         }
         return null;
     }
 
-    /** @see LivingEntity#setCanPickupItems(boolean) */
-    public EEntity setCanPickupItems(Boolean pickup) {
-        if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).setCanPickupItems(pickup);
-        }
-        return this;
-    }
-
-    /** @see LivingEntity#getCanPickupItems() */
+    /**
+     * @see org.bukkit.entity.LivingEntity#getCanPickupItems()
+     */
     public Boolean getCanPickupItems() {
         if (entity instanceof LivingEntity) {
-            return ((LivingEntity)entity).getCanPickupItems();
+            return ((LivingEntity) entity).getCanPickupItems();
         }
         return false;
+    }
+
+    /**
+     * @see org.bukkit.entity.LivingEntity#setCanPickupItems(boolean)
+     */
+    public EEntity setCanPickupItems(Boolean pickup) {
+        if (entity instanceof LivingEntity) {
+            ((LivingEntity) entity).setCanPickupItems(pickup);
+        }
+        return this;
     }
 
     //Leash
-    /** @see LivingEntity#isLeashed() */
+
+    /**
+     * @see org.bukkit.entity.LivingEntity#isLeashed()
+     */
     public Boolean isLeashed() {
         if (entity instanceof LivingEntity) {
-            return ((LivingEntity)entity).isLeashed();
+            return ((LivingEntity) entity).isLeashed();
         }
         return false;
     }
 
-    /** @see LivingEntity#getLeashHolder() */
+    /**
+     * @see org.bukkit.entity.LivingEntity#getLeashHolder()
+     */
     public EEntity getLeashHolder() {
         if (entity instanceof LivingEntity) {
-            return new EEntity(((LivingEntity)entity).getLeashHolder());
+            return new EEntity(((LivingEntity) entity).getLeashHolder());
         }
         return null;
     }
 
-    /** @see LivingEntity#setLeashHolder(Entity) */
-    public EEntity setLeashHolder(Entity holder) {
+    /**
+     * @see org.bukkit.entity.LivingEntity#setLeashHolder(Entity)
+     */
+    public EEntity setLeashHolder(EEntity holder) {
         if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).setLeashHolder(holder);
+            ((LivingEntity) entity).setLeashHolder(holder.bukkit());
         }
         return this;
     }
 
-    /** @see LivingEntity#setLeashHolder(Entity) */
-    public EEntity setLeashHolder(EEntity holder) {
+    /**
+     * @see org.bukkit.entity.LivingEntity#setLeashHolder(Entity)
+     */
+    public EEntity setLeashHolder(Entity holder) {
         if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).setLeashHolder(holder.bukkit());
+            ((LivingEntity) entity).setLeashHolder(holder);
         }
         return this;
     }
 
     //Damage
-    /** @see LivingEntity#getKiller() */
+
+    /**
+     * @see org.bukkit.entity.LivingEntity#getKiller()
+     */
     public Player getKiller() {
         if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).getKiller();
+            ((LivingEntity) entity).getKiller();
         }
         return null;
     }
 
-    /** @see LivingEntity#getNoDamageTicks() */
+    /**
+     * @see org.bukkit.entity.LivingEntity#getNoDamageTicks()
+     */
     public Integer getNoDamageTicks() {
         if (entity instanceof LivingEntity) {
-            return ((LivingEntity)entity).getNoDamageTicks();
+            return ((LivingEntity) entity).getNoDamageTicks();
         }
         return 0;
     }
 
-    /** @see LivingEntity#getMaximumNoDamageTicks() */
-    public Integer getMaxNoDamageTicks() {
-        if (entity instanceof LivingEntity) {
-            return ((LivingEntity)entity).getMaximumNoDamageTicks();
-        }
-        return 0;
-    }
-
-    /** @see LivingEntity#setNoDamageTicks(int) */
+    /**
+     * @see org.bukkit.entity.LivingEntity#setNoDamageTicks(int)
+     */
     public EEntity setNoDamageTicks(Integer ticks) {
         if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).setNoDamageTicks(ticks);
+            ((LivingEntity) entity).setNoDamageTicks(ticks);
         }
         return this;
     }
 
-    /** @see LivingEntity#setMaximumNoDamageTicks(int) */
+    /**
+     * @see org.bukkit.entity.LivingEntity#getMaximumNoDamageTicks()
+     */
+    public Integer getMaxNoDamageTicks() {
+        if (entity instanceof LivingEntity) {
+            return ((LivingEntity) entity).getMaximumNoDamageTicks();
+        }
+        return 0;
+    }
+
+    /**
+     * @see org.bukkit.entity.LivingEntity#setMaximumNoDamageTicks(int)
+     */
     public EEntity setMaxNoDamageTicks(Integer ticks) {
         if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).setMaximumNoDamageTicks(ticks);
+            ((LivingEntity) entity).setMaximumNoDamageTicks(ticks);
         }
         return this;
     }
 
-    /** @see LivingEntity#getLastDamage() */
+    /**
+     * @see org.bukkit.entity.LivingEntity#getLastDamage()
+     */
     public Double getLastDamage() {
         if (entity instanceof LivingEntity) {
-            return ((LivingEntity)entity).getLastDamage();
+            return ((LivingEntity) entity).getLastDamage();
         }
         return null;
     }
 
-    /** @see LivingEntity#setLastDamage(double) */
+    /**
+     * @see org.bukkit.entity.LivingEntity#setLastDamage(double)
+     */
     public EEntity setLastDamage(Double amount) {
         if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).setLastDamage(amount);
+            ((LivingEntity) entity).setLastDamage(amount);
         }
         return this;
     }
 
     //Air
-    /** @see LivingEntity#setRemainingAir(int) */
-    public EEntity setAir(Integer ticks) {
-        if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).setRemainingAir(ticks);
-        }
-        return this;
-    }
 
-    /** @see LivingEntity#getRemainingAir() */
+    /**
+     * @see org.bukkit.entity.LivingEntity#getRemainingAir()
+     */
     public Integer getAir() {
         if (entity instanceof LivingEntity) {
             return ((LivingEntity) entity).getRemainingAir();
@@ -627,71 +780,100 @@ public class EEntity {
         return null;
     }
 
-    //Max health
-    /** @see LivingEntity#setMaximumAir(int) */
-    public EEntity setMaxAir(Integer ticks) {
+    /**
+     * @see org.bukkit.entity.LivingEntity#setRemainingAir(int)
+     */
+    public EEntity setAir(Integer ticks) {
         if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).setMaximumAir(ticks);
+            ((LivingEntity) entity).setRemainingAir(ticks);
         }
         return this;
     }
 
-    /** @see LivingEntity#getMaximumAir() */
+    //Max health
+
+    /**
+     * @see org.bukkit.entity.LivingEntity#getMaximumAir()
+     */
     public Integer getMaxAir() {
         if (entity instanceof LivingEntity) {
-            return ((LivingEntity)entity).getMaximumAir();
+            return ((LivingEntity) entity).getMaximumAir();
         }
         return null;
     }
 
+    /**
+     * @see org.bukkit.entity.LivingEntity#setMaximumAir(int)
+     */
+    public EEntity setMaxAir(Integer ticks) {
+        if (entity instanceof LivingEntity) {
+            ((LivingEntity) entity).setMaximumAir(ticks);
+        }
+        return this;
+    }
+
     //LOS
-    /** @see LivingEntity#getLineOfSight(Set, int) */
+
+    /**
+     * @see org.bukkit.entity.LivingEntity#getLineOfSight(Set, int)
+     */
     public List<Block> getLineOfSight(Set<Material> transparent, Integer maxDistance) {
         if (entity instanceof LivingEntity) {
-            return ((LivingEntity)entity).getLineOfSight(transparent, maxDistance);
+            return ((LivingEntity) entity).getLineOfSight(transparent, maxDistance);
         }
         return Collections.emptyList();
     }
 
-    /** @see LivingEntity#hasLineOfSight(Entity) */
+    /**
+     * @see org.bukkit.entity.LivingEntity#hasLineOfSight(Entity)
+     */
     public Boolean hasLineOfSight(Entity other) {
         if (entity instanceof LivingEntity) {
-            return ((LivingEntity)entity).hasLineOfSight(other);
+            return ((LivingEntity) entity).hasLineOfSight(other);
         }
         return false;
     }
 
     //TODO: Method to check line of sight with location.
 
-    /** @see LivingEntity#getTargetBlock(Set, int) */
+    /**
+     * @see LivingEntity#getTargetBlock(Set, int)
+     */
     public Block getTargetBlock(Set<Material> transparent, Integer maxDistance) {
         if (entity instanceof LivingEntity) {
-            return ((LivingEntity)entity).getTargetBlock(transparent, maxDistance);
+            return ((LivingEntity) entity).getTargetBlock(transparent, maxDistance);
         }
         return null;
     }
 
-    /** @see LivingEntity#getLastTwoTargetBlocks(Set, int) */
+    /**
+     * @see LivingEntity#getLastTwoTargetBlocks(Set, int)
+     */
     public List<Block> getLastTwoTargetBlocks(Set<Material> transparent, Integer maxDistance) {
         if (entity instanceof LivingEntity) {
-            return ((LivingEntity)entity).getLastTwoTargetBlocks(transparent, maxDistance);
+            return ((LivingEntity) entity).getLastTwoTargetBlocks(transparent, maxDistance);
         }
         return Collections.emptyList();
     }
 
     //EYE HEIGHT
-    /** @see LivingEntity#getEyeHeight() */
+
+    /**
+     * @see LivingEntity#getEyeHeight()
+     */
     public Double getEyeHeight() {
         if (entity instanceof LivingEntity) {
-            return ((LivingEntity)entity).getEyeHeight();
+            return ((LivingEntity) entity).getEyeHeight();
         }
         return null;
     }
 
-    /** @see LivingEntity#getEyeLocation() */
+    /**
+     * @see LivingEntity#getEyeLocation()
+     */
     public Location getEyeLocation() {
         if (entity instanceof LivingEntity) {
-            return ((LivingEntity)entity).getEyeLocation();
+            return ((LivingEntity) entity).getEyeLocation();
         }
         return null;
     }
@@ -704,34 +886,43 @@ public class EEntity {
     //region Agable entities
 
     //AGE
-    /** @see Ageable#getAge() */
+
+    /**
+     * @see Ageable#getAge()
+     */
     public Integer getAge() {
         if (entity instanceof Ageable) {
-            return ((Ageable)entity).getAge();
+            return ((Ageable) entity).getAge();
         }
         return null;
     }
 
-    /** @see Ageable#setAge(int) */
+    /**
+     * @see Ageable#setAge(int)
+     */
     public EEntity setAge(Integer age) {
         if (entity instanceof Ageable) {
-            ((Ageable)entity).setAge(age);
+            ((Ageable) entity).setAge(age);
         }
         return this;
     }
 
-    /** @see Ageable#getAgeLock() */
+    /**
+     * @see Ageable#getAgeLock()
+     */
     public Boolean isAgeLocked() {
         if (entity instanceof Ageable) {
-            return ((Ageable)entity).getAgeLock();
+            return ((Ageable) entity).getAgeLock();
         }
         return false;
     }
 
-    /** @see Ageable#setAgeLock(boolean) */
+    /**
+     * @see Ageable#setAgeLock(boolean)
+     */
     public EEntity setAgeLock(Boolean lock) {
         if (entity instanceof Ageable) {
-            ((Ageable)entity).setAgeLock(lock);
+            ((Ageable) entity).setAgeLock(lock);
         }
         return this;
     }
@@ -749,55 +940,66 @@ public class EEntity {
         return this;
     }
 
-    /** @see Ageable#setBaby() */
+    /**
+     * @see Ageable#setBaby()
+     */
     public EEntity setBaby() {
         if (entity instanceof Ageable) {
-            ((Ageable)entity).setBaby();
+            ((Ageable) entity).setBaby();
         } else if (entity instanceof Zombie) {
-            ((Zombie)entity).setBaby(true);
+            ((Zombie) entity).setBaby(true);
         } else if (entity instanceof PigZombie) {
-            ((PigZombie)entity).setBaby(true);
+            ((PigZombie) entity).setBaby(true);
         }
         return this;
     }
 
-    /** @see Ageable#setAdult() */
+    /**
+     * @see Ageable#setAdult()
+     */
     public EEntity setAdult() {
         if (entity instanceof Ageable) {
-            ((Ageable)entity).setAdult();
+            ((Ageable) entity).setAdult();
         } else if (entity instanceof Zombie) {
-            ((Zombie)entity).setBaby(false);
+            ((Zombie) entity).setBaby(false);
         } else if (entity instanceof PigZombie) {
-            ((PigZombie)entity).setBaby(false);
+            ((PigZombie) entity).setBaby(false);
         }
         return this;
     }
 
-    /** @see Ageable#isAdult() */
+    /**
+     * @see Ageable#isAdult()
+     */
     public Boolean isAdult() {
         if (entity instanceof Ageable) {
-            return ((Ageable)entity).isAdult();
+            return ((Ageable) entity).isAdult();
         } else if (entity instanceof Zombie) {
-            return !((Zombie)entity).isBaby();
+            return !((Zombie) entity).isBaby();
         } else if (entity instanceof Zombie) {
-            return !((PigZombie)entity).isBaby();
+            return !((PigZombie) entity).isBaby();
         }
         return false;
     }
 
     //BREED
-    /** @see Ageable#canBreed() */
+
+    /**
+     * @see Ageable#canBreed()
+     */
     public Boolean canBreed() {
         if (entity instanceof Ageable) {
-            return ((Ageable)entity).canBreed();
+            return ((Ageable) entity).canBreed();
         }
         return false;
     }
 
-    /** @see Ageable#setBreed(boolean) */
+    /**
+     * @see Ageable#setBreed(boolean)
+     */
     public EEntity setBreed(Boolean breed) {
         if (entity instanceof Ageable) {
-            ((Ageable)entity).setBreed(breed);
+            ((Ageable) entity).setBreed(breed);
         }
         return this;
     }
@@ -809,36 +1011,44 @@ public class EEntity {
     // ##################################################
     //region Tamable
 
-    /** @see Tameable#setTamed(boolean) */
+    /**
+     * @see Tameable#setTamed(boolean)
+     */
     public EEntity setTamed(Boolean tamed) {
         if (entity instanceof Tameable) {
-            ((Tameable)entity).setTamed(tamed);
+            ((Tameable) entity).setTamed(tamed);
         }
         return this;
     }
 
-    /** @see Tameable#isTamed() */
+    /**
+     * @see Tameable#isTamed()
+     */
     public Boolean isTamed() {
         if (entity instanceof Tameable) {
-            return ((Tameable)entity).isTamed();
+            return ((Tameable) entity).isTamed();
         }
         return false;
     }
 
-    /** @see Tameable#setOwner(AnimalTamer) */
-    public EEntity setOwner(Player player) {
-        if (entity instanceof Tameable) {
-            ((Tameable)entity).setOwner(player);
-        }
-        return this;
-    }
-
-    /** @see Tameable#getOwner() */
+    /**
+     * @see Tameable#getOwner()
+     */
     public AnimalTamer getOwner() {
         if (entity instanceof Tameable) {
-            return ((Tameable)entity).getOwner();
+            return ((Tameable) entity).getOwner();
         }
         return null;
+    }
+
+    /**
+     * @see Tameable#setOwner(AnimalTamer)
+     */
+    public EEntity setOwner(Player player) {
+        if (entity instanceof Tameable) {
+            ((Tameable) entity).setOwner(player);
+        }
+        return this;
     }
     //endregion
 
@@ -848,20 +1058,24 @@ public class EEntity {
     // ##################################################
     //region Creatures
 
-    /** @see Creature#setTarget(LivingEntity) */
-    public EEntity setTarget(LivingEntity target) {
-        if (entity instanceof Creature) {
-            ((Creature)entity).setTarget(target);
-        }
-        return this;
-    }
-
-    /** @see Creature#getTarget() */
+    /**
+     * @see Creature#getTarget()
+     */
     public LivingEntity getTarget() {
         if (entity instanceof Creature) {
-            return ((Creature)entity).getTarget();
+            return ((Creature) entity).getTarget();
         }
         return null;
+    }
+
+    /**
+     * @see Creature#setTarget(LivingEntity)
+     */
+    public EEntity setTarget(LivingEntity target) {
+        if (entity instanceof Creature) {
+            ((Creature) entity).setTarget(target);
+        }
+        return this;
     }
     //endregion
 
@@ -872,51 +1086,65 @@ public class EEntity {
     //region Projectiles
 
     //PROJECTILE
-    /** @see Projectile#getShooter() */
+
+    /**
+     * @see Projectile#getShooter()
+     */
     public ProjectileSource getShooter() {
         if (entity instanceof Projectile) {
-            return ((Projectile)entity).getShooter();
+            return ((Projectile) entity).getShooter();
         }
         return null;
     }
 
-    /** @see Projectile#setShooter(ProjectileSource) */
+    /**
+     * @see Projectile#setShooter(ProjectileSource)
+     */
     public EEntity setShooter(ProjectileSource source) {
         if (entity instanceof Projectile) {
-            ((Projectile)entity).setShooter(source);
+            ((Projectile) entity).setShooter(source);
         }
         return this;
     }
 
-    /** @see Projectile#doesBounce() */
+    /**
+     * @see Projectile#doesBounce()
+     */
     public Boolean doesBounce() {
         if (entity instanceof Projectile) {
-            return ((Projectile)entity).doesBounce();
+            return ((Projectile) entity).doesBounce();
         }
         return false;
     }
 
-    /** @see Projectile#setBounce(boolean) */
+    /**
+     * @see Projectile#setBounce(boolean)
+     */
     public EEntity setBounce(Boolean bounce) {
         if (entity instanceof Projectile) {
-            ((Projectile)entity).setBounce(bounce);
+            ((Projectile) entity).setBounce(bounce);
         }
         return this;
     }
 
     //PROJECTILE SOURCE
-    /** @see ProjectileSource#launchProjectile(Class)  */
+
+    /**
+     * @see ProjectileSource#launchProjectile(Class)
+     */
     public <T extends Projectile> T launchProjectile(Class<? extends T> projectile) {
         if (entity instanceof ProjectileSource) {
-            return ((ProjectileSource)entity).launchProjectile(projectile);
+            return ((ProjectileSource) entity).launchProjectile(projectile);
         }
         return null;
     }
 
-    /** @see ProjectileSource#launchProjectile(Class, Vector)  */
+    /**
+     * @see ProjectileSource#launchProjectile(Class, Vector)
+     */
     public <T extends Projectile> T launchProjectile(Class<? extends T> projectile, Vector velocity) {
         if (entity instanceof ProjectileSource) {
-            return ((ProjectileSource)entity).launchProjectile(projectile, velocity);
+            return ((ProjectileSource) entity).launchProjectile(projectile, velocity);
         }
         return null;
     }
@@ -928,16 +1156,17 @@ public class EEntity {
     // ##################################################
     //region Hanging entities
 
-    /** @see Hanging#setFacingDirection(BlockFace, boolean) */
+    /**
+     * @see Hanging#setFacingDirection(BlockFace, boolean)
+     */
     public EEntity setFacingDirection(BlockFace face, Boolean force) {
         if (entity instanceof Hanging) {
-            ((Hanging)entity).setFacingDirection(face, force);
+            ((Hanging) entity).setFacingDirection(face, force);
         }
         return this;
     }
     //endregion
     //endregion
-
 
 
     //region Non creature entities. (Bukkit methods)
@@ -947,200 +1176,255 @@ public class EEntity {
     //region Armor stands
 
     //POSE
-    /** @see ArmorStand#getBodyPose() */
+
+    /**
+     * @see ArmorStand#getBodyPose()
+     */
     public EulerAngle getBodyPose() {
         if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).getBodyPose();
+            return ((ArmorStand) entity).getBodyPose();
         }
         return null;
     }
 
-    /** @see ArmorStand#setBodyPose(EulerAngle) */
+    /**
+     * @see ArmorStand#setBodyPose(EulerAngle)
+     */
     public EEntity setBodyPose(EulerAngle pose) {
         if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setBodyPose(pose);
+            ((ArmorStand) entity).setBodyPose(pose);
         }
         return this;
     }
 
-    /** @see ArmorStand#getLeftArmPose() */
+    /**
+     * @see ArmorStand#getLeftArmPose()
+     */
     public EulerAngle getLeftArmPose() {
         if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).getLeftArmPose();
+            return ((ArmorStand) entity).getLeftArmPose();
         }
         return null;
     }
 
-    /** @see ArmorStand#setLeftArmPose(EulerAngle) */
+    /**
+     * @see ArmorStand#setLeftArmPose(EulerAngle)
+     */
     public EEntity setLeftArmPose(EulerAngle pose) {
         if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setLeftArmPose(pose);
+            ((ArmorStand) entity).setLeftArmPose(pose);
         }
         return this;
     }
 
-    /** @see ArmorStand#getRightArmPose() */
+    /**
+     * @see ArmorStand#getRightArmPose()
+     */
     public EulerAngle getRightArmPose() {
         if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).getRightArmPose();
+            return ((ArmorStand) entity).getRightArmPose();
         }
         return null;
     }
 
-    /** @see ArmorStand#setRightArmPose(EulerAngle) */
+    /**
+     * @see ArmorStand#setRightArmPose(EulerAngle)
+     */
     public EEntity setRightArmPose(EulerAngle pose) {
         if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setRightArmPose(pose);
+            ((ArmorStand) entity).setRightArmPose(pose);
         }
         return this;
     }
 
-    /** @see ArmorStand#getLeftLegPose() */
+    /**
+     * @see ArmorStand#getLeftLegPose()
+     */
     public EulerAngle getLeftLegPose() {
         if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).getLeftLegPose();
+            return ((ArmorStand) entity).getLeftLegPose();
         }
         return null;
     }
 
-    /** @see ArmorStand#setLeftLegPose(EulerAngle) */
+    /**
+     * @see ArmorStand#setLeftLegPose(EulerAngle)
+     */
     public EEntity setLeftLegPose(EulerAngle pose) {
         if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setLeftLegPose(pose);
+            ((ArmorStand) entity).setLeftLegPose(pose);
         }
         return this;
     }
 
-    /** @see ArmorStand#getRightLegPose() */
+    /**
+     * @see ArmorStand#getRightLegPose()
+     */
     public EulerAngle getRightLegPose() {
         if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).getRightLegPose();
+            return ((ArmorStand) entity).getRightLegPose();
         }
         return null;
     }
 
-    /** @see ArmorStand#setRightLegPose(EulerAngle) */
+    /**
+     * @see ArmorStand#setRightLegPose(EulerAngle)
+     */
     public EEntity setRightLegPose(EulerAngle pose) {
         if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setRightLegPose(pose);
+            ((ArmorStand) entity).setRightLegPose(pose);
         }
         return this;
     }
 
-    /** @see ArmorStand#getHeadPose() */
+    /**
+     * @see ArmorStand#getHeadPose()
+     */
     public EulerAngle getHeadPose() {
         if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).getHeadPose();
+            return ((ArmorStand) entity).getHeadPose();
         }
         return null;
     }
 
-    /** @see ArmorStand#setHeadPose(EulerAngle) */
+    /**
+     * @see ArmorStand#setHeadPose(EulerAngle)
+     */
     public EEntity setHeadPose(EulerAngle pose) {
         if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setHeadPose(pose);
+            ((ArmorStand) entity).setHeadPose(pose);
         }
         return this;
     }
 
     //BASEPLATE
-    /** @see ArmorStand#hasBasePlate() */
+
+    /**
+     * @see ArmorStand#hasBasePlate()
+     */
     public Boolean hasBasePlate() {
         if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).hasBasePlate();
+            return ((ArmorStand) entity).hasBasePlate();
         }
         return false;
     }
 
-    /** @see ArmorStand#setBasePlate(boolean) */
+    /**
+     * @see ArmorStand#setBasePlate(boolean)
+     */
     public EEntity setBasePlate(Boolean plate) {
         if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setBasePlate(plate);
+            ((ArmorStand) entity).setBasePlate(plate);
         }
         return this;
     }
 
     //GRAVITY
-    /** @see ArmorStand#hasGravity() */
+
+    /**
+     * @see ArmorStand#hasGravity()
+     */
     public Boolean hasGravity() {
         if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).hasGravity();
+            return ((ArmorStand) entity).hasGravity();
         }
         return false;
     }
 
-    /** @see ArmorStand#setGravity(boolean) */
+    /**
+     * @see ArmorStand#setGravity(boolean)
+     */
     public EEntity setGravity(Boolean gravity) {
         if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setGravity(gravity);
+            ((ArmorStand) entity).setGravity(gravity);
         }
         return this;
     }
 
     //VISIBILITY
-    /** @see ArmorStand#isVisible() */
+
+    /**
+     * @see ArmorStand#isVisible()
+     */
     public Boolean isVisible() {
         if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).isVisible();
+            return ((ArmorStand) entity).isVisible();
         }
         return false;
     }
 
-    /** @see ArmorStand#setVisible(boolean) */
+    /**
+     * @see ArmorStand#setVisible(boolean)
+     */
     public EEntity setVisible(Boolean visible) {
         if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setVisible(visible);
+            ((ArmorStand) entity).setVisible(visible);
         }
         return this;
     }
 
     //ARMS
-    /** @see ArmorStand#hasArms() */
+
+    /**
+     * @see ArmorStand#hasArms()
+     */
     public Boolean hasArms() {
         if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).hasArms();
+            return ((ArmorStand) entity).hasArms();
         }
         return false;
     }
 
-    /** @see ArmorStand#setArms(boolean) */
+    /**
+     * @see ArmorStand#setArms(boolean)
+     */
     public EEntity setArms(Boolean arms) {
         if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setArms(arms);
+            ((ArmorStand) entity).setArms(arms);
         }
         return this;
     }
 
     //SMALL
-    /** @see ArmorStand#isSmall() */
+
+    /**
+     * @see ArmorStand#isSmall()
+     */
     public Boolean isSmall() {
         if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).isSmall();
+            return ((ArmorStand) entity).isSmall();
         }
         return false;
     }
 
-    /** @see ArmorStand#setSmall(boolean) */
+    /**
+     * @see ArmorStand#setSmall(boolean)
+     */
     public EEntity setSmall(Boolean small) {
         if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setSmall(small);
+            ((ArmorStand) entity).setSmall(small);
         }
         return this;
     }
 
     //MARKER
-    /** @see ArmorStand#isSmall() */
+
+    /**
+     * @see ArmorStand#isSmall()
+     */
     public Boolean isMarker() {
         if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).isMarker();
+            return ((ArmorStand) entity).isMarker();
         }
         return false;
     }
 
-    /** @see ArmorStand#setMarker(boolean) */
+    /**
+     * @see ArmorStand#setMarker(boolean)
+     */
     public EEntity setMarker(Boolean marker) {
         if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setMarker(marker);
+            ((ArmorStand) entity).setMarker(marker);
         }
         return this;
     }
@@ -1152,34 +1436,42 @@ public class EEntity {
     // ##################################################
     //region Arrows
 
-    /** @see Arrow#isCritical() */
+    /**
+     * @see Arrow#isCritical()
+     */
     public Boolean isCritical() {
         if (entity instanceof Arrow) {
-            return ((Arrow)entity).isCritical();
+            return ((Arrow) entity).isCritical();
         }
         return false;
     }
 
-    /** @see Arrow#setCritical(boolean) */
+    /**
+     * @see Arrow#setCritical(boolean)
+     */
     public EEntity setCritical(Boolean critical) {
         if (entity instanceof Arrow) {
-            ((Arrow)entity).setCritical(critical);
+            ((Arrow) entity).setCritical(critical);
         }
         return this;
     }
 
-    /** @see Arrow#getKnockbackStrength() */
+    /**
+     * @see Arrow#getKnockbackStrength()
+     */
     public Integer getKnockbackStrength() {
         if (entity instanceof Arrow) {
-            return ((Arrow)entity).getKnockbackStrength();
+            return ((Arrow) entity).getKnockbackStrength();
         }
         return null;
     }
 
-    /** @see Arrow#setKnockbackStrength(int) */
+    /**
+     * @see Arrow#setKnockbackStrength(int)
+     */
     public EEntity setKnockbackStrength(Integer knockback) {
         if (entity instanceof Arrow) {
-            ((Arrow)entity).setKnockbackStrength(knockback);
+            ((Arrow) entity).setKnockbackStrength(knockback);
         }
         return this;
     }
@@ -1191,50 +1483,62 @@ public class EEntity {
     // ##################################################
     //region Boats
 
-    /** @see Boat#getWorkOnLand() */
+    /**
+     * @see Boat#getWorkOnLand()
+     */
     public Boolean getWorkOnLand() {
         if (entity instanceof Boat) {
-            return ((Boat)entity).getWorkOnLand();
+            return ((Boat) entity).getWorkOnLand();
         }
         return false;
     }
 
-    /** @see Boat#setWorkOnLand(boolean) */
+    /**
+     * @see Boat#setWorkOnLand(boolean)
+     */
     public EEntity setWorkOnLand(Boolean workOnLand) {
         if (entity instanceof Boat) {
-            ((Boat)entity).setWorkOnLand(workOnLand);
+            ((Boat) entity).setWorkOnLand(workOnLand);
         }
         return this;
     }
 
-    /** @see Boat#getUnoccupiedDeceleration() */
+    /**
+     * @see Boat#getUnoccupiedDeceleration()
+     */
     public Double getUnoccupiedDeceleration() {
         if (entity instanceof Boat) {
-            return ((Boat)entity).getUnoccupiedDeceleration();
+            return ((Boat) entity).getUnoccupiedDeceleration();
         }
         return null;
     }
 
-    /** @see Boat#setUnoccupiedDeceleration(double) */
+    /**
+     * @see Boat#setUnoccupiedDeceleration(double)
+     */
     public EEntity setUnoccupiedDeceleration(Double rate) {
         if (entity instanceof Boat) {
-            ((Boat)entity).setUnoccupiedDeceleration(rate);
+            ((Boat) entity).setUnoccupiedDeceleration(rate);
         }
         return this;
     }
 
-    /** @see Boat#getOccupiedDeceleration() */
+    /**
+     * @see Boat#getOccupiedDeceleration()
+     */
     public Double getOccupiedDeceleration() {
         if (entity instanceof Boat) {
-            return ((Boat)entity).getOccupiedDeceleration();
+            return ((Boat) entity).getOccupiedDeceleration();
         }
         return null;
     }
 
-    /** @see Boat#setOccupiedDeceleration(double) */
+    /**
+     * @see Boat#setOccupiedDeceleration(double)
+     */
     public EEntity setOccupiedDeceleration(Double rate) {
         if (entity instanceof Boat) {
-            ((Boat)entity).setOccupiedDeceleration(rate);
+            ((Boat) entity).setOccupiedDeceleration(rate);
         }
         return this;
     }
@@ -1246,26 +1550,32 @@ public class EEntity {
     // ##################################################
     //region Command minecarts
 
-    /** @see CommandMinecart#getCommand() */
+    /**
+     * @see CommandMinecart#getCommand()
+     */
     public String getCommand() {
         if (entity instanceof CommandMinecart) {
-            return ((CommandMinecart)entity).getCommand();
+            return ((CommandMinecart) entity).getCommand();
         }
         return "";
     }
 
-    /** @see CommandMinecart#setCommand(String) */
+    /**
+     * @see CommandMinecart#setCommand(String)
+     */
     public EEntity setCommand(String cmd) {
         if (entity instanceof CommandMinecart) {
-            ((CommandMinecart)entity).setCommand(cmd);
+            ((CommandMinecart) entity).setCommand(cmd);
         }
         return this;
     }
 
-    /** @see CommandMinecart#setName(String) */
+    /**
+     * @see CommandMinecart#setName(String)
+     */
     public EEntity setName(String name) {
         if (entity instanceof CommandMinecart) {
-            ((CommandMinecart)entity).setName(name);
+            ((CommandMinecart) entity).setName(name);
         }
         return this;
     }
@@ -1277,18 +1587,22 @@ public class EEntity {
     // ##################################################
     //region Experience orbs
 
-    /** @see ExperienceOrb#getExperience() */
+    /**
+     * @see ExperienceOrb#getExperience()
+     */
     public Integer getExperience() {
         if (entity instanceof ExperienceOrb) {
-            return ((ExperienceOrb)entity).getExperience();
+            return ((ExperienceOrb) entity).getExperience();
         }
         return null;
     }
 
-    /** @see ExperienceOrb#setExperience(int) */
+    /**
+     * @see ExperienceOrb#setExperience(int)
+     */
     public EEntity setExperience(Integer exp) {
         if (entity instanceof ExperienceOrb) {
-            ((ExperienceOrb)entity).setExperience(exp);
+            ((ExperienceOrb) entity).setExperience(exp);
         }
         return this;
     }
@@ -1300,50 +1614,45 @@ public class EEntity {
     // ##################################################
     //region Falling blocks
 
-    /** @see FallingBlock#getDropItem() */
     public Boolean getDropItem() {
         if (entity instanceof FallingBlock) {
-            return ((FallingBlock)entity).getDropItem();
+            return ((FallingBlock) entity).getDropItem();
         }
         return false;
     }
 
-    /** @see FallingBlock#setDropItem(boolean) */
+
     public EEntity setDropItem(Boolean drop) {
         if (entity instanceof FallingBlock) {
-            ((FallingBlock)entity).setDropItem(drop);
+            ((FallingBlock) entity).setDropItem(drop);
         }
         return this;
     }
 
-    /** @see FallingBlock#canHurtEntities() */
     public Boolean canHurtEntities() {
         if (entity instanceof FallingBlock) {
-            return ((FallingBlock)entity).canHurtEntities();
+            return ((FallingBlock) entity).canHurtEntities();
         }
         return false;
     }
 
-    /** @see FallingBlock#setHurtEntities(boolean) */
     public EEntity setHurtEntities(Boolean hurtEntities) {
         if (entity instanceof FallingBlock) {
-            ((FallingBlock)entity).setHurtEntities(hurtEntities);
+            ((FallingBlock) entity).setHurtEntities(hurtEntities);
         }
         return this;
     }
 
-    /** @see FallingBlock#getMaterial() */
     public Material getMaterial() {
         if (entity instanceof FallingBlock) {
-            return ((FallingBlock)entity).getMaterial();
+            return ((FallingBlock) entity).getMaterial();
         }
         return null;
     }
 
-    /** @see FallingBlock#getBlockData() */
     public Byte getData() {
         if (entity instanceof FallingBlock) {
-            return ((FallingBlock)entity).getBlockData();
+            return ((FallingBlock) entity).getBlockData();
         }
         return null;
     }
@@ -1355,26 +1664,32 @@ public class EEntity {
     // ##################################################
     //region Firework rockets
 
-    /** @see Firework#getFireworkMeta() */
+    /**
+     * @see Firework#getFireworkMeta()
+     */
     public FireworkMeta getFireworkMeta() {
         if (entity instanceof FireworkMeta) {
-            return ((Firework)entity).getFireworkMeta();
+            return ((Firework) entity).getFireworkMeta();
         }
         return null;
     }
 
-    /** @see Firework#setFireworkMeta(FireworkMeta) */
+    /**
+     * @see Firework#setFireworkMeta(FireworkMeta)
+     */
     public EEntity setFireworkMeta(FireworkMeta meta) {
         if (entity instanceof Firework) {
-            ((Firework)entity).setFireworkMeta(meta);
+            ((Firework) entity).setFireworkMeta(meta);
         }
         return this;
     }
 
-    /** @see Firework#detonate() */
+    /**
+     * @see Firework#detonate()
+     */
     public EEntity detonate() {
         if (entity instanceof Firework) {
-            ((Firework)entity).detonate();
+            ((Firework) entity).detonate();
         }
         return this;
     }
@@ -1386,18 +1701,22 @@ public class EEntity {
     // ##################################################
     //region Items
 
-    /** @see Item#getPickupDelay() */
+    /**
+     * @see Item#getPickupDelay()
+     */
     public Integer getPickupDelay() {
         if (entity instanceof Item) {
-            return ((Item)entity).getPickupDelay();
+            return ((Item) entity).getPickupDelay();
         }
         return null;
     }
 
-    /** @see Item#setPickupDelay(int) */
+    /**
+     * @see Item#setPickupDelay(int)
+     */
     public EEntity setPickupDelay(Integer ticks) {
         if (entity instanceof Item) {
-            ((Item)entity).setPickupDelay(ticks);
+            ((Item) entity).setPickupDelay(ticks);
         }
         return this;
     }
@@ -1409,18 +1728,22 @@ public class EEntity {
     // ##################################################
     //region Item frames
 
-    /** @see ItemFrame#getRotation() */
+    /**
+     * @see ItemFrame#getRotation()
+     */
     public Rotation getRotation() {
         if (entity instanceof ItemFrame) {
-            return ((ItemFrame)entity).getRotation();
+            return ((ItemFrame) entity).getRotation();
         }
         return null;
     }
 
-    /** @see ItemFrame#setRotation(Rotation) */
+    /**
+     * @see ItemFrame#setRotation(Rotation)
+     */
     public EEntity setRotation(Rotation rotation) {
         if (entity instanceof ItemFrame) {
-            ((ItemFrame)entity).setRotation(rotation);
+            ((ItemFrame) entity).setRotation(rotation);
         }
         return this;
     }
@@ -1432,10 +1755,12 @@ public class EEntity {
     // ##################################################
     //region Lightning strikes
 
-    /** @see LightningStrike#isEffect() */
+    /**
+     * @see LightningStrike#isEffect()
+     */
     public Boolean isEffect() {
         if (entity instanceof LightningStrike) {
-            return ((LightningStrike)entity).isEffect();
+            return ((LightningStrike) entity).isEffect();
         }
         return false;
     }
@@ -1447,114 +1772,142 @@ public class EEntity {
     // ##################################################
     //region Minecarts
 
-    /** @see Minecart#isSlowWhenEmpty() */
+    /**
+     * @see Minecart#isSlowWhenEmpty()
+     */
     public Boolean isSlowWhenEmpty() {
         if (entity instanceof Minecart) {
-            return ((Minecart)entity).isSlowWhenEmpty();
+            return ((Minecart) entity).isSlowWhenEmpty();
         }
         return false;
     }
 
-    /** @see Minecart#setSlowWhenEmpty(boolean) */
+    /**
+     * @see Minecart#setSlowWhenEmpty(boolean)
+     */
     public EEntity setSlowWhenEmpty(Boolean slow) {
         if (entity instanceof Minecart) {
-            ((Minecart)entity).setSlowWhenEmpty(slow);
+            ((Minecart) entity).setSlowWhenEmpty(slow);
         }
         return this;
     }
 
-    /** @see Minecart#getDamage() */
+    /**
+     * @see Minecart#getDamage()
+     */
     public Double getDamage() {
         if (entity instanceof Minecart) {
-            return ((Minecart)entity).getDamage();
+            return ((Minecart) entity).getDamage();
         }
         return null;
     }
 
-    /** @see Minecart#setDamage(double) */
+    /**
+     * @see Minecart#setDamage(double)
+     */
     public EEntity setDamage(Double damage) {
         if (entity instanceof Minecart) {
-            ((Minecart)entity).setDamage(damage);
+            ((Minecart) entity).setDamage(damage);
         }
         return this;
     }
 
-    /** @see Minecart#getFlyingVelocityMod() */
+    /**
+     * @see Minecart#getFlyingVelocityMod()
+     */
     public Vector getFlyingVelocityMod() {
         if (entity instanceof Minecart) {
-            return ((Minecart)entity).getFlyingVelocityMod();
+            return ((Minecart) entity).getFlyingVelocityMod();
         }
         return null;
     }
 
-    /** @see Minecart#setFlyingVelocityMod(Vector) */
+    /**
+     * @see Minecart#setFlyingVelocityMod(Vector)
+     */
     public EEntity setFlyingVelocityMod(Vector velocity) {
         if (entity instanceof Minecart) {
-            ((Minecart)entity).setFlyingVelocityMod(velocity);
+            ((Minecart) entity).setFlyingVelocityMod(velocity);
         }
         return this;
     }
 
-    /** @see Minecart#setFlyingVelocityMod(Vector) */
+    /**
+     * @see Minecart#setFlyingVelocityMod(Vector)
+     */
     public EEntity setFlyingVelocityMod(Float x, Float y, Float z) {
         if (entity instanceof Minecart) {
-            ((Minecart)entity).setFlyingVelocityMod(new Vector(x,y,z));
+            ((Minecart) entity).setFlyingVelocityMod(new Vector(x, y, z));
         }
         return this;
     }
 
-    /** @see Minecart#getDerailedVelocityMod() */
+    /**
+     * @see Minecart#getDerailedVelocityMod()
+     */
     public Vector getDerailedVelocityMod() {
         if (entity instanceof Minecart) {
-            return ((Minecart)entity).getDerailedVelocityMod();
+            return ((Minecart) entity).getDerailedVelocityMod();
         }
         return null;
     }
 
-    /** @see Minecart#setDerailedVelocityMod(Vector) */
+    /**
+     * @see Minecart#setDerailedVelocityMod(Vector)
+     */
     public EEntity setDerailedVelocityMod(Vector velocity) {
         if (entity instanceof Minecart) {
-            ((Minecart)entity).setDerailedVelocityMod(velocity);
+            ((Minecart) entity).setDerailedVelocityMod(velocity);
         }
         return this;
     }
 
-    /** @see Minecart#setDerailedVelocityMod(Vector) */
+    /**
+     * @see Minecart#setDerailedVelocityMod(Vector)
+     */
     public EEntity setDerailedVelocityMod(Float x, Float y, Float z) {
         if (entity instanceof Minecart) {
-            ((Minecart)entity).setDerailedVelocityMod(new Vector(x, y, z));
+            ((Minecart) entity).setDerailedVelocityMod(new Vector(x, y, z));
         }
         return this;
     }
 
-    /** @see Minecart#getDisplayBlock() */
+    /**
+     * @see Minecart#getDisplayBlock()
+     */
     public MaterialData getDisplayBlock() {
         if (entity instanceof Minecart) {
-            return ((Minecart)entity).getDisplayBlock();
+            return ((Minecart) entity).getDisplayBlock();
         }
         return null;
     }
 
-    /** @see Minecart#setDisplayBlock(MaterialData) */
+    /**
+     * @see Minecart#setDisplayBlock(MaterialData)
+     */
     public EEntity setDisplayBlock(MaterialData material) {
         if (entity instanceof Minecart) {
-            ((Minecart)entity).setDisplayBlock(material);
+            ((Minecart) entity).setDisplayBlock(material);
         }
         return this;
     }
 
-    /** @see Minecart#getDisplayBlockOffset() */
+    /**
+     * @see Minecart#getDisplayBlockOffset()
+     */
     public Integer getDisplayBlockOffset() {
         if (entity instanceof Minecart) {
-            return ((Minecart)entity).getDisplayBlockOffset();
+            return ((Minecart) entity).getDisplayBlockOffset();
         }
         return null;
     }
 
-    /** @see Minecart#setDisplayBlockOffset(int) */
+    /**
+     * @see Minecart#setDisplayBlockOffset(int)
+     */
     public EEntity setDisplayBlockOffset(Integer offset) {
         if (entity instanceof Minecart) {
-            ((Minecart)entity).setDisplayBlockOffset(offset);
+            ((Minecart) entity).setDisplayBlockOffset(offset);
         }
         return this;
     }
@@ -1566,26 +1919,32 @@ public class EEntity {
     // ##################################################
     //region Paintings
 
-    /** @see Painting#getArt() */
+    /**
+     * @see Painting#getArt()
+     */
     public Art getArt() {
         if (entity instanceof ItemFrame) {
-            return ((Painting)entity).getArt();
+            return ((Painting) entity).getArt();
         }
         return null;
     }
 
-    /** @see Painting#setArt(Art) */
+    /**
+     * @see Painting#setArt(Art)
+     */
     public EEntity setArt(Art art) {
         if (entity instanceof Painting) {
-            ((Painting)entity).setArt(art);
+            ((Painting) entity).setArt(art);
         }
         return this;
     }
 
-    /** @see Painting#setArt(Art, boolean) */
+    /**
+     * @see Painting#setArt(Art, boolean)
+     */
     public EEntity setArt(Art art, Boolean force) {
         if (entity instanceof Painting) {
-            ((Painting)entity).setArt(art, force);
+            ((Painting) entity).setArt(art, force);
         }
         return this;
     }
@@ -1597,10 +1956,12 @@ public class EEntity {
     // ##################################################
     //region Thrown potions
 
-    /** @see ThrownPotion#getEffects() */
+    /**
+     * @see ThrownPotion#getEffects()
+     */
     public Collection<PotionEffect> getEffects() {
         if (entity instanceof ThrownPotion) {
-            return ((ThrownPotion)entity).getEffects();
+            return ((ThrownPotion) entity).getEffects();
         }
         return null;
     }
@@ -1612,26 +1973,32 @@ public class EEntity {
     // ##################################################
     //region Primted TnT
 
-    /** @see TNTPrimed#getFuseTicks() */
+    /**
+     * @see TNTPrimed#getFuseTicks()
+     */
     public Integer getFuseTicks() {
         if (entity instanceof TNTPrimed) {
-            return ((TNTPrimed)entity).getFuseTicks();
+            return ((TNTPrimed) entity).getFuseTicks();
         }
         return null;
     }
 
-    /** @see TNTPrimed#setFuseTicks(int) */
+    /**
+     * @see TNTPrimed#setFuseTicks(int)
+     */
     public EEntity setFuseTicks(Integer ticks) {
         if (entity instanceof TNTPrimed) {
-            ((TNTPrimed)entity).setFuseTicks(ticks);
+            ((TNTPrimed) entity).setFuseTicks(ticks);
         }
         return this;
     }
 
-    /** @see TNTPrimed#getSource() */
+    /**
+     * @see TNTPrimed#getSource()
+     */
     public EEntity getSource() {
         if (entity instanceof TNTPrimed) {
-            return new EEntity(((TNTPrimed)entity).getSource());
+            return new EEntity(((TNTPrimed) entity).getSource());
         }
         return null;
     }
@@ -1643,24 +2010,27 @@ public class EEntity {
     // ##################################################
     //region Wither skulls
 
-    /** @see WitherSkull#isCharged() */
+    /**
+     * @see WitherSkull#isCharged()
+     */
     public Boolean isCharged() {
         if (entity instanceof WitherSkull) {
-            return ((WitherSkull)entity).isCharged();
+            return ((WitherSkull) entity).isCharged();
         }
         return false;
     }
 
-    /** @see WitherSkull#setCharged(boolean) */
+    /**
+     * @see WitherSkull#setCharged(boolean)
+     */
     public EEntity setCharged(Boolean powered) {
         if (entity instanceof WitherSkull) {
-            ((WitherSkull)entity).setCharged(powered);
+            ((WitherSkull) entity).setCharged(powered);
         }
         return this;
     }
     //endregion
     //endregion
-
 
 
     //region Creature entities. (Bukkit methods)
@@ -1669,18 +2039,22 @@ public class EEntity {
     // ##################################################
     //region Bats
 
-    /** @see Bat#isAwake() */
+    /**
+     * @see Bat#isAwake()
+     */
     public Boolean isAwake() {
         if (entity instanceof Bat) {
-            return ((Bat)entity).isAwake();
+            return ((Bat) entity).isAwake();
         }
         return false;
     }
 
-    /** @see Bat#setAwake(boolean) */
+    /**
+     * @see Bat#setAwake(boolean)
+     */
     public EEntity setAwake(Boolean awake) {
         if (entity instanceof Bat) {
-            ((Bat)entity).setAwake(awake);
+            ((Bat) entity).setAwake(awake);
         }
         return this;
     }
@@ -1692,18 +2066,22 @@ public class EEntity {
     // ##################################################
     //region Creepers
 
-    /** @see Creeper#isPowered() */
+    /**
+     * @see Creeper#isPowered()
+     */
     public Boolean isPowered() {
         if (entity instanceof Creeper) {
-            return ((Creeper)entity).isPowered();
+            return ((Creeper) entity).isPowered();
         }
         return false;
     }
 
-    /** @see Creeper#setPowered(boolean) */
+    /**
+     * @see Creeper#setPowered(boolean)
+     */
     public EEntity setPowered(Boolean powered) {
         if (entity instanceof Creeper) {
-            ((Creeper)entity).setPowered(powered);
+            ((Creeper) entity).setPowered(powered);
         }
         return this;
     }
@@ -1715,18 +2093,22 @@ public class EEntity {
     // ##################################################
     //region Enderman
 
-    /** @see Enderman#getCarriedMaterial() */
+    /**
+     * @see Enderman#getCarriedMaterial()
+     */
     public MaterialData getCarriedMaterial() {
         if (entity instanceof Enderman) {
-            return ((Enderman)entity).getCarriedMaterial();
+            return ((Enderman) entity).getCarriedMaterial();
         }
         return null;
     }
 
-    /** @see Enderman#setCarriedMaterial(MaterialData) */
+    /**
+     * @see Enderman#setCarriedMaterial(MaterialData)
+     */
     public EEntity setCarriedMaterial(MaterialData material) {
         if (entity instanceof Enderman) {
-            ((Enderman)entity).setCarriedMaterial(material);
+            ((Enderman) entity).setCarriedMaterial(material);
         }
         return this;
     }
@@ -1738,18 +2120,22 @@ public class EEntity {
     // ##################################################
     //region Guardians
 
-    /** @see Guardian#isElder() */
+    /**
+     * @see Guardian#isElder()
+     */
     public Boolean isElder() {
         if (entity instanceof Guardian) {
-            return ((Guardian)entity).isElder();
+            return ((Guardian) entity).isElder();
         }
         return false;
     }
 
-    /** @see Guardian#setElder(boolean) */
+    /**
+     * @see Guardian#setElder(boolean)
+     */
     public EEntity setElder(Boolean eldar) {
         if (entity instanceof Guardian) {
-            ((Guardian)entity).setElder(eldar);
+            ((Guardian) entity).setElder(eldar);
         }
         return this;
     }
@@ -1761,168 +2147,202 @@ public class EEntity {
     // ##################################################
     //region Horses
 
-    /** @see Horse#getVariant() */
+    /**
+     * @see Horse#getVariant()
+     */
     public Horse.Variant getVariant() {
         if (entity instanceof Horse) {
-            return ((Horse)entity).getVariant();
+            return ((Horse) entity).getVariant();
         }
         return null;
     }
 
-    /** @see Horse#setVariant(Horse.Variant) */
+    /**
+     * @see Horse#setVariant(Horse.Variant)
+     */
     public EEntity setVariant(Horse.Variant variant) {
         if (entity instanceof Horse) {
-            ((Horse)entity).setVariant(variant);
+            ((Horse) entity).setVariant(variant);
         }
         return this;
     }
 
-    /** @see Horse#getColor() */
+    /**
+     * @see Horse#getColor()
+     */
     public Horse.Color getColor() {
         if (entity instanceof Horse) {
-            return ((Horse)entity).getColor();
+            return ((Horse) entity).getColor();
         }
         return null;
     }
 
-    /** @see Horse#setColor(Horse.Color) */
+    /**
+     * @see Horse#setColor(Horse.Color)
+     */
     public EEntity setColor(Horse.Color color) {
         if (entity instanceof Horse) {
-            ((Horse)entity).setColor(color);
+            ((Horse) entity).setColor(color);
         }
         return this;
     }
 
-    /** @see Horse#getStyle() */
+    /**
+     * @see Horse#getStyle()
+     */
     public Horse.Style getStyle() {
         if (entity instanceof Horse) {
-            return ((Horse)entity).getStyle();
+            return ((Horse) entity).getStyle();
         }
         return null;
     }
 
-    /** @see Horse#setStyle(Horse.Style) */
+    /**
+     * @see Horse#setStyle(Horse.Style)
+     */
     public EEntity setStyle(Horse.Style color) {
         if (entity instanceof Horse) {
-            ((Horse)entity).setStyle(color);
+            ((Horse) entity).setStyle(color);
         }
         return this;
     }
 
-    /** @see Horse#isCarryingChest() */
+    /**
+     * @see Horse#isCarryingChest()
+     */
     public Boolean isCarryingChest() {
         if (entity instanceof Horse) {
-            return ((Horse)entity).isCarryingChest();
+            return ((Horse) entity).isCarryingChest();
         }
         return false;
     }
 
-    /** @see Horse#setCarryingChest(boolean) */
+    /**
+     * @see Horse#setCarryingChest(boolean)
+     */
     public EEntity setCarryingChest(Boolean chest) {
         if (entity instanceof Horse) {
-            ((Horse)entity).setCarryingChest(chest);
+            ((Horse) entity).setCarryingChest(chest);
         }
         return this;
     }
 
-    /** @see Horse#getDomestication() */
+    /**
+     * @see Horse#getDomestication()
+     */
     public Integer getDomestication() {
         if (entity instanceof Horse) {
-            return ((Horse)entity).getDomestication();
+            return ((Horse) entity).getDomestication();
         }
         return null;
     }
 
-    /** @see Horse#setDomestication(int) */
+    /**
+     * @see Horse#setDomestication(int)
+     */
     public EEntity setDomestication(Integer knockback) {
         if (entity instanceof Horse) {
-            ((Horse)entity).setDomestication(knockback);
+            ((Horse) entity).setDomestication(knockback);
         }
         return this;
     }
 
-    /** @see Horse#getMaxDomestication() */
+    /**
+     * @see Horse#getMaxDomestication()
+     */
     public Integer getMaxDomestication() {
         if (entity instanceof Horse) {
-            return ((Horse)entity).getMaxDomestication();
+            return ((Horse) entity).getMaxDomestication();
         }
         return null;
     }
 
-    /** @see Horse#setMaxDomestication(int) */
+    /**
+     * @see Horse#setMaxDomestication(int)
+     */
     public EEntity setMaxDomestication(Integer knockback) {
         if (entity instanceof Horse) {
-            ((Horse)entity).setMaxDomestication(knockback);
+            ((Horse) entity).setMaxDomestication(knockback);
         }
         return this;
     }
 
-    /** @see Horse#getJumpStrength() */
+    /**
+     * @see Horse#getJumpStrength()
+     */
     public Double getJumpStrength() {
         if (entity instanceof Horse) {
-            return ((Horse)entity).getJumpStrength();
+            return ((Horse) entity).getJumpStrength();
         }
         return null;
     }
 
-    /** @see Horse#setJumpStrength(double) */
+    /**
+     * @see Horse#setJumpStrength(double)
+     */
     public EEntity setJumpStrength(Double strength) {
         if (entity instanceof Horse) {
-            ((Horse)entity).setJumpStrength(strength);
+            ((Horse) entity).setJumpStrength(strength);
         }
         return this;
     }
 
-    /** @see Horse#getInventory() */
+    /**
+     * @see Horse#getInventory()
+     */
     public HorseInventory getInventory() {
         if (entity instanceof Horse) {
-            return ((Horse)entity).getInventory();
+            return ((Horse) entity).getInventory();
+        }
+        return null;
+    }
+
+    /**
+     * Get the equipped item in the armor slot from the horse.
+     *
+     * @return EItem from the armor slot.
+     */
+    public EItem getArmor() {
+        if (entity instanceof Horse) {
+            return new EItem(((Horse) entity).getInventory().getArmor());
         }
         return null;
     }
 
     /**
      * Equips the given item in the horse armor slot.
+     *
      * @param item The item to equip.
      * @return EEntity instance.
      */
     public EEntity setArmor(EItem item) {
         if (entity instanceof Horse) {
-            ((Horse)entity).getInventory().setArmor(item);
+            ((Horse) entity).getInventory().setArmor(item);
         }
         return this;
     }
 
     /**
-     * Get the equipped item in the armor slot from the horse.
-     * @return EItem from the armor slot.
-     */
-    public EItem getArmor() {
-        if (entity instanceof Horse) {
-            return new EItem(((Horse)entity).getInventory().getArmor());
-        }
-        return null;
-    }
-
-    /**
      * Equips the given item in the horse saddle slot.
+     *
      * @param item The item to equip.
      * @return EEntity instance.
      */
     public EEntity setSaddle(EItem item) {
         if (entity instanceof Horse) {
-            ((Horse)entity).getInventory().setSaddle(item);
+            ((Horse) entity).getInventory().setSaddle(item);
         }
         return this;
     }
 
     /**
      * Get the equipped item in the saddle slot from the horse.
+     *
      * @return EItem from the saddle slot.
      */
     public EItem getSaddle() {
         if (entity instanceof Horse) {
-            return new EItem(((Horse)entity).getInventory().getSaddle());
+            return new EItem(((Horse) entity).getInventory().getSaddle());
         }
         return null;
     }
@@ -1934,20 +2354,31 @@ public class EEntity {
     // ##################################################
     //region Iron golems
 
-    /** @see IronGolem#isPlayerCreated() */
-    public Boolean isPlayerCreated() {
-        if (entity instanceof IronGolem) {
-            return ((IronGolem)entity).isPlayerCreated();
-        }
-        return false;
-    }
-
-    /** @see IronGolem#setPlayerCreated(boolean) */
-    public EEntity setPlayerCreated(Boolean playerCreated) {
-        if (entity instanceof IronGolem) {
-            ((IronGolem)entity).setPlayerCreated(playerCreated);
+    /**
+     * @see Pig#setSaddle(boolean)
+     * For horses it will set a saddle item in the saddle inventory slot or set it to air.
+     */
+    public EEntity setSaddle(Boolean saddle) {
+        if (entity instanceof Pig) {
+            ((Pig) entity).setSaddle(saddle);
+        } else if (entity instanceof Horse) {
+            if (saddle) {
+                ((Horse) entity).getInventory().setSaddle(new EItem(Material.SADDLE));
+            } else {
+                ((Horse) entity).getInventory().setSaddle(EItem.AIR);
+            }
         }
         return this;
+    }
+
+    /**
+     * @see IronGolem#isPlayerCreated()
+     */
+    public Boolean isPlayerCreated() {
+        if (entity instanceof IronGolem) {
+            return ((IronGolem) entity).isPlayerCreated();
+        }
+        return false;
     }
     //endregion
 
@@ -1957,20 +2388,24 @@ public class EEntity {
     // ##################################################
     //region Ocelots
 
-    /** @see Ocelot#getCatType() */
-    public Ocelot.Type getCatType() {
-        if (entity instanceof Ocelot) {
-            return ((Ocelot)entity).getCatType();
-        }
-        return null;
-    }
-
-    /** @see Ocelot#setCatType(Ocelot.Type) */
-    public EEntity setCatType(Ocelot.Type type) {
-        if (entity instanceof Ocelot) {
-            ((Ocelot)entity).setCatType(type);
+    /**
+     * @see IronGolem#setPlayerCreated(boolean)
+     */
+    public EEntity setPlayerCreated(Boolean playerCreated) {
+        if (entity instanceof IronGolem) {
+            ((IronGolem) entity).setPlayerCreated(playerCreated);
         }
         return this;
+    }
+
+    /**
+     * @see Ocelot#getCatType()
+     */
+    public Ocelot.Type getCatType() {
+        if (entity instanceof Ocelot) {
+            return ((Ocelot) entity).getCatType();
+        }
+        return null;
     }
     //endregion
 
@@ -1980,20 +2415,24 @@ public class EEntity {
     // ##################################################
     //region Pig zombies
 
-    /** @see PigZombie#getAnger() */
-    public Integer getAnger() {
-        if (entity instanceof PigZombie) {
-            return ((PigZombie)entity).getAnger();
-        }
-        return null;
-    }
-
-    /** @see PigZombie#setAnger(int) */
-    public EEntity setAnger(Integer anger) {
-        if (entity instanceof PigZombie) {
-            ((PigZombie)entity).setAnger(anger);
+    /**
+     * @see Ocelot#setCatType(Ocelot.Type)
+     */
+    public EEntity setCatType(Ocelot.Type type) {
+        if (entity instanceof Ocelot) {
+            ((Ocelot) entity).setCatType(type);
         }
         return this;
+    }
+
+    /**
+     * @see PigZombie#getAnger()
+     */
+    public Integer getAnger() {
+        if (entity instanceof PigZombie) {
+            return ((PigZombie) entity).getAnger();
+        }
+        return null;
     }
     //endregion
 
@@ -2003,20 +2442,24 @@ public class EEntity {
     // ##################################################
     //region Rabbits
 
-    /** @see Rabbit#getRabbitType() */
-    public Rabbit.Type getRabbitType() {
-        if (entity instanceof Rabbit) {
-            return ((Rabbit)entity).getRabbitType();
-        }
-        return null;
-    }
-
-    /** @see Rabbit#setRabbitType(Rabbit.Type) */
-    public EEntity setRabbitType(Rabbit.Type type) {
-        if (entity instanceof Rabbit) {
-            ((Rabbit)entity).setRabbitType(type);
+    /**
+     * @see PigZombie#setAnger(int)
+     */
+    public EEntity setAnger(Integer anger) {
+        if (entity instanceof PigZombie) {
+            ((PigZombie) entity).setAnger(anger);
         }
         return this;
+    }
+
+    /**
+     * @see Rabbit#getRabbitType()
+     */
+    public Rabbit.Type getRabbitType() {
+        if (entity instanceof Rabbit) {
+            return ((Rabbit) entity).getRabbitType();
+        }
+        return null;
     }
     //endregion
 
@@ -2026,20 +2469,24 @@ public class EEntity {
     // ##################################################
     //region Sheeps
 
-    /** @see Sheep#isSheared() */
-    public Boolean isSheared() {
-        if (entity instanceof Sheep) {
-            return ((Sheep)entity).isSheared();
-        }
-        return false;
-    }
-
-    /** @see Sheep#setSheared(boolean) */
-    public EEntity setSheared(Boolean saddle) {
-        if (entity instanceof Sheep) {
-            ((Sheep)entity).setSheared(saddle);
+    /**
+     * @see Rabbit#setRabbitType(Rabbit.Type)
+     */
+    public EEntity setRabbitType(Rabbit.Type type) {
+        if (entity instanceof Rabbit) {
+            ((Rabbit) entity).setRabbitType(type);
         }
         return this;
+    }
+
+    /**
+     * @see Sheep#isSheared()
+     */
+    public Boolean isSheared() {
+        if (entity instanceof Sheep) {
+            return ((Sheep) entity).isSheared();
+        }
+        return false;
     }
     //endregion
 
@@ -2049,30 +2496,32 @@ public class EEntity {
     // ##################################################
     //region Skeletons
 
-    /** @see Skeleton#getSkeletonType() */
-    public Skeleton.SkeletonType getSkeletonType() {
-        if (entity instanceof Skeleton) {
-            return ((Skeleton)entity).getSkeletonType();
-        }
-        return null;
-    }
-
-    /** @see Skeleton#setSkeletonType(Skeleton.SkeletonType) */
-    public EEntity setSkeletonType(Skeleton.SkeletonType type) {
-        if (entity instanceof Skeleton) {
-            ((Skeleton)entity).setSkeletonType(type);
+    /**
+     * @see Sheep#setSheared(boolean)
+     */
+    public EEntity setSheared(Boolean saddle) {
+        if (entity instanceof Sheep) {
+            ((Sheep) entity).setSheared(saddle);
         }
         return this;
     }
 
-    /** @see Skeleton#setSkeletonType(Skeleton.SkeletonType) */
-    public EEntity makeWitherSkeleton(boolean wither) {
+    /**
+     * @see Skeleton#getSkeletonType()
+     */
+    public Skeleton.SkeletonType getSkeletonType() {
         if (entity instanceof Skeleton) {
-            if (wither) {
-                ((Skeleton)entity).setSkeletonType(Skeleton.SkeletonType.WITHER);
-            } else {
-                ((Skeleton)entity).setSkeletonType(Skeleton.SkeletonType.NORMAL);
-            }
+            return ((Skeleton) entity).getSkeletonType();
+        }
+        return null;
+    }
+
+    /**
+     * @see Skeleton#setSkeletonType(Skeleton.SkeletonType)
+     */
+    public EEntity setSkeletonType(Skeleton.SkeletonType type) {
+        if (entity instanceof Skeleton) {
+            ((Skeleton) entity).setSkeletonType(type);
         }
         return this;
     }
@@ -2084,20 +2533,28 @@ public class EEntity {
     // ##################################################
     //region Slimes
 
-    /** @see Slime#getSize() */
-    public Integer getSize() {
-        if (entity instanceof Slime) {
-            return ((Slime)entity).getSize();
-        }
-        return null;
-    }
-
-    /** @see Slime#setSize(int) */
-    public EEntity setSize(Integer size) {
-        if (entity instanceof Slime) {
-            ((Slime)entity).setSize(size);
+    /**
+     * @see Skeleton#setSkeletonType(Skeleton.SkeletonType)
+     */
+    public EEntity makeWitherSkeleton(boolean wither) {
+        if (entity instanceof Skeleton) {
+            if (wither) {
+                ((Skeleton) entity).setSkeletonType(Skeleton.SkeletonType.WITHER);
+            } else {
+                ((Skeleton) entity).setSkeletonType(Skeleton.SkeletonType.NORMAL);
+            }
         }
         return this;
+    }
+
+    /**
+     * @see Slime#getSize()
+     */
+    public Integer getSize() {
+        if (entity instanceof Slime) {
+            return ((Slime) entity).getSize();
+        }
+        return null;
     }
     //endregion
 
@@ -2107,20 +2564,24 @@ public class EEntity {
     // ##################################################
     //region Villagers
 
-    /** @see Villager#getProfession() */
-    public Villager.Profession getProfession() {
-        if (entity instanceof Villager) {
-            return ((Villager)entity).getProfession();
-        }
-        return null;
-    }
-
-    /** @see Villager#setProfession(Villager.Profession) */
-    public EEntity setProfession(Villager.Profession type) {
-        if (entity instanceof Villager) {
-            ((Villager)entity).setProfession(type);
+    /**
+     * @see Slime#setSize(int)
+     */
+    public EEntity setSize(Integer size) {
+        if (entity instanceof Slime) {
+            ((Slime) entity).setSize(size);
         }
         return this;
+    }
+
+    /**
+     * @see Villager#getProfession()
+     */
+    public Villager.Profession getProfession() {
+        if (entity instanceof Villager) {
+            return ((Villager) entity).getProfession();
+        }
+        return null;
     }
     //endregion
 
@@ -2130,20 +2591,24 @@ public class EEntity {
     // ##################################################
     //region Wolves
 
-    /** @see Wolf#getCollarColor() */
-    public DyeColor getCollarColor() {
-        if (entity instanceof Wolf) {
-            return ((Wolf)entity).getCollarColor();
-        }
-        return null;
-    }
-
-    /** @see Wolf#setCollarColor(DyeColor) */
-    public EEntity setCollarColor(DyeColor color) {
-        if (entity instanceof Wolf) {
-            ((Wolf)entity).setCollarColor(color);
+    /**
+     * @see Villager#setProfession(Villager.Profession)
+     */
+    public EEntity setProfession(Villager.Profession type) {
+        if (entity instanceof Villager) {
+            ((Villager) entity).setProfession(type);
         }
         return this;
+    }
+
+    /**
+     * @see Wolf#getCollarColor()
+     */
+    public DyeColor getCollarColor() {
+        if (entity instanceof Wolf) {
+            return ((Wolf) entity).getCollarColor();
+        }
+        return null;
     }
     //endregion
 
@@ -2153,27 +2618,40 @@ public class EEntity {
     // ##################################################
     //region Zombies
 
-    /** @see Zombie#isVillager() */
-    public Boolean isVillager() {
-        if (entity instanceof Zombie) {
-            return ((Zombie)entity).isVillager();
-        }
-        return false;
-    }
-
-    /** @see Zombie#setVillager(boolean) */
-    public EEntity setVillager(Boolean villager) {
-        if (entity instanceof Zombie) {
-            ((Zombie)entity).setVillager(villager);
+    /**
+     * @see Wolf#setCollarColor(DyeColor)
+     */
+    public EEntity setCollarColor(DyeColor color) {
+        if (entity instanceof Wolf) {
+            ((Wolf) entity).setCollarColor(color);
         }
         return this;
     }
-    //endregion
-    //endregion
 
+    /**
+     * @see Zombie#isVillager()
+     */
+    public Boolean isVillager() {
+        if (entity instanceof Zombie) {
+            return ((Zombie) entity).isVillager();
+        }
+        return false;
+    }
+    //endregion
+    //endregion
 
 
     //region Mixed entity methods. (Methods that are used for multiple entities like setItemInHand)
+
+    /**
+     * @see Zombie#setVillager(boolean)
+     */
+    public EEntity setVillager(Boolean villager) {
+        if (entity instanceof Zombie) {
+            ((Zombie) entity).setVillager(villager);
+        }
+        return this;
+    }
 
     /**
      * @see PigZombie#isAngry()
@@ -2181,9 +2659,9 @@ public class EEntity {
      */
     public Boolean isAngry() {
         if (entity instanceof PigZombie) {
-            return ((PigZombie)entity).isAngry();
+            return ((PigZombie) entity).isAngry();
         } else if (entity instanceof Wolf) {
-            return ((Wolf)entity).isAngry();
+            return ((Wolf) entity).isAngry();
         }
         return false;
     }
@@ -2194,9 +2672,9 @@ public class EEntity {
      */
     public EEntity setAngry(Boolean angry) {
         if (entity instanceof PigZombie) {
-            ((PigZombie)entity).setAngry(angry);
+            ((PigZombie) entity).setAngry(angry);
         } else if (entity instanceof Wolf) {
-            ((Wolf)entity).setAngry(angry);
+            ((Wolf) entity).setAngry(angry);
         }
         return this;
     }
@@ -2207,9 +2685,9 @@ public class EEntity {
      */
     public Boolean isSitting() {
         if (entity instanceof Ocelot) {
-            return ((Ocelot)entity).isSitting();
+            return ((Ocelot) entity).isSitting();
         } else if (entity instanceof Wolf) {
-            return ((Wolf)entity).isSitting();
+            return ((Wolf) entity).isSitting();
         }
         return false;
     }
@@ -2220,9 +2698,9 @@ public class EEntity {
      */
     public EEntity setSitting(Boolean sitting) {
         if (entity instanceof Ocelot) {
-            ((Ocelot)entity).setSitting(sitting);
+            ((Ocelot) entity).setSitting(sitting);
         } else if (entity instanceof Wolf) {
-            ((Wolf)entity).setSitting(sitting);
+            ((Wolf) entity).setSitting(sitting);
         }
         return this;
     }
@@ -2233,9 +2711,9 @@ public class EEntity {
      */
     public Double getMaxSpeed() {
         if (entity instanceof Boat) {
-            return ((Boat)entity).getMaxSpeed();
+            return ((Boat) entity).getMaxSpeed();
         } else if (entity instanceof Minecart) {
-            return ((Boat)entity).getMaxSpeed();
+            return ((Boat) entity).getMaxSpeed();
         }
         return null;
     }
@@ -2246,17 +2724,19 @@ public class EEntity {
      */
     public EEntity setMaxSpeed(Double rate) {
         if (entity instanceof Boat) {
-            ((Boat)entity).setMaxSpeed(rate);
+            ((Boat) entity).setMaxSpeed(rate);
         } else if (entity instanceof Minecart) {
-            ((Boat)entity).setMaxSpeed(rate);
+            ((Boat) entity).setMaxSpeed(rate);
         }
         return this;
     }
 
-    /** @see ThrownPotion#getItem() */
+    /**
+     * @see ThrownPotion#getItem()
+     */
     public EItem getItem() {
         if (entity instanceof ThrownPotion) {
-            return new EItem(((ThrownPotion)entity).getItem());
+            return new EItem(((ThrownPotion) entity).getItem());
         }
         return null;
     }
@@ -2266,13 +2746,13 @@ public class EEntity {
      * @see ThrownPotion#setItem(ItemStack)
      * @see ItemFrame#setItem(ItemStack)
      */
-    public EEntity setItem(ItemStack item) {
+    public EEntity setItem(EItem item) {
         if (entity instanceof Item) {
-            ((Item)entity).setItemStack(item);
+            ((Item) entity).setItemStack(item);
         } else if (entity instanceof ThrownPotion) {
-            ((ThrownPotion)entity).setItem(item);
+            ((ThrownPotion) entity).setItem(item);
         } else if (entity instanceof ItemFrame) {
-            ((ItemFrame)entity).setItem(item);
+            ((ItemFrame) entity).setItem(item);
         }
         return this;
     }
@@ -2282,13 +2762,13 @@ public class EEntity {
      * @see ThrownPotion#setItem(ItemStack)
      * @see ItemFrame#setItem(ItemStack)
      */
-    public EEntity setItem(EItem item) {
+    public EEntity setItem(ItemStack item) {
         if (entity instanceof Item) {
-            ((Item)entity).setItemStack(item);
+            ((Item) entity).setItemStack(item);
         } else if (entity instanceof ThrownPotion) {
-            ((ThrownPotion)entity).setItem(item);
+            ((ThrownPotion) entity).setItem(item);
         } else if (entity instanceof ItemFrame) {
-            ((ItemFrame)entity).setItem(item);
+            ((ItemFrame) entity).setItem(item);
         }
         return this;
     }
@@ -2299,40 +2779,24 @@ public class EEntity {
      */
     public Boolean hasSaddle() {
         if (entity instanceof Pig) {
-            return ((Pig)entity).hasSaddle();
+            return ((Pig) entity).hasSaddle();
         } else if (entity instanceof Horse) {
-            return ((Horse)entity).getInventory().getSaddle() != null;
+            return ((Horse) entity).getInventory().getSaddle() != null;
         }
         return false;
     }
 
-    /**
-     * @see Pig#setSaddle(boolean)
-     * For horses it will set a saddle item in the saddle inventory slot or set it to air.
-     */
-    public EEntity setSaddle(Boolean saddle) {
-        if (entity instanceof Pig) {
-            ((Pig)entity).setSaddle(saddle);
-        } else if (entity instanceof Horse) {
-            if (saddle) {
-                ((Horse)entity).getInventory().setSaddle(new EItem(Material.SADDLE));
-            } else {
-                ((Horse)entity).getInventory().setSaddle(EItem.AIR);
-            }
-        }
-        return this;
-    }
-
     //ITEMS
+
     /**
      * @see ArmorStand#getItemInHand()
      * @see EntityEquipment#getItemInHand()
      */
     public ItemStack getItemInHand() {
         if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).getItemInHand();
+            return ((ArmorStand) entity).getItemInHand();
         } else if (entity instanceof LivingEntity) {
-            return ((LivingEntity)entity).getEquipment().getItemInHand();
+            return ((LivingEntity) entity).getEquipment().getItemInHand();
         }
         return null;
     }
@@ -2343,9 +2807,9 @@ public class EEntity {
      */
     public EEntity setItemInHand(EItem item) {
         if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setItemInHand(item);
+            ((ArmorStand) entity).setItemInHand(item);
         } else if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).getEquipment().setItemInHand(item);
+            ((LivingEntity) entity).getEquipment().setItemInHand(item);
         }
         return this;
     }
@@ -2356,9 +2820,9 @@ public class EEntity {
      */
     public ItemStack getBoots() {
         if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).getBoots();
+            return ((ArmorStand) entity).getBoots();
         } else if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).getEquipment().getBoots();
+            ((LivingEntity) entity).getEquipment().getBoots();
         }
         return null;
     }
@@ -2369,9 +2833,9 @@ public class EEntity {
      */
     public EEntity setBoots(EItem item) {
         if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setBoots(item);
+            ((ArmorStand) entity).setBoots(item);
         } else if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).getEquipment().setBoots(item);
+            ((LivingEntity) entity).getEquipment().setBoots(item);
         }
         return this;
     }
@@ -2382,9 +2846,9 @@ public class EEntity {
      */
     public ItemStack getLeggings() {
         if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).getLeggings();
+            return ((ArmorStand) entity).getLeggings();
         } else if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).getEquipment().getLeggings();
+            ((LivingEntity) entity).getEquipment().getLeggings();
         }
         return null;
     }
@@ -2395,9 +2859,9 @@ public class EEntity {
      */
     public EEntity setLeggings(EItem item) {
         if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setLeggings(item);
+            ((ArmorStand) entity).setLeggings(item);
         } else if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).getEquipment().setLeggings(item);
+            ((LivingEntity) entity).getEquipment().setLeggings(item);
         }
         return this;
     }
@@ -2408,9 +2872,9 @@ public class EEntity {
      */
     public ItemStack getChestplate() {
         if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).getChestplate();
+            return ((ArmorStand) entity).getChestplate();
         } else if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).getEquipment().getChestplate();
+            ((LivingEntity) entity).getEquipment().getChestplate();
         }
         return null;
     }
@@ -2421,9 +2885,9 @@ public class EEntity {
      */
     public EEntity setChestplate(EItem item) {
         if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setChestplate(item);
+            ((ArmorStand) entity).setChestplate(item);
         } else if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).getEquipment().setChestplate(item);
+            ((LivingEntity) entity).getEquipment().setChestplate(item);
         }
         return this;
     }
@@ -2434,9 +2898,9 @@ public class EEntity {
      */
     public ItemStack getHelmet() {
         if (entity instanceof ArmorStand) {
-            return ((ArmorStand)entity).getHelmet();
+            return ((ArmorStand) entity).getHelmet();
         } else if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).getEquipment().getHelmet();
+            ((LivingEntity) entity).getEquipment().getHelmet();
         }
         return null;
     }
@@ -2447,14 +2911,13 @@ public class EEntity {
      */
     public EEntity setHelmet(EItem item) {
         if (entity instanceof ArmorStand) {
-            ((ArmorStand)entity).setHelmet(item);
+            ((ArmorStand) entity).setHelmet(item);
         } else if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).getEquipment().setHelmet(item);
+            ((LivingEntity) entity).getEquipment().setHelmet(item);
         }
         return this;
     }
     //endregion
-
 
 
     //region Custom methods. (Mostly Util)

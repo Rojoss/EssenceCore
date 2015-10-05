@@ -47,7 +47,7 @@ import java.util.Map;
 
 /**
  * Custom ItemStack that supports item building.
- * For example: new EItem(Material.STONE).setName("&atest").setLore("lore", "more lore");
+ * For example: new EItem(Material.STONE).setName("&amp;atest").setLore("lore", "more lore")
  */
 public class EItem extends ItemStack {
 
@@ -467,7 +467,7 @@ public class EItem extends ItemStack {
      * Adds one or more pages to the end of the book.
      * Each page can have up to 256 characters.
      * And there can only be 50 pages in each book.
-     * @See {@link #} for several book formatting options. //TODO: Put link for book formatting class.
+     * for several book formatting options. //TODO: Put link for book formatting class.
      */
     public EItem addPage(String... pages) {
         ItemMeta meta = getItemMeta();
@@ -481,7 +481,7 @@ public class EItem extends ItemStack {
     /**
      * Sets a page of the book.
      * The content can have up to 256 characters. (any more will be truncated)
-     * @See {@link #} for several book formatting options. //TODO: Put link for book formatting class.
+     *  for several book formatting options. //TODO: Put link for book formatting class.
      */
     public EItem setPage(int page, String content) {
         ItemMeta meta = getItemMeta();
@@ -496,7 +496,7 @@ public class EItem extends ItemStack {
      * Clears the book and sets the page(s) specified.
      * Each page can have up to 256 characters.
      * And there can only be 50 pages in each book.
-     * @See {@link #} for several book formatting options. //TODO: Put link for book formatting class.
+     * for several book formatting options. //TODO: Put link for book formatting class.
      */
     public EItem setPages(String... pages) {
         return setPages(Arrays.asList(pages));
@@ -506,7 +506,7 @@ public class EItem extends ItemStack {
      * Clears the book and sets the page(s) specified.
      * Each page can have up to 256 characters.
      * And there can only be 50 pages in each book.
-     * @See {@link #} for several book formatting options. //TODO: Put link for book formatting class.
+     *  for several book formatting options. //TODO: Put link for book formatting class.
      */
     public EItem setPages(List<String> pages) {
         ItemMeta meta = getItemMeta();

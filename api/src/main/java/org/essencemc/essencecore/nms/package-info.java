@@ -23,26 +23,7 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.nms;
-
-import org.bukkit.GameMode;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-
 /**
- * Interface for handling any visuals that are only visible to a particular player only
+ * Contains all the stuff related to NMS
  */
-public interface IPlayerScreenVisuals {
-
-    IPlayerScreenVisuals setPlayerDimension(World.Environment environment, Player player);
-
-    IPlayerScreenVisuals setPlayerDimension(World.Environment environment, Player[] players);
-
-    IPlayerScreenVisuals setPlayerGamemode(GameMode gameMode, Player player);
-
-    IPlayerScreenVisuals setPlayerGamemode(GameMode gameMode, Player[] players);
-
-    IPlayerScreenVisuals setPlayerReducedInfo(boolean reducedInfo, Player player);
-
-    IPlayerScreenVisuals setPlayerReducedInfo(boolean reducedInfo, Player[] players);
-}
+package org.essencemc.essencecore.nms;

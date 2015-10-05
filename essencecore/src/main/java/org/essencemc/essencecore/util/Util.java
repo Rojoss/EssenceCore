@@ -60,7 +60,7 @@ public class Util {
 
 
     /**
-     * Remove all color and put colors as the formatting codes like &1.
+     * Remove all color and put colors as the formatting codes like &amp;1.
      * @param str The string to remove color from.
      * @return formatted string
      */

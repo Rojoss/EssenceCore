@@ -48,7 +48,7 @@ public class Debug {
 
     /**
      * Log the debug message to console.
-     * @param prefix A prefix added to the debug message. (Can also be used to color it like '&1')
+     * @param prefix A prefix added to the debug message. (Can also be used to color it like '&amp;1')
      * @param obj The object to debug. (This can also be just a string.)
      */
     public static  void log(String prefix, Object obj) {
@@ -66,7 +66,7 @@ public class Debug {
 
     /**
      * Broadcast the debug message to the entire server.
-     * @param prefix A prefix added to the debug message. (Can also be used to color it like '&1')
+     * @param prefix A prefix added to the debug message. (Can also be used to color it like '&amp;1')
      * @param obj The object to debug. (This can also be just a string.)
      */
     public static void bc(String prefix, Object obj) {
@@ -84,7 +84,7 @@ public class Debug {
 
     /**
      * Send the debug message to the specified player.
-     * @param prefix A prefix added to the debug message. (Can also be used to color it like '&1')
+     * @param prefix A prefix added to the debug message. (Can also be used to color it like '&amp;1')
      * @param obj The object to debug. (This can also be just a string.)
      */
     public static void send(Player player, String prefix, Object obj) {
@@ -102,7 +102,7 @@ public class Debug {
 
     /**
      * Send the debug message to all ops and player with 'cw.debug' permission.
-     * @param prefix A prefix added to the debug message. (Can also be used to color it like '&1')
+     * @param prefix A prefix added to the debug message. (Can also be used to color it like '&amp;1')
      * @param obj The object to debug. (This can also be just a string.)
      */
     public static void bcOps(String prefix, Object obj) {

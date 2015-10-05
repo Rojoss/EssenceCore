@@ -39,7 +39,7 @@ public class ItemUtil {
     public static ItemStack air = new ItemStack(Material.AIR);
 
     /**
-     * @see {@link #compareItems(org.bukkit.inventory.ItemStack, org.bukkit.inventory.ItemStack, boolean, boolean)}
+     * @see #compareItems(org.bukkit.inventory.ItemStack, org.bukkit.inventory.ItemStack, boolean, boolean)
      */
     public static boolean compareItems(ItemStack stack1, ItemStack stack2) {
         return compareItems(stack1, stack2, false, true);
@@ -74,7 +74,7 @@ public class ItemUtil {
         return loc.getWorld().dropItem(loc, item);
     }
 
-    /** @see {@link #dropItem(Location, ItemStack, Player)} */
+    /** @see #dropItem(Location, ItemStack, Player) */
     public static Item dropItemStack(Block block, ItemStack item, Player owner) {
         return dropItem(block.getLocation().add(0.5f, 0.5f, 0.5f), item, owner);
     }

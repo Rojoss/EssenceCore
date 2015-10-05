@@ -59,7 +59,7 @@
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-ftp</artifactId>
-                <version>1.0-alpha-6</version>
+                <version>1.0-beta-3</version>
             </extension>
         </extensions>
     </build>
@@ -76,6 +76,11 @@
             <id>essence-repo</id>
             <url>ftp://ftp.essencemc.org/maven2</url>
         </repository>
+
+       <site>
+            <id>essence-javadocs</id>
+            <url>ftp://ftp.essencemc.org/javadoc</url>
+        </site>
     </distributionManagement>
 
     <modules>
@@ -83,5 +88,15 @@
         <module>v1_8R3</module>
         <module>api</module>
     </modules>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
+            </plugin>
+        </plugins>
+    </reporting>
     
 </project>

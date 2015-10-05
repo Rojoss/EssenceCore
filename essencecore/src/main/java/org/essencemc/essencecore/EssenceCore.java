@@ -36,6 +36,7 @@ import org.essencemc.essencecore.database.Database;
 import org.essencemc.essencecore.database.MySql.MySql;
 import org.essencemc.essencecore.database.SqlLite.SqlLite;
 import org.essencemc.essencecore.listeners.ModuleListener;
+import org.essencemc.essencecore.listeners.PlaceholderListener;
 import org.essencemc.essencecore.modules.Modules;
 import org.essencemc.essencecore.nms.IChat;
 import org.essencemc.essencecore.nms.ISkull;
@@ -210,6 +211,7 @@ public class EssenceCore extends JavaPlugin {
     private void registerEvents() {
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new ModuleListener(), this);
+        pm.registerEvents(new PlaceholderListener(this), this);
     }
 
     private void loadAliases() {

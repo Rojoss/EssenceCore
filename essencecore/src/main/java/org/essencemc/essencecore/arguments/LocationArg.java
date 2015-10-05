@@ -165,6 +165,11 @@ public class LocationArg extends Argument {
     }
 
     @Override
+    public String toString() {
+        return LocationArg.Parse(value == null ? (defaultValue == null ? null : (Location)defaultValue) : (Location)value);
+    }
+
+    @Override
     public String getDescription() {
         return Message.ARG_LOCATION.msg().getMsg(false);
     }
@@ -172,5 +177,27 @@ public class LocationArg extends Argument {
     @Override
     public Class getRawClass() {
         return Location.class;
+    }
+
+    public static Location Parse(String input) {
+        LocationArg arg = new LocationArg();
+        if (arg.parse(input)) {
+            return (Location)arg.value;
+        }
+        return null;
+    }
+
+    public static String Parse(Location input) {
+        if (input == null) {
+            return null;
+        }
+        String x = input.getX()%1 == 0 ? Integer.toString(input.getBlockX()) : Double.toString(input.getX());
+        String y = input.getX()%1 == 0 ? Integer.toString(input.getBlockX()) : Double.toString(input.getX());
+        String z = input.getX()%1 == 0 ? Integer.toString(input.getBlockX()) : Double.toString(input.getX());
+
+        if (input.getYaw() == 0 && input.getPitch() == 0) {
+            return  x + "," + y + "," + z + ":" + input.getWorld();
+        }
+        return  x + "," + y + "," + z + "," + input.getYaw() + "," + input.getPitch() + ":" + input.getWorld();
     }
 }

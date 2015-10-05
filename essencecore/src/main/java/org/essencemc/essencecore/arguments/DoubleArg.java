@@ -78,4 +78,19 @@ public class DoubleArg extends Argument {
     public Class getRawClass() {
         return Double.class;
     }
+
+    public static Double Parse(String input) {
+        DoubleArg arg = new DoubleArg();
+        if (arg.parse(input)) {
+            return (Double)arg.value;
+        }
+        return null;
+    }
+
+    public static String Parse(Double input) {
+        if (input == null) {
+            return null;
+        }
+        return input.toString();
+    }
 }

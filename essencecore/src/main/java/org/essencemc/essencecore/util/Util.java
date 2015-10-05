@@ -157,7 +157,16 @@ public class Util {
         return NEGATIVE_POTION_EFFECTS.contains(effect);
     }
 
-
+    public static int countChars(String string, char ch) {
+        int count = 0;
+        char[] chars = string.toCharArray();
+        for (char c : chars) {
+            if (c == ch) {
+                count++;
+            }
+        }
+        return count;
+    }
 
     public static String implode(Object[] arr, String glue, String lastGlue, int start, int end) {
         String ret = "";

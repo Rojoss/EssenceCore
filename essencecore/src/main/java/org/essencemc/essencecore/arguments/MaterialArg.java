@@ -26,6 +26,7 @@
 package org.essencemc.essencecore.arguments;
 
 import org.bukkit.material.MaterialData;
+import org.essencemc.essencecore.aliases.Aliases;
 import org.essencemc.essencecore.aliases.Items;
 import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.message.Message;
@@ -73,6 +74,11 @@ public class MaterialArg extends Argument {
     }
 
     @Override
+    public String toString() {
+        return MaterialArg.Parse(value == null ? (defaultValue == null ? null : (MaterialData) defaultValue) : (MaterialData) value);
+    }
+
+    @Override
     public String getDescription() {
         return Message.ARG_MATERIAL.msg().getMsg(false);
     }
@@ -80,5 +86,21 @@ public class MaterialArg extends Argument {
     @Override
     public Class getRawClass() {
         return MaterialData.class;
+    }
+
+
+    public static MaterialData Parse(String input) {
+        MaterialArg arg = new MaterialArg();
+        if (arg.parse(input)) {
+            return (MaterialData)arg.value;
+        }
+        return null;
+    }
+
+    public static String Parse(MaterialData input) {
+        if (input == null) {
+            return null;
+        }
+        return Items.getItem(input.getItemType(), input.getData()).getName();
     }
 }

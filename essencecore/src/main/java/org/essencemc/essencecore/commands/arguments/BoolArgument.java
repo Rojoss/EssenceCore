@@ -27,6 +27,7 @@ package org.essencemc.essencecore.commands.arguments;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
+import org.essencemc.essencecore.arguments.BoolArg;
 import org.essencemc.essencecore.commands.arguments.internal.ArgumentParseResult;
 import org.essencemc.essencecore.commands.arguments.internal.ArgumentRequirement;
 import org.essencemc.essencecore.commands.arguments.internal.CmdArgument;
@@ -49,13 +50,13 @@ public class BoolArgument extends CmdArgument {
             return result;
         }
 
-        if (arg.equalsIgnoreCase("true") || arg.equalsIgnoreCase("yes") || arg.equalsIgnoreCase("1") || arg.equalsIgnoreCase("y") || arg.equalsIgnoreCase("v")) {
-            result.setValue(true);
-        } else {
-            result.setValue(false);
+        Boolean value = BoolArg.Parse(arg);
+        if (value == null) {
+            sender.sendMessage(Message.NOT_A_BOOLEAN.msg().getMsg(true, arg));
+            result.success = false;
+            return result;
         }
-        result.success = true;
-
+        result.setValue(value);
         return result;
     }
 

@@ -25,13 +25,11 @@
 
 package org.essencemc.essencecore.commands.arguments;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.essencemc.essencecore.arguments.LocationArg;
 import org.essencemc.essencecore.commands.arguments.internal.ArgumentParseResult;
 import org.essencemc.essencecore.commands.arguments.internal.ArgumentRequirement;
 import org.essencemc.essencecore.commands.arguments.internal.CmdArgument;
@@ -54,117 +52,25 @@ public class LocationArgument extends CmdArgument {
             return result;
         }
 
-        Location location = new Location(null, 0, 0, 0, 0, 0);
-
-        // If player and not location
-        if (arg.startsWith("@")) {
-            Player player = null;
-            String[] components = arg.split("-");
-            if (components.length == 5) {
-                location = Bukkit.getPlayer(UUID.fromString(arg.replace("@", ""))).getLocation();
-            } else {
-                location = Bukkit.getPlayer(arg.replace("@", "")).getLocation();
-            }
-
-            if (location == null) {
-                result.success = false;
-                sender.sendMessage(Message.INVALID_PLAYER.msg().getMsg(true, arg));
-            }
-
-            result.setValue(location);
-            return result;
-        }
-
-        // If world not specified or used relative locations by Console
-        if (!arg.contains(":") || arg.contains("~")) {
-            if (sender instanceof ConsoleCommandSender) {
-                result.success = false;
-                return result;
-            }
-        }
-
-        // Set the location's world
-        if (arg.contains(":")) {
-            String worldName = arg.substring(arg.indexOf(":"));
-            World world = Bukkit.getWorld(worldName);
-
-            // If the world doesn't exist
-            if (world == null) {
-                result.success = false;
-                return result;
-            }
-
-            location.setWorld(world);
-        } else {
-            location.setWorld(getLocation(sender).getWorld());
-        }
-
-        // Get x, y, z, yaw and pitch components
-        String[] components = arg.split(":")[0].split(",");
-
-        Object[] keySet = getLocation(sender).serialize().keySet().toArray();
-
-        // Adds the relative location and removes ~'s
-        for (int i = 1; i < components.length; i++) {
-            if (components[i - 1].contains("~")) {
-                float value = (float)keySet[i];
-                addToLocation(location, new float[] {value}, i, i);
-                components[i - 1].replace("~", "");
-            }
-        }
-
-        if (components.length >= 3 && components.length <= 5) {
-            float[] parsedValues = parseValues(components);
-
-            if (parsedValues == null) {
-                result.success = false;
-                return result;
-            }
-
-            addToLocation(location, parsedValues, 1, components.length);
-        } else {
+        LocationArg locArg = new LocationArg(getLocation(sender));
+        if (!locArg.parse(arg)) {
+            sender.sendMessage(locArg.getError());
             result.success = false;
             return result;
         }
 
-        result.setValue(location);
-
+        result.setValue(locArg.getValue());
+        result.success = true;
         return result;
     }
 
-    public Location getLocation(CommandSender sender) {
+    private Location getLocation(CommandSender sender) {
         if (sender instanceof BlockCommandSender) {
             return ((BlockCommandSender)sender).getBlock().getLocation();
-        } else /*if (sender instanceof Player)*/ {
+        } else if (sender instanceof Player) {
             return ((Player)sender).getLocation();
         }
-    }
-
-    public void addToLocation(Location location, float[] vec, int minLimit, int maxLimit) {
-        if (minLimit <= 1 && maxLimit >= 1)
-            location.setX(location.getX() + vec[minLimit - 1]);
-        if (minLimit <= 2 && maxLimit >= 2)
-            location.setY(location.getY() + vec[minLimit - 2]);
-        if (minLimit <= 3 && maxLimit >= 3)
-            location.setZ(location.getZ() + vec[minLimit - 3]);
-        if (minLimit <= 4 && maxLimit >= 4)
-            location.setYaw(location.getYaw() + vec[minLimit - 4]);
-        if (minLimit <= 5 && maxLimit >= 5)
-            location.setPitch(location.getPitch() + vec[minLimit - 5]);
-    }
-
-    public float[] parseValues(String[] components) {
-        float parsed[] = {0, 0, 0, 0, 0};
-
-        for (int i = 0; i < 6; i++) {
-            try {
-                parsed[i] = Float.valueOf(components[i]);
-            } catch (NumberFormatException e) {
-                return null;
-            }
-        }
-
-        return parsed;
+        return null;
     }
 
     @Override

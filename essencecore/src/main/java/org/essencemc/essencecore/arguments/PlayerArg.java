@@ -85,6 +85,11 @@ public class PlayerArg extends Argument {
     }
 
     @Override
+    public String toString() {
+        return PlayerArg.Parse(value == null ? (defaultValue == null ? null : (Player) defaultValue) : (Player) value);
+    }
+
+    @Override
     public String getDescription() {
         return Message.ARG_PLAYER.msg().getMsg(false);
     }
@@ -92,5 +97,20 @@ public class PlayerArg extends Argument {
     @Override
     public Class getRawClass() {
         return Player.class;
+    }
+
+    public static Player Parse(String input) {
+        PlayerArg arg = new PlayerArg();
+        if (arg.parse(input)) {
+            return (Player)arg.value;
+        }
+        return null;
+    }
+
+    public static String Parse(Player input) {
+        if (input == null) {
+            return null;
+        }
+        return input.getName();
     }
 }

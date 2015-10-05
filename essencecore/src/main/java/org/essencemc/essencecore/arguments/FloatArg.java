@@ -78,4 +78,19 @@ public class FloatArg extends Argument {
     public Class getRawClass() {
         return Float.class;
     }
+
+    public static Float Parse(String input) {
+        FloatArg arg = new FloatArg();
+        if (arg.parse(input)) {
+            return (Float)arg.value;
+        }
+        return null;
+    }
+
+    public static String Parse(Float input) {
+        if (input == null) {
+            return null;
+        }
+        return input.toString();
+    }
 }

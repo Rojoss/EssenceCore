@@ -25,6 +25,7 @@
 
 package org.essencemc.essencecore;
 
+import com.google.gson.Gson;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.essencemc.essencecore.aliases.AliasType;
@@ -35,15 +36,16 @@ import org.essencemc.essencecore.config.aliases.ItemAliases;
 import org.essencemc.essencecore.database.Database;
 import org.essencemc.essencecore.database.MySql.MySql;
 import org.essencemc.essencecore.database.SqlLite.SqlLite;
+import org.essencemc.essencecore.exceptions.NMSClassNotFoundException;
 import org.essencemc.essencecore.listeners.ModuleListener;
 import org.essencemc.essencecore.listeners.PlaceholderListener;
 import org.essencemc.essencecore.modules.Modules;
 import org.essencemc.essencecore.nms.IChat;
 import org.essencemc.essencecore.nms.ISkull;
 import org.essencemc.essencecore.nms.ITitle;
+import org.essencemc.essencecore.nms.v1_8R3.Chat_1_8_R3;
 import org.essencemc.essencecore.nms.v1_8R3.SkullUtil_1_8_R3;
 import org.essencemc.essencecore.nms.v1_8R3.Title_1_8_R3;
-import org.essencemc.essencecore.nms.v1_8R3.Chat_1_8_R3;
 import org.essencemc.essencecore.player.PlayerManager;
 
 import java.sql.Connection;
@@ -55,7 +57,7 @@ import java.util.logging.Logger;
 public class EssenceCore extends JavaPlugin {
 
     private static EssenceCore instance;
-    //private Gson gson = new Gson();
+    private Gson gson = new Gson();
 
     private Database database;
     private Connection sql;
@@ -133,6 +135,7 @@ public class EssenceCore extends JavaPlugin {
                 compatible = false;
         }
 
+        // TODO have a setting to indicate that nms stuff is not completely supported
         if (compatible)
             log("This version of EssenceCore is fully compatible with your server version!");
         else {
@@ -251,9 +254,9 @@ public class EssenceCore extends JavaPlugin {
         return instance;
     }
 
-    /*public Gson getGson() {
+    public Gson getGson() {
         return gson;
-    }*/
+    }
 
     public Database getDB() {
         return database;
@@ -264,7 +267,7 @@ public class EssenceCore extends JavaPlugin {
     }
 
 
-    public ISkull getSkull() {
+    public ISkull getSkull() throws NMSClassNotFoundException {
         return iSkull;
     }
 
@@ -303,11 +306,11 @@ public class EssenceCore extends JavaPlugin {
         return modules;
     }
 
-    public ITitle getTitle() {
+    public ITitle getTitle() throws NMSClassNotFoundException {
         return iTitle;
     }
 
-    public IChat getChat() {
+    public IChat getChat() throws NMSClassNotFoundException {
         return iChat;
     }
 }

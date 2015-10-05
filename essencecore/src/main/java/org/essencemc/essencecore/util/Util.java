@@ -25,10 +25,17 @@
 
 package org.essencemc.essencecore.util;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Rotation;
+import org.bukkit.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
+import org.essencemc.essencecore.arguments.*;
+import org.essencemc.essencecore.entity.EEntity;
+import org.essencemc.essencecore.entity.EItem;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
@@ -148,6 +155,48 @@ public class Util {
     }
 
 
+    public static String objectToString(Object obj) {
+        if (obj == null) {
+            return "&4&o&mnull";
+        }
+        if (obj instanceof Boolean) {
+            return BoolArg.Parse((Boolean)obj);
+        } else if (obj instanceof  Integer) {
+            return IntArg.Parse((Integer)obj);
+        //} else if (obj instanceof Long) {
+            //return LongArg.Parse((Long)obj);
+        } else if (obj instanceof Float) {
+            return FloatArg.Parse((Float)obj);
+        } else if (obj instanceof Double) {
+            return DoubleArg.Parse((Double)obj);
+        } else if (obj instanceof Location) {
+            return LocationArg.Parse((Location)obj);
+        } else if (obj instanceof Vector) {
+            return VectorArg.Parse((Vector)obj);
+        } else if (obj instanceof World) {
+            return WorldArg.Parse((World)obj);
+        } else if (obj instanceof Player) {
+            return PlayerArg.Parse((Player) obj);
+        //} else if (obj instanceof EEntity) {
+            //return EntityArg.Parse((EEntity)obj);
+        //} else if (obj instanceof Entity) {
+            //return EntityArg.Parse(new EEntity((Entity)obj));
+        } else if (obj instanceof EItem) {
+            return ItemArg.Parse((EItem)obj);
+        } else if (obj instanceof ItemStack) {
+            return ItemArg.Parse(new EItem((ItemStack)obj));
+        //} else if (obj instanceof Inventory) {
+            //return InvArg.Parse((Inventory)obj);
+        } else if (obj instanceof MaterialData) {
+            return MaterialArg.Parse((MaterialData) obj);
+        } else if (obj instanceof String) {
+            return (String)obj;
+        } else {
+            return obj.toString();
+        }
+    }
+
+
     /**
      * Check whether a PotionEffectType is negative or positive.
      * @param effect The PotionEffectType to check.
@@ -166,6 +215,24 @@ public class Util {
             }
         }
         return count;
+    }
+
+    public static String trim(String string, String trim) {
+        return Util.trimLast(Util.trimFirst(string, trim), trim);
+    }
+
+    public static String trimFirst(String string, String trim) {
+        while (string.startsWith(trim)) {
+            string = string.substring(trim.length());
+        }
+        return string;
+    }
+
+    public static String trimLast(String string, String trim) {
+        while (string.endsWith(trim)) {
+            string = string.substring(0, string.length() - 1 - trim.length());
+        }
+        return string;
     }
 
     public static String implode(Object[] arr, String glue, String lastGlue, int start, int end) {

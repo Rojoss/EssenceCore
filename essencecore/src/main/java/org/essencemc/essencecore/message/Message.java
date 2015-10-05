@@ -59,6 +59,7 @@ public enum Message {
     INVALID_ENTITY_TAG_ENTITY(MsgCat.VALIDATION, "&4{0} &ccan not be used for &4{1}&c. &7&l/entities <entity> &cfor a list of tags you can use. "),
     MISSING_XYZ_LOCATION(MsgCat.VALIDATION, "&4{0} &cis not a valid location! &7You have to set the x,y,z values."),
     ENTITY_NO_LOCATION(MsgCat.VALIDATION, "&cMissing location for entity."),
+    INVALID_PLACEHOLDER_VALUE(MsgCat.VALIDATION, "&c&o&mundefined"),
 
     //Item parser error messages
     PARSER_VALID(MsgCat.ITEM_PARSER, "&6This is a valid item."),

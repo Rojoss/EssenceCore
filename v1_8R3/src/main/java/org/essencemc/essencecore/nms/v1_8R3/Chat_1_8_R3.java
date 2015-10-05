@@ -43,10 +43,12 @@ public class Chat_1_8_R3 implements IChat {
      * @param player
      */
     @Override
-    public void sendActionbar(String message, Player player) {
+    public IChat sendActionbar(String message, Player player) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(message);
         PacketPlayOutChat actionbarPacket = new PacketPlayOutChat(icbc, (byte) 2);
         Util.sendPacket(player, actionbarPacket);
+
+        return this;
     }
 
     /**
@@ -56,13 +58,15 @@ public class Chat_1_8_R3 implements IChat {
      * @param players
      */
     @Override
-    public void sendActionbar(String message, Player[] players) {
+    public IChat sendActionbar(String message, Player[] players) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(message);
         PacketPlayOutChat actionbarPacket = new PacketPlayOutChat(icbc, (byte) 2);
 
         for (Player player : players) {
             Util.sendPacket(player, actionbarPacket);
         }
+
+        return this;
     }
 
     /**
@@ -72,10 +76,12 @@ public class Chat_1_8_R3 implements IChat {
      * @param player
      */
     @Override
-    public void sendChat(String message, Player player) {
+    public IChat sendChat(String message, Player player) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(message);
         PacketPlayOutChat chatPacket = new PacketPlayOutChat(icbc, (byte) 0);
         Util.sendPacket(player, chatPacket);
+
+        return this;
     }
 
     /**
@@ -85,13 +91,15 @@ public class Chat_1_8_R3 implements IChat {
      * @param players
      */
     @Override
-    public void sendChat(String message, Player[] players) {
+    public IChat sendChat(String message, Player[] players) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(message);
         PacketPlayOutChat chatPacket = new PacketPlayOutChat(icbc, (byte) 0);
 
         for (Player p: players) {
             Util.sendPacket(p, chatPacket);
         }
+
+        return this;
     }
 
 }

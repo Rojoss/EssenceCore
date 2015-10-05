@@ -33,22 +33,42 @@ import org.bukkit.entity.Player;
 public interface IChat {
 
     /**
-     * Send actionbar to the player
+     * Send actionbar to the player.
+     *
+     * @param message The message to be sent to the player. It has to be a string in raw JSON format. You can use TextParser to build one if you want.
+     * @param player The player the message has to be sent to. Note that the player has to be a {@link Player} object or else it wont work.
+     *
+     * @return IChat instance
      */
-    void sendActionbar(String message, Player player);
+    IChat sendActionbar(String message, Player player);
 
     /**
      * Send actionbar to the players
+     *
+     * @param message The message to be sent to the player. It has to be a string in raw JSON format. You can use TextParser to build one if you want.
+     * @param players The players the message has to be sent to. Note that the players have to be an array of {@link Player} object or else it wont work
+     *
+     * @return IChat instance
      */
-    void sendActionbar(String message, Player[] players);
+    IChat sendActionbar(String message, Player[] players);
 
     /**
-     * Send custom chat to the player
+     * Send raw chat message to the player
+     *
+     * @param message The message to be sent to the player. It has to be a string in raw JSON format. You can use TextParser to build one if you want.
+     * @param player The player the message has to be sent to. Note that the player has to be a {@link Player} object or else it wont work.
+     *
+     * @return IChat instance
      */
-    void sendChat(String message, Player player);
+    IChat sendChat(String message, Player player);
 
     /**
-     * Send chat to the players
+     * Send raw chat message to the players
+     *
+     * @param message The message to be sent to the player. It has to be a string in raw JSON format. You can use TextParser to build one if you want.
+     * @param players The players the message has to be sent to. Note that the players have to be an array of {@link Player} object or else it wont work
+     *
+     * @return IChat instance
      */
-    void sendChat(String message, Player[] players);
+    IChat sendChat(String message, Player[] players);
 }

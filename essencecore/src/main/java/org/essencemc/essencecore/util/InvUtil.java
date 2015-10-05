@@ -41,17 +41,17 @@ import java.util.HashMap;
 
 public class InvUtil {
 
-    /** @see {@link #addItems(Inventory, ItemStack, int, boolean)} */
+    /** @see #addItems(Inventory, ItemStack, int, boolean) */
     public static HashMap<Integer, ItemStack> addItems(Inventory inventory, ItemStack item) {
         return addItems(inventory, item, -1, true);
     }
 
-    /** @see {@link #addItems(Inventory, ItemStack, int, boolean)} */
+    /** @see #addItems(Inventory, ItemStack, int, boolean) */
     public static HashMap<Integer, ItemStack> addItems(Inventory inventory, ItemStack item, int slot) {
         return addItems(inventory, item, slot, true);
     }
 
-    /** @see {@link #addItems(Inventory, ItemStack, int, boolean)} */
+    /** @see #addItems(Inventory, ItemStack, int, boolean) */
     public static HashMap<Integer, ItemStack> addItems(Inventory inventory, ItemStack item, boolean dropifFull) {
         return addItems(inventory, item, -1, dropifFull);
     }

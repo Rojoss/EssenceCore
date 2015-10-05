@@ -45,26 +45,26 @@ import java.lang.reflect.Type;
 import java.util.*;
 
 
-/**
+/*/**
  * Simple configuration class.
  * To use this class just extend from it.
- *
+ * <p>
  * It will create config options for the fields in the config class.
  * private, static, final and transient fields will be ignored.
  * So if you want to create a field and not have it in the config you should make it private transient static or/and final.
- *
+ * <p>
  * Double underscores in field names will be replaces with new config sections (indents).
- *
- * The following data types for fields are supported:
- * String, Boolean, Integer, Double, Float, Long, Byte, Char
- * Location, Vector & UUID.
- * List, Map & Enum (The data inside these can be any of these data types. However, for maps the key has to be a string.)
- *
+ * <p>
+ * The following data types for fields are supported: String, Boolean, Integer, Double, Float, Long, Byte, Char, Location, Vector & UUID. List, Map & Enum (The data inside these can be any of these data types. However, for maps the key has to be a string.)
+ * <p>
  * To create a new config file call setFile() on the config class that extends from this.
  * Then call load() to load in all config values in to the fields.
  * And call save() to save the values from the fields to the config file.
  *
- * @authors (original idea)md_5, (by)codename_B & MrFigg, (customized)Worstboy
+ * @author (original idea)md_5
+ * @author (by)codename_B
+ * @author (by)MrFigg
+ * @author (customized)Worstboy
  */
 public abstract class EasyConfig {
 
@@ -76,7 +76,7 @@ public abstract class EasyConfig {
      * Can pass in a File, Plugin, or String with the path like: "plugins/Essence/Messages.yml"
      * Must be called before using config.load() or config.save();
      */
-    public EasyConfig setFile(Object input)  {
+    public EasyConfig setFile(Object input) {
         if (input == null) {
             new InvalidConfigurationException("File cannot be null!").printStackTrace();
         } else if (input instanceof File) {
@@ -153,7 +153,7 @@ public abstract class EasyConfig {
             if (doSkip(field)) {
                 continue;
             }
-            if(cs.isSet(path)) {
+            if (cs.isSet(path)) {
                 field.set(this, loadObject(field, cs, path));
             } else {
                 cs.set(path, saveObject(field.get(this), field, cs, path));
@@ -162,7 +162,7 @@ public abstract class EasyConfig {
     }
 
     private void onSave(ConfigurationSection cs) throws Exception {
-        for(Field field : getClass().getDeclaredFields()) {
+        for (Field field : getClass().getDeclaredFields()) {
             String path = field.getName().replaceAll("__", ".");
             if (doSkip(field)) {
                 continue;
@@ -194,7 +194,7 @@ public abstract class EasyConfig {
         } else if (clazz.isEnum() && isString(cs.get(path))) {
             return getEnum(clazz, (String) cs.get(path));
         } else if (List.class.isAssignableFrom(clazz) && isConfigurationSection(cs.get(path))) {
-            Class subClazz = getClassAtDepth(field.getGenericType(), depth+1);
+            Class subClazz = getClassAtDepth(field.getGenericType(), depth + 1);
             if (EasyConfig.class.isAssignableFrom(subClazz) || Location.class.isAssignableFrom(subClazz) || Vector.class.isAssignableFrom(subClazz) ||
                     Map.class.isAssignableFrom(subClazz) || List.class.isAssignableFrom(subClazz) || subClazz.isEnum()) {
                 return getList(field, cs.getConfigurationSection(path), path, depth);
@@ -211,7 +211,7 @@ public abstract class EasyConfig {
         if (EasyConfig.class.isAssignableFrom(clazz) && isSimpleConfig(obj)) {
             return getSimpleConfig((EasyConfig) obj, path, cs);
         } else if (UUID.class.isAssignableFrom(clazz) && isUUID(obj)) {
-            return getUUID((UUID)obj);
+            return getUUID((UUID) obj);
         } else if (Location.class.isAssignableFrom(clazz) && isLocation(obj)) {
             return getLocation((Location) obj);
         } else if (Vector.class.isAssignableFrom(clazz) && isVector(obj)) {
@@ -219,10 +219,10 @@ public abstract class EasyConfig {
         } else if (Map.class.isAssignableFrom(clazz) && isMap(obj)) {
             return getMap((Map) obj, field, cs, path, depth);
         } else if (clazz.isEnum() && isEnum(clazz, obj)) {
-            return getEnum((Enum)obj);
+            return getEnum((Enum) obj);
         } else if (List.class.isAssignableFrom(clazz) && isList(obj)) {
-            Class subClazz = getClassAtDepth(field.getGenericType(), depth+1);
-            if(EasyConfig.class.isAssignableFrom(subClazz) || Location.class.isAssignableFrom(subClazz) || Vector.class.isAssignableFrom(subClazz) ||
+            Class subClazz = getClassAtDepth(field.getGenericType(), depth + 1);
+            if (EasyConfig.class.isAssignableFrom(subClazz) || Location.class.isAssignableFrom(subClazz) || Vector.class.isAssignableFrom(subClazz) ||
                     Map.class.isAssignableFrom(subClazz) || List.class.isAssignableFrom(subClazz) || subClazz.isEnum()) {
                 return getList((List) obj, field, cs, path, depth);
             } else {
@@ -234,9 +234,9 @@ public abstract class EasyConfig {
     }
 
     private Class getClassAtDepth(Type type, int depth) throws Exception {
-        if(depth<=0) {
+        if (depth <= 0) {
             String className = type.toString();
-            if (className.length() >=6 && className.substring(0, 6).equalsIgnoreCase("class ")) {
+            if (className.length() >= 6 && className.substring(0, 6).equalsIgnoreCase("class ")) {
                 className = className.substring(6);
             }
             if (className.indexOf("<") >= 0) {
@@ -244,22 +244,22 @@ public abstract class EasyConfig {
             }
             try {
                 return Class.forName(className);
-            } catch(ClassNotFoundException ex) {
-                if(className.equalsIgnoreCase("byte")) return Byte.class;
-                if(className.equalsIgnoreCase("short")) return Short.class;
-                if(className.equalsIgnoreCase("int")) return Integer.class;
-                if(className.equalsIgnoreCase("long")) return Long.class;
-                if(className.equalsIgnoreCase("float")) return Float.class;
-                if(className.equalsIgnoreCase("double")) return Double.class;
-                if(className.equalsIgnoreCase("char")) return Character.class;
-                if(className.equalsIgnoreCase("boolean")) return Boolean.class;
+            } catch (ClassNotFoundException ex) {
+                if (className.equalsIgnoreCase("byte")) return Byte.class;
+                if (className.equalsIgnoreCase("short")) return Short.class;
+                if (className.equalsIgnoreCase("int")) return Integer.class;
+                if (className.equalsIgnoreCase("long")) return Long.class;
+                if (className.equalsIgnoreCase("float")) return Float.class;
+                if (className.equalsIgnoreCase("double")) return Double.class;
+                if (className.equalsIgnoreCase("char")) return Character.class;
+                if (className.equalsIgnoreCase("boolean")) return Boolean.class;
                 throw ex;
             }
         }
         depth--;
         ParameterizedType pType = (ParameterizedType) type;
         Type[] typeArgs = pType.getActualTypeArguments();
-        return getClassAtDepth(typeArgs[typeArgs.length-1], depth);
+        return getClassAtDepth(typeArgs[typeArgs.length - 1], depth);
     }
 
 
@@ -278,7 +278,7 @@ public abstract class EasyConfig {
         }
         if (o instanceof String) {
             try {
-                UUID.fromString((String)o);
+                UUID.fromString((String) o);
                 return true;
             } catch (Exception e) {
                 return false;
@@ -289,7 +289,7 @@ public abstract class EasyConfig {
 
     private boolean isConfigurationSection(Object o) {
         try {
-            return (ConfigurationSection)o != null;
+            return (ConfigurationSection) o != null;
         } catch (Exception e) {
             return false;
         }
@@ -311,7 +311,7 @@ public abstract class EasyConfig {
 
     private boolean isSimpleConfig(Object obj) {
         try {
-            return (EasyConfig)obj != null;
+            return (EasyConfig) obj != null;
         } catch (Exception e) {
             return false;
         }
@@ -319,7 +319,7 @@ public abstract class EasyConfig {
 
     private boolean isLocation(Object obj) {
         try {
-            return (Location)obj != null;
+            return (Location) obj != null;
         } catch (Exception e) {
             return false;
         }
@@ -327,7 +327,7 @@ public abstract class EasyConfig {
 
     private boolean isVector(Object obj) {
         try {
-            return (Vector)obj != null;
+            return (Vector) obj != null;
         } catch (Exception e) {
             return false;
         }
@@ -335,7 +335,7 @@ public abstract class EasyConfig {
 
     private boolean isMap(Object obj) {
         try {
-            return (Map)obj != null;
+            return (Map) obj != null;
         } catch (Exception e) {
             return false;
         }
@@ -343,8 +343,8 @@ public abstract class EasyConfig {
 
     private boolean isList(Object obj) {
         try {
-            return (List)obj != null;
-        } catch(Exception e) {
+            return (List) obj != null;
+        } catch (Exception e) {
             return false;
         }
     }
@@ -352,7 +352,7 @@ public abstract class EasyConfig {
     private boolean isEnum(Class clazz, Object obj) {
         if (!clazz.isEnum()) return false;
         for (Object constant : clazz.getEnumConstants()) {
-            if(constant.equals(obj)) {
+            if (constant.equals(obj)) {
                 return true;
             }
         }
@@ -365,7 +365,7 @@ public abstract class EasyConfig {
     */
 
     private EasyConfig getSimpleConfig(Class clazz, ConfigurationSection cs) throws Exception {
-        EasyConfig obj = (EasyConfig)clazz.newInstance();
+        EasyConfig obj = (EasyConfig) clazz.newInstance();
         obj.onLoad(cs);
         return obj;
     }
@@ -381,12 +381,12 @@ public abstract class EasyConfig {
     private Location getLocation(String json) throws Exception {
         JSONObject data = (JSONObject) new JSONParser().parse(json);
 
-        World world = Bukkit.getWorld((String)data.get("world"));
-        double x = Double.parseDouble((String)data.get("x"));
-        double y = Double.parseDouble((String)data.get("y"));
-        double z = Double.parseDouble((String)data.get("z"));
-        float pitch = Float.parseFloat((String)data.get("pitch"));
-        float yaw = Float.parseFloat((String)data.get("yaw"));
+        World world = Bukkit.getWorld((String) data.get("world"));
+        double x = Double.parseDouble((String) data.get("x"));
+        double y = Double.parseDouble((String) data.get("y"));
+        double z = Double.parseDouble((String) data.get("z"));
+        float pitch = Float.parseFloat((String) data.get("pitch"));
+        float yaw = Float.parseFloat((String) data.get("yaw"));
 
         Location loc = new Location(world, x, y, z);
         loc.setPitch(pitch);
@@ -397,9 +397,9 @@ public abstract class EasyConfig {
     private Vector getVector(String json) throws Exception {
         JSONObject data = (JSONObject) new JSONParser().parse(json);
 
-        double x = Double.parseDouble((String)data.get("x"));
-        double y = Double.parseDouble((String)data.get("y"));
-        double z = Double.parseDouble((String)data.get("z"));
+        double x = Double.parseDouble((String) data.get("x"));
+        double y = Double.parseDouble((String) data.get("y"));
+        double z = Double.parseDouble((String) data.get("z"));
 
         return new Vector(x, y, z);
     }
@@ -430,14 +430,14 @@ public abstract class EasyConfig {
             int loaded = 0;
             int i = 0;
             while (loaded < listSize) {
-                if (cs.isSet(key+i)) {
-                    Object in = cs.get(key+i);
-                    in = loadObject(field, cs, key+i, depth);
+                if (cs.isSet(key + i)) {
+                    Object in = cs.get(key + i);
+                    in = loadObject(field, cs, key + i, depth);
                     list.add(in);
                     loaded++;
                 }
                 i++;
-                if (i > (listSize*3)) {
+                if (i > (listSize * 3)) {
                     loaded = listSize;
                 }
             }
@@ -450,11 +450,11 @@ public abstract class EasyConfig {
             throw new Exception("Class " + clazz.getName() + " is not an enum.");
         }
         for (Object constant : clazz.getEnumConstants()) {
-            if (((Enum)constant).toString().equals(string)) {
+            if (((Enum) constant).toString().equals(string)) {
                 return (Enum) constant;
             }
         }
-        throw new Exception("String " + string + " not a valid enum constant for "+clazz.getName());
+        throw new Exception("String " + string + " not a valid enum constant for " + clazz.getName());
     }
 
 
@@ -475,18 +475,18 @@ public abstract class EasyConfig {
     private String getLocation(Location loc) {
         String ret = "{";
         ret += "\"world\":\"" + loc.getWorld().getName() + "\"";
-        ret += ",\"x\":\"" + loc.getX()+"\"";
-        ret += ",\"y\":\"" + loc.getY()+"\"";
-        ret += ",\"z\":\"" + loc.getZ()+"\"";
-        ret += ",\"pitch\":\"" + loc.getPitch()+"\"";
-        ret += ",\"yaw\":\"" + loc.getYaw()+"\"";
+        ret += ",\"x\":\"" + loc.getX() + "\"";
+        ret += ",\"y\":\"" + loc.getY() + "\"";
+        ret += ",\"z\":\"" + loc.getZ() + "\"";
+        ret += ",\"pitch\":\"" + loc.getPitch() + "\"";
+        ret += ",\"yaw\":\"" + loc.getYaw() + "\"";
         ret += "}";
         if (!isJSON(ret)) {
             return getLocationJSON(loc);
         }
         try {
             getLocation(ret);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             return getLocationJSON(loc);
         }
         return ret;
@@ -507,16 +507,16 @@ public abstract class EasyConfig {
 
     private String getVector(Vector vec) {
         String ret = "{";
-        ret += "\"x\":\"" + vec.getX()+"\"";
-        ret += ",\"y\":\"" + vec.getY()+"\"";
-        ret += ",\"z\":\"" + vec.getZ()+"\"";
+        ret += "\"x\":\"" + vec.getX() + "\"";
+        ret += ",\"y\":\"" + vec.getY() + "\"";
+        ret += ",\"z\":\"" + vec.getZ() + "\"";
         ret += "}";
-        if(!isJSON(ret)) {
+        if (!isJSON(ret)) {
             return getVectorJSON(vec);
         }
         try {
             getVector(ret);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             return getVectorJSON(vec);
         }
         return ret;
@@ -539,7 +539,7 @@ public abstract class EasyConfig {
         if (keys != null && keys.size() > 0) {
             for (String key : keys) {
                 Object out = map.get(key);
-                out = saveObject(out, field, cs, path+"."+key, depth);
+                out = saveObject(out, field, cs, path + "." + key, depth);
                 subCS.set(key, out);
             }
         }
@@ -554,10 +554,10 @@ public abstract class EasyConfig {
             key = key.substring(key.lastIndexOf("."));
         }
         if (list != null && list.size() > 0) {
-            for(int i = 0; i < list.size(); i++) {
+            for (int i = 0; i < list.size(); i++) {
                 Object out = list.get(i);
-                out = saveObject(out, field, cs, path + "." + key + (i+1), depth);
-                subCS.set(key + (i+1), out);
+                out = saveObject(out, field, cs, path + "." + key + (i + 1), depth);
+                subCS.set(key + (i + 1), out);
             }
         }
         return subCS;
@@ -566,7 +566,6 @@ public abstract class EasyConfig {
     private String getEnum(Enum enumObj) {
         return enumObj.toString();
     }
-
 
 
     private boolean doSkip(Field field) {

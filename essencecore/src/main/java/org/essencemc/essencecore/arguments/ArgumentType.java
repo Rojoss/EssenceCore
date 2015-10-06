@@ -104,8 +104,8 @@ public enum ArgumentType {
             return ArgumentType.BOOLEAN;
         } else if (!value.endsWith("l") && !value.endsWith("L") && parseSuccessful(ArgumentType.INTEGER, value)) {
             return ArgumentType.INTEGER;
-        } else if (parseSuccessful(ArgumentType.LONG, value)) {
-            return ArgumentType.LONG;
+        //} else if (parseSuccessful(ArgumentType.LONG, value)) {
+            //return ArgumentType.LONG;
         } else if (!value.endsWith("d") && !value.endsWith("D") && parseSuccessful(ArgumentType.FLOAT, value)) {
             return ArgumentType.FLOAT;
         } else if (!value.endsWith("f") && !value.endsWith("F") && parseSuccessful(ArgumentType.DOUBLE, value)) {
@@ -116,16 +116,16 @@ public enum ArgumentType {
             return ArgumentType.WORLD;
         } else if (parseSuccessful(ArgumentType.VECTOR, value)) {
             return ArgumentType.VECTOR;
-        } else if (parseSuccessful(ArgumentType.WORLD, value)) {
-            return ArgumentType.WORLD;
+        } else if (parseSuccessful(ArgumentType.LOCATION, value)) {
+            return ArgumentType.LOCATION;
         } else if (parseSuccessful(ArgumentType.MATERIAL, value)) {
             return ArgumentType.MATERIAL;
         } else if (parseSuccessful(ArgumentType.ITEM, value)) {
             return ArgumentType.ITEM;
-        } else if (parseSuccessful(ArgumentType.ENTITY, value)) {
-            return ArgumentType.ENTITY;
-        } else if (parseSuccessful(ArgumentType.INVENTORY, value)) {
-            return ArgumentType.INVENTORY;
+        //} else if (parseSuccessful(ArgumentType.ENTITY, value)) {
+            //return ArgumentType.ENTITY;
+        //} else if (parseSuccessful(ArgumentType.INVENTORY, value)) {
+            //return ArgumentType.INVENTORY;
         } else if (parseSuccessful(ArgumentType.STRING, value)) {
             return ArgumentType.STRING;
         }

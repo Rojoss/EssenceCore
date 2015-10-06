@@ -40,7 +40,7 @@ public class PlaceholderListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     private void placeholderRequest(PlaceholderRequestEvent event) {
         String p = event.getPlaceholder();
-        Object[] data = event.getData();
+        List<Object> data = event.getData();
 
         // ##################################################
         // #################### STRINGS #####################

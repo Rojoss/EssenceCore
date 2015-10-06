@@ -6,6 +6,7 @@ import org.essencemc.essencecore.EssenceCore;
 import org.essencemc.essencecore.arguments.*;
 import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.message.Message;
+import org.essencemc.essencecore.util.Debug;
 import org.essencemc.essencecore.util.Util;
 
 import java.util.ArrayList;
@@ -49,9 +50,7 @@ public class Placeholder {
                     data.add(parse(argument, player));
                 }
 
-                Object source = null;
-                //TODO: Get the source...
-                result += getPlaceholderValue(player, placeholder, source, data) + " ";
+                result += getPlaceholderValue(player, placeholder, data) + " ";
             } else {
                 // Literal
                 result += word + " ";
@@ -145,11 +144,11 @@ public class Placeholder {
      * Get the placeholder value by dispatching an event.
      * @param player The player which will be used as default source if there is no source specified.
      * @param placeholder The full placeholder string as {type}{name}
-     * @param source The source value as object. If it's a location placeholder the source must be a location.
      * @param data List with all argument strings. (data)
      * @return Placeholder value or undefined.
      */
-    private static String getPlaceholderValue(Player player, String placeholder, Object source, List<String> data) {
+    private static String getPlaceholderValue(Player player, String placeholder, List<String> data) {
+        Object source = null;
         String p = placeholder.toLowerCase();
 
         //Get the placeholder type.
@@ -157,19 +156,24 @@ public class Placeholder {
         if (type == null) {
             type = PlaceholderType.CUSTOM;
         }
-        //TODO: Remove type from placeholder string. ($playername should be just name)
+        p = PlaceholderType.trimType(type, p);
 
         //Parse all arguments.
-        Argument[] args = new Argument[data.size()];
+        List<Object> dataValues = new ArrayList<Object>();
         int index = 0;
         for (String argument : data) {
             ArgumentType argType = ArgumentType.fromValue(argument);
             Argument arg = argType.getNewArg();
-
             arg.parse(argument);
-            args[index++] = arg;
-        }
 
+            //If the first argument is the argument type for the placeholder then use the argument as source if not add it as argument.
+            if (index == 0 && arg.getValue().getClass().equals(type.getClazz())) {
+                source = arg.getValue();
+            } else {
+                dataValues.add(arg);
+                index++;
+            }
+        }
         //Get default source if there is no source specified.
         if (source == null) {
             if (player != null) {
@@ -188,15 +192,20 @@ public class Placeholder {
                     source = player.getInventory();
                 }
             }
-            //If there is no source specified and the type is a raw type or there is no player the placeholder is invalid.
-            //TODO: Should probably have error codes for setting the value. Like Undefined-1 would be no raw source value specified etc.
-            if (source == null) {
-                return Util.color(Message.INVALID_PLACEHOLDER_VALUE.msg().getMsg(false));
-            }
+        }
+
+        //If there is no source specified and the type is a raw type or there is no player the placeholder is invalid.
+        //TODO: Should probably have error codes for setting the value. Like Undefined-1 would be no raw source value specified etc.
+        if (source == null) {
+            return Util.color(Message.INVALID_PLACEHOLDER_VALUE.msg().getMsg(false));
         }
 
         //Dispatch the custom event with the placeholder, source and arguments.
-        PlaceholderRequestEvent event = new PlaceholderRequestEvent(type, placeholder, source, args);
+        Debug.bc(type.toString());
+        Debug.bc(p);
+        Debug.bc(source);
+        Debug.bc(dataValues);
+        PlaceholderRequestEvent event = new PlaceholderRequestEvent(type, p, source, dataValues);
         EssenceCore.inst().getServer().getPluginManager().callEvent(event);
 
         //If there is no value set for the placeholder it's invalid.

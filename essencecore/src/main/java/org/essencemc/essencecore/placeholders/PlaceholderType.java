@@ -1,33 +1,48 @@
 package org.essencemc.essencecore.placeholders;
 
+import org.bukkit.Location;
+import org.bukkit.Server;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.util.Vector;
+import org.essencemc.essencecore.entity.EEntity;
+import org.essencemc.essencecore.entity.EItem;
+
 public enum PlaceholderType {
-    INTEGER("integer", "int", "in"),
-    DOUBLE("double", "doub", "dou", "do"),
-    FLOAT("float", "flo", "fl"),
-    LONG("long", "lon", "lo"),
-    STRING("string", "str", "st"),
-    BOOLEAN("boolean", "bool", "boo", "bo"),
+    INTEGER(Integer.class, "integer", "int", "in"),
+    DOUBLE(Double.class, "double", "doub", "dou", "do"),
+    FLOAT(Float.class, "float", "flo", "fl"),
+    LONG(Long.class, "long", "lon", "lo"),
+    STRING(String.class, "string", "str", "st"),
+    BOOLEAN(Boolean.class, "boolean", "bool", "boo", "bo"),
 
-    LOCATION("location", "loc", "lo"),
-    VECTOR("vector", "vec", "ve"),
-    WORLD("world", "wor", "wo"),
-    PLAYER("player", "pla", "pl"),
-    ENTITY("entity", "ent", "en"),
-    ITEM("item", "ite", "it"),
-    INVENTORY("inventory", "inv", "in"),
+    LOCATION(Location.class, "location", "loc", "lo"),
+    VECTOR(Vector.class, "vector", "vec", "ve"),
+    WORLD(World.class, "world", "wor", "wo"),
+    PLAYER(Player.class, "player", "pla", "pl"),
+    ENTITY(EEntity.class, "entity", "ent", "en"),
+    ITEM(EItem.class, "item", "ite", "it"),
+    INVENTORY(Inventory.class, "inventory", "inv", "in"),
 
-    CUSTOM("string", "str", "st"),
-    SERVER("server", "ser", "se")
+    CUSTOM(String.class, "custom", "cus", "cu"),
+    SERVER(Server.class, "server", "ser", "se")
     ;
-    
+
+    private Class clazz;
     private String[] names;
 
-    PlaceholderType(String... names) {
+    PlaceholderType(Class clazz, String... names) {
+        this.clazz = clazz;
         this.names = names;
     }
 
     public String[] getNames() {
         return names;
+    }
+
+    public Class getClazz() {
+        return clazz;
     }
 
     public static PlaceholderType fromString(String name) {
@@ -40,5 +55,14 @@ public enum PlaceholderType {
             }
         }
         return null;
+    }
+
+    public static String trimType(PlaceholderType type, String placeholder) {
+        for (String prefix : type.getNames()) {
+            if (placeholder.startsWith(prefix)) {
+                return placeholder.replaceFirst("\\Q" + prefix + "\\E([^a-zA-Z0-9])?", "");
+            }
+        }
+        return placeholder;
     }
 }

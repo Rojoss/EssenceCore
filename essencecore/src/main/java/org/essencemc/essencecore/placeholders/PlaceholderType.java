@@ -13,11 +13,11 @@ public enum PlaceholderType {
     INTEGER(Integer.class, "integer", "int", "in"),
     DOUBLE(Double.class, "double", "doub", "dou", "do"),
     FLOAT(Float.class, "float", "flo", "fl"),
-    LONG(Long.class, "long", "lon", "lo"),
+    LONG(Long.class, "long", "lon"),
     STRING(String.class, "string", "str", "st"),
     BOOLEAN(Boolean.class, "boolean", "bool", "boo", "bo"),
 
-    LOCATION(Location.class, "location", "loc", "lo"),
+    LOCATION(Location.class, "location", "loc"),
     VECTOR(Vector.class, "vector", "vec", "ve"),
     WORLD(World.class, "world", "wor", "wo"),
     PLAYER(Player.class, "player", "pla", "pl"),

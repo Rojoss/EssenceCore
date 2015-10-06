@@ -111,6 +111,12 @@ public class LocationArg extends Argument {
             return success;
         }
 
+        if (location.getWorld() == null) {
+            error = Message.MISSING_WORLD_LOCATION.msg().getMsg(true, input);
+            success = false;
+            return success;
+        }
+
         //Convert the location in a map so we can easily modify the values.
         Map<String, Object> locMap = location.serialize();
         String[] mapKeys = new String[] {"x", "y", "z", "yaw", "pitch"};

@@ -58,6 +58,7 @@ public enum Message {
     INVALID_ENTITY_TAG(MsgCat.VALIDATION, "&4{0} &cis not a valid entity tag. &7&l/entities <entity> &cfor a list. "),
     INVALID_ENTITY_TAG_ENTITY(MsgCat.VALIDATION, "&4{0} &ccan not be used for &4{1}&c. &7&l/entities <entity> &cfor a list of tags you can use. "),
     MISSING_XYZ_LOCATION(MsgCat.VALIDATION, "&4{0} &cis not a valid location! &7You have to set the x,y,z values."),
+    MISSING_WORLD_LOCATION(MsgCat.VALIDATION, "&4{0} &cis not a valid location! &7You have to specify a world or player after x,y,z:"),
     ENTITY_NO_LOCATION(MsgCat.VALIDATION, "&cMissing location for entity."),
     INVALID_PLACEHOLDER_VALUE(MsgCat.VALIDATION, "&c&o&mundefined"),
 

@@ -39,31 +39,26 @@ public class PlaceholderListener implements Listener {
     //All default placeholders.
     @EventHandler(priority = EventPriority.LOWEST)
     private void placeholderRequest(PlaceholderRequestEvent event) {
-        String[] split = event.getPlaceholder().split("_", 2);
-        if (split.length <= 1) {
-            return;
-        }
-        String p = split[1];
-
+        String p = event.getPlaceholder();
         Object[] data = event.getData();
 
         // ##################################################
         // #################### STRINGS #####################
         // ##################################################
         if (event.getType() == PlaceholderType.STRING) {
-            if (data.length < 1 || !(data[0] instanceof String)) {
+            if (!(event.getSource() instanceof String)) {
                 return;
             }
-            String data0 = ((String)data[0]);
+            String source = (String)event.getSource();
 
             if (p.equals("empty")) {
-                event.setValue(data0.isEmpty());
+                event.setValue(source.isEmpty());
             } else if (p.equals("length") || p.equals("size")) {
-                event.setValue(data0.length());
+                event.setValue(source.length());
             } else if (p.equals("uppercase") || p.equals("upper")) {
-                event.setValue(data0.toUpperCase());
+                event.setValue(source.toUpperCase());
             } else if (p.equals("lowercase") || p.equals("lower")) {
-                event.setValue(data0.toLowerCase());
+                event.setValue(source.toLowerCase());
             }
             return;
         }
@@ -76,19 +71,19 @@ public class PlaceholderListener implements Listener {
                 event.setValue(random.nextInt());
             }
 
-            if (data.length < 1 || !(data[0] instanceof Integer)) {
+            if (!(event.getSource() instanceof Integer)) {
                 return;
             }
-            Integer data0 = ((Integer)data[0]);
+            Integer source = (Integer)event.getSource();
 
             if (p.equals("double")) {
-                event.setValue(data0.doubleValue());
+                event.setValue(source.doubleValue());
             } else if (p.equals("float")) {
-                event.setValue(data0.floatValue());
+                event.setValue(source.floatValue());
             } else if (p.equals("long")) {
-                event.setValue(data0.longValue());
+                event.setValue(source.longValue());
             } else if (p.equals("abs")) {
-                event.setValue(Math.abs(data0));
+                event.setValue(Math.abs(source));
             }
             return;
         }
@@ -101,21 +96,21 @@ public class PlaceholderListener implements Listener {
                 event.setValue(random.nextFloat());
             }
 
-            if (data.length < 1 || !(data[0] instanceof Float)) {
+            if (!(event.getSource() instanceof Float)) {
                 return;
             }
-            Float data0 = ((Float)data[0]);
+            Float source = (Float)event.getSource();
 
             if (p.equals("double")) {
-                event.setValue(data0.doubleValue());
+                event.setValue(source.doubleValue());
             } else if (p.equals("int")) {
-                event.setValue(data0.intValue());
+                event.setValue(source.intValue());
             } else if (p.equals("long")) {
-                event.setValue(data0.longValue());
+                event.setValue(source.longValue());
             } else if (p.equals("round")) {
-                event.setValue(Math.round(data0));
+                event.setValue(Math.round(source));
             } else if (p.equals("abs")) {
-                event.setValue(Math.abs(data0));
+                event.setValue(Math.abs(source));
             }
             return;
         }
@@ -128,23 +123,23 @@ public class PlaceholderListener implements Listener {
                 event.setValue(random.nextDouble());
             }
 
-            if (data.length < 1 || !(data[0] instanceof Double)) {
+            if (!(event.getSource() instanceof Double)) {
                 return;
             }
-            Double data0 = ((Double)data[0]);
+            Double source = (Double)event.getSource();
 
             if (p.equals("float")) {
-                event.setValue(data0.floatValue());
+                event.setValue(source.floatValue());
             } else if (p.equals("int")) {
-                event.setValue(data0.intValue());
+                event.setValue(source.intValue());
             } else if (p.equals("long")) {
-                event.setValue(data0.longValue());
+                event.setValue(source.longValue());
             } else if (p.equals("ceil")) {
-                event.setValue(Math.ceil(data0));
+                event.setValue(Math.ceil(source));
             } else if (p.equals("floor")) {
-                event.setValue(Math.floor(data0));
+                event.setValue(Math.floor(source));
             } else if (p.equals("abs")) {
-                event.setValue(Math.abs(data0));
+                event.setValue(Math.abs(source));
             }
             return;
         }
@@ -153,33 +148,33 @@ public class PlaceholderListener implements Listener {
         // ################### LOCATIONS ####################
         // ##################################################
         if (event.getType() == PlaceholderType.LOCATION) {
-            if (data.length < 1 || !(data[0] instanceof Location)) {
+            if (!(event.getSource() instanceof Location)) {
                 return;
             }
-            Location data0 = ((Location)data[0]);
+            Location source = (Location)event.getSource();
 
             if (p.equals("x")) {
-                event.setValue(data0.getX());
+                event.setValue(source.getX());
             } else if (p.equals("y")) {
-                event.setValue(data0.getY());
+                event.setValue(source.getY());
             } else if (p.equals("z")) {
-                event.setValue(data0.getZ());
+                event.setValue(source.getZ());
             } else if (p.equals("bx") || p.equals("blockx")) {
-                event.setValue(data0.getBlockX());
+                event.setValue(source.getBlockX());
             } else if (p.equals("by") || p.equals("blocky")) {
-                event.setValue(data0.getBlockY());
+                event.setValue(source.getBlockY());
             } else if (p.equals("bz") || p.equals("blockz")) {
-                event.setValue(data0.getBlockZ());
+                event.setValue(source.getBlockZ());
             } else if (p.equals("yaw") || p.equals("y")) {
-                event.setValue(data0.getYaw());
+                event.setValue(source.getYaw());
             } else if (p.equals("pitch") || p.equals("p")) {
-                event.setValue(data0.getPitch());
+                event.setValue(source.getPitch());
             } else if (p.equals("world")) {
-                event.setValue(data0.getWorld());
+                event.setValue(source.getWorld());
             } else if (p.equals("vector")) {
-                event.setValue(data0.toVector());
+                event.setValue(source.toVector());
             } else if (p.equals("direction") || p.equals("dir")) {
-                event.setValue(data0.getDirection());
+                event.setValue(source.getDirection());
             }
             return;
         }
@@ -188,23 +183,23 @@ public class PlaceholderListener implements Listener {
         // #################### VECTORS #####################
         // ##################################################
         if (event.getType() == PlaceholderType.VECTOR) {
-            if (data.length < 1 || !(data[0] instanceof Vector)) {
+            if (!(event.getSource() instanceof Vector)) {
                 return;
             }
-            Vector data0 = ((Vector)data[0]);
+            Vector source = (Vector)event.getSource();
 
             if (p.equals("x")) {
-                event.setValue(data0.getX());
+                event.setValue(source.getX());
             } else if (p.equals("y")) {
-                event.setValue(data0.getY());
+                event.setValue(source.getY());
             } else if (p.equals("z")) {
-                event.setValue(data0.getZ());
+                event.setValue(source.getZ());
             } else if (p.equals("bx") || p.equals("blockx")) {
-                event.setValue(data0.getBlockX());
+                event.setValue(source.getBlockX());
             } else if (p.equals("by") || p.equals("blocky")) {
-                event.setValue(data0.getBlockY());
+                event.setValue(source.getBlockY());
             } else if (p.equals("bz") || p.equals("blockz")) {
-                event.setValue(data0.getBlockZ());
+                event.setValue(source.getBlockZ());
             }
             return;
         }
@@ -213,41 +208,41 @@ public class PlaceholderListener implements Listener {
         // ##################### WORLD ######################
         // ##################################################
         if (event.getType() == PlaceholderType.WORLD) {
-            if (data.length < 1 || !(data[0] instanceof World)) {
+            if (!(event.getSource() instanceof World)) {
                 return;
             }
-            World data0 = ((World)data[0]);
+            World source = (World)event.getSource();
 
             if (p.equals("uuid") || p.equals("uid")) {
-                event.setValue(data0.getUID().toString());
+                event.setValue(source.getUID().toString());
             } else if (p.equals("id") || p.equals("index")) {
                 List<World> worlds = ess.getServer().getWorlds();
                 for (int i = 0; i < ess.getServer().getWorlds().size(); i++) {
-                    if (worlds.get(i).getName().equals(data0.getName())) {
+                    if (worlds.get(i).getName().equals(source.getName())) {
                         event.setValue(i);
                         break;
                     }
                 }
             } else if (p.equals("animals")) {
-                event.setValue(data0.getAllowAnimals());
+                event.setValue(source.getAllowAnimals());
             } else if (p.equals("monsters") || p.equals("mobs")) {
-                event.setValue(data0.getAllowMonsters());
+                event.setValue(source.getAllowMonsters());
             } else if (p.equals("pvp")) {
-                event.setValue(data0.getPVP());
+                event.setValue(source.getPVP());
             } else if (p.equals("difficulty")) {
-                event.setValue(data0.getDifficulty().name());
+                event.setValue(source.getDifficulty().name());
             } else if (p.equals("environment") || p.equals("env")) {
-                event.setValue(data0.getEnvironment().name());
+                event.setValue(source.getEnvironment().name());
             } else if (p.equals("height") || p.equals("maxheight")) {
-                event.setValue(data0.getMaxHeight());
+                event.setValue(source.getMaxHeight());
             } else if (p.equals("seed")) {
-                event.setValue(data0.getSeed());
+                event.setValue(source.getSeed());
             } else if (p.equals("spawn")) {
-                event.setValue(data0.getSpawnLocation());
+                event.setValue(source.getSpawnLocation());
             } else if (p.equals("time")) {
-                event.setValue(data0.getTime());
+                event.setValue(source.getTime());
             } else if (p.equals("type")) {
-                event.setValue(data0.getWorldType().getName());
+                event.setValue(source.getWorldType().getName());
             }
             return;
         }
@@ -256,134 +251,134 @@ public class PlaceholderListener implements Listener {
         // #################### PLAYER ######################
         // ##################################################
         if (event.getType() == PlaceholderType.PLAYER) {
-            if (data.length < 1 || !(data[0] instanceof World)) {
+            if (!(event.getSource() instanceof Player)) {
                 return;
             }
-            Player data0 = ((Player)data[0]);
+            Player source = (Player)event.getSource();
 
                 //General
             if (p.equals("name")) {
-                event.setValue(data0.getName());
+                event.setValue(source.getName());
             } else if (p.equals("displayname") || p.equals("dname")) {
-                event.setValue(data0.getDisplayName());
+                event.setValue(source.getDisplayName());
             } else if (p.equals("listname") || p.equals("tabname") || p.equals("scorename")) {
-                event.setValue(data0.getPlayerListName());
+                event.setValue(source.getPlayerListName());
             } else if (p.equals("uuid")) {
-                event.setValue(data0.getUniqueId().toString());
+                event.setValue(source.getUniqueId().toString());
             } else if (p.equals("id") || p.equals("entityid")) {
-                event.setValue(data0.getEntityId());
+                event.setValue(source.getEntityId());
             } else if (p.equals("ip") || p.equals("address")) {
-                event.setValue(data0.getAddress().getHostString());
+                event.setValue(source.getAddress().getHostString());
             } else if (p.equals("whitelisted") || p.equals("whitelist")) {
-                event.setValue(data0.isWhitelisted());
+                event.setValue(source.isWhitelisted());
             } else if (p.equals("banned") || p.equals("ban")) {
-                event.setValue(data0.isBanned());
+                event.setValue(source.isBanned());
             } else if (p.equals("lastplayed") || p.equals("lastonline")) {
-                event.setValue(data0.getLastPlayed());
+                event.setValue(source.getLastPlayed());
             } else if (p.equals("firstplayed") || p.equals("firstonline")) {
-                event.setValue(data0.getFirstPlayed());
+                event.setValue(source.getFirstPlayed());
 
                 //Location
             } else if (p.equals("location") || p.equals("loc")) {
-                event.setValue(data0.getLocation());
+                event.setValue(source.getLocation());
             } else if (p.equals("world") ) {
-                event.setValue(data0.getWorld());
+                event.setValue(source.getWorld());
             } else if (p.equals("compass") || p.equals("compassloc")) {
-                event.setValue(data0.getCompassTarget());
+                event.setValue(source.getCompassTarget());
             } else if (p.equals("bed") || p.equals("bedspawn") || p.equals("bedloc") || p.equals("bedspawnloc")) {
-                event.setValue(data0.getBedSpawnLocation());
+                event.setValue(source.getBedSpawnLocation());
             } else if (p.equals("bed") || p.equals("bedspawn") || p.equals("bedloc") || p.equals("bedspawnloc")) {
-                event.setValue(data0.getBedSpawnLocation());
+                event.setValue(source.getBedSpawnLocation());
             } else if (p.equals("eye") || p.equals("eyes") || p.equals("eyeloc")) {
-                event.setValue(data0.getEyeLocation());
+                event.setValue(source.getEyeLocation());
             } else if (p.equals("velocity") || p.equals("vel") || p.equals("v")) {
-                event.setValue(data0.getVelocity());
+                event.setValue(source.getVelocity());
             } else if (p.equals("direction") || p.equals("dir")) {
-                event.setValue(data0.getLocation().getDirection());
+                event.setValue(source.getLocation().getDirection());
 
                 //Status
             } else if (p.equals("health") || p.equals("hp")) {
-                event.setValue(data0.getHealth());
+                event.setValue(source.getHealth());
             } else if (p.equals("maxhealth") || p.equals("maxhp") || p.equals("mhealth") || p.equals("mhp")) {
-                event.setValue(data0.getMaxHealth());
+                event.setValue(source.getMaxHealth());
             } else if (p.equals("hunger") || p.equals("food") || p.equals("foodlevel")) {
-                event.setValue(data0.getFoodLevel());
+                event.setValue(source.getFoodLevel());
             } else if (p.equals("exhaustion") || p.equals("exhaust") || p.equals("exh")) {
-                event.setValue(data0.getExhaustion());
+                event.setValue(source.getExhaustion());
             } else if (p.equals("saturation") || p.equals("saturate") || p.equals("sat")) {
-                event.setValue(data0.getSaturation());
+                event.setValue(source.getSaturation());
             } else if (p.equals("air") || p.equals("oxygen")) {
-                event.setValue(data0.getRemainingAir());
+                event.setValue(source.getRemainingAir());
             } else if (p.equals("maxair") || p.equals("maxoxygen") || p.equals("mair") || p.equals("moxygen")) {
-                event.setValue(data0.getMaximumAir());
+                event.setValue(source.getMaximumAir());
             } else if (p.equals("flyspeed") || p.equals("flyingspeed") || p.equals("fspeed")) {
-                event.setValue((Integer)Math.round(data0.getFlySpeed() * 100));
+                event.setValue((Integer)Math.round(source.getFlySpeed() * 100));
             } else if (p.equals("walkspeed") || p.equals("movespeed") || p.equals("walkingspeed") || p.equals("movingspeed") || p.equals("mspeed") || p.equals("wspeed")) {
-                event.setValue((Integer)Math.round(data0.getWalkSpeed() * 100));
+                event.setValue((Integer)Math.round(source.getWalkSpeed() * 100));
             } else if (p.equals("fire") || p.equals("firetick") || p.equals("fireticks")) {
-                event.setValue(data0.getFireTicks());
+                event.setValue(source.getFireTicks());
             } else if (p.equals("maxfire") || p.equals("maxfiretick") || p.equals("maxfireticks") || p.equals("mfire") || p.equals("mfiretick") || p.equals("mfireticks")) {
-                event.setValue(data0.getMaxFireTicks());
+                event.setValue(source.getMaxFireTicks());
             } else if (p.equals("allowflight") || p.equals("flight") || p.equals("canfly")) {
-                event.setValue(data0.getAllowFlight());
+                event.setValue(source.getAllowFlight());
             } else if (p.equals("flying") || p.equals("fly")) {
-                event.setValue(data0.isFlying());
+                event.setValue(source.isFlying());
             } else if (p.equals("sprinting") || p.equals("sprint")) {
-                event.setValue(data0.isSprinting());
+                event.setValue(source.isSprinting());
             } else if (p.equals("sneaking") || p.equals("sneak") || p.equals("shifting") || p.equals("shift")) {
-                event.setValue(data0.isSneaking());
+                event.setValue(source.isSneaking());
             } else if (p.equals("blocking") || p.equals("block")) {
-                event.setValue(data0.isBlocking());
+                event.setValue(source.isBlocking());
             } else if (p.equals("dead") || p.equals("death")) {
-                event.setValue(data0.isDead());
+                event.setValue(source.isDead());
             } else if (p.equals("alive")) {
-                event.setValue(!data0.isDead());
+                event.setValue(!source.isDead());
             } else if (p.equals("killer")) {
-                event.setValue(data0.getKiller() == null ? null : data0.getKiller());
+                event.setValue(source.getKiller() == null ? null : source.getKiller());
             } else if (p.equals("lastdamage") || p.equals("lastdmg")) {
-                event.setValue(data0.getLastDamage());
+                event.setValue(source.getLastDamage());
             } else if (p.equals("lastdamagecause") || p.equals("lastdmgcause")) {
-                event.setValue(data0.getLastDamageCause().getCause().name());
+                event.setValue(source.getLastDamageCause().getCause().name());
             } else if (p.equals("nodamageticks") || p.equals("nodmgticks") || p.equals("nodamagetick") || p.equals("nodmgtick")) {
-                event.setValue(data0.getNoDamageTicks());
+                event.setValue(source.getNoDamageTicks());
             } else if (p.equals("maxnodamageticks") || p.equals("maxnodmgticks") || p.equals("maxnodamagetick") || p.equals("maxnodmgtick")) {
-                event.setValue(data0.getMaximumNoDamageTicks());
+                event.setValue(source.getMaximumNoDamageTicks());
             } else if (p.equals("gamemode")) {
-                event.setValue(Aliases.getName(AliasType.GAME_MODE, data0.getGameMode().toString()));
+                event.setValue(Aliases.getName(AliasType.GAME_MODE, source.getGameMode().toString()));
             } else if (p.equals("time")) {
-                event.setValue(data0.getPlayerTime());
+                event.setValue(source.getPlayerTime());
             } else if (p.equals("timeoffset")) {
-                event.setValue(data0.getPlayerTimeOffset());
+                event.setValue(source.getPlayerTimeOffset());
             } else if (p.equals("weather")) {
-                event.setValue(data0.getPlayerWeather().name());
+                event.setValue(source.getPlayerWeather().name());
             } else if (p.equals("pickupitems") || p.equals("itempickup")) {
-                event.setValue(data0.getCanPickupItems());
+                event.setValue(source.getCanPickupItems());
             } else if (p.equals("tickslived") || p.equals("ticklived") || p.equals("ticksalive") || p.equals("tickalive") || p.equals("aliveticks") || p.equals("alivetick")) {
-                event.setValue(data0.getTicksLived());
+                event.setValue(source.getTicksLived());
             } else if (p.equals("sleepticks") || p.equals("sleeptick")) {
-                event.setValue(data0.getSleepTicks());
+                event.setValue(source.getSleepTicks());
 
                 //Misc
             } else if (p.equals("invehicle")) {
-                event.setValue(data0.isInsideVehicle());
+                event.setValue(source.isInsideVehicle());
             } else if (p.equals("vehicle")) {
-                event.setValue(data0.getVehicle());
+                event.setValue(source.getVehicle());
 
                 //Item/Inv
             } else if (p.equals("hand") || p.equals("holding")) {
-                event.setValue(data0.getItemInHand());
+                event.setValue(source.getItemInHand());
             } else if (p.equals("helmet") || p.equals("helm") || p.equals("cap")) {
-                event.setValue(data0.getInventory().getHelmet());
+                event.setValue(source.getInventory().getHelmet());
             } else if (p.equals("chestplate") || p.equals("chest") || p.equals("cplate") || p.equals("chestp")) {
-                event.setValue(data0.getInventory().getChestplate());
+                event.setValue(source.getInventory().getChestplate());
             } else if (p.equals("leggings") || p.equals("legs") || p.equals("leg") || p.equals("pants")) {
-                event.setValue(data0.getInventory().getLeggings());
+                event.setValue(source.getInventory().getLeggings());
             } else if (p.equals("boots") || p.equals("boot") || p.equals("shoes")) {
-                event.setValue(data0.getInventory().getBoots());
+                event.setValue(source.getInventory().getBoots());
             } else if (p.equals("cursor") || p.equals("selection")) {
-                event.setValue(data0.getItemOnCursor());
+                event.setValue(source.getItemOnCursor());
             } else if (p.equals("slot")) {
-                event.setValue(data0.getInventory().getHeldItemSlot());
+                event.setValue(source.getInventory().getHeldItemSlot());
             }
 
             //TODO: Experience with utility (vanilla experience is messed up)

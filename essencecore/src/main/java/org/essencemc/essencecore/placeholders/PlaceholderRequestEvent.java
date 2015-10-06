@@ -1,27 +1,25 @@
 package org.essencemc.essencecore.placeholders;
 
-import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.essencemc.essencecore.arguments.ArgumentType;
 import org.essencemc.essencecore.util.Util;
 
 public class PlaceholderRequestEvent extends Event {
 
-    private final CommandSender source;
     private final PlaceholderType type;
     private final String placeholder;
+    private final Object source;
     private final Object[] data;
     private String value;
 
-    public PlaceholderRequestEvent(CommandSender source, PlaceholderType type, String placeholder, Object... data) {
-        this.source = source;
+    public PlaceholderRequestEvent(PlaceholderType type, String placeholder, Object source, Object... data) {
         this.type = type;
         this.placeholder = placeholder;
+        this.source = source;
         this.data = data;
     }
 
-    public CommandSender getSource() {
+    public Object getSource() {
         return source;
     }
 

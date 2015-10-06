@@ -1,6 +1,7 @@
 package org.essencemc.essencecore.placeholders;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.essencemc.essencecore.EssenceCore;
 import org.essencemc.essencecore.arguments.*;
 import org.essencemc.essencecore.arguments.internal.Argument;
@@ -21,7 +22,7 @@ public class Placeholder {
      * @param string The text with placeholders that needs to be parsed.
      * @return The string with all placeholders replaced.
      */
-    public static String parse(String string, CommandSender source) {
+    public static String parse(String string, Player player) {
         //If there are no placeholders do nothing.
         if (!string.contains("$")) {
             return string;
@@ -45,10 +46,12 @@ public class Placeholder {
                 String[] arguments = parseSplitNotDouble(word.substring((leftBracketIndex == -1 ? 0 : leftBracketIndex) + 1, rightBracketIndex).trim(), ',');
 
                 for (String argument : arguments) {
-                    data.add(parse(argument, source));
+                    data.add(parse(argument, player));
                 }
 
-                result += getPlaceholderValue(source, placeholder, data) + " ";
+                Object source = null;
+                //TODO: Get the source...
+                result += getPlaceholderValue(player, placeholder, source, data) + " ";
             } else {
                 // Literal
                 result += word + " ";
@@ -138,13 +141,25 @@ public class Placeholder {
         return list.toArray(new String[list.size()]);
     }
 
-    private static String getPlaceholderValue(CommandSender source, String placeholder, List<String> data) {
+    /**
+     * Get the placeholder value by dispatching an event.
+     * @param player The player which will be used as default source if there is no source specified.
+     * @param placeholder The full placeholder string as {type}{name}
+     * @param source The source value as object. If it's a location placeholder the source must be a location.
+     * @param data List with all argument strings. (data)
+     * @return Placeholder value or undefined.
+     */
+    private static String getPlaceholderValue(Player player, String placeholder, Object source, List<String> data) {
         String p = placeholder.toLowerCase();
+
+        //Get the placeholder type.
         PlaceholderType type = PlaceholderType.fromString(p);
         if (type == null) {
             type = PlaceholderType.CUSTOM;
         }
+        //TODO: Remove type from placeholder string. ($playername should be just name)
 
+        //Parse all arguments.
         Argument[] args = new Argument[data.size()];
         int index = 0;
         for (String argument : data) {
@@ -155,9 +170,36 @@ public class Placeholder {
             args[index++] = arg;
         }
 
-        PlaceholderRequestEvent event = new PlaceholderRequestEvent(source, type, placeholder, args);
+        //Get default source if there is no source specified.
+        if (source == null) {
+            if (player != null) {
+                //If there is a player specified get the source from the player.
+                if (type == PlaceholderType.PLAYER || type == PlaceholderType.ENTITY) {
+                    source = player;
+                } else if (type == PlaceholderType.LOCATION) {
+                    source = player.getLocation();
+                } else if (type == PlaceholderType.WORLD) {
+                    source = player.getWorld();
+                } else if (type == PlaceholderType.VECTOR) {
+                    source = player.getLocation().toVector();
+                } else if (type == PlaceholderType.ITEM) {
+                    source = player.getInventory().getItemInHand();
+                } else if (type == PlaceholderType.INVENTORY) {
+                    source = player.getInventory();
+                }
+            }
+            //If there is no source specified and the type is a raw type or there is no player the placeholder is invalid.
+            //TODO: Should probably have error codes for setting the value. Like Undefined-1 would be no raw source value specified etc.
+            if (source == null) {
+                return Util.color(Message.INVALID_PLACEHOLDER_VALUE.msg().getMsg(false));
+            }
+        }
+
+        //Dispatch the custom event with the placeholder, source and arguments.
+        PlaceholderRequestEvent event = new PlaceholderRequestEvent(type, placeholder, source, args);
         EssenceCore.inst().getServer().getPluginManager().callEvent(event);
 
+        //If there is no value set for the placeholder it's invalid.
         if (event.getValue() == null || event.getValue().isEmpty()) {
             return Util.color(Message.INVALID_PLACEHOLDER_VALUE.msg().getMsg(false));
         }

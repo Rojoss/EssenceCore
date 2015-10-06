@@ -57,7 +57,7 @@ public class VectorArg extends Argument {
             return success;
         }
 
-        String[] split = input.split(";");
+        String[] split = input.split(",");
         if (split.length < 3) {
             error = Message.NOT_A_VECTOR.msg().getMsg(true, input);
             success = false;

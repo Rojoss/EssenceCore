@@ -37,61 +37,77 @@ import org.essencemc.essencecore.nms.v1_8R3.util.Util;
 public class Chat_1_8_R3 implements IChat {
 
     /**
-     * Send actionbar to the player
-     *
-     * @param message
-     * @param player
+     * @param message The message to be sent to the player.
+     *                It has to be a string in raw JSON format.
+     *                You can use TextParser to build one if you want.
+     * @param player  The player the message has to be sent to.
+     *                Note that the player has to be a {@link Player} object or else it wont work.
+     * @return IChat instance
      */
     @Override
-    public void sendActionbar(String message, Player player) {
+    public IChat sendActionbar(String message, Player player) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(message);
         PacketPlayOutChat actionbarPacket = new PacketPlayOutChat(icbc, (byte) 2);
         Util.sendPacket(player, actionbarPacket);
+
+        return this;
     }
 
     /**
-     * Send actionbar to the players
-     *
-     * @param message
-     * @param players
+     * @param message The message to be sent to the player.
+     *                It has to be a string in raw JSON format.
+     *                You can use TextParser to build one if you want.
+     * @param players The players the message has to be sent to.
+     *                Note that the players have to be an array of {@link Player} object or else it wont work
+     * @return IChat instance
      */
     @Override
-    public void sendActionbar(String message, Player[] players) {
+    public IChat sendActionbar(String message, Player[] players) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(message);
         PacketPlayOutChat actionbarPacket = new PacketPlayOutChat(icbc, (byte) 2);
 
         for (Player player : players) {
             Util.sendPacket(player, actionbarPacket);
         }
+
+        return this;
     }
 
     /**
-     * Send custom chat to the player
-     *
-     * @param message
-     * @param player
+     * @param message The message to be sent to the player.
+     *                It has to be a string in raw JSON format.
+     *                You can use TextParser to build one if you want.
+     * @param player  The player the message has to be sent to.
+     *                Note that the player has to be a {@link Player} object or else it wont work.
+     * @return IChat instance
      */
     @Override
-    public void sendChat(String message, Player player) {
+    public IChat sendChat(String message, Player player) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(message);
         PacketPlayOutChat chatPacket = new PacketPlayOutChat(icbc, (byte) 0);
         Util.sendPacket(player, chatPacket);
+
+        return this;
     }
 
     /**
-     * Send chat to the players
-     *
-     * @param message
-     * @param players
+     * @param message The message to be sent to the player.
+     *                It has to be a string in raw JSON format.
+     *                You can use TextParser to build one if you want.
+     * @param players The players the message has to be sent to.
+     *                Note that the players have to be an array of {@link Player} object or else it wont work
+     * @return
      */
     @Override
-    public void sendChat(String message, Player[] players) {
+    public IChat sendChat(String message, Player[] players) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(message);
         PacketPlayOutChat chatPacket = new PacketPlayOutChat(icbc, (byte) 0);
 
         for (Player p: players) {
             Util.sendPacket(p, chatPacket);
         }
+
+        return this;
     }
 
 }

@@ -24,6 +24,6 @@
  */
 
 /**
- * Contains all the stuff related to NMS from Titles and Chat to Custom Entities (coming soon)
+ * The base package for the Essence Core plugin
  */
-package org.essencemc.essencecore.nms;
+package org.essencemc.essencecore;

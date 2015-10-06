@@ -25,6 +25,7 @@
 
 package org.essencemc.essencecore;
 
+import com.google.gson.Gson;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.essencemc.essencecore.aliases.AliasType;
@@ -35,15 +36,16 @@ import org.essencemc.essencecore.config.aliases.ItemAliases;
 import org.essencemc.essencecore.database.Database;
 import org.essencemc.essencecore.database.MySql.MySql;
 import org.essencemc.essencecore.database.SqlLite.SqlLite;
+import org.essencemc.essencecore.exceptions.NMSClassNotFoundException;
 import org.essencemc.essencecore.listeners.ModuleListener;
 import org.essencemc.essencecore.listeners.PlaceholderListener;
 import org.essencemc.essencecore.modules.Modules;
 import org.essencemc.essencecore.nms.IChat;
 import org.essencemc.essencecore.nms.ISkull;
 import org.essencemc.essencecore.nms.ITitle;
+import org.essencemc.essencecore.nms.v1_8R3.Chat_1_8_R3;
 import org.essencemc.essencecore.nms.v1_8R3.SkullUtil_1_8_R3;
 import org.essencemc.essencecore.nms.v1_8R3.Title_1_8_R3;
-import org.essencemc.essencecore.nms.v1_8R3.Chat_1_8_R3;
 import org.essencemc.essencecore.player.PlayerManager;
 
 import java.sql.Connection;
@@ -55,7 +57,7 @@ import java.util.logging.Logger;
 public class EssenceCore extends JavaPlugin {
 
     private static EssenceCore instance;
-    //private Gson gson = new Gson();
+    private Gson gson = new Gson();
 
     private Database database;
     private Connection sql;
@@ -112,14 +114,17 @@ public class EssenceCore extends JavaPlugin {
         log("loaded successfully");
     }
 
+    /**
+     * Designate NMS classes for various NMS api's
+     */
     private void setupNMS() {
-        String version;
+        String version = null;
         boolean compatible;
 
         try {
             version = getServer().getClass().getPackage().getName().replace(".",  ",").split(",")[3];
-        } catch (ArrayIndexOutOfBoundsException whatVersionAreYouUsingException) {
-            return;
+        } catch (ArrayIndexOutOfBoundsException exception) {
+            exception.printStackTrace();
         }
 
         switch (version) {
@@ -138,7 +143,7 @@ public class EssenceCore extends JavaPlugin {
         else {
             warn("This version of EssenceCore is not fully compatible with your server version!");
             warn("Your server version: " + version);
-            warn("Earliest compatible version: v1_8_R1");
+            warn("Earliest compatible version: v1_8_R3");
             warn("Latest compatible version: v1_8_R3");
             warn("If there is a newer server version we will update the plugin as soon as possible.");
             warn("EssenceCore will still work fine but certain features will be disabled.");
@@ -214,6 +219,9 @@ public class EssenceCore extends JavaPlugin {
         pm.registerEvents(new PlaceholderListener(this), this);
     }
 
+    /**
+     * Load various alias files
+     */
     private void loadAliases() {
         itemAliases = new ItemAliases("plugins/Essence/aliases/Items.yml");
 
@@ -236,24 +244,48 @@ public class EssenceCore extends JavaPlugin {
         aliases.put(AliasType.SOUNDS, new AliasesCfg("plugins/Essence/aliases/Sounds.yml", AliasType.SOUNDS));
     }
 
+    /**
+     * Log a message to the console with log level of {@link java.util.logging.Level#INFO}.
+     *
+     * @param msg The message to be printed to the console.
+     *            Can be any type of Object.
+     */
     public void log(Object msg) {
         log.info("[EssenceCore " + getDescription().getVersion() + "] " + msg.toString());
     }
+
+    /**
+     * Log a message to the console with log level of {@link java.util.logging.Level#WARNING}.
+     *
+     * @param msg The message to be printed to the console.
+     *            Can be any type of Object.
+     */
     public void warn(Object msg) {
         log.warning("[EssenceCore " + getDescription().getVersion() + "] " + msg.toString());
     }
+
+    /**
+     * Log a message to the console with log level of {@link java.util.logging.Level#SEVERE}.
+     *
+     * @param msg The message to be printed to the console.
+     *            Can be any type of Object.
+     */
     public void logError(Object msg) {
         log.severe("[EssenceCore " + getDescription().getVersion() + "] " + msg.toString());
     }
 
-    
+
+    /**
+     * Get the {@link EssenceCore} instance.
+     * @return EssenceCore instance
+     */
     public static EssenceCore inst() {
         return instance;
     }
 
-    /*public Gson getGson() {
+    public Gson getGson() {
         return gson;
-    }*/
+    }
 
     public Database getDB() {
         return database;
@@ -264,8 +296,16 @@ public class EssenceCore extends JavaPlugin {
     }
 
 
-    public ISkull getSkull() {
-        return iSkull;
+    /**
+     * @return {@link ISkull} instance
+     * @throws NMSClassNotFoundException
+     */
+    public ISkull getSkull() throws NMSClassNotFoundException {
+        if (iTitle.equals(null)) {
+            throw new NMSClassNotFoundException("SkullData is not found for your server version");
+        } else {
+            return iSkull;
+        }
     }
 
 
@@ -294,7 +334,6 @@ public class EssenceCore extends JavaPlugin {
         return playerManager;
     }
 
-
     public Commands getCommands() {
         return commands;
     }
@@ -303,11 +342,19 @@ public class EssenceCore extends JavaPlugin {
         return modules;
     }
 
-    public ITitle getTitle() {
-        return iTitle;
+    public ITitle getTitle() throws NMSClassNotFoundException {
+        if (iTitle.equals(null)) {
+            throw new NMSClassNotFoundException("Titles are not found for your server version");
+        } else {
+            return iTitle;
+        }
     }
 
-    public IChat getChat() {
-        return iChat;
+    public IChat getChat() throws NMSClassNotFoundException {
+        if (iTitle.equals(null)) {
+            throw new NMSClassNotFoundException("Chat and Actionbars are not found for your server version");
+        } else {
+            return iChat;
+        }
     }
 }

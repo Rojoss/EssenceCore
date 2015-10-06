@@ -36,9 +36,12 @@
     </parent>
 
     <artifactId>essence-core</artifactId>
-    <version>0.0.1.0-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
 
-
+    <properties>
+        <project.minimumVersion>1.8R3</project.minimumVersion>
+        <project.maximumVersion>1.8R3</project.maximumVersion>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>

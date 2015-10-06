@@ -36,108 +36,133 @@ import org.essencemc.essencecore.nms.v1_8R3.util.Util;
  */
 public class Title_1_8_R3 implements ITitle {
 
+
     /**
-     * Send the player only the title message
-     *
-     * @param titleMessage
-     * @param fadeIn
-     * @param stay
-     * @param fadeOut
-     * @param player
+     * @param titleMessage The message to be sent to the player.
+     *                     It has to be a string in raw JSON format.
+     *                     You can use TextParser to build one if you want.
+     * @param fadeIn       Fade in time for the title message in ticks.
+     * @param stay         Time in ticks the message stays floating on the screen
+     * @param fadeOut      Fade in time for the title message in ticks.
+     * @param player       The player the message has to be sent to.
+     *                     Note that the player has to be a {@link Player} object or else it wont work.
+     * @return {@link ITitle] instance
      */
     @Override
-    public void sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Player player) {
+    public ITitle sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Player player) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(titleMessage);
         PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, icbc, fadeIn, stay, fadeOut);
         Util.sendPacket(player, titlePacket);
+        return this;
     }
 
+
     /**
-     * Send the players only the title message
-     *
-     * @param titleMessage
-     * @param fadeIn
-     * @param stay
-     * @param fadeOut
-     * @param players
+     * @param titleMessage The message to be sent to the player.
+     *                     It has to be a string in raw JSON format.
+     *                     You can use TextParser to build one if you want.
+     * @param fadeIn       Fade in time for the title message in ticks.
+     * @param stay         Time in ticks the message stays floating on the screen
+     * @param fadeOut      Fade in time for the title message in ticks.
+     * @param players      The players the message has to be sent to.
+     *                     Note that the players have to be an array of {@link Player} object or else it wont work
+     * @return {@link ITitle] instance
      */
     @Override
-    public void sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Player[] players) {
+    public ITitle sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Player[] players) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(titleMessage);
         PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, icbc, fadeIn, stay, fadeOut);
 
         for (Player p: players) {
             Util.sendPacket(p, titlePacket);
         }
+        return this;
     }
 
+
     /**
-     * Send the player only the subtitle message
-     *
-     * @param subtitleMessage
-     * @param fadeIn
-     * @param stay
-     * @param fadeOut
-     * @param player
+     * @param subtitleMessage The message to be sent to the player.
+     *                        It has to be a string in raw JSON format.
+     *                        You can use TextParser to build one if you want.
+     * @param fadeIn          Fade in time for the title message in ticks.
+     * @param stay            Time in ticks the message stays floating on the screen
+     * @param fadeOut         Fade in time for the title message in ticks.
+     * @param player          The player the message has to be sent to.
+     *                        Note that the player has to be a {@link Player} object or else it wont work.
+     * @return {@link ITitle] instance
      */
     @Override
-    public void sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Player player) {
+    public ITitle sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Player player) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(subtitleMessage);
         PacketPlayOutTitle subtitlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, icbc, fadeIn, stay, fadeOut);
         Util.sendPacket(player, subtitlePacket);
+        return this;
     }
 
+
     /**
-     * Send the players only the subtitle message
-     *
-     * @param subtitleMessage
-     * @param fadeIn
-     * @param stay
-     * @param fadeOut
-     * @param players
+     * @param subtitleMessage The message to be sent to the player.
+     *                        It has to be a string in raw JSON format.
+     *                        You can use TextParser to build one if you want.
+     * @param fadeIn          Fade in time for the title message in ticks.
+     * @param stay            Time in ticks the message stays floating on the screen
+     * @param fadeOut         Fade in time for the title message in ticks.
+     * @param players         The players the message has to be sent to.
+     *                        Note that the players have to be an array of {@link Player} object or else it wont work
+     * @return {@link ITitle] instance
      */
     @Override
-    public void sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Player[] players) {
+    public ITitle sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Player[] players) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(subtitleMessage);
         PacketPlayOutTitle subtitlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, icbc, fadeIn, stay, fadeOut);
 
         for (Player p: players) {
             Util.sendPacket(p, subtitlePacket);
         }
+        return this;
     }
 
 
     /**
-     * Send the player the title and subtitle messages
-     *
-     * @param titleMessage
-     * @param subtitleMessage
-     * @param fadeIn
-     * @param stay
-     * @param fadeOut
-     * @param player
+     * @param titleMessage    The message to be sent to the player.
+     *                        It has to be a string in raw JSON format.
+     *                        You can use TextParser to build one if you want.
+     * @param subtitleMessage The message to be sent to the player.
+     *                        It has to be a string in raw JSON format.
+     *                        You can use TextParser to build one if you want.
+     * @param fadeIn          Fade in time for the title message in ticks.
+     * @param stay            Time in ticks the message stays floating on the screen
+     * @param fadeOut         Fade in time for the title message in ticks.
+     * @param player          The player the message has to be sent to.
+     *                        Note that the player has to be a {@link Player} object or else it wont work.
+     * @return {@link ITitle] instance
      */
     @Override
-    public void sendWholeTitle(String titleMessage, String subtitleMessage, int fadeIn, int stay, int fadeOut, Player player) {
+    public ITitle sendWholeTitle(String titleMessage, String subtitleMessage, int fadeIn, int stay, int fadeOut, Player player) {
         IChatBaseComponent titleIcbc = IChatBaseComponent.ChatSerializer.a(titleMessage);
         IChatBaseComponent subtitleIcbc = IChatBaseComponent.ChatSerializer.a(subtitleMessage);
         PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, titleIcbc, fadeIn, stay, fadeOut);
         PacketPlayOutTitle subtitlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, subtitleIcbc, fadeIn, stay, fadeOut);
         Util.sendPacket(player, titlePacket, subtitlePacket);
+        return this;
     }
 
     /**
-     * Send the players the title and subtitle messages
-     *
-     * @param titleMessage
-     * @param subtitleMessage
-     * @param fadeIn
-     * @param stay
-     * @param fadeOut
-     * @param players
+     * @param titleMessage    The message to be sent to the player.
+     *                        It has to be a string in raw JSON format.
+     *                        You can use TextParser to build one if you want.
+     * @param subtitleMessage The message to be sent to the player.
+     *                        It has to be a string in raw JSON format.
+     *                        You can use TextParser to build one if you want.
+     * @param fadeIn          Fade in time for the title message in ticks.
+     * @param stay            Time in ticks the message stays floating on the screen
+     * @param fadeOut         Fade in time for the title message in ticks.
+     * @param players         The players the message has to be sent to.
+     *                        Note that the players have to be an array of {@link Player} object or else it wont work
+     * @return {@link ITitle] instance
      */
     @Override
-    public void sendWholeTitle(String titleMessage, String subtitleMessage, int fadeIn, int stay, int fadeOut, Player[] players) {
+    public ITitle sendWholeTitle(String titleMessage, String subtitleMessage, int fadeIn, int stay, int fadeOut, Player[] players) {
         IChatBaseComponent titleIcbc = IChatBaseComponent.ChatSerializer.a(titleMessage);
         IChatBaseComponent subtitleIcbc = IChatBaseComponent.ChatSerializer.a(subtitleMessage);
         PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, titleIcbc, fadeIn, stay, fadeOut);
@@ -147,6 +172,7 @@ public class Title_1_8_R3 implements ITitle {
             Util.sendPacket(p, titlePacket, subtitlePacket);
             Util.sendPacket(p, titlePacket, subtitlePacket);
         }
+        return this;
     }
 
 }

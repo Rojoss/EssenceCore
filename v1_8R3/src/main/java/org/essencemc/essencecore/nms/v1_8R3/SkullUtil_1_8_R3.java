@@ -51,12 +51,10 @@ import java.util.UUID;
  */
 public class SkullUtil_1_8_R3 implements ISkull {
 
+
     /**
-     * Set a specific skin texture to the given skull block.
-     * If the block isn't a skull nothing will happen!
-     *
-     * @param skinUrl
-     * @param block
+     * @param skinUrl The textures.minecraft.net skin url for the skull.
+     * @param block   The skull block on which the skin has to be applied on.
      */
     @Override
     public void setSkullUrl(String skinUrl, Block block) {
@@ -75,12 +73,11 @@ public class SkullUtil_1_8_R3 implements ISkull {
         block.getState().update(true);
     }
 
+
     /**
-     * Set a specific skin texture to the given skull meta.
-     * It will return the SkullMeta with the texture applied if it was valid.
-     *
-     * @param skinUrl
-     * @param meta
+     * @param skinUrl The textures.minecraft.net skin url for the skull.
+     * @param meta    The skull meta of a skull block.
+     * @return SkullMeta
      */
     @Override
     public SkullMeta setSkullUrl(String skinUrl, SkullMeta meta) {
@@ -105,6 +102,10 @@ public class SkullUtil_1_8_R3 implements ISkull {
         return meta;
     }
 
+    /**
+     * @param meta The skull meta of a skull block.
+     * @return The textures.minecraft.net skin url for the skull.
+     */
     @Override
     public String getSkullUrl(SkullMeta meta) {
         if (meta == null) {

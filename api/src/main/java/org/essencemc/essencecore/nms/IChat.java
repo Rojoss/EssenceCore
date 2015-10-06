@@ -35,8 +35,11 @@ public interface IChat {
     /**
      * Send actionbar to the player.
      *
-     * @param message The message to be sent to the player. It has to be a string in raw JSON format. You can use TextParser to build one if you want.
-     * @param player The player the message has to be sent to. Note that the player has to be a {@link Player} object or else it wont work.
+     * @param message The message to be sent to the player.
+     *                It has to be a string in raw JSON format.
+     *                You can use TextParser to build one if you want.
+     * @param player The player the message has to be sent to.
+     *               Note that the player has to be a {@link Player} object or else it wont work.
      *
      * @return IChat instance
      */
@@ -45,8 +48,11 @@ public interface IChat {
     /**
      * Send actionbar to the players
      *
-     * @param message The message to be sent to the player. It has to be a string in raw JSON format. You can use TextParser to build one if you want.
-     * @param players The players the message has to be sent to. Note that the players have to be an array of {@link Player} object or else it wont work
+     * @param message The message to be sent to the player.
+     *                It has to be a string in raw JSON format.
+     *                You can use TextParser to build one if you want.
+     * @param players The players the message has to be sent to.
+     *                Note that the players have to be an array of {@link Player} object or else it wont work
      *
      * @return IChat instance
      */
@@ -55,8 +61,11 @@ public interface IChat {
     /**
      * Send raw chat message to the player
      *
-     * @param message The message to be sent to the player. It has to be a string in raw JSON format. You can use TextParser to build one if you want.
-     * @param player The player the message has to be sent to. Note that the player has to be a {@link Player} object or else it wont work.
+     * @param message The message to be sent to the player.
+     *                It has to be a string in raw JSON format.
+     *                You can use TextParser to build one if you want.
+     * @param player The player the message has to be sent to.
+     *               Note that the player has to be a {@link Player} object or else it wont work.
      *
      * @return IChat instance
      */
@@ -65,8 +74,11 @@ public interface IChat {
     /**
      * Send raw chat message to the players
      *
-     * @param message The message to be sent to the player. It has to be a string in raw JSON format. You can use TextParser to build one if you want.
-     * @param players The players the message has to be sent to. Note that the players have to be an array of {@link Player} object or else it wont work
+     * @param message The message to be sent to the player.
+     *                It has to be a string in raw JSON format.
+     *                You can use TextParser to build one if you want.
+     * @param players The players the message has to be sent to.
+     *                Note that the players have to be an array of {@link Player} object or else it wont work
      *
      * @return IChat instance
      */

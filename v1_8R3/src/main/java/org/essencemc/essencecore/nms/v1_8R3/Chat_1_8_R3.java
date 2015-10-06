@@ -37,10 +37,12 @@ import org.essencemc.essencecore.nms.v1_8R3.util.Util;
 public class Chat_1_8_R3 implements IChat {
 
     /**
-     * Send actionbar to the player
-     *
-     * @param message
-     * @param player
+     * @param message The message to be sent to the player.
+     *                It has to be a string in raw JSON format.
+     *                You can use TextParser to build one if you want.
+     * @param player  The player the message has to be sent to.
+     *                Note that the player has to be a {@link Player} object or else it wont work.
+     * @return IChat instance
      */
     @Override
     public IChat sendActionbar(String message, Player player) {
@@ -52,10 +54,12 @@ public class Chat_1_8_R3 implements IChat {
     }
 
     /**
-     * Send actionbar to the players
-     *
-     * @param message
-     * @param players
+     * @param message The message to be sent to the player.
+     *                It has to be a string in raw JSON format.
+     *                You can use TextParser to build one if you want.
+     * @param players The players the message has to be sent to.
+     *                Note that the players have to be an array of {@link Player} object or else it wont work
+     * @return IChat instance
      */
     @Override
     public IChat sendActionbar(String message, Player[] players) {
@@ -70,10 +74,12 @@ public class Chat_1_8_R3 implements IChat {
     }
 
     /**
-     * Send custom chat to the player
-     *
-     * @param message
-     * @param player
+     * @param message The message to be sent to the player.
+     *                It has to be a string in raw JSON format.
+     *                You can use TextParser to build one if you want.
+     * @param player  The player the message has to be sent to.
+     *                Note that the player has to be a {@link Player} object or else it wont work.
+     * @return IChat instance
      */
     @Override
     public IChat sendChat(String message, Player player) {
@@ -85,10 +91,12 @@ public class Chat_1_8_R3 implements IChat {
     }
 
     /**
-     * Send chat to the players
-     *
-     * @param message
-     * @param players
+     * @param message The message to be sent to the player.
+     *                It has to be a string in raw JSON format.
+     *                You can use TextParser to build one if you want.
+     * @param players The players the message has to be sent to.
+     *                Note that the players have to be an array of {@link Player} object or else it wont work
+     * @return
      */
     @Override
     public IChat sendChat(String message, Player[] players) {

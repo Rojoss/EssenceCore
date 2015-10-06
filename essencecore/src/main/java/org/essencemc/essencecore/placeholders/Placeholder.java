@@ -1,12 +1,10 @@
 package org.essencemc.essencecore.placeholders;
 
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.essencemc.essencecore.EssenceCore;
 import org.essencemc.essencecore.arguments.*;
 import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.message.Message;
-import org.essencemc.essencecore.util.Debug;
 import org.essencemc.essencecore.util.Util;
 
 import java.util.ArrayList;
@@ -24,6 +22,10 @@ public class Placeholder {
      * @return The string with all placeholders replaced.
      */
     public static String parse(String string, Player player) {
+        return parsePayload(string, player, true);
+    }
+
+    private static String parsePayload(String string, Player player, boolean finalize) {
         //If there are no placeholders do nothing.
         if (!string.contains("$")) {
             return string;
@@ -44,20 +46,20 @@ public class Placeholder {
                 String placeholder = word.substring(1, (leftBracketIndex == -1 ? word.length() : leftBracketIndex)).trim();
 
                 List<String> data = new ArrayList<String>();
-                String[] arguments = parseSplitNotDouble(word.substring((leftBracketIndex == -1 ? 0 : leftBracketIndex) + 1, rightBracketIndex).trim(), ',');
+                String[] arguments = parseSplitNotDouble(word.substring((leftBracketIndex == -1 ? 0 : leftBracketIndex + 1), rightBracketIndex).trim(), ',');
 
                 for (String argument : arguments) {
-                    data.add(parse(argument, player));
+                    data.add(parse(argument, player).replace(",", ",,").replace("$", "$$"));
                 }
 
-                result += getPlaceholderValue(player, placeholder, data) + " ";
+                result += getPlaceholderValue(player, placeholder, data).replace(",,", ",").replace("$$", "$") + " ";
             } else {
                 // Literal
-                result += word + " ";
+                result += word.replace(",", ",,").replace("$", "$$") + " ";
             }
         }
 
-        return result.trim(); // Remove the last space
+        return result.trim().replace(",,", ",").replace("$$", "$"); // Remove the last space
     }
 
     /**
@@ -162,6 +164,7 @@ public class Placeholder {
         List<Object> dataValues = new ArrayList<Object>();
         int index = 0;
         for (String argument : data) {
+            argument = argument.replace(",,", ",").replace("$$", "$");
             ArgumentType argType = ArgumentType.fromValue(argument);
             Argument arg = argType.getNewArg();
             arg.parse(argument);
@@ -171,8 +174,8 @@ public class Placeholder {
                 source = arg.getValue();
             } else {
                 dataValues.add(arg);
-                index++;
             }
+            index++;
         }
         //Get default source if there is no source specified.
         if (source == null) {
@@ -201,10 +204,6 @@ public class Placeholder {
         }
 
         //Dispatch the custom event with the placeholder, source and arguments.
-        Debug.bc(type.toString());
-        Debug.bc(p);
-        Debug.bc(source);
-        Debug.bc(dataValues);
         PlaceholderRequestEvent event = new PlaceholderRequestEvent(type, p, source, dataValues);
         EssenceCore.inst().getServer().getPluginManager().callEvent(event);
 

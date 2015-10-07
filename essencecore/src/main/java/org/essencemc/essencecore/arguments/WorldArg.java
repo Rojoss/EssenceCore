@@ -66,7 +66,7 @@ public class WorldArg extends Argument {
         World world = null;
         if (NumberUtil.getInt(input) != null) {
             world = server.getWorlds().size() < NumberUtil.getInt(input) ? null : server.getWorlds().get(NumberUtil.getInt(input));
-        } else if (input.split("-").length == 5) {
+        } else if (input.length() == 36 && input.split("-").length == 5) {
             world = server.getWorld(UUID.fromString(input));
         } else {
             world = server.getWorld(input);

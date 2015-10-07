@@ -29,6 +29,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.message.Message;
+import org.essencemc.essencecore.util.Debug;
 
 import java.util.UUID;
 
@@ -61,7 +62,7 @@ public class PlayerArg extends Argument {
 
         Player player = null;
         String[] components = input.split("-");
-        if (components.length == 5) {
+        if ( input.length() == 36 && components.length == 5 && !components[0].isEmpty()) {
             player = Bukkit.getPlayer(UUID.fromString(input));
         } else {
             player = Bukkit.getPlayer(input);

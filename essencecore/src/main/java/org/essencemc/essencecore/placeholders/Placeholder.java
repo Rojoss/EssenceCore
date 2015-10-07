@@ -40,18 +40,21 @@ public class Placeholder {
             if (word.startsWith("$") && !word.startsWith("$$")) { // Account for escaping
                 // Placeholder
 
-                int leftBracketIndex = word.indexOf('(');
-                int rightBracketIndex = word.contains(")") ? word.lastIndexOf(')') : word.length();
-
-                String placeholder = word.substring(1, (leftBracketIndex == -1 ? word.length() : leftBracketIndex)).trim();
-
                 List<String> data = new ArrayList<String>();
-                String[] arguments = parseSplitNotDouble(word.substring((leftBracketIndex == -1 ? 0 : leftBracketIndex + 1), rightBracketIndex).trim(), ',');
+                int leftBracketIndex = word.length();
 
-                for (String argument : arguments) {
-                    data.add(parse(argument, player).replace(",", ",,").replace("$", "$$"));
+                if (word.contains("(") && word.contains(")")) {
+                    leftBracketIndex = word.indexOf('(');
+                    int rightBracketIndex = word.lastIndexOf(')');
+
+                    String[] arguments = parseSplitNotDouble(word.substring(leftBracketIndex + 1, rightBracketIndex).trim(), ',');
+
+                    for (String argument : arguments) {
+                        data.add(parsePayload(argument, player, false).replace(",", ",,").replace("$", "$$"));
+                    }
                 }
 
+                String placeholder = word.substring(1, leftBracketIndex).trim();
                 result += getPlaceholderValue(player, placeholder, data).replace(",,", ",").replace("$$", "$") + " ";
             } else {
                 // Literal
@@ -79,17 +82,9 @@ public class Placeholder {
             char c = string.charAt(count);
 
             if (c == '(') {
-                if (string.length() > (count + 1) && string.charAt(count + 1) == '(') { // Account for escaping
-                    count++;
-                } else {
-                    roundBrackets++;
-                }
+                roundBrackets++;
             } else if (c == ')') {
-                if (string.length() > (count + 1) && string.charAt(count + 1) == ')') { // Account for escaping
-                    count++;
-                } else {
-                    roundBrackets--;
-                }
+                roundBrackets--;
             }
 
             builder += c;

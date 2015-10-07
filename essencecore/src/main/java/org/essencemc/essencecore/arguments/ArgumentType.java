@@ -114,10 +114,10 @@ public enum ArgumentType {
             return ArgumentType.PLAYER;
         } else if (parseSuccessful(ArgumentType.WORLD, value)) {
             return ArgumentType.WORLD;
-        } else if (parseSuccessful(ArgumentType.VECTOR, value)) {
-            return ArgumentType.VECTOR;
         } else if (parseSuccessful(ArgumentType.LOCATION, value)) {
             return ArgumentType.LOCATION;
+        } else if (parseSuccessful(ArgumentType.VECTOR, value)) {
+            return ArgumentType.VECTOR;
         } else if (parseSuccessful(ArgumentType.MATERIAL, value)) {
             return ArgumentType.MATERIAL;
         } else if (parseSuccessful(ArgumentType.ITEM, value)) {

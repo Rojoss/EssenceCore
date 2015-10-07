@@ -23,12 +23,12 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.nms.v1_8R3;
+package org.essencemc.essencecore.nms.packet.playout.title;
 
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import org.bukkit.entity.Player;
-import org.essencemc.essencecore.nms.ITitle;
+import org.essencemc.essencecore.nms.packet.playout.title.ITitle;
 import org.essencemc.essencecore.nms.v1_8R3.util.Util;
 
 /**

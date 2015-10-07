@@ -23,16 +23,17 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.nms;
+package org.essencemc.essencecore.nms.packet.playout.respawn;
 
-import org.bukkit.World.Environment;
+import net.minecraft.server.v1_8_R3.PacketPlayOutRespawn;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.essencemc.essencecore.nms.v1_8R3.util.Util;
 
 /**
- * Interface for handling player respawns
+ * Handles the player respawning for v1_8R3
  */
-public interface IRespawn {
-
+public class Respawn_1_8_R3 implements IRespawn {
     /**
      * Respawn a player
      *
@@ -40,7 +41,13 @@ public interface IRespawn {
      *               Note that the player has to be a {@link Player} object or else it wont work.
      * @return IRespawn instance
      */
-    IRespawn respawnPlayer(Player player);
+    @Override
+    public IRespawn respawnPlayer(Player player) {
+
+        PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(Util.resolveEnvironment(player), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
+        Util.sendPacket(player, respawnPacket);
+        return this;
+    }
 
     /**
      * Respawn multiple players
@@ -49,7 +56,15 @@ public interface IRespawn {
      *                Note that the players have to be an array of {@link Player} object or else it wont work.
      * @return IRespawn instance
      */
-    IRespawn respawnPlayers(Player[] players);
+    @Override
+    public IRespawn respawnPlayers(Player[] players) {
+
+        for (Player player: players) {
+            PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(Util.resolveEnvironment(player), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
+            Util.sendPacket(player, respawnPacket);
+        }
+        return this;
+    }
 
     /**
      * Change player sky type for a player
@@ -59,7 +74,14 @@ public interface IRespawn {
      *               Note that the player has to be a {@link Player} object or else it wont work.
      * @return IRespawn instance
      */
-    IRespawn changePlayerSky(Environment environment, Player player);
+    @Override
+    public IRespawn changePlayerSky(World.Environment environment, Player player) {
+        PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(environment.ordinal(), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
+        Util.sendPacket(player, respawnPacket);
+
+        Util.refreshPlayerChunks(10, player);
+        return this;
+    }
 
     /**
      * Change player sky type for a player
@@ -70,7 +92,13 @@ public interface IRespawn {
      *               Note that the player has to be a {@link Player} object or else it wont work.
      * @return IRespawn instance
      */
-    IRespawn changePlayerSky(Environment environment, int chunkRadius, Player player);
+    public IRespawn changePlayerSky(World.Environment environment, int chunkRadius, Player player) {
+        PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(environment.ordinal(), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
+        Util.sendPacket(player, respawnPacket);
+
+        Util.refreshPlayerChunks(chunkRadius, player);
+        return this;
+    }
 
     /**
      * Change skies for multiple players
@@ -80,7 +108,16 @@ public interface IRespawn {
      *                Note that the players have to be an array of {@link Player} object or else it wont work.
      * @return IRespawn instance
      */
-    IRespawn changePlayerSky(Environment environment, Player[] players);
+    @Override
+    public IRespawn changePlayerSky(World.Environment environment, Player[] players) {
+        for (Player player: players) {
+            PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(environment.ordinal(), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
+            Util.sendPacket(player, respawnPacket);
+
+            Util.refreshPlayerChunks(10, player);
+        }
+        return this;
+    }
 
     /**
      * Change skies for multiple players
@@ -91,5 +128,13 @@ public interface IRespawn {
      *                Note that the players have to be an array of {@link Player} object or else it wont work.
      * @return IRespawn instance
      */
-    IRespawn changePlayerSky(Environment environment, int chunkRadius, Player[] players);
+    public IRespawn changePlayerSky(World.Environment environment, int chunkRadius, Player[] players) {
+        for (Player player: players) {
+            PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(environment.ordinal(), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
+            Util.sendPacket(player, respawnPacket);
+
+            Util.refreshPlayerChunks(chunkRadius, player);
+        }
+        return this;
+    }
 }

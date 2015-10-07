@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.nms;
+package org.essencemc.essencecore.nms.packet.playout.title;
 
 import org.bukkit.entity.Player;
 

@@ -26,9 +26,6 @@
 package org.essencemc.essencecore.nms.v1_8R3.util;
 
 import net.minecraft.server.v1_8_R3.*;
-import net.minecraft.server.v1_8_R3.WorldType;
-import org.bukkit.*;
-import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -50,96 +47,30 @@ public class Util {
         return IChatBaseComponent.ChatSerializer.a(message);
     }
 
-    public static EnumDifficulty resolveDifficulty(Difficulty difficulty) {
-        EnumDifficulty enumDifficulty;
-
-        switch (difficulty) {
-            case PEACEFUL:
-                enumDifficulty = EnumDifficulty.PEACEFUL;
-                break;
-            case EASY:
-                enumDifficulty = EnumDifficulty.EASY;
-                break;
-            case NORMAL:
-                enumDifficulty = EnumDifficulty.NORMAL;
-                break;
-            case HARD:
-                enumDifficulty = EnumDifficulty.HARD;
-                break;
-            default:
-                enumDifficulty = EnumDifficulty.NORMAL;
-        }
-        return enumDifficulty;
+    public static EnumDifficulty resolveDifficulty(Player player) {
+        return EnumDifficulty.getById(player.getWorld().getDifficulty().ordinal());
     }
 
-    public static WorldType resolveWorldType(org.bukkit.WorldType worldType) {
-        WorldType enumWorldType;
-
-        switch (worldType) {
-            case NORMAL:
-                enumWorldType = WorldType.NORMAL;
-                break;
-            case FLAT:
-                enumWorldType = WorldType.FLAT;
-                break;
-            case VERSION_1_1:
-                enumWorldType = WorldType.NORMAL_1_1;
-                break;
-            case LARGE_BIOMES:
-                enumWorldType = WorldType.LARGE_BIOMES;
-                break;
-            case AMPLIFIED:
-                enumWorldType = WorldType.AMPLIFIED;
-                break;
-            case CUSTOMIZED:
-                enumWorldType = WorldType.CUSTOMIZED;
-                break;
-            default:
-                enumWorldType = WorldType.NORMAL;
-                break;
-        }
-        return enumWorldType;
+    public static WorldType resolveWorldType(Player player) {
+        return WorldType.getType(player.getWorld().getWorldType().toString());
     }
 
-    public static WorldSettings.EnumGamemode resolveGameMode(GameMode gameMode) {
-        WorldSettings.EnumGamemode enumGamemode;
-
-        switch (gameMode) {
-            case SURVIVAL:
-                enumGamemode = WorldSettings.EnumGamemode.SURVIVAL;
-                break;
-            case CREATIVE:
-                enumGamemode = WorldSettings.EnumGamemode.CREATIVE;
-                break;
-            case ADVENTURE:
-                enumGamemode = WorldSettings.EnumGamemode.ADVENTURE;
-                break;
-            case SPECTATOR:
-                enumGamemode = WorldSettings.EnumGamemode.SPECTATOR;
-                break;
-            default:
-                enumGamemode = WorldSettings.EnumGamemode.SURVIVAL;
-        }
-
-        return enumGamemode;
+    public static WorldSettings.EnumGamemode resolveGameMode(Player player) {
+        return WorldSettings.EnumGamemode.getById(player.getGameMode().ordinal());
     }
 
-    public static int resolveEnvironment(World.Environment environment) {
-        int value;
+    public static int resolveEnvironment(Player player) {
+        return player.getWorld().getEnvironment().ordinal();
+    }
 
-        switch (environment) {
-            case NETHER:
-                value = -1;
-                break;
-            case NORMAL:
-                value = 0;
-                break;
-            case THE_END:
-                value = 1;
-                break;
-            default:
-                value = 0;
+    public static void refreshPlayerChunks(int radius, Player player) {
+        int r = Math.abs(radius);
+        org.bukkit.Chunk chunk = player.getWorld().getChunkAt(player.getLocation());
+
+        for(int x = -r; x < r; ++x) {
+            for(int z = -r; z < r; ++z) {
+                player.getWorld().refreshChunk(chunk.getX() + x, chunk.getZ() + z);
+            }
         }
-        return value;
     }
 }

@@ -41,9 +41,11 @@ import org.essencemc.essencecore.listeners.ModuleListener;
 import org.essencemc.essencecore.listeners.PlaceholderListener;
 import org.essencemc.essencecore.modules.Modules;
 import org.essencemc.essencecore.nms.IChat;
+import org.essencemc.essencecore.nms.IRespawn;
 import org.essencemc.essencecore.nms.ISkull;
 import org.essencemc.essencecore.nms.ITitle;
 import org.essencemc.essencecore.nms.v1_8R3.Chat_1_8_R3;
+import org.essencemc.essencecore.nms.v1_8R3.Respawn_1_8_R3;
 import org.essencemc.essencecore.nms.v1_8R3.SkullUtil_1_8_R3;
 import org.essencemc.essencecore.nms.v1_8R3.Title_1_8_R3;
 import org.essencemc.essencecore.player.PlayerManager;
@@ -54,6 +56,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+/**
+ * The main class for the Essence Core plugin
+ */
 public class EssenceCore extends JavaPlugin {
 
     private static EssenceCore instance;
@@ -71,6 +76,7 @@ public class EssenceCore extends JavaPlugin {
     private ISkull iSkull = null;
     private ITitle iTitle = null;
     private IChat iChat = null;
+    private IRespawn iRespawn = null;
 
     private ItemAliases itemAliases;
     private Map<AliasType, AliasesCfg> aliases = new HashMap<AliasType, AliasesCfg>();
@@ -132,6 +138,7 @@ public class EssenceCore extends JavaPlugin {
                 iSkull = new SkullUtil_1_8_R3();
                 iTitle = new Title_1_8_R3();
                 iChat = new Chat_1_8_R3();
+                iRespawn = new Respawn_1_8_R3();
                 compatible = true;
                 break;
             default:
@@ -355,6 +362,14 @@ public class EssenceCore extends JavaPlugin {
             throw new NMSClassNotFoundException("Chat and Actionbars are not found for your server version");
         } else {
             return iChat;
+        }
+    }
+
+    public IRespawn getRespawn() throws NMSClassNotFoundException {
+        if (iRespawn.equals(null)) {
+            throw new NMSClassNotFoundException("Respawning is not found for your server version");
+        } else {
+            return iRespawn;
         }
     }
 }

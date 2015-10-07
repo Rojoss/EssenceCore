@@ -46,7 +46,7 @@ public class Title_1_8_R3 implements ITitle {
      * @param fadeOut      Fade in time for the title message in ticks.
      * @param player       The player the message has to be sent to.
      *                     Note that the player has to be a {@link Player} object or else it wont work.
-     * @return {@link ITitle] instance
+     * @return ITitle instance
      */
     @Override
     public ITitle sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Player player) {
@@ -66,7 +66,7 @@ public class Title_1_8_R3 implements ITitle {
      * @param fadeOut      Fade in time for the title message in ticks.
      * @param players      The players the message has to be sent to.
      *                     Note that the players have to be an array of {@link Player} object or else it wont work
-     * @return {@link ITitle] instance
+     * @return ITitle instance
      */
     @Override
     public ITitle sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Player[] players) {
@@ -89,7 +89,7 @@ public class Title_1_8_R3 implements ITitle {
      * @param fadeOut         Fade in time for the title message in ticks.
      * @param player          The player the message has to be sent to.
      *                        Note that the player has to be a {@link Player} object or else it wont work.
-     * @return {@link ITitle] instance
+     * @return ITitle instance
      */
     @Override
     public ITitle sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Player player) {
@@ -109,7 +109,7 @@ public class Title_1_8_R3 implements ITitle {
      * @param fadeOut         Fade in time for the title message in ticks.
      * @param players         The players the message has to be sent to.
      *                        Note that the players have to be an array of {@link Player} object or else it wont work
-     * @return {@link ITitle] instance
+     * @return ITitle instance
      */
     @Override
     public ITitle sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Player[] players) {
@@ -135,7 +135,7 @@ public class Title_1_8_R3 implements ITitle {
      * @param fadeOut         Fade in time for the title message in ticks.
      * @param player          The player the message has to be sent to.
      *                        Note that the player has to be a {@link Player} object or else it wont work.
-     * @return {@link ITitle] instance
+     * @return ITitle instance
      */
     @Override
     public ITitle sendWholeTitle(String titleMessage, String subtitleMessage, int fadeIn, int stay, int fadeOut, Player player) {
@@ -159,7 +159,7 @@ public class Title_1_8_R3 implements ITitle {
      * @param fadeOut         Fade in time for the title message in ticks.
      * @param players         The players the message has to be sent to.
      *                        Note that the players have to be an array of {@link Player} object or else it wont work
-     * @return {@link ITitle] instance
+     * @return ITitle instance
      */
     @Override
     public ITitle sendWholeTitle(String titleMessage, String subtitleMessage, int fadeIn, int stay, int fadeOut, Player[] players) {

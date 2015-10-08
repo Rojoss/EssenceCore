@@ -26,7 +26,6 @@
 package org.essencemc.essencecore.message;
 
 import org.essencemc.essencecore.EssenceCore;
-import org.essencemc.essencecore.config.internal.EasyConfig;
 import org.essencemc.essencecore.config.MessagesCfg;
 import org.essencemc.essencecore.config.internal.MessageConfig;
 import org.essencemc.essencecore.util.Util;
@@ -36,11 +35,11 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Represents a configurable messsage that can have placeholders and formatting.
+ * Represents a configurable messsage.
  * In Essence messages are registered in the Message enum but you could also create messages directly.
  * However, an enum is probably the best approach so that you can access the messages easily.
  * To send a message to a player you would do something like:
- * Message.NO_PERM.msg().getMsg(true, "essence.example.perm");
+ * Message.NO_PERM.msg(true).parseArgs("essence.example.perm").send(player);
  */
 public class EMessage {
 
@@ -56,7 +55,7 @@ public class EMessage {
      * The key should be the enum key or it can be any string.
      * The default message should not contain any prefixes it should only contain the message.
      * The message may contain placeholders like {0}, {1} or key based placeholders like {placeholder}, {item}
-     * However, these placeholders will only get formatted if the proper getMsg() method is called.
+     * However, these placeholders will only get formatted if the proper getText() method is called.
      * In most cases indexed placeholders should be used since it's the most simple to use.
      */
     public EMessage(MsgCat category, String key, String defaultMsg, MessageConfig config) {
@@ -104,74 +103,9 @@ public class EMessage {
 
 
     /**
-     * Get the message from config.
-     * @param format if set set to true it will add the prefix in front of the message and colorize the message.
+     * Get the message from config as {@link EText}.
      */
-    public String getMsg(boolean format) {
-        if (message == null || message.isEmpty()) {
-            updateMessage();
-        }
-        String resultMsg = message;
-        if (format && !resultMsg.isEmpty()) {
-            resultMsg = Util.color(Message.PREFIX.msg().getMsg(false) + resultMsg);
-        }
-        return resultMsg;
-    }
-
-    /**
-     * Get the message from config from the specified Message
-     * It will replace all numbered args based on the specified args.
-     * For example a message like 'You have been given {0} {1}.'
-     * If you would call getMsg(Message.GIVE_ITEM, "1", "stone")
-     * You will get 'You have been given 1 stone.'
-     * @param format if set set to true it will add the prefix in front of the message and colorize the message.
-     * @param args A list of strings that will be replaced in the message by index.
-     */
-    public String getMsg(boolean format, String... args) {
-        String msg = getMsg(format);
-        for (int i = 0; i < args.length; i++) {
-            if (args[i] == null) {
-                continue;
-            }
-            msg = msg.replace("{" + i + "}", args[i]);
-        }
-        return msg;
-    }
-
-    /**
-     * Get the message from config from the specified Message
-     * It will replace all specified args with the value from the map.
-     * For example a message like 'You have been given {amt} {item}.'
-     * You would pass in a hasmap with "amt" as key and like "1" as value and "item" : "stone"
-     * You will get 'You have been given 1 stone.'
-     * @param format if set set to true it will add the prefix in front of the message and colorize the message.
-     * @param args A hashmap with keys and values where all {keys} will be replaced in the message with the value in the hashmap.
-     */
-    public String getMsg(boolean format, HashMap<String, String> args) {
-        String msg = getMsg(format);
-        for (Map.Entry<String, String> arg : args.entrySet()) {
-            msg = msg.replace("{" + arg.getKey() + "}", arg.getValue());
-        }
-        return msg;
-    }
-
-    /**
-     * Combination of {@link #getMsg(boolean, String...)} and {@link #getMsg(boolean, HashMap)}
-     * @param format if set set to true it will add the prefix in front of the message and colorize the message.
-     * @param keyArgs A hashmap with keys and values where all {keys} will be replaced in the message with the value in the hashmap.
-     * @param numberArgs A list of strings that will be replaced in the message by index.
-     */
-    public String getMsg(boolean format, HashMap<String, String> keyArgs, String... numberArgs) {
-        String msg = getMsg(format);
-        for (Map.Entry<String, String> arg : keyArgs.entrySet()) {
-            msg = msg.replace("{" + arg.getKey() + "}", arg.getValue());
-        }
-        for (int i = 0; i < numberArgs.length; i ++) {
-            if (numberArgs[i] == null) {
-                continue;
-            }
-            msg = msg.replace("{" + i + "}", numberArgs[i]);
-        }
-        return msg;
+    public EText getText() {
+        return new EText(message);
     }
 }

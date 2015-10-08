@@ -30,6 +30,7 @@ import org.essencemc.essencecore.commands.arguments.internal.ArgumentParseResult
 import org.essencemc.essencecore.commands.arguments.internal.ArgumentRequirement;
 import org.essencemc.essencecore.commands.arguments.internal.CmdArgument;
 import org.essencemc.essencecore.commands.EssenceCommand;
+import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 import org.essencemc.essencecore.util.NumberUtil;
 
@@ -60,7 +61,7 @@ public class DoubleArgument extends CmdArgument {
 
         Double value = NumberUtil.getDouble(arg);
         if (value == null) {
-            sender.sendMessage(Message.NOT_A_NUMBER.msg().getMsg(true, arg));
+            Message.NOT_A_NUMBER.msg(true, true, cmd.castPlayer(sender)).parseArgs(arg).send(sender);
             result.success = false;
             return result;
         }
@@ -68,7 +69,7 @@ public class DoubleArgument extends CmdArgument {
             if (clampValue) {
                 value = minValue;
             } else {
-                sender.sendMessage(Message.NUMBER_TOO_LOW.msg().getMsg(true, arg, Double.toString(minValue)));
+                Message.NUMBER_TOO_LOW.msg(true, true, cmd.castPlayer(sender)).parseArgs(arg, Double.toString(minValue)).send(sender);
                 result.success = false;
                 return result;
             }
@@ -77,7 +78,7 @@ public class DoubleArgument extends CmdArgument {
             if (clampValue) {
                 value = maxValue;
             } else {
-                sender.sendMessage(Message.NUMBER_TOO_HIGH.msg().getMsg(true, arg, Double.toString(maxValue)));
+                Message.NUMBER_TOO_HIGH.msg(true, true, cmd.castPlayer(sender)).parseArgs(arg, Double.toString(maxValue)).send(sender);
                 result.success = false;
                 return result;
             }
@@ -90,17 +91,17 @@ public class DoubleArgument extends CmdArgument {
     }
 
     @Override
-    public String getDescription() {
+    public EText getDescription() {
         if (minValue != null && maxValue != null) {
-            return Message.ARG_DECIMAL_MIN_MAX.msg().getMsg(false, minValue.toString(), maxValue.toString());
+            return Message.ARG_DECIMAL_MIN_MAX.msg().parseArgs(minValue.toString(), maxValue.toString());
         }
         if (minValue != null) {
-            return Message.ARG_DECIMAL_MIN.msg().getMsg(false, minValue.toString());
+            return Message.ARG_DECIMAL_MIN.msg().parseArgs(minValue.toString());
         }
         if (maxValue != null) {
-            return Message.ARG_DECIMAL_MAX.msg().getMsg(false, maxValue.toString());
+            return Message.ARG_DECIMAL_MAX.msg().parseArgs(maxValue.toString());
         }
-        return Message.ARG_DECIMAL.msg().getMsg(false);
+        return Message.ARG_DECIMAL.msg();
     }
     
 }

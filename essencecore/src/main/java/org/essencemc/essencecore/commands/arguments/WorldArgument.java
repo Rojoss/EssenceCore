@@ -34,6 +34,7 @@ import org.essencemc.essencecore.commands.arguments.internal.ArgumentParseResult
 import org.essencemc.essencecore.commands.arguments.internal.ArgumentRequirement;
 import org.essencemc.essencecore.commands.arguments.internal.CmdArgument;
 import org.essencemc.essencecore.commands.EssenceCommand;
+import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 import org.essencemc.essencecore.util.NumberUtil;
 
@@ -69,7 +70,7 @@ public class WorldArgument extends CmdArgument {
         result.success = true;
         if (world == null) {
             result.success = false;
-            sender.sendMessage(Message.INVALID_WORLD.msg().getMsg(true, arg));
+            Message.INVALID_WORLD.msg(true, true, cmd.castPlayer(sender)).parseArgs(arg).send(sender);
         }
         return result;
     }
@@ -88,7 +89,7 @@ public class WorldArgument extends CmdArgument {
     }
 
     @Override
-    public String getDescription() {
-        return Message.ARG_WORLD.msg().getMsg(false);
+    public EText getDescription() {
+        return Message.ARG_WORLD.msg();
     }
 }

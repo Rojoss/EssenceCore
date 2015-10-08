@@ -32,6 +32,7 @@ import org.essencemc.essencecore.commands.arguments.internal.ArgumentParseResult
 import org.essencemc.essencecore.commands.arguments.internal.ArgumentRequirement;
 import org.essencemc.essencecore.commands.arguments.internal.CmdArgument;
 import org.essencemc.essencecore.commands.EssenceCommand;
+import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class BoolArgument extends CmdArgument {
 
         Boolean value = BoolArg.Parse(arg);
         if (value == null) {
-            sender.sendMessage(Message.NOT_A_BOOLEAN.msg().getMsg(true, arg));
+            Message.NOT_A_BOOLEAN.msg(true, true, cmd.castPlayer(sender)).parseArgs(arg).send(sender);
             result.success = false;
             return result;
         }
@@ -73,7 +74,7 @@ public class BoolArgument extends CmdArgument {
     }
 
     @Override
-    public String getDescription() {
-        return Message.ARG_BOOL.msg().getMsg(false);
+    public EText getDescription() {
+        return Message.ARG_BOOL.msg();
     }
 }

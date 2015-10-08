@@ -29,6 +29,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.essencemc.essencecore.arguments.internal.Argument;
+import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 import org.essencemc.essencecore.util.NumberUtil;
 
@@ -56,7 +57,7 @@ public class LocationArg extends Argument {
     public boolean parse(String input) {
         success = true;
         if (input == null || input.isEmpty()) {
-            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().getMsg(true, name) : Message.NO_ARG_VALUE.msg().getMsg(true);
+            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().parseArgs(name) : Message.NO_ARG_VALUE.msg();
             success = false;
             return success;
         }
@@ -106,13 +107,13 @@ public class LocationArg extends Argument {
         //Get the coords x,y,z[,yaw,pitch]
         String[] coords = split[0].split(",");
         if (coords.length < 3) {
-            error = Message.MISSING_XYZ_LOCATION.msg().getMsg(true, input);
+            error = Message.MISSING_XYZ_LOCATION.msg().parseArgs(input);
             success = false;
             return success;
         }
 
         if (location.getWorld() == null) {
-            error = Message.MISSING_WORLD_LOCATION.msg().getMsg(true, input);
+            error = Message.MISSING_WORLD_LOCATION.msg().parseArgs(input);
             success = false;
             return success;
         }
@@ -133,7 +134,7 @@ public class LocationArg extends Argument {
             //Parse the value.
             Double val = NumberUtil.getDouble(value);
             if (val == null && !value.isEmpty()) {
-                error = Message.NOT_A_DECIMAL.msg().getMsg(true, value);
+                error = Message.NOT_A_DECIMAL.msg().parseArgs(value);
                 success = false;
                 return success;
             }
@@ -156,7 +157,7 @@ public class LocationArg extends Argument {
 
         //Final error check just to make sure.
         if (location == null) {
-            error = Message.INVALID_LOCATION.msg().getMsg(true, input);
+            error = Message.INVALID_LOCATION.msg().parseArgs(input);
             success = false;
             return success;
         }
@@ -176,8 +177,8 @@ public class LocationArg extends Argument {
     }
 
     @Override
-    public String getDescription() {
-        return Message.ARG_LOCATION.msg().getMsg(false);
+    public EText getDescription() {
+        return Message.ARG_LOCATION.msg();
     }
 
     @Override

@@ -32,6 +32,7 @@ import org.essencemc.essencecore.commands.arguments.internal.ArgumentParseResult
 import org.essencemc.essencecore.commands.arguments.internal.ArgumentRequirement;
 import org.essencemc.essencecore.commands.arguments.internal.CmdArgument;
 import org.essencemc.essencecore.commands.EssenceCommand;
+import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 
 import java.util.UUID;
@@ -47,7 +48,7 @@ public class OfflinePlayerArgument extends CmdArgument {
         ArgumentParseResult result = new ArgumentParseResult();
         if (arg == null || arg.isEmpty()) {
             if (isRequired(sender)) {
-                sender.sendMessage(Message.CMD_INVALID_USAGE.msg().getMsg(true, cmd.getUsage(sender)));
+                Message.CMD_INVALID_USAGE.msg(true, true, cmd.castPlayer(sender)).parseArgs(cmd.getUsage(sender)).send(sender);
                 result.success = false;
                 return result;
             }
@@ -66,7 +67,7 @@ public class OfflinePlayerArgument extends CmdArgument {
         //If the specified player is the sender don't do a permission check...
         if (!sender.equals(player)) {
             if (!cmd.hasPermission(sender, permission)) {
-                sender.sendMessage(Message.NO_PERM.msg().getMsg(true, cmd.getPermission() + "." + permission));
+                Message.NO_PERM.msg(true, true, cmd.castPlayer(sender)).parseArgs(arg, cmd.getPermission() + "." + permission).send(sender);
                 result.success = false;
                 return result;
             }
@@ -76,7 +77,7 @@ public class OfflinePlayerArgument extends CmdArgument {
 
         if (player == null) {
             result.success = false;
-            sender.sendMessage(Message.INVALID_PLAYER.msg().getMsg(true, arg));
+            Message.INVALID_PLAYER.msg(true, true, cmd.castPlayer(sender)).parseArgs(arg).send(sender);
         } else {
             result.success = true;
         }
@@ -85,8 +86,8 @@ public class OfflinePlayerArgument extends CmdArgument {
     }
 
     @Override
-    public String getDescription() {
-        return Message.ARG_OFFLINE_PLAYER.msg().getMsg(false);
+    public EText getDescription() {
+        return Message.ARG_OFFLINE_PLAYER.msg();
     }
 
 }

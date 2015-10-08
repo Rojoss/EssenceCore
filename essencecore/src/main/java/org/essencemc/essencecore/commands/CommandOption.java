@@ -27,18 +27,19 @@ package org.essencemc.essencecore.commands;
 
 import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.message.EMessage;
+import org.essencemc.essencecore.message.EText;
 
 public class CommandOption {
 
-    private EMessage infoMessage;
+    private EText infoMessage;
     private Argument argument;
 
-    public CommandOption(EMessage infoMessage, Argument argument) {
+    public CommandOption(EText infoMessage, Argument argument) {
         this.infoMessage = infoMessage;
         this.argument = argument;
     }
 
-    public EMessage getInfo() {
+    public EText getInfo() {
         return infoMessage;
     }
 

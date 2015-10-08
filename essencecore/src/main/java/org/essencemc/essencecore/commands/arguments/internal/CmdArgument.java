@@ -28,6 +28,7 @@ package org.essencemc.essencecore.commands.arguments.internal;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.essencemc.essencecore.commands.EssenceCommand;
+import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 
 import java.util.List;
@@ -58,7 +59,7 @@ public abstract class CmdArgument {
 
         if (arg == null || arg.isEmpty()) {
             if (isRequired(sender)) {
-                sender.sendMessage(Message.CMD_INVALID_USAGE.msg().getMsg(true, cmd.getUsage(sender)));
+                Message.CMD_INVALID_USAGE.msg(true, true, cmd.castPlayer(sender)).parseArgs(cmd.getUsage()).send(sender);
                 result.success = false;
             } else {
                 result.success = true;
@@ -67,7 +68,7 @@ public abstract class CmdArgument {
         }
 
         if (!cmd.hasPermission(sender, permission)) {
-            sender.sendMessage(Message.NO_PERM.msg().getMsg(true, cmd.getPermission() + "." + permission));
+            Message.NO_PERM.msg(true, true, cmd.castPlayer(sender)).parseArgs(cmd.getPermission() + "." + permission).send(sender);
             result.success = false;
             return result;
         }
@@ -116,8 +117,8 @@ public abstract class CmdArgument {
         }
     }
 
-    public String getDescription() {
-        return Message.ARG_NO_DESC.msg().getMsg(false);
+    public EText getDescription() {
+        return Message.ARG_NO_DESC.msg();
     }
 
     public List<String> tabComplete(CommandSender sender, String message) {

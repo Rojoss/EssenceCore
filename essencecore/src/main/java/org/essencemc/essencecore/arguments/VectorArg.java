@@ -27,6 +27,7 @@ package org.essencemc.essencecore.arguments;
 
 import org.bukkit.util.Vector;
 import org.essencemc.essencecore.arguments.internal.Argument;
+import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 import org.essencemc.essencecore.util.NumberUtil;
 
@@ -52,35 +53,35 @@ public class VectorArg extends Argument {
     public boolean parse(String input) {
         success = true;
         if (input == null || input.isEmpty()) {
-            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().getMsg(true, name) : Message.NO_ARG_VALUE.msg().getMsg(true);
+            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().parseArgs(name) : Message.NO_ARG_VALUE.msg();
             success = false;
             return success;
         }
 
         String[] split = input.split(",");
         if (split.length < 3) {
-            error = Message.NOT_A_VECTOR.msg().getMsg(true, input);
+            error = Message.NOT_A_VECTOR.msg().parseArgs(input);
             success = false;
             return success;
         }
 
         Float x = NumberUtil.getFloat(split[0]);
         if (x == null) {
-            error = Message.NOT_A_DECIMAL.msg().getMsg(true, split[0]);
+            error = Message.NOT_A_DECIMAL.msg().parseArgs(split[0]);
             success = false;
             return success;
         }
 
         Float y = NumberUtil.getFloat(split[1]);
         if (y == null) {
-            error = Message.NOT_A_DECIMAL.msg().getMsg(true, split[1]);
+            error = Message.NOT_A_DECIMAL.msg().parseArgs(split[1]);
             success = false;
             return success;
         }
 
         Float z = NumberUtil.getFloat(split[2]);
         if (z == null) {
-            error = Message.NOT_A_DECIMAL.msg().getMsg(true, split[2]);
+            error = Message.NOT_A_DECIMAL.msg().parseArgs(split[2]);
             success = false;
             return success;
         }
@@ -100,8 +101,8 @@ public class VectorArg extends Argument {
     }
 
     @Override
-    public String getDescription() {
-        return Message.ARG_VECTOR.msg().getMsg(false);
+    public EText getDescription() {
+        return Message.ARG_VECTOR.msg();
     }
 
     @Override

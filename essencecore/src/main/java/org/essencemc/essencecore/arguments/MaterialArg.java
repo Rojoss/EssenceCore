@@ -26,9 +26,9 @@
 package org.essencemc.essencecore.arguments;
 
 import org.bukkit.material.MaterialData;
-import org.essencemc.essencecore.aliases.Aliases;
 import org.essencemc.essencecore.aliases.Items;
 import org.essencemc.essencecore.arguments.internal.Argument;
+import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 
 public class MaterialArg extends Argument {
@@ -53,14 +53,14 @@ public class MaterialArg extends Argument {
     public boolean parse(String input) {
         success = true;
         if (input == null || input.isEmpty()) {
-            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().getMsg(true, name) : Message.NO_ARG_VALUE.msg().getMsg(true);
+            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().parseArgs(name) : Message.NO_ARG_VALUE.msg();
             success = false;
             return success;
         }
 
         value = Items.getMaterialData(input);
         if (value == null) {
-            error = Message.NOT_A_MATERIAL.msg().getMsg(true, input);
+            error = Message.NOT_A_MATERIAL.msg().parseArgs(input);
             success = false;
             return success;
         }
@@ -79,8 +79,8 @@ public class MaterialArg extends Argument {
     }
 
     @Override
-    public String getDescription() {
-        return Message.ARG_MATERIAL.msg().getMsg(false);
+    public EText getDescription() {
+        return Message.ARG_MATERIAL.msg();
     }
 
     @Override

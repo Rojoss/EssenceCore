@@ -42,6 +42,7 @@ import org.essencemc.essencecore.aliases.Aliases;
 import org.essencemc.essencecore.aliases.ItemAlias;
 import org.essencemc.essencecore.aliases.Items;
 import org.essencemc.essencecore.entity.EItem;
+import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 import org.essencemc.essencecore.util.NumberUtil;
 import org.essencemc.essencecore.util.Util;
@@ -60,7 +61,7 @@ public class ItemParser {
     private String string = null;
     private EItem item = null;
 
-    private String error = "";
+    private EText error = null;
 
 
     /**
@@ -77,7 +78,7 @@ public class ItemParser {
 
         String[] sections = string.split(" ");
         if (sections.length < 1) {
-            error = Message.PARSER_NO_ITEM_SPECIFIED.msg().getMsg(true);
+            error = Message.PARSER_NO_ITEM_SPECIFIED.msg();
             return;
         }
         List<String> sectionList = new ArrayList<String>(Arrays.asList(sections));
@@ -85,7 +86,7 @@ public class ItemParser {
         //item[:data]
         ItemAlias itemAlias = Items.getItem(sections[0]);
         if (itemAlias == null) {
-            error = Message.PARSER_INVALID_ITEM.msg().getMsg(true, sections[0]);
+            error = Message.PARSER_INVALID_ITEM.msg().parseArgs(sections[0]);
             return;
         }
         item.setType(itemAlias.getType());
@@ -101,7 +102,7 @@ public class ItemParser {
         //Amount
         if (sections.length > 1) {
             if (NumberUtil.getInt(sections[1]) == null) {
-                error = Message.PARSER_INVALID_AMOUNT.msg().getMsg(true, sections[1]);
+                error = Message.PARSER_INVALID_AMOUNT.msg().parseArgs(sections[1]);
                 if (!ignoreErrors) {
                     return;
                 }
@@ -122,7 +123,7 @@ public class ItemParser {
         for (String section : sectionList) {
             String[] split = section.split(":");
             if (split.length < 2) {
-                error = Message.NO_META_VALUE.msg().getMsg(true, split[0]);
+                error = Message.NO_META_VALUE.msg().parseArgs(split[0]);
                 if (ignoreErrors) {
                     continue;
                 } else {
@@ -149,7 +150,7 @@ public class ItemParser {
         if (metaMap.containsKey("leather")) {
             Color color = Util.getColor(metaMap.get("leather"));
             if (color == null) {
-                error = Message.PARSER_INVALID_COLOR.msg().getMsg(true, metaMap.get("leather"));
+                error = Message.PARSER_INVALID_COLOR.msg().parseArgs(metaMap.get("leather"));
                 if (!ignoreErrors) {
                     return;
                 }
@@ -191,7 +192,7 @@ public class ItemParser {
         if (metaMap.containsKey("basecolor")) {
             DyeColor color = Aliases.getDyeColor(metaMap.get("basecolor"));
             if (color == null) {
-                error = Message.PARSER_INVALID_DYE_COLOR.msg().getMsg(true, metaMap.get("basecolor"));
+                error = Message.PARSER_INVALID_DYE_COLOR.msg().parseArgs(metaMap.get("basecolor"));
                 if (!ignoreErrors) {
                     return;
                 }
@@ -208,7 +209,7 @@ public class ItemParser {
         boolean hasColor = false;
         if (metaMap.containsKey("power")) {
             if (NumberUtil.getInt(metaMap.get("power")) == null) {
-                error = Message.NOT_A_NUMBER.msg().getMsg(true, metaMap.get("power"));
+                error = Message.NOT_A_NUMBER.msg().parseArgs(metaMap.get("power"));
                 if (!ignoreErrors) {
                     return;
                 }
@@ -220,7 +221,7 @@ public class ItemParser {
         if (metaMap.containsKey("shape")) {
             FireworkEffect.Type shape = Aliases.getFireworkEffect(metaMap.get("shape"));
             if (shape == null) {
-                error = Message.PARSER_INVALID_SHAPE.msg().getMsg(true, metaMap.get("shape"));
+                error = Message.PARSER_INVALID_SHAPE.msg().parseArgs(metaMap.get("shape"));
                 if (!ignoreErrors) {
                     return;
                 }
@@ -237,7 +238,7 @@ public class ItemParser {
             for (String color : colorSplit) {
                 Color clr = Util.getColor(color);
                 if (clr == null) {
-                    error = Message.PARSER_INVALID_COLOR.msg().getMsg(true, metaMap.get("color"));
+                    error = Message.PARSER_INVALID_COLOR.msg().parseArgs(metaMap.get("color"));
                     if (!ignoreErrors) {
                         return;
                     }
@@ -258,7 +259,7 @@ public class ItemParser {
             for (String color : colorSplit) {
                 Color clr = Util.getColor(color);
                 if (clr == null) {
-                    error = Message.PARSER_INVALID_COLOR.msg().getMsg(true, metaMap.get("fade"));
+                    error = Message.PARSER_INVALID_COLOR.msg().parseArgs(metaMap.get("fade"));
                     if (!ignoreErrors) {
                         return;
                     }
@@ -291,13 +292,13 @@ public class ItemParser {
         } catch (Exception e) {
             if (hasFireworkMeta) {
                 if (!hasShape) {
-                    error = Message.PARSER_MISSING_FIREWORK_SHAPE.msg().getMsg(true);
+                    error = Message.PARSER_MISSING_FIREWORK_SHAPE.msg();
                     if (!ignoreErrors) {
                         return;
                     }
                 }
                 if (!hasColor) {
-                    error = Message.PARSER_MISSING_FIREWORK_COLOR.msg().getMsg(true);
+                    error = Message.PARSER_MISSING_FIREWORK_COLOR.msg();
                     if (!ignoreErrors) {
                         return;
                     }
@@ -312,7 +313,7 @@ public class ItemParser {
                 Enchantment enchant = Aliases.getEnchantment(entry.getKey());
                 if (enchant != null) {
                     if (NumberUtil.getInt(entry.getValue()) == null) {
-                        error = Message.PARSER_ENCHANT_VALUE.msg().getMsg(true, entry.getValue());
+                        error = Message.PARSER_ENCHANT_VALUE.msg().parseArgs(entry.getValue());
                         return;
                     }
                     item.addEnchant(enchant, NumberUtil.getInt(entry.getValue()));
@@ -324,11 +325,11 @@ public class ItemParser {
                 if (effect != null) {
                     String[] split = entry.getValue().split("\\.");
                     if (split.length < 2) {
-                        error = Message.PARSER_POTION_VALUE.msg().getMsg(true, entry.getValue());
+                        error = Message.PARSER_POTION_VALUE.msg().parseArgs(entry.getValue());
                         return;
                     }
                     if (NumberUtil.getInt(split[0]) == null || NumberUtil.getInt(split[1]) == null) {
-                        error = Message.PARSER_POTION_VALUE.msg().getMsg(true, entry.getValue());
+                        error = Message.PARSER_POTION_VALUE.msg().parseArgs(entry.getValue());
                         return;
                     }
                     item.addEffect(new PotionEffect(effect, NumberUtil.getInt(split[0]), NumberUtil.getInt(split[1])), true);
@@ -340,7 +341,7 @@ public class ItemParser {
                 if (pattern != null) {
                     DyeColor color = Aliases.getDyeColor(entry.getValue());
                     if (color == null) {
-                        error = Message.PARSER_INVALID_DYE_COLOR.msg().getMsg(true, entry.getValue());
+                        error = Message.PARSER_INVALID_DYE_COLOR.msg().parseArgs(entry.getValue());
                         return;
                     }
                     item.addPattern(pattern, color);
@@ -379,7 +380,7 @@ public class ItemParser {
         //Material[:data]
         ItemAlias itemAlias = Items.getItem(item.getType(), item.getDurability());
         if (itemAlias == null) {
-            error = Message.PARSER_INVALID_ITEM.msg().getMsg(true);
+            error = Message.PARSER_INVALID_ITEM.msg();
             return;
         }
         String itemString = itemAlias.getName().replaceAll(" ", "");
@@ -519,14 +520,14 @@ public class ItemParser {
      * @return if it parsed successful.
      */
     public boolean isValid() {
-        return item != null && string != null && error.isEmpty();
+        return item != null && string != null && error != null;
     }
 
     /**
-     * If the validation was unsuccessful this will return the error message.
-     * @return the message which contains the error. If it was successfull the message will be empty.
+     * If the validation was unsuccessful this will return the error text.
+     * @return the text which contains the error. If it was successfull the text will be null.
      */
-    public String getError() {
+    public EText getError() {
         return error;
     }
 

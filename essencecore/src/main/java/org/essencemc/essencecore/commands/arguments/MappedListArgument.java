@@ -31,6 +31,7 @@ import org.essencemc.essencecore.commands.arguments.internal.ArgumentParseResult
 import org.essencemc.essencecore.commands.arguments.internal.ArgumentRequirement;
 import org.essencemc.essencecore.commands.arguments.internal.CmdArgument;
 import org.essencemc.essencecore.commands.EssenceCommand;
+import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 import org.essencemc.essencecore.util.Util;
 
@@ -69,7 +70,7 @@ public class MappedListArgument extends CmdArgument {
             }
         }
 
-        sender.sendMessage(Message.INVALID_LIST_ARGUMENT.msg().getMsg(true, arg, Util.implode(allArgs, ",")));
+        Message.INVALID_LIST_ARGUMENT.msg(true, true, cmd.castPlayer(sender)).parseArgs(arg, Util.implode(allArgs, ",")).send(sender);
         result.success = false;
         return result;
     }
@@ -88,7 +89,7 @@ public class MappedListArgument extends CmdArgument {
     }
 
     @Override
-    public String getDescription() {
-        return Message.ARG_LIST.msg().getMsg(false, Util.implode(strings.keySet(), ","));
+    public EText getDescription() {
+        return Message.ARG_LIST.msg().parseArgs(Util.implode(strings.keySet(), ","));
     }
 }

@@ -47,7 +47,7 @@ public class ReflectCommand extends Command {
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
         if (cmd != null) {
             if (!cmd.hasPermission(sender)) {
-                sender.sendMessage(Message.NO_PERM.msg().getMsg(true, cmd.getPermission()));
+                Message.NO_PERM.msg(true, true, cmd.castPlayer(sender)).parseArgs(cmd.getPermission()).send(sender);
                 return true;
             }
             return cmd.onCommand(sender, this, commandLabel, args);

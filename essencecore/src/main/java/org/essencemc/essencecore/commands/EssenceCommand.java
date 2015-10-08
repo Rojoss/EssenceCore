@@ -40,6 +40,7 @@ import org.essencemc.essencecore.commands.arguments.internal.CmdArgument;
 import org.essencemc.essencecore.commands.links.*;
 import org.essencemc.essencecore.commands.links.internal.CommandLink;
 import org.essencemc.essencecore.message.EMessage;
+import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 import org.essencemc.essencecore.util.Util;
 
@@ -228,7 +229,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                 }
                 String perm = modifiers.get(arg).getPerm();
                 if (!hasPermission(sender, perm)) {
-                    sender.sendMessage(Message.NO_PERM.msg().getMsg(true, perm.startsWith("essence.") ? perm : permission + "." + perm));
+                    Message.NO_PERM.msg(true, true, castPlayer(sender)).parseArgs(perm.startsWith("essence.") ? perm : permission + "." + perm).send(sender);
                     result.success = false;
                     return result;
                 }
@@ -246,7 +247,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                     //It will allow empty arguments if there is a default or cached value.
                     if (!optionalArg.isValid()) {
                         if (!optionalArg.hasDefault() || (split.length > 1 && !split[1].isEmpty())) {
-                            sender.sendMessage(optionalArg.getError());
+                            optionalArg.getError().addPrefix().parsePlaceholders(castPlayer(sender)).toJSON().send(sender);
                             result.success = false;
                             return result;
                         }
@@ -318,7 +319,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                 //If there is no value specified for this argument and it's a required argument send and error.
                 //If it's an optional argument the value will be set to null.
                 if (cmdArg.isRequired(sender)) {
-                    sender.sendMessage(Message.CMD_INVALID_USAGE.msg().getMsg(true, cmd.getUsage(sender)));
+                    Message.CMD_INVALID_USAGE.msg(true, true, castPlayer(sender)).parseArgs(cmd.getUsage(sender)).send(sender);
                     result.success = false;
                     return result;
                 } else {
@@ -336,7 +337,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
             if (link instanceof ConflictLink) {
                 //If both are specified send an error.
                 if (keys.contains(link.getFirst()) && keys.contains(link.getSecond())) {
-                    sender.sendMessage(Message.CMD_LINK_CONFLICT.msg().getMsg(true, link.getFirst(), link.getSecond()));
+                    Message.CMD_LINK_CONFLICT.msg(true, true, castPlayer(sender)).parseArgs(link.getFirst(), link.getSecond()).send(sender);
                     result.success = false;
                     return result;
                 }
@@ -344,11 +345,11 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
             if (link instanceof LinkLink) {
                 //If one of these isn't specified and the other is send an error.
                 if (keys.contains(link.getFirst()) && !keys.contains(link.getSecond())) {
-                    sender.sendMessage(Message.CMD_LINK_LINK.msg().getMsg(true, link.getFirst(), link.getSecond()));
+                    Message.CMD_LINK_LINK.msg(true, true, castPlayer(sender)).parseArgs(link.getFirst(), link.getSecond()).send(sender);
                     result.success = false;
                     return result;
                 } else if (keys.contains(link.getSecond()) && !keys.contains(link.getFirst())) {
-                    sender.sendMessage(Message.CMD_LINK_LINK.msg().getMsg(true, link.getSecond(), link.getFirst()));
+                    Message.CMD_LINK_LINK.msg(true, true, castPlayer(sender)).parseArgs(link.getSecond(), link.getFirst()).send(sender);
                     result.success = false;
                     return result;
                 }
@@ -358,11 +359,11 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         return result;
     }
 
-    public void addCommandOption(String key, EMessage infoMessage, Argument optionType) {
+    public void addCommandOption(String key, EText infoMessage, Argument optionType) {
         addCommandOption(key, infoMessage, optionType, true);
     }
 
-    public void addCommandOption(String key, EMessage infoMessage, Argument argument, boolean addAsArgument) {
+    public void addCommandOption(String key, EText infoMessage, Argument argument, boolean addAsArgument) {
         cmdOptions.put(key, new CommandOption(infoMessage, argument));
         if (addAsArgument) {
             addOptionalArgument(key, argument.clone(), infoMessage);
@@ -378,19 +379,19 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         addOptionalArgument(key, argumentType, null, permission);
     }
 
-    public void addOptionalArgument(String key, Argument argumentType, EMessage info) {
+    public void addOptionalArgument(String key, Argument argumentType, EText info) {
         addOptionalArgument(key, argumentType, info, "");
     }
 
-    public void addOptionalArgument(String key, Argument argumentType, EMessage info, String permission) {
+    public void addOptionalArgument(String key, Argument argumentType, EText info, String permission) {
         optionalArgs.put(key, new CommandOptionalArg(info, argumentType, permission));
     }
 
-    public void addModifier(String modifier, EMessage info) {
+    public void addModifier(String modifier, EText info) {
         addModifier(modifier, info, "");
     }
 
-    public void addModifier(String modifier, EMessage info, String permission) {
+    public void addModifier(String modifier, EText info, String permission) {
         if (!modifier.startsWith("-")) {
             modifier = "-" + modifier;
         }
@@ -412,33 +413,34 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     }
 
     public void showHelp(CommandSender sender) {
-        String str_aliases = Util.implode(getAliases(), Message.CMD_HELP_SEPARATOR.msg().getMsg(false));
+        String str_aliases = Util.implode(getAliases(), Message.CMD_HELP_SEPARATOR.msg().getText());
 
         List<String> argList = new ArrayList<String>();
         for (CmdArgument arg : cmdArgs) {
-            argList.add(Message.CMD_HELP_ARG.msg().getMsg(false, arg.getName(sender), arg.getDescription()));
+            argList.add(Message.CMD_HELP_ARG.msg().parseArgs(arg.getName(sender), arg.getDescription().getText()).getText());
         }
         String str_usage = label + " " + Util.implode(argList, " ");
 
         List<String> modifierList = new ArrayList<String>();
         for (Map.Entry<String, CommandModifier> entry : modifiers.entrySet()) {
-            modifierList.add(Message.CMD_HELP_MODIFIER.msg().getMsg(false, entry.getKey(), entry.getValue().getInfo().getMsg(false)));
+            modifierList.add(Message.CMD_HELP_MODIFIER.msg().parseArgs(entry.getKey(), entry.getValue().getInfo().getText()).getText());
         }
-        String str_modifiers = Util.implode(modifierList, Message.CMD_HELP_SEPARATOR.msg().getMsg(false));
+        String str_modifiers = Util.implode(modifierList, Message.CMD_HELP_SEPARATOR.msg().getText());
 
         List<String> optArgList = new ArrayList<String>();
         for (Map.Entry<String, CommandOptionalArg> entry : optionalArgs.entrySet()) {
-            optArgList.add(Message.CMD_HELP_OPT_ARG.msg().getMsg(false, entry.getKey(), entry.getValue().getArg().getDescription(), entry.getValue().getArg().getDefault().toString()));
+            Argument arg = entry.getValue().getArg();
+            optArgList.add(Message.CMD_HELP_OPT_ARG.msg().parseArgs(entry.getKey(), arg.getDescription().getText(), arg.getDefault() == null ? "&c&o&mundefined" : arg.getDefault().toString()).getText());
         }
-        String str_optargs = Util.implode(optArgList, Message.CMD_HELP_SEPARATOR.msg().getMsg(false));
+        String str_optargs = Util.implode(optArgList, Message.CMD_HELP_SEPARATOR.msg().getText());
 
         List<String> optList = new ArrayList<String>();
         for (Map.Entry<String, CommandOption> entry : cmdOptions.entrySet()) {
-            optList.add(Message.CMD_HELP_OPTION.msg().getMsg(false, entry.getKey(), entry.getValue().getInfo().getMsg(false), entry.getValue().getArg().getValue().toString()));
+            optList.add(Message.CMD_HELP_OPTION.msg().parseArgs(entry.getKey(), entry.getValue().getInfo().getText(), entry.getValue().getArg().getValue().toString()).getText());
         }
-        String str_options = Util.implode(optList, Message.CMD_HELP_SEPARATOR.msg().getMsg(false));
+        String str_options = Util.implode(optList, Message.CMD_HELP_SEPARATOR.msg().getText());
 
-        String none = Util.color(Message.CMD_HELP_NONE.msg().getMsg(false));
+        String none = Message.CMD_HELP_NONE.msg().color().getText();
 
         HashMap<String, String> values = new HashMap<String, String>();
         values.put("cmd", label);
@@ -450,10 +452,12 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         values.put("opt-args", str_optargs.isEmpty() ? none : Util.color(str_optargs));
         values.put("options", str_options.isEmpty() ? none : Util.color(str_options));
 
-        sender.sendMessage(Util.color(Message.CMD_HELP_ESSENCE.msg().getMsg(false, values)));
+        Bukkit.broadcastMessage(Util.removeColor(Message.CMD_HELP_ESSENCE.msg().parseArgs(values).getText()));
+        Bukkit.broadcastMessage(Util.removeColor(Message.CMD_HELP_ESSENCE.msg().parseArgs(values).toJSON().getText()));
+        Message.CMD_HELP_ESSENCE.msg().parseArgs(values).toJSON().send(sender);
     }
 
-    protected Player castPlayer(CommandSender sender) {
+    public Player castPlayer(CommandSender sender) {
         if (sender instanceof Player) {
             return (Player)sender;
         }

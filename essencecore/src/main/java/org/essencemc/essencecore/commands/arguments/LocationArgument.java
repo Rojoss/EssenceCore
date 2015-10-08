@@ -34,9 +34,8 @@ import org.essencemc.essencecore.commands.arguments.internal.ArgumentParseResult
 import org.essencemc.essencecore.commands.arguments.internal.ArgumentRequirement;
 import org.essencemc.essencecore.commands.arguments.internal.CmdArgument;
 import org.essencemc.essencecore.commands.EssenceCommand;
+import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
-
-import java.util.UUID;
 
 public class LocationArgument extends CmdArgument {
 
@@ -54,7 +53,7 @@ public class LocationArgument extends CmdArgument {
 
         LocationArg locArg = new LocationArg(getLocation(sender));
         if (!locArg.parse(arg)) {
-            sender.sendMessage(locArg.getError());
+            locArg.getError().addPrefix().parsePlaceholders(cmd.castPlayer(sender)).toJSON().send(sender);
             result.success = false;
             return result;
         }
@@ -74,8 +73,8 @@ public class LocationArgument extends CmdArgument {
     }
 
     @Override
-    public String getDescription() {
-        return Message.ARG_LOCATION.msg().getMsg(false);
+    public EText getDescription() {
+        return Message.ARG_LOCATION.msg();
     }
 
 }

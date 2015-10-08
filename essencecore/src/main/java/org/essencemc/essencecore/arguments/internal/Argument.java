@@ -25,10 +25,12 @@
 
 package org.essencemc.essencecore.arguments.internal;
 
+import org.essencemc.essencecore.message.EText;
+
 public abstract class Argument {
 
     protected String name;
-    protected String error;
+    protected EText error;
     protected boolean success = false;
     protected Object defaultValue;
     protected Object value;
@@ -52,7 +54,7 @@ public abstract class Argument {
 
     public abstract boolean parse(String input);
 
-    public abstract String getDescription();
+    public abstract EText getDescription();
 
     public abstract Argument clone();
 
@@ -90,7 +92,7 @@ public abstract class Argument {
         return null;
     }
 
-    public String getError() {
+    public EText getError() {
         return error;
     }
 

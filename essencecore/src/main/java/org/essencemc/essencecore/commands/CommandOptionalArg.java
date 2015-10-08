@@ -27,20 +27,21 @@ package org.essencemc.essencecore.commands;
 
 import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.message.EMessage;
+import org.essencemc.essencecore.message.EText;
 
 public class CommandOptionalArg {
 
-    private EMessage infoMessage;
+    private EText infoMessage;
     private Argument argument;
     private String permission;
 
-    public CommandOptionalArg(EMessage infoMessage, Argument argument, String permission) {
+    public CommandOptionalArg(EText infoMessage, Argument argument, String permission) {
         this.infoMessage = infoMessage;
         this.argument = argument;
         this.permission = permission;
     }
 
-    public EMessage getInfo() {
+    public EText getInfo() {
         return infoMessage;
     }
 

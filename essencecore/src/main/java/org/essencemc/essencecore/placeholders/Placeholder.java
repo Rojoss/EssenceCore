@@ -5,7 +5,6 @@ import org.essencemc.essencecore.EssenceCore;
 import org.essencemc.essencecore.arguments.*;
 import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.message.Message;
-import org.essencemc.essencecore.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -195,7 +194,7 @@ public class Placeholder {
         //If there is no source specified and the type is a raw type or there is no player the placeholder is invalid.
         //TODO: Should probably have error codes for setting the value. Like Undefined-1 would be no raw source value specified etc.
         if (source == null) {
-            return Util.color(Message.INVALID_PLACEHOLDER_VALUE.msg().getMsg(false));
+            return Message.INVALID_PLACEHOLDER_VALUE.msg(true, true, player).getText();
         }
 
         //Dispatch the custom event with the placeholder, source and arguments.
@@ -204,7 +203,7 @@ public class Placeholder {
 
         //If there is no value set for the placeholder it's invalid.
         if (event.getValue() == null || event.getValue().isEmpty()) {
-            return Util.color(Message.INVALID_PLACEHOLDER_VALUE.msg().getMsg(false));
+            return Message.INVALID_PLACEHOLDER_VALUE.msg(true, true, player).getText();
         }
 
         return event.getValue();

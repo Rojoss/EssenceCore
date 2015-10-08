@@ -26,18 +26,19 @@
 package org.essencemc.essencecore.commands;
 
 import org.essencemc.essencecore.message.EMessage;
+import org.essencemc.essencecore.message.EText;
 
 public class CommandModifier {
 
-    private EMessage infoMessage;
+    private EText infoMessage;
     private String permission;
 
-    public CommandModifier(EMessage infoMessage, String permission) {
+    public CommandModifier(EText infoMessage, String permission) {
         this.infoMessage = infoMessage;
         this.permission = permission;
     }
 
-    public EMessage getInfo() {
+    public EText getInfo() {
         return infoMessage;
     }
 

@@ -36,6 +36,7 @@ import org.essencemc.essencecore.arguments.LocationArg;
 import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.entity.EEntity;
 import org.essencemc.essencecore.entity.EntityTag;
+import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 import org.essencemc.essencecore.util.NumberUtil;
 import org.essencemc.essencecore.util.Util;
@@ -59,7 +60,7 @@ public class EntityParser {
     private String string = null;
     private List<List<EEntity>> entities = new ArrayList<List<EEntity>>();
 
-    private String error = "";
+    private EText error = null;
 
 
     /**
@@ -123,7 +124,7 @@ public class EntityParser {
             if (!data.isEmpty()) {
                 String[] split = data.split(" ");
                 if (NumberUtil.getInt(split[0]) == null) {
-                    error = Message.PARSER_INVALID_AMOUNT.msg().getMsg(true, split[0]);
+                    error = Message.PARSER_INVALID_AMOUNT.msg().parseArgs(split[0]);
                     return;
                 }
                 amount = NumberUtil.getInt(split[0]);
@@ -141,7 +142,7 @@ public class EntityParser {
 
         if (location == null) {
             if (!ignoreErrors) {
-                error = Message.ENTITY_NO_LOCATION.msg().getMsg(true);
+                error = Message.ENTITY_NO_LOCATION.msg();
                 return;
             }
 
@@ -165,7 +166,7 @@ public class EntityParser {
             //TODO: Get entity from alias.
             EntityType type = EntityType.fromName(entity);
             if (type == null) {
-                error = Message.INVALID_ENITY_TYPE.msg().getMsg(true, entity);
+                error = Message.INVALID_ENITY_TYPE.msg().parseArgs(entity);
                 return;
             }
 
@@ -212,7 +213,7 @@ public class EntityParser {
                     if (tag != null) {
                         if (!EntityTag.getTags(entry.getKey()).contains(tag)) {
                             //TODO: Get name from alias.
-                            error = Message.INVALID_ENTITY_TAG_ENTITY.msg().getMsg(true, data.getKey(), entry.getKey().getName());
+                            error = Message.INVALID_ENTITY_TAG_ENTITY.msg().parseArgs(data.getKey(), entry.getKey().getName());
                             if (!ignoreErrors) {
                                 entity.remove();
                                 return;
@@ -289,7 +290,7 @@ public class EntityParser {
                     //Do the same for potion effects by key.
                     //TODO: Potion effects as tags.
 
-                    error = Message.INVALID_ENTITY_TAG.msg().getMsg(true, data.getKey());
+                    error = Message.INVALID_ENTITY_TAG.msg().parseArgs(data.getKey());
                     if (!ignoreErrors) {
                         entity.remove();
                         return;
@@ -315,14 +316,14 @@ public class EntityParser {
      * @return if it parsed successful.
      */
     public boolean isValid() {
-        return entities != null && !entities.isEmpty() && string != null && error.isEmpty();
+        return entities != null && !entities.isEmpty() && string != null && error != null;
     }
 
     /**
-     * If the validation was unsuccessful this will return the error message.
-     * @return the message which contains the error. If it was successful the message will be empty.
+     * If the validation was unsuccessful this will return the error text.
+     * @return the text which contains the error. If it was successful the text will be null.
      */
-    public String getError() {
+    public EText getError() {
         return error;
     }
 

@@ -26,6 +26,7 @@
 package org.essencemc.essencecore.arguments;
 
 import org.essencemc.essencecore.arguments.internal.Argument;
+import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 import org.essencemc.essencecore.util.Util;
 
@@ -54,13 +55,13 @@ public class ListArg extends Argument {
     public boolean parse(String input) {
         success = true;
         if (input == null || input.isEmpty()) {
-            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().getMsg(true, name) : Message.NO_ARG_VALUE.msg().getMsg(true);
+            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().parseArgs(name) : Message.NO_ARG_VALUE.msg();
             success = false;
             return success;
         }
 
         if (!values.contains(input.toLowerCase())) {
-            error = Message.INVALID_LIST_ARGUMENT.msg().getMsg(true, input, Util.implode(values, ","));
+            error = Message.INVALID_LIST_ARGUMENT.msg().parseArgs(input, Util.implode(values, ","));
             success = false;
             return success;
         }
@@ -75,8 +76,8 @@ public class ListArg extends Argument {
     }
 
     @Override
-    public String getDescription() {
-        return Message.ARG_LIST.msg().getMsg(false, Util.implode(values, ","));
+    public EText getDescription() {
+        return Message.ARG_LIST.msg().parseArgs(Util.implode(values, ","));
     }
 
     @Override

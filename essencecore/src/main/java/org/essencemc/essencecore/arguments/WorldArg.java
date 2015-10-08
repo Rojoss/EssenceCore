@@ -29,6 +29,7 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.essencemc.essencecore.EssenceCore;
 import org.essencemc.essencecore.arguments.internal.Argument;
+import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 import org.essencemc.essencecore.util.NumberUtil;
 
@@ -56,7 +57,7 @@ public class WorldArg extends Argument {
     public boolean parse(String input) {
         success = true;
         if (input == null || input.isEmpty()) {
-            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().getMsg(true, name) : Message.NO_ARG_VALUE.msg().getMsg(true);
+            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().parseArgs(name) : Message.NO_ARG_VALUE.msg();
             success = false;
             return success;
         }
@@ -74,7 +75,7 @@ public class WorldArg extends Argument {
 
         if (world == null) {
             success = false;
-            error = Message.INVALID_WORLD.msg().getMsg(true, input);
+            error = Message.INVALID_WORLD.msg().parseArgs(input);
         } else {
             success = true;
         }
@@ -94,8 +95,8 @@ public class WorldArg extends Argument {
     }
 
     @Override
-    public String getDescription() {
-        return Message.ARG_WORLD.msg().getMsg(false);
+    public EText getDescription() {
+        return Message.ARG_WORLD.msg();
     }
 
     @Override

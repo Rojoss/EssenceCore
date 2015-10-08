@@ -27,6 +27,7 @@ package org.essencemc.essencecore.arguments;
 
 import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.entity.EItem;
+import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 import org.essencemc.essencecore.parsers.ItemParser;
 
@@ -52,7 +53,7 @@ public class ItemArg extends Argument {
     public boolean parse(String input) {
         success = true;
         if (input == null || input.isEmpty()) {
-            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().getMsg(true, name) : Message.NO_ARG_VALUE.msg().getMsg(true);
+            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().parseArgs(name) : Message.NO_ARG_VALUE.msg();
             success = false;
             return success;
         }
@@ -83,8 +84,8 @@ public class ItemArg extends Argument {
     }
 
     @Override
-    public String getDescription() {
-        return Message.ARG_ITEM.msg().getMsg(false);
+    public EText getDescription() {
+        return Message.ARG_ITEM.msg();
     }
 
     @Override

@@ -2,11 +2,15 @@ package org.essencemc.essencecore.message;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.essencemc.essencecore.EssenceCore;
 import org.essencemc.essencecore.parsers.TextParser;
 import org.essencemc.essencecore.placeholders.Placeholder;
 import org.essencemc.essencecore.util.Util;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Text builder to parse text in multiple ways and sending text easily.
@@ -54,7 +58,7 @@ public class EText {
      * @return EText instance.
      */
     public EText addPrefix() {
-        text = Util.color(Message.PREFIX.msg().getMsg(false)) + " " + text;
+        text = Message.PREFIX.msg().color().getText() + " " + text;
         return this;
     }
 
@@ -83,6 +87,39 @@ public class EText {
     }
 
     /**
+     * Replace all numbered args based on the specified args.
+     * For example a message like 'You have been given {0} {1}.'
+     * If you pass in '1' as the first argument and 'diamond' as the second.
+     * the result message would be 'You have been given 1 diamond.'
+     * @param args All the arguments that will be replaced. The order you specify this in matters for the index id's!
+     * @return EText instance.
+     */
+    public EText parseArgs(String... args) {
+        for (int i = 0; i < args.length; i++) {
+            if (args[i] == null) {
+                continue;
+            }
+            text = text.replace("{" + i + "}", args[i]);
+        }
+        return this;
+    }
+
+    /**
+     * Replace all key args based on the specified args in the map.
+     * For example a message like 'You have been given {amount} {item}.'
+     * If you pass in {{'amount': '1'}, {'item': 'diamond'}}
+     * the result message would be 'You have been given 1 diamond.'
+     * @param args A map with string keys and values. (Keys should not have the curly brackets!)
+     * @return EText instance.
+     */
+    public EText parseArgs(HashMap<String, String> args) {
+        for (Map.Entry<String, String> arg : args.entrySet()) {
+            text = text.replace("{" + arg.getKey() + "}", arg.getValue());
+        }
+        return this;
+    }
+
+    /**
      * Get the formatted text result.
      * If you want to send messages you should use one of the send/broadcast methods.
      * @return String with the formatted text.
@@ -102,6 +139,22 @@ public class EText {
             EssenceCore.inst().getChat().sendChat(text, player);
         } else {
             player.sendMessage(text);
+        }
+        return this;
+    }
+
+    /**
+     * Send the text to the specified command sender.
+     * If the text is JSON it will send it as a JSON message with proper formatting if the sender is a player.
+     * @param sender The CommandSender to send the text to.
+     * @return EText instance.
+     */
+    public EText send(CommandSender sender) {
+        if (text.contains("{}") && sender instanceof Player) {
+            EssenceCore.inst().getChat().sendChat(text, (Player)sender);
+        } else {
+            //TODO: If JSON undo json parsing and send it as a regular message.
+            sender.sendMessage(text);
         }
         return this;
     }

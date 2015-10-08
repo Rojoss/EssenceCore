@@ -53,7 +53,7 @@ public class Util {
      */
     public static String color(String str) {
         for (ChatColor c : ChatColor.values()) {
-            str = str.replaceAll("&" + c.getChar() + "|&" + Character.toUpperCase(c.getChar()), c.toString());
+            str = str.replaceAll("&" + c.getChar() + "|&" + Character.toUpperCase(c.getChar()), "§" + c.getChar());
         }
         return str;
     }

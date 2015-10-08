@@ -27,6 +27,8 @@ package org.essencemc.essencecore.nms.packet.playout.chat;
 
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
+
 /**
  * Interface for handling actionbars and chat
  */
@@ -59,6 +61,19 @@ public interface IChat {
     IChat sendActionbar(String message, Player[] players);
 
     /**
+     * Send actionbar to the players
+     *
+     * @param message The message to be sent to the player.
+     *                It has to be a string in raw JSON format.
+     *                You can use TextParser to build one if you want.
+     * @param players The players the message has to be sent to.
+     *                Note that the players have to be a collection of {@link Player} object or else it wont work
+     *
+     * @return IChat instance
+     */
+    IChat sendActionbar(String message, Collection<? extends Player> players);
+
+    /**
      * Send raw chat message to the player
      *
      * @param message The message to be sent to the player.
@@ -83,4 +98,17 @@ public interface IChat {
      * @return IChat instance
      */
     IChat sendChat(String message, Player[] players);
+
+    /**
+     * Send raw chat message to the players
+     *
+     * @param message The message to be sent to the player.
+     *                It has to be a string in raw JSON format.
+     *                You can use TextParser to build one if you want.
+     * @param players The players the message has to be sent to.
+     *                Note that the players have to be a collection of {@link Player} object or else it wont work
+     *
+     * @return IChat instance
+     */
+    IChat sendChat(String message, Collection<? extends Player> players);
 }

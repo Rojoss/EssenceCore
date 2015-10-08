@@ -39,6 +39,7 @@ import org.essencemc.essencecore.database.SqlLite.SqlLite;
 import org.essencemc.essencecore.exceptions.NMSClassNotFoundException;
 import org.essencemc.essencecore.listeners.ModuleListener;
 import org.essencemc.essencecore.listeners.PlaceholderListener;
+import org.essencemc.essencecore.menu.Menu;
 import org.essencemc.essencecore.modules.Modules;
 import org.essencemc.essencecore.nms.packet.playout.chat.IChat;
 import org.essencemc.essencecore.nms.packet.playout.respawn.IRespawn;
@@ -50,6 +51,7 @@ import org.essencemc.essencecore.nms.v1_8R3.SkullUtil_1_8_R3;
 import org.essencemc.essencecore.nms.packet.playout.title.Title_1_8_R3;
 import org.essencemc.essencecore.player.PlayerManager;
 
+import javax.swing.event.MenuListener;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -224,6 +226,7 @@ public class EssenceCore extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new ModuleListener(), this);
         pm.registerEvents(new PlaceholderListener(this), this);
+        pm.registerEvents(new Menu.Events(), this);
     }
 
     /**

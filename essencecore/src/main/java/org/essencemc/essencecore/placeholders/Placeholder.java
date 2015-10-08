@@ -21,43 +21,38 @@ public class Placeholder {
      * @return The string with all placeholders replaced.
      */
     public static String parse(String string, Player player) {
-        return parsePayload(string, player, true);
-    }
-
-    private static String parsePayload(String string, Player player, boolean finalize) {
         //If there are no placeholders do nothing.
         if (!string.contains("$")) {
             return string;
         }
 
         String result = "";
-
-        // The actual parsing:
-        String[] words = parseSplitNotInBrackets(string, " ");
-        for (String word : words) {
-            word = word.trim(); // Remove any weird whitespace
-            if (word.startsWith("$") && !word.startsWith("$$")) { // Account for escaping
+        for (String sequence : parseSplitNotInBracketsKeepDelimiter(string, "$")) {
+            sequence = sequence.trim(); // Remove any weird whitespace
+            if (sequence.startsWith("$") && !sequence.startsWith("$$")) { // Account for escaping
                 // Placeholder
 
+                int leftBracketIndex = sequence.indexOf('(');
+                int rightBracketIndex = sequence.contains(")") ? sequence.lastIndexOf(')') : sequence.length();
+
+                String placeholder = sequence.substring(1, (leftBracketIndex == -1 ? sequence.length() : leftBracketIndex)).trim();
+
                 List<String> data = new ArrayList<String>();
-                int leftBracketIndex = word.length();
+                String[] arguments = parseSplitNotDouble(sequence.substring((leftBracketIndex == -1 ? 0 : leftBracketIndex) + 1, rightBracketIndex).trim(), ',');
 
-                if (word.contains("(") && word.contains(")")) {
-                    leftBracketIndex = word.indexOf('(');
-                    int rightBracketIndex = word.lastIndexOf(')');
-
-                    String[] arguments = parseSplitNotDouble(word.substring(leftBracketIndex + 1, rightBracketIndex).trim(), ',');
-
-                    for (String argument : arguments) {
-                        data.add(parsePayload(argument, player, false).replace(",", ",,").replace("$", "$$"));
-                    }
+                for (String argument : arguments) {
+                    data.add(parse(argument, player));
                 }
 
-                String placeholder = word.substring(1, leftBracketIndex).trim();
-                result += getPlaceholderValue(player, placeholder, data).replace(",,", ",").replace("$$", "$") + " ";
+                result += getPlaceholderValue(player, placeholder, data).replace(",,", ",").replace("$$", "$");
+
+                // Anything after brackets
+                if (rightBracketIndex < (sequence.length() - 1)) {
+                    result += parse(sequence.substring(rightBracketIndex + 1), player).replace(",", ",,").replace("$", "$$");
+                }
             } else {
                 // Literal
-                result += word.replace(",", ",,").replace("$", "$$") + " ";
+                result += sequence.replace(",", ",,").replace("$", "$$");
             }
         }
 
@@ -65,13 +60,13 @@ public class Placeholder {
     }
 
     /**
-     * Parses a split of the specified string at the given delimiters, excluding round brackets.
+     * Parses a split of the specified string at the given delimiters, excluding round brackets. Also keep delimiters
      *
      * @param string    the string to split
      * @param delimiter the delimiter strings
      * @return the split string array
      */
-    public static String[] parseSplitNotInBrackets(String string, String... delimiter) {
+    public static String[] parseSplitNotInBracketsKeepDelimiter(String string, String... delimiter) {
         List<String> list = new ArrayList<String>();
 
         int roundBrackets = 0;
@@ -90,9 +85,16 @@ public class Placeholder {
             if (roundBrackets == 0) {
                 for (String split : delimiter) {
                     if (builder.endsWith(split)) {
-                        list.add(builder.substring(0, builder.length() - split.length()));
-                        builder = "";
-                        break;
+                        if (count == (string.length() - 1) || string.charAt(count + 1) != split.charAt(0)) {
+                            if (!builder.equals(split)) {
+                                list.add(builder.substring(0, builder.length() - split.length()));
+                                builder = split;
+                            }
+                            break;
+                        } else {
+                            count++;
+                            break;
+                        }
                     }
                 }
             }

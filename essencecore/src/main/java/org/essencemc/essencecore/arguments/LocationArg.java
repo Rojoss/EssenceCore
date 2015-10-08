@@ -199,8 +199,8 @@ public class LocationArg extends Argument {
             return null;
         }
         String x = input.getX()%1 == 0 ? Integer.toString(input.getBlockX()) : Double.toString(input.getX());
-        String y = input.getX()%1 == 0 ? Integer.toString(input.getBlockX()) : Double.toString(input.getX());
-        String z = input.getX()%1 == 0 ? Integer.toString(input.getBlockX()) : Double.toString(input.getX());
+        String y = input.getY()%1 == 0 ? Integer.toString(input.getBlockY()) : Double.toString(input.getY());
+        String z = input.getZ()%1 == 0 ? Integer.toString(input.getBlockZ()) : Double.toString(input.getZ());
 
         if (input.getYaw() == 0 && input.getPitch() == 0) {
             return  x + "," + y + "," + z + ":" + input.getWorld().getName();

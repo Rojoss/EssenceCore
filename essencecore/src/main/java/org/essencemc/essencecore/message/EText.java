@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.essencemc.essencecore.EssenceCore;
 import org.essencemc.essencecore.parsers.TextParser;
 import org.essencemc.essencecore.placeholders.Placeholder;
+import org.essencemc.essencecore.util.Debug;
 import org.essencemc.essencecore.util.Util;
 
 import java.util.HashMap;
@@ -22,7 +23,7 @@ import java.util.Map;
  */
 public class EText {
 
-    private String text;
+    private String text = "";
 
     /**
      * Starts building a new EText based of the specified string.
@@ -48,7 +49,8 @@ public class EText {
      * @return EText instance.
      */
     public EText toJSON() {
-        text = new TextParser(text).getJSON();
+        color();
+        //text = new TextParser(text).getJSON();
         return this;
     }
 
@@ -135,8 +137,9 @@ public class EText {
      * @return EText instance.
      */
     public EText send(Player player) {
-        if (text.contains("{}")) {
-            EssenceCore.inst().getChat().sendChat(text, player);
+        if (text.contains("{")) {
+            player.sendMessage(text);
+            //EssenceCore.inst().getChat().sendChat(text, player);
         } else {
             player.sendMessage(text);
         }
@@ -150,10 +153,15 @@ public class EText {
      * @return EText instance.
      */
     public EText send(CommandSender sender) {
-        if (text.contains("{}") && sender instanceof Player) {
-            EssenceCore.inst().getChat().sendChat(text, (Player)sender);
+        if (text.contains("{")) {
+            if (sender instanceof Player) {
+                sender.sendMessage(text);
+                //EssenceCore.inst().getChat().sendChat(text, (Player)sender);
+            } else {
+                //TODO: If JSON undo json parsing and send it as a regular message.
+                sender.sendMessage(text);
+            }
         } else {
-            //TODO: If JSON undo json parsing and send it as a regular message.
             sender.sendMessage(text);
         }
         return this;
@@ -165,7 +173,7 @@ public class EText {
      * @return EText instance.
      */
     public EText broadcast() {
-        if (text.contains("{}")) {
+        if (text.contains("{")) {
             EssenceCore.inst().getChat().sendChat(text, Bukkit.getServer().getOnlinePlayers());
         } else {
             Bukkit.getServer().broadcastMessage(text);
@@ -179,7 +187,7 @@ public class EText {
      * @return EText instance.
      */
     public EText broadcast(World... worlds) {
-        if (text.contains("{}")) {
+        if (text.contains("{")) {
             for (World world : worlds) {
                 EssenceCore.inst().getChat().sendChat(text, world.getPlayers());
             }

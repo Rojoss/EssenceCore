@@ -25,6 +25,7 @@
 
 package org.essencemc.essencecore.message;
 
+import org.bukkit.entity.Player;
 import org.essencemc.essencecore.EssenceCore;
 
 public enum Message {
@@ -79,8 +80,8 @@ public enum Message {
     //Main command messages
     CMD_PLAYER_ONLY(MsgCat.COMMAND_OTHER, "&cThis command can only be executed by players."),
     CMD_INVALID_USAGE(MsgCat.COMMAND_OTHER, "&cInvalid usage! &7Command syntax: &8{0}&7."),
-    CMD_HELP_ESSENCE(MsgCat.COMMAND_OTHER, "&8===== &4&l{cmd} &8=====\n&7&o{desc}\n&6Usage&8: &7{usage}\n&6Base permission&8: &7{perm}\n&6Aliases&8: &7{aliases}\n" +
-            "&6Modifiers&8: &7{modifiers}\n&6Optional args&8: &7{opt-args}\n&6Options&8: &7{options}"),
+    CMD_HELP_ESSENCE(MsgCat.COMMAND_OTHER, "&8===== &4&l{cmd} &8=====|&7&o{desc}|&6Usage&8: &7{usage}|&6Base permission&8: &7{perm}|&6Aliases&8: &7{aliases}|" +
+            "&6Modifiers&8: &7{modifiers}|&6Optional args&8: &7{opt-args}|&6Options&8: &7{options}"),
     CMD_HELP_SEPARATOR(MsgCat.COMMAND_OTHER, "&8, &7"),
     CMD_HELP_NONE(MsgCat.COMMAND_OTHER, "None"),
     CMD_HELP_MODIFIER(MsgCat.COMMAND_OTHER, "{{&7&o{1}}&7{0}}"),
@@ -128,8 +129,28 @@ public enum Message {
         message = new EMessage(category, this.toString(), defaultMsg, EssenceCore.inst().getMessages());
     }
 
-    public EMessage msg() {
+    public EMessage emsg() {
         return message;
+    }
+
+    public EText msg() {
+        return message.getText();
+    }
+
+    public EText msg(boolean format, boolean json) {
+        if (json) {
+            return message.getText().addPrefix().parsePlaceholders(null).toJSON();
+        } else {
+            return message.getText().addPrefix().parsePlaceholders(null).color();
+        }
+    }
+
+    public EText msg(boolean format, boolean json, Player player) {
+        if (json) {
+            return message.getText().addPrefix().parsePlaceholders(player).toJSON();
+        } else {
+            return message.getText().addPrefix().parsePlaceholders(player).color();
+        }
     }
 
     public static EMessage fromString(String name) {
@@ -137,7 +158,7 @@ public enum Message {
         name = name.toLowerCase().replace("-", "");
         for (Message msg : values()) {
             if (msg.toString().toLowerCase().replace("_", "").equals(name)) {
-                return msg.msg();
+                return msg.emsg();
             }
         }
         return null;

@@ -359,7 +359,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     }
 
     public void addArgument(String name, Argument argument, ArgumentRequirement requirement) {
-        addArgument(name, argument, requirement);
+        addArgument(name, argument, requirement, "");
     }
 
     public void addArgument(String name, Argument argument, ArgumentRequirement requirement, String permission) {

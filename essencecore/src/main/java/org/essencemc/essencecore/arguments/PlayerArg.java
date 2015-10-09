@@ -30,6 +30,7 @@ import org.bukkit.entity.Player;
 import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
+import org.essencemc.essencecore.util.Util;
 
 import java.util.UUID;
 
@@ -67,7 +68,14 @@ public class PlayerArg extends Argument {
         } else {
             player = Bukkit.getPlayer(input);
         }
-        //TODO: Get player by nick/display name
+        if (player == null) {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (Util.stripAllColor(p.getDisplayName()).equalsIgnoreCase(input) || Util.stripAllColor(p.getPlayerListName()).equalsIgnoreCase(input)) {
+                    player = p;
+                    break;
+                }
+            }
+        }
 
         if (player == null) {
             success = false;

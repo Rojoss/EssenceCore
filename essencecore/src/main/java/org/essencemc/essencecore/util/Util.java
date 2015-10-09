@@ -58,6 +58,17 @@ public class Util {
         return str;
     }
 
+    /**
+     * Integrate ChatColor in a string based on color codes.
+     * @param str The string to apply color to.
+     * @return formatted string
+     */
+    public static String colorChatColors(String str) {
+        for (ChatColor c : ChatColor.values()) {
+            str = str.replaceAll("&" + c.getChar() + "|&" + Character.toUpperCase(c.getChar()), c.toString());
+        }
+        return str;
+    }
 
     /**
      * Remove all color and put colors as the formatting codes like &amp;1.
@@ -69,6 +80,15 @@ public class Util {
             str = str.replace(c.toString(), "&" + c.getChar());
         }
         return str;
+    }
+
+    /**
+     * Strips all coloring from the specified string.
+     * @param str The string to remove color from.
+     * @return String without any colors and without any color symbols.
+     */
+    public static String stripAllColor(String str) {
+        return ChatColor.stripColor(colorChatColors(str));
     }
 
 

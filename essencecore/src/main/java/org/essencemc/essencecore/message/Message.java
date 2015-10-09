@@ -139,20 +139,29 @@ public enum Message {
         return message.getText();
     }
 
-    public EText msg(boolean format, boolean json) {
-        if (json) {
-            return message.getText().addPrefix().parsePlaceholders(null).toJSON();
-        } else {
-            return message.getText().addPrefix().parsePlaceholders(null).color();
+    public EText msg(boolean prefix, boolean json) {
+        EText text = message.getText();
+        if (prefix) {
+            text = text.addPrefix();
         }
+        if (json) {
+            text = text.toJSON();
+        }
+        return text;
     }
 
-    public EText msg(boolean format, boolean json, Player player) {
-        if (json) {
-            return message.getText().addPrefix().parsePlaceholders(player).toJSON();
-        } else {
-            return message.getText().addPrefix().parsePlaceholders(player).color();
+    public EText msg(boolean prefix, boolean json, Player player) {
+        EText text = message.getText();
+        if (prefix) {
+            text = text.addPrefix();
         }
+        if (player != null) {
+            text = text.parsePlaceholders(player);
+        }
+        if (json) {
+            text = text.toJSON();
+        }
+        return text;
     }
 
     public static EMessage fromString(String name) {

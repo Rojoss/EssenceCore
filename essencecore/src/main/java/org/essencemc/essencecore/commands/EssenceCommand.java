@@ -54,7 +54,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     protected List<String> aliases;
     protected String permission;
 
-    protected CmdArgument[] cmdArgs;
+    protected List<CmdArgument> cmdArgs = new ArrayList<CmdArgument>();
     public Map<String, CommandModifier> modifiers = new HashMap<String, CommandModifier>();
     public Map<String, CommandOption> cmdOptions = new HashMap<String, CommandOption>();
     public Map<String, CommandOptionalArg> optionalArgs = new HashMap<String, CommandOptionalArg>();
@@ -158,7 +158,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     /** Get the command usage */
     public String getUsage(CommandSender sender) {
         List<String> args = new ArrayList<String>();
-        if (cmdArgs != null && cmdArgs.length > 0) {
+        if (cmdArgs != null && cmdArgs.size() > 0) {
             for (CmdArgument arg : cmdArgs) {
                 args.add(arg.getName(sender));
             }
@@ -269,7 +269,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         result.setArgs(args);
 
         //Handle all links that modify command arguments before parsing them.
-        List<CmdArgument> cmdArgsClone = new ArrayList<CmdArgument>(Arrays.asList(cmdArgs.clone()));
+        List<CmdArgument> cmdArgsClone = new ArrayList<CmdArgument>(cmdArgs);
         for (CommandLink link : links) {
             //Skip all links that don't modify command args.
             if (!(link instanceof RemoveLink) && !(link instanceof ShiftLink) && !(link instanceof MakeOptionalLink)) {
@@ -280,8 +280,8 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                 continue;
             }
             //Go through all args and check if any match with the second value of the link.
-            for (int i = 0; i < cmdArgs.length; i++) {
-                CmdArgument cmdArg = cmdArgs[i];
+            for (int i = 0; i < cmdArgs.size(); i++) {
+                CmdArgument cmdArg = cmdArgs.get(i);
                 if (link.getSecond().equalsIgnoreCase(cmdArg.getName(false))) {
                     //Remove the argument
                     if (link instanceof RemoveLink) {
@@ -356,6 +356,14 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         }
 
         return result;
+    }
+
+    public void addArgument(String name, Argument argument, ArgumentRequirement requirement) {
+        addArgument(name, argument, requirement);
+    }
+
+    public void addArgument(String name, Argument argument, ArgumentRequirement requirement, String permission) {
+        cmdArgs.add(new CmdArgument(name, argument, requirement, permission));
     }
 
     public void addCommandOption(String key, EText infoMessage, Argument optionType) {
@@ -473,9 +481,9 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
      */
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String message, String[] args) {
-        if (cmdArgs.length < args.length) {
+        if (cmdArgs.size() < args.length) {
             return null;
         }
-        return cmdArgs[args.length-1].tabComplete(sender, args[args.length-1]);
+        return cmdArgs.get(args.length-1).tabComplete(sender, args[args.length-1]);
     }
 }

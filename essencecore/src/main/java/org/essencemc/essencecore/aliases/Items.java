@@ -42,6 +42,9 @@ public class Items {
     }
 
     public static ItemAlias getItem(Material material, short data) {
+        if (data < 0 || (data > 0 && material.getMaxDurability() > 0)) {
+            data = 0;
+        }
         String key = material.toString().toLowerCase() + "-" + data;
         if (itemLookup.containsKey(key)) {
             return itemLookup.get(key);

@@ -466,6 +466,9 @@ public abstract class Menu {
 
         @EventHandler
         private void pluginDisable(PluginDisableEvent event) {
+            if (menus == null || menus.isEmpty()) {
+                return;
+            }
             List<Menu> menusClone = new ArrayList<Menu>(menus);
             for (Menu menu : menusClone) {
                 if (menu.plugin == event.getPlugin()) {

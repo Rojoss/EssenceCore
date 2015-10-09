@@ -1,4 +1,4 @@
-package org.essencemc.essencecore.arguments;
+package org.essencemc.essencecore.arguments.internal;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -8,7 +8,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
-import org.essencemc.essencecore.arguments.internal.Argument;
+import org.essencemc.essencecore.arguments.*;
 import org.essencemc.essencecore.entity.EEntity;
 
 public enum ArgumentType {

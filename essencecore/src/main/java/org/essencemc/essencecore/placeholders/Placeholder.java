@@ -2,8 +2,8 @@ package org.essencemc.essencecore.placeholders;
 
 import org.bukkit.entity.Player;
 import org.essencemc.essencecore.EssenceCore;
-import org.essencemc.essencecore.arguments.*;
 import org.essencemc.essencecore.arguments.internal.Argument;
+import org.essencemc.essencecore.arguments.internal.ArgumentType;
 import org.essencemc.essencecore.message.Message;
 
 import java.util.ArrayList;

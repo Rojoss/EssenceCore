@@ -30,46 +30,46 @@ import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 import org.essencemc.essencecore.util.NumberUtil;
 
-public class IntArg extends Argument {
+public class LongArg extends Argument {
 
-    private Integer min;
-    private Integer max;
+    private Long min;
+    private Long max;
 
-    public IntArg() {
+    public LongArg() {
         super();
     }
 
-    public IntArg(Integer min, Integer max) {
+    public LongArg(Long min, Long max) {
         super();
         this.min = min;
         this.max = max;
     }
 
-    public IntArg(String name) {
+    public LongArg(String name) {
         super(name);
     }
 
-    public IntArg(String name, Integer min, Integer max) {
+    public LongArg(String name, Long min, Long max) {
         super(name);
         this.min = min;
         this.max = max;
     }
 
-    public IntArg(Integer defaultValue) {
+    public LongArg(Long defaultValue) {
         super(defaultValue);
     }
 
-    public IntArg(Integer defaultValue, Integer min, Integer max) {
+    public LongArg(Long defaultValue, Long min, Long max) {
         super(defaultValue);
         this.min = min;
         this.max = max;
     }
 
-    public IntArg(String name, Integer defaultValue) {
+    public LongArg(String name, Long defaultValue) {
         super(name, defaultValue);
     }
 
-    public IntArg(String name, Integer defaultValue, Integer min, Integer max) {
+    public LongArg(String name, Long defaultValue, Long min, Long max) {
         super(name, defaultValue);
         this.min = min;
         this.max = max;
@@ -83,19 +83,19 @@ public class IntArg extends Argument {
             success = false;
             return success;
         }
-        value = NumberUtil.getInt(input);
+        value = NumberUtil.getLong(input);
         if (value == null) {
             error = Message.NOT_A_NUMBER.msg().parseArgs(input);
             success = false;
             return success;
         }
-        if (min != null && (Integer)value < min) {
-            error = Message.NUMBER_TOO_LOW.msg().parseArgs(input, Integer.toString(min));
+        if (min != null && (Long)value < min) {
+            error = Message.NUMBER_TOO_LOW.msg().parseArgs(input, Long.toString(min));
             success = false;
             return success;
         }
-        if (max != null && (Integer)value > max) {
-            error = Message.NUMBER_TOO_LOW.msg().parseArgs(input, Integer.toString(max));
+        if (max != null && (Long)value > max) {
+            error = Message.NUMBER_TOO_LOW.msg().parseArgs(input, Long.toString(max));
             success = false;
             return success;
         }
@@ -103,36 +103,36 @@ public class IntArg extends Argument {
     }
 
     @Override
-     public IntArg clone() {
-        return new IntArg(name, defaultValue == null ? null : (Integer)defaultValue);
+     public LongArg clone() {
+        return new LongArg(name, defaultValue == null ? null : (Long)defaultValue);
     }
 
     @Override
     public EText getDescription() {
         if (min != null && max != null) {
-            return Message.ARG_INT_MIN_MAX.msg().parseArgs(Integer.toString(min), Integer.toString(max));
+            return Message.ARG_INT_MIN_MAX.msg().parseArgs(Long.toString(min), Long.toString(max));
         } else if (min != null) {
-            return Message.ARG_INT_MIN.msg().parseArgs(Integer.toString(min));
+            return Message.ARG_INT_MIN.msg().parseArgs(Long.toString(min));
         } else if (max != null) {
-            return Message.ARG_INT_MAX.msg().parseArgs(Integer.toString(max));
+            return Message.ARG_INT_MAX.msg().parseArgs(Long.toString(max));
         }
         return Message.ARG_INT.msg();
     }
 
     @Override
     public Class getRawClass() {
-        return Integer.class;
+        return Long.class;
     }
 
-    public static Integer Parse(String input) {
-        IntArg arg = new IntArg();
+    public static Long Parse(String input) {
+        LongArg arg = new LongArg();
         if (arg.parse(input)) {
-            return (Integer)arg.value;
+            return (Long)arg.value;
         }
         return null;
     }
 
-    public static String Parse(Integer input) {
+    public static String Parse(Long input) {
         if (input == null) {
             return null;
         }

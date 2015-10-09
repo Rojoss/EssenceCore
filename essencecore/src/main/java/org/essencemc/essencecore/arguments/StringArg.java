@@ -26,21 +26,64 @@
 package org.essencemc.essencecore.arguments;
 
 import org.essencemc.essencecore.arguments.internal.Argument;
+import org.essencemc.essencecore.arguments.internal.MatchString;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 
 public class StringArg extends Argument {
 
+    private Integer minChars;
+    private Integer maxChars;
+    public MatchString match;
+
     public StringArg() {
         super();
+    }
+
+    public StringArg(MatchString match) {
+        super();
+        this.match = match;
+    }
+
+    public StringArg(Integer minChars, Integer maxChars) {
+        super();
+        this.minChars = minChars;
+        this.maxChars = maxChars;
     }
 
     public StringArg(String defaultValue) {
         super(defaultValue);
     }
 
+    public StringArg(String defaultValue, MatchString match) {
+        super(defaultValue);
+        this.match = match;
+    }
+
+    public StringArg(String defaultValue, Integer minChars, Integer maxChars) {
+        super(defaultValue);
+        this.minChars = minChars;
+        this.maxChars = maxChars;
+    }
+
     public StringArg(String name, String defaultValue) {
         super(name, defaultValue);
+    }
+
+    public StringArg(String name, String defaultValue, MatchString match) {
+        super(name, defaultValue);
+        this.match = match;
+    }
+
+    public StringArg(String name, String defaultValue, String match) {
+        super(name, defaultValue);
+        this.match = new MatchString(match);
+    }
+
+    public StringArg(String name, String defaultValue, Integer minChars, Integer maxChars) {
+        super(name, defaultValue);
+        this.minChars = minChars;
+        this.maxChars = maxChars;
     }
 
     @Override
@@ -48,6 +91,21 @@ public class StringArg extends Argument {
         success = true;
         if (input == null || input.isEmpty()) {
             error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().parseArgs(name) : Message.NO_ARG_VALUE.msg();
+            success = false;
+            return success;
+        }
+        if (match != null && match.match != null && !match.match.isEmpty() && !input.equalsIgnoreCase(match.match)) {
+            error = Message.NO_STRING_MATCH.msg().parseArgs(input, match.match);
+            success = false;
+            return success;
+        }
+        if (minChars != null && input.length() < minChars) {
+            error = Message.TOO_FEW_CHARACTERS.msg().parseArgs(input, Integer.toString(minChars));
+            success = false;
+            return success;
+        }
+        if (maxChars != null && input.length() > maxChars) {
+            error = Message.TOO_MUCH_CHARACTERS.msg().parseArgs(input, Integer.toString(maxChars));
             success = false;
             return success;
         }
@@ -62,6 +120,15 @@ public class StringArg extends Argument {
 
     @Override
     public EText getDescription() {
+        if (match != null && match.match != null && !match.match.isEmpty()) {
+            return Message.ARG_STRING_MATCH.msg().parseArgs(match.match);
+        } else if (minChars != null && maxChars != null) {
+            return Message.ARG_STRING_MIN_MAX.msg().parseArgs(Integer.toString(minChars), Integer.toString(maxChars));
+        } else if (minChars != null) {
+            return Message.ARG_STRING_MIN.msg().parseArgs(Integer.toString(minChars));
+        } else if (maxChars != null) {
+            return Message.ARG_STRING_MAX.msg().parseArgs(Integer.toString(maxChars));
+        }
         return Message.ARG_STRING.msg();
     }
 

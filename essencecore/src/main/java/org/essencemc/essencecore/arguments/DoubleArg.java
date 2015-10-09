@@ -32,20 +32,47 @@ import org.essencemc.essencecore.util.NumberUtil;
 
 public class DoubleArg extends Argument {
 
+    private Double min;
+    private Double max;
+
     public DoubleArg() {
         super();
+    }
+
+    public DoubleArg(Double min, Double max) {
+        super();
+        this.min = min;
+        this.max = max;
     }
 
     public DoubleArg(String name) {
         super(name);
     }
 
+    public DoubleArg(String name, Double min, Double max) {
+        super(name);
+        this.min = min;
+        this.max = max;
+    }
+
     public DoubleArg(Double defaultValue) {
         super(defaultValue);
     }
 
+    public DoubleArg(Double defaultValue, Double min, Double max) {
+        super(defaultValue);
+        this.min = min;
+        this.max = max;
+    }
+
     public DoubleArg(String name, Double defaultValue) {
         super(name, defaultValue);
+    }
+
+    public DoubleArg(String name, Double defaultValue, Double min, Double max) {
+        super(name, defaultValue);
+        this.min = min;
+        this.max = max;
     }
 
     @Override
@@ -62,6 +89,16 @@ public class DoubleArg extends Argument {
             success = false;
             return success;
         }
+        if (min != null && (Double)value < min) {
+            error = Message.NUMBER_TOO_LOW.msg().parseArgs(input, Double.toString(min));
+            success = false;
+            return success;
+        }
+        if (max != null && (Double)value > max) {
+            error = Message.NUMBER_TOO_HIGH.msg().parseArgs(input, Double.toString(max));
+            success = false;
+            return success;
+        }
         return success;
     }
 
@@ -72,6 +109,13 @@ public class DoubleArg extends Argument {
 
     @Override
     public EText getDescription() {
+        if (min != null && max != null) {
+            return Message.ARG_DECIMAL_MIN_MAX.msg().parseArgs(Double.toString(min), Double.toString(max));
+        } else if (min != null) {
+            return Message.ARG_DECIMAL_MIN.msg().parseArgs(Double.toString(min));
+        } else if (max != null) {
+            return Message.ARG_DECIMAL_MAX.msg().parseArgs(Double.toString(max));
+        }
         return Message.ARG_DECIMAL.msg();
     }
 

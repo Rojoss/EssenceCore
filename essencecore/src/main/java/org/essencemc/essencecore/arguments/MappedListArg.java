@@ -37,7 +37,7 @@ import java.util.Map;
 
 public class MappedListArg extends Argument {
 
-    Map<String, List<String>> values = new HashMap<String, List<String>>();
+    public Map<String, List<String>> values = new HashMap<String, List<String>>();
 
     public MappedListArg(Map<String, List<String>> values) {
         this.values = values;

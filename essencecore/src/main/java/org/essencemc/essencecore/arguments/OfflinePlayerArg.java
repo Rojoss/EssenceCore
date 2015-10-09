@@ -25,30 +25,31 @@
 
 package org.essencemc.essencecore.arguments;
 
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
-import org.essencemc.essencecore.util.Util;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.UUID;
 
-public class ListArg extends Argument {
+public class OfflinePlayerArg extends Argument {
 
-    public List<String> values = new ArrayList<String>();
-
-    public ListArg(List<String> values) {
-        this.values = values;
+    public OfflinePlayerArg() {
+        super();
     }
 
-    public ListArg(String defaultValue, List<String> values) {
+    public OfflinePlayerArg(String name) {
+        super(name);
+    }
+
+    public OfflinePlayerArg(OfflinePlayer defaultValue) {
         super(defaultValue);
-        this.values = values;
     }
 
-    public ListArg(String name, String defaultValue, List<String> values) {
+    public OfflinePlayerArg(String name, OfflinePlayer defaultValue) {
         super(name, defaultValue);
-        this.values = values;
     }
 
     @Override
@@ -60,28 +61,57 @@ public class ListArg extends Argument {
             return success;
         }
 
-        if (!values.contains(input.toLowerCase())) {
-            error = Message.INVALID_LIST_ARGUMENT.msg().parseArgs(input, Util.implode(values, ","));
-            success = false;
-            return success;
+        OfflinePlayer player = null;
+        String[] components = input.split("-");
+        if ( input.length() == 36 && components.length == 5 && !components[0].isEmpty()) {
+            player = Bukkit.getOfflinePlayer(UUID.fromString(input));
+        } else {
+            player = Bukkit.getOfflinePlayer(input);
         }
 
-        value = input;
+        if (player == null) {
+            success = false;
+            error = Message.INVALID_PLAYER.msg().parseArgs(input);
+        } else {
+            success = true;
+        }
+
+        value = player;
         return success;
     }
 
     @Override
-    public ListArg clone() {
-        return new ListArg(name, defaultValue == null ? null : (String)defaultValue, new ArrayList<String>(values));
+    public OfflinePlayerArg clone() {
+        return new OfflinePlayerArg(name, defaultValue == null ? null : (OfflinePlayer)defaultValue);
+    }
+
+    @Override
+    public String toString() {
+        return OfflinePlayerArg.Parse(value == null ? (defaultValue == null ? null : (OfflinePlayer) defaultValue) : (OfflinePlayer) value);
     }
 
     @Override
     public EText getDescription() {
-        return Message.ARG_LIST.msg().parseArgs(Util.implode(values, ","));
+        return Message.ARG_OFFLINE_PLAYER.msg();
     }
 
     @Override
     public Class getRawClass() {
-        return String.class;
+        return OfflinePlayer.class;
+    }
+
+    public static OfflinePlayer Parse(String input) {
+        OfflinePlayerArg arg = new OfflinePlayerArg();
+        if (arg.parse(input)) {
+            return (OfflinePlayer)arg.value;
+        }
+        return null;
+    }
+
+    public static String Parse(OfflinePlayer input) {
+        if (input == null) {
+            return null;
+        }
+        return input.getName();
     }
 }

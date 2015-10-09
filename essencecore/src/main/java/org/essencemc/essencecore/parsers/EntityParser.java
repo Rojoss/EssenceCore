@@ -316,7 +316,7 @@ public class EntityParser {
      * @return if it parsed successful.
      */
     public boolean isValid() {
-        return entities != null && !entities.isEmpty() && string != null && error != null;
+        return entities != null && !entities.isEmpty() && string != null && error == null;
     }
 
     /**

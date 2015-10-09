@@ -32,20 +32,47 @@ import org.essencemc.essencecore.util.NumberUtil;
 
 public class FloatArg extends Argument {
 
+    private Float min;
+    private Float max;
+
     public FloatArg() {
         super();
+    }
+
+    public FloatArg(Float min, Float max) {
+        super();
+        this.min = min;
+        this.max = max;
     }
 
     public FloatArg(String name) {
         super(name);
     }
 
+    public FloatArg(String name, Float min, Float max) {
+        super(name);
+        this.min = min;
+        this.max = max;
+    }
+
     public FloatArg(Float defaultValue) {
         super(defaultValue);
     }
 
+    public FloatArg(Float defaultValue, Float min, Float max) {
+        super(defaultValue);
+        this.min = min;
+        this.max = max;
+    }
+
     public FloatArg(String name, Float defaultValue) {
         super(name, defaultValue);
+    }
+
+    public FloatArg(String name, Float defaultValue, Float min, Float max) {
+        super(name, defaultValue);
+        this.min = min;
+        this.max = max;
     }
 
     @Override
@@ -62,6 +89,16 @@ public class FloatArg extends Argument {
             success = false;
             return success;
         }
+        if (min != null && (Float)value < min) {
+            error = Message.NUMBER_TOO_LOW.msg().parseArgs(input, Float.toString(min));
+            success = false;
+            return success;
+        }
+        if (max != null && (Float)value > max) {
+            error = Message.NUMBER_TOO_HIGH.msg().parseArgs(input, Float.toString(max));
+            success = false;
+            return success;
+        }
         return success;
     }
 
@@ -72,6 +109,13 @@ public class FloatArg extends Argument {
 
     @Override
     public EText getDescription() {
+        if (min != null && max != null) {
+            return Message.ARG_DECIMAL_MIN_MAX.msg().parseArgs(Float.toString(min), Float.toString(max));
+        } else if (min != null) {
+            return Message.ARG_DECIMAL_MIN.msg().parseArgs(Float.toString(min));
+        } else if (max != null) {
+            return Message.ARG_DECIMAL_MAX.msg().parseArgs(Float.toString(max));
+        }
         return Message.ARG_DECIMAL.msg();
     }
 

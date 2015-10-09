@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.commands.arguments.internal;
+package org.essencemc.essencecore.commands.arguments;
 
 import java.util.ArrayList;
 import java.util.HashMap;

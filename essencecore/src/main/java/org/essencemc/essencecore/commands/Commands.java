@@ -45,6 +45,15 @@ public class Commands {
         this.cfg = ess.getCommandsCfg();
     }
 
+    public EssenceCommand getCommand(Class<? extends EssenceCommand> clazz) {
+        for (EssenceCommand cmd : commands) {
+            if (cmd.getClass().equals(clazz)) {
+                return cmd;
+            }
+        }
+        return null;
+    }
+
     /**
      * Register a command.
      * If the command is already registered it will update the data based of the config values.

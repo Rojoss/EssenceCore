@@ -23,17 +23,11 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.commands.arguments.internal;
+package org.essencemc.essencecore.commands.arguments;
 
-public class ArgumentParseResult {
-    public boolean success = true;
-    private Object value = null;
-
-    public Object getValue() {
-        return value;
-    }
-
-    public void setValue(Object value) {
-        this.value = value;
-    }
+public enum ArgumentRequirement {
+    OPTIONAL,
+    REQUIRED,
+    REQUIRED_CONSOLE,
+    ;
 }

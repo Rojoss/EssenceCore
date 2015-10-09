@@ -44,6 +44,7 @@ import org.essencemc.essencecore.aliases.Items;
 import org.essencemc.essencecore.entity.EItem;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
+import org.essencemc.essencecore.util.Debug;
 import org.essencemc.essencecore.util.NumberUtil;
 import org.essencemc.essencecore.util.Util;
 
@@ -520,7 +521,7 @@ public class ItemParser {
      * @return if it parsed successful.
      */
     public boolean isValid() {
-        return item != null && string != null && error != null;
+        return item != null && string != null && error == null;
     }
 
     /**

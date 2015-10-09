@@ -32,20 +32,47 @@ import org.essencemc.essencecore.util.NumberUtil;
 
 public class IntArg extends Argument {
 
+    private Integer min;
+    private Integer max;
+
     public IntArg() {
         super();
+    }
+
+    public IntArg(Integer min, Integer max) {
+        super();
+        this.min = min;
+        this.max = max;
     }
 
     public IntArg(String name) {
         super(name);
     }
 
+    public IntArg(String name, Integer min, Integer max) {
+        super(name);
+        this.min = min;
+        this.max = max;
+    }
+
     public IntArg(Integer defaultValue) {
         super(defaultValue);
     }
 
+    public IntArg(Integer defaultValue, Integer min, Integer max) {
+        super(defaultValue);
+        this.min = min;
+        this.max = max;
+    }
+
     public IntArg(String name, Integer defaultValue) {
         super(name, defaultValue);
+    }
+
+    public IntArg(String name, Integer defaultValue, Integer min, Integer max) {
+        super(name, defaultValue);
+        this.min = min;
+        this.max = max;
     }
 
     @Override
@@ -62,6 +89,16 @@ public class IntArg extends Argument {
             success = false;
             return success;
         }
+        if (min != null && (Integer)value < min) {
+            error = Message.NUMBER_TOO_LOW.msg().parseArgs(input, Integer.toString(min));
+            success = false;
+            return success;
+        }
+        if (max != null && (Integer)value > max) {
+            error = Message.NUMBER_TOO_LOW.msg().parseArgs(input, Integer.toString(max));
+            success = false;
+            return success;
+        }
         return success;
     }
 
@@ -72,6 +109,13 @@ public class IntArg extends Argument {
 
     @Override
     public EText getDescription() {
+        if (min != null && max != null) {
+            return Message.ARG_INT_MIN_MAX.msg().parseArgs(Integer.toString(min), Integer.toString(max));
+        } else if (min != null) {
+            return Message.ARG_INT_MIN.msg().parseArgs(Integer.toString(min));
+        } else if (max != null) {
+            return Message.ARG_INT_MAX.msg().parseArgs(Integer.toString(max));
+        }
         return Message.ARG_INT.msg();
     }
 

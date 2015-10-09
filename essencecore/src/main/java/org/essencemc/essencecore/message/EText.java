@@ -49,8 +49,7 @@ public class EText {
      * @return EText instance.
      */
     public EText toJSON() {
-        color();
-        //text = new TextParser(text).getJSON();
+        text = new TextParser(text).getJSON();
         return this;
     }
 
@@ -138,8 +137,8 @@ public class EText {
      */
     public EText send(Player player) {
         if (text.contains("{")) {
-            player.sendMessage(text);
-            //EssenceCore.inst().getChat().sendChat(text, player);
+            //player.sendMessage(text);
+            EssenceCore.inst().getChat().sendChat(text, player);
         } else {
             player.sendMessage(text);
         }
@@ -155,8 +154,8 @@ public class EText {
     public EText send(CommandSender sender) {
         if (text.contains("{")) {
             if (sender instanceof Player) {
-                sender.sendMessage(text);
-                //EssenceCore.inst().getChat().sendChat(text, (Player)sender);
+                //sender.sendMessage(text);
+                EssenceCore.inst().getChat().sendChat(text, (Player)sender);
             } else {
                 //TODO: If JSON undo json parsing and send it as a regular message.
                 sender.sendMessage(text);

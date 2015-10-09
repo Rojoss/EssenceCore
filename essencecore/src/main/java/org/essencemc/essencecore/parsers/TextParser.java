@@ -21,110 +21,110 @@ import java.util.List;
  */
 public class TextParser {
 
-    private String string = null;
-    private String json = null;
+    private final String string;
+    private final String json;
     private String error = "";
 
     public TextParser(String string) {
         this.string = string;
+        String json = "";
 
-        String[] words = string.split(" ");
-        List<String> sections = new ArrayList<String>();
+        // We're just gonna integrate the JSON parser into the string parser/splitter
+        String builder = "";
+        int square = 0, curly = 0, angle = 0;
 
-        //First of all combine all words together into sections.
-        List<String> curSection = new ArrayList<String>();
-        boolean isFormatting = false;
-        int endCharsNeeded = 0;
-        char format = ' ';
-        for (String word : words) {
-            //If we're already formatting add the section.
-            if (isFormatting) {
-                curSection.add(word);
-                //Reduce the end characters needed.
-                endCharsNeeded -= Util.countChars(word, format);
-                //If all end characters have been added end the current section and start a new one.
-                if (endCharsNeeded <= 0) {
-                    if (!curSection.isEmpty() && !curSection.get(0).isEmpty()) {
-                        sections.add(Util.implode(curSection, " "));
+        for (int i = 0; i < string.length(); i++) {
+            char c = string.charAt(i);
+            builder += c;
+
+            switch (c) {
+                case '[':
+                    if (square++ == 0 && curly == 0 && angle == 0) {
+                        json = formatJSONWithArray(json, builder.substring(0, builder.length() - 1));
+                        builder = "[";
                     }
-                    curSection.clear();
-                    format = ' ';
-                    isFormatting = false;
-                }
-                continue;
-            }
-
-            //Get the type of section. (Space for a regular text word/section)
-            char type = ' ';
-            char[] chars = word.toCharArray();
-            for (char ch : chars) {
-                if (ch == '{' || ch == '<' || ch == '[') {
-                    type = ch;
                     break;
-                }
-            }
-
-            //If the type is just regular text, add the word to current section.
-            if (type == ' ') {
-                curSection.add(word);
-                continue;
-            }
-            //If there is a format symbol, end the current section and start a new formatting section.
-            if (!curSection.isEmpty() && !curSection.get(0).isEmpty()) {
-                sections.add(Util.implode(curSection, " "));
-            }
-            curSection.clear();
-            curSection.add(word);
-            isFormatting = true;
-            if (type == '{') {
-                format = '}';
-            } else if (type == '[') {
-                format = ']';
-            } else if (type == '<') {
-                format = '>';
-            }
-            endCharsNeeded = Util.countChars(word, type);
-
-            //Check if the current word already contains all the end chars.
-            endCharsNeeded -= Util.countChars(word, format);
-            if (endCharsNeeded <= 0) {
-                if (!word.isEmpty()) {
-                    sections.add(word);
-                }
-                curSection.clear();
-                format = ' ';
-                isFormatting = false;
+                case '{':
+                    if (curly++ == 0 && square == 0 && angle == 0) {
+                        json = formatJSONWithArray(json, builder.substring(0, builder.length() - 1));
+                        builder = "{";
+                    }
+                    break;
+                case '<':
+                    if (angle++ == 0 && square == 0 && curly == 0) {
+                        json = formatJSONWithArray(json, builder.substring(0, builder.length() - 1));
+                        builder = "<";
+                    }
+                    break;
+                case ']':
+                    if (--square == 0 && curly == 0 && angle == 0 && builder.startsWith("[[")) {
+                        json = formatJSONWithArray(json, builder);
+                        builder = "";
+                    }
+                    break;
+                case '}':
+                    if (--curly == 0 && square == 0 && angle == 0 && builder.startsWith("{{")) {
+                        json = formatJSONWithArray(json, builder);
+                        builder = "";
+                    }
+                    break;
+                case '>':
+                    if (--angle == 0 && square == 0 && curly == 0 && builder.startsWith("<<")) {
+                        json = formatJSONWithArray(json, builder);
+                        builder = "";
+                    }
+                    break;
             }
         }
-        if (!curSection.isEmpty() && !curSection.get(0).isEmpty()) {
-            sections.add(Util.implode(curSection, " "));
+
+        if (!builder.isEmpty()) {
+            json = formatJSONWithArray(json, builder);
         }
 
-        //Format all sections to JSON.
-        for (int i = 0; i < sections.size(); i++) {
-            String text = sections.get(i);
-            //Simply convert colors to use § instead of &.
-            text = text.replaceAll("&", "§");
+        if (json.startsWith("[")) {
+            json += "]";
+        }
 
-            //Get JSON for custom formats.
-            if (text.startsWith("{{")) {
-                text = formatHover(text);
-            } else if (text.startsWith("[[")) {
-                text = formatClick(text, "]", 2, "open_url");
-            } else if (text.startsWith("<<<")) {
-                text = formatClick(text, ">>", 3, "suggest_command");
-            } else if (text.startsWith("<<")) {
-                text = formatClick(text, ">", 2, "run_command");
+        this.json = json;
+    }
+
+    private String formatJSON(String text) {
+        // Don't format empty texts
+        if (text.isEmpty()) {
+            return "";
+        }
+
+        text = text.replace("\\n", "\n").replace("&", "§");
+
+        //Get JSON for custom formats.
+        if (text.startsWith("{{")) {
+            return formatHover(text);
+        } else if (text.startsWith("[[")) {
+            return formatClick(text, "]", 2, "open_url");
+        } else if (text.startsWith("<<<")) {
+            return formatClick(text, ">>", 3, "suggest_command");
+        } else if (text.startsWith("<<")) {
+            return formatClick(text, ">", 2, "run_command");
+        }
+
+        //Default format for regular text.
+        return "{\"text\":\"" + text + "\"}";
+    }
+
+    private String formatJSONWithArray(String json, String text) {
+        boolean empty = json.isEmpty();
+
+        if (!empty) {
+            if (!json.startsWith("[")) {
+                json = "[" + json + ", " + formatJSON(text);
             } else {
-                //Default format for regular text.
-                text = "{\"text\":\"" + text + "\"}";
+                json += ", " + formatJSON(text);
             }
-
-            //Aply the json text.
-            sections.set(i, text);
+        } else {
+            json = formatJSON(text);
         }
 
-        json = "[" + Util.implode(sections, ", ") + "]";
+        return json;
     }
 
     private String formatHover(String text) {

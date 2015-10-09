@@ -55,6 +55,7 @@ public enum Message {
     TOO_MUCH_CHARACTERS(MsgCat.VALIDATION, "&4{1} &cis too long! &7It can't have more than &8{1} &7characters."),
     NO_ARG_VALUE_NAME(MsgCat.VALIDATION, "&cMissing value for argument &4{0}&c! &7Specify the value after the semicolon!"),
     NO_ARG_VALUE(MsgCat.VALIDATION, "&cMissing argument value after the semicolon!"),
+    INVALID_ENTITY(MsgCat.VALIDATION, "&4{0} is not a valid entity!"),
     INVALID_ENITY_TYPE(MsgCat.VALIDATION, "&4{0} &cis not a valid entity type! &7&l/entities &cfor a list!"),
     INVALID_ENTITY_TAG(MsgCat.VALIDATION, "&4{0} &cis not a valid entity tag. &7&l/entities <entity> &cfor a list. "),
     INVALID_ENTITY_TAG_ENTITY(MsgCat.VALIDATION, "&4{0} &ccan not be used for &4{1}&c. &7&l/entities <entity> &cfor a list of tags you can use. "),
@@ -121,6 +122,7 @@ public enum Message {
     ARG_VECTOR(MsgCat.COMMAND_ARG, "&7A vector with a x y z value. &8Example: &71;5.5;-1&8."),
     ARG_ITEM(MsgCat.COMMAND_ARG, "&7An item string like you would use in /item surrounded with quotes. &8Example: &7\"diamondsword 1 sharpness:1\"&8."),
     ARG_MATERIAL(MsgCat.COMMAND_ARG, "&7A material string with optional data &8Example: &7stone, wool:10 or 264&8."),
+    ARG_ENTITY(MsgCat.COMMAND_ARG, "&7An entity UUID, ID or string used in summon."),
     ;
 
     private EMessage message;

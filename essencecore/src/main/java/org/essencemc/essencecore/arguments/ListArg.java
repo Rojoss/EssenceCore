@@ -35,7 +35,7 @@ import java.util.List;
 
 public class ListArg extends Argument {
 
-    List<String> values = new ArrayList<String>();
+    public List<String> values = new ArrayList<String>();
 
     public ListArg(List<String> values) {
         this.values = values;

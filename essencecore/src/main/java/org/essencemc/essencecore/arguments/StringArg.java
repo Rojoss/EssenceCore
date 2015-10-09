@@ -34,7 +34,7 @@ public class StringArg extends Argument {
 
     private Integer minChars;
     private Integer maxChars;
-    private MatchString match;
+    public MatchString match;
 
     public StringArg() {
         super();

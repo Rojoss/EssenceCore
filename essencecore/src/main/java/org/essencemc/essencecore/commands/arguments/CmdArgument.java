@@ -50,14 +50,6 @@ public class CmdArgument {
     protected String permission;
     protected ArgumentRequirement requirement;
 
-    public CmdArgument(String name, Argument argument) {
-        this(name, argument, ArgumentRequirement.REQUIRED, "");
-    }
-
-    public CmdArgument(String name, Argument argument, ArgumentRequirement requirement) {
-        this(name, argument, requirement, "");
-    }
-
     public CmdArgument(String name, Argument argument, ArgumentRequirement requirement, String permission) {
         this.name = name;
         this.argument = argument;
@@ -85,7 +77,6 @@ public class CmdArgument {
             return result;
         }
 
-        Argument argument = this.argument.clone();
         if (!argument.parse(arg)) {
             argument.getError().addPrefix().parsePlaceholders(cmd.castPlayer(sender)).toJSON().send(sender);
             result.success = false;

@@ -128,6 +128,14 @@ public class CmdArgument {
         }
     }
 
+    public Argument getArgument() {
+        return argument;
+    }
+
+    public void setArgument(Argument argument) {
+        this.argument = argument;
+    }
+
     public EText getDescription() {
         return argument.getDescription();
     }
@@ -146,6 +154,9 @@ public class CmdArgument {
         }
 
         if (argument instanceof ListArg) {
+            if (((ListArg)argument).values == null || ((ListArg)argument).values.isEmpty()) {
+                return null;
+            }
             for (String str : ((ListArg)argument).values) {
                 str = str.replaceAll(" ", "");
                 if (StringUtil.startsWithIgnoreCase(str, message)) {

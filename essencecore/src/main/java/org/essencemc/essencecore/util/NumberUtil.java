@@ -43,6 +43,19 @@ public class NumberUtil {
     }
 
     /**
+     * Convert a string like '1' to a long. Returns null if it's invalid.
+     * @param str
+     * @return int
+     */
+    public static Long getLong(String str) {
+        try {
+            return Long.parseLong(str);
+        } catch (NumberFormatException e) {
+        }
+        return null;
+    }
+
+    /**
      * Convert a string like '1.5' to a double. Returns null if it's invalid.
      * @param str
      * @return double

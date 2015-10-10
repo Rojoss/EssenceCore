@@ -38,25 +38,25 @@ public class Placeholder {
                 String placeholder = sequence.substring(1, (leftBracketIndex == -1 ? sequence.length() : leftBracketIndex)).trim();
 
                 List<String> data = new ArrayList<String>();
-                String[] arguments = parseSplitNotDouble(sequence.substring((leftBracketIndex == -1 ? 0 : leftBracketIndex) + 1, rightBracketIndex).trim(), ',');
+                String[] arguments = parseSplitNotDouble(sequence.substring((leftBracketIndex == -1 ? 0 : leftBracketIndex) + 1, rightBracketIndex).trim(), ';');
 
                 for (String argument : arguments) {
                     data.add(parse(argument, player));
                 }
 
-                result += getPlaceholderValue(player, placeholder, data).replace(",,", ",").replace("$$", "$");
+                result += getPlaceholderValue(player, placeholder, data).replace(";;", ";").replace("$$", "$");
 
                 // Anything after brackets
                 if (rightBracketIndex < (sequence.length() - 1)) {
-                    result += parse(sequence.substring(rightBracketIndex + 1), player).replace(",", ",,").replace("$", "$$");
+                    result += parse(sequence.substring(rightBracketIndex + 1), player).replace(";", ";;").replace("$", "$$");
                 }
             } else {
                 // Literal
-                result += sequence.replace(",", ",,").replace("$", "$$");
+                result += sequence.replace(";", ";;").replace("$", "$$");
             }
         }
 
-        return result.trim().replace(",,", ",").replace("$$", "$"); // Remove the last space
+        return result.trim().replace(";;", ";").replace("$$", "$"); // Remove the last space
     }
 
     /**
@@ -160,7 +160,7 @@ public class Placeholder {
         List<Object> dataValues = new ArrayList<Object>();
         int index = 0;
         for (String argument : data) {
-            argument = argument.replace(",,", ",").replace("$$", "$");
+            argument = argument.replace(";;", ";").replace("$$", "$");
             ArgumentType argType = ArgumentType.fromValue(argument);
             Argument arg = argType.getNewArg();
             arg.parse(argument);

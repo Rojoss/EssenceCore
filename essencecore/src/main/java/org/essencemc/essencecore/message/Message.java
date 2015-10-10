@@ -63,6 +63,8 @@ public enum Message {
     MISSING_WORLD_LOCATION(MsgCat.VALIDATION, "&4{0} &cis not a valid location! &7You have to specify a world or player after x,y,z:"),
     ENTITY_NO_LOCATION(MsgCat.VALIDATION, "&cMissing location for entity."),
     INVALID_PLACEHOLDER_VALUE(MsgCat.VALIDATION, "&c&o&mundefined"),
+    INVALID_DURATION(MsgCat.VALIDATION, "&4{0} &cis not a valid duration! &7Error found at &c{1}&7."),
+    INVALID_DURATION_NOT_ZERO(MsgCat.VALIDATION, "&4{0} &cis not a valid duration! &7Value can't be zero."),
 
     //Item parser error messages
     PARSER_VALID(MsgCat.ITEM_PARSER, "&6This is a valid item."),

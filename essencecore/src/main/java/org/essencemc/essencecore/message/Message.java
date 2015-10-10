@@ -125,6 +125,7 @@ public enum Message {
     ARG_ITEM(MsgCat.COMMAND_ARG, "&7An item string like you would use in /item surrounded with quotes. &8Example: &7\"diamondsword 1 sharpness:1\"&8."),
     ARG_MATERIAL(MsgCat.COMMAND_ARG, "&7A material string with optional data &8Example: &7stone, wool:10 or 264&8."),
     ARG_ENTITY(MsgCat.COMMAND_ARG, "&7An entity UUID, ID or string used in summon."),
+    ARG_DURATION(MsgCat.COMMAND_ARG, "&7A duration in milliseconds or a string. &8Example: &71d12h30m10s500ms, 10h5m or 5s."),
     ;
 
     private EMessage message;

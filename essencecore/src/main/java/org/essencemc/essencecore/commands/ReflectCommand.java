@@ -28,6 +28,7 @@ package org.essencemc.essencecore.commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.essencemc.essencecore.message.Message;
+import org.essencemc.essencecore.message.Param;
 
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class ReflectCommand extends Command {
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
         if (cmd != null) {
             if (!cmd.hasPermission(sender)) {
-                Message.NO_PERM.msg(true, true, cmd.castPlayer(sender)).parseArgs(cmd.getPermission()).send(sender);
+                Message.NO_PERM.msg().send(sender, Param.P("perm", cmd.getPermission()));
                 return true;
             }
             return cmd.onCommand(sender, this, commandLabel, args);

@@ -27,10 +27,10 @@ package org.essencemc.essencecore.arguments;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
+import org.essencemc.essencecore.message.Param;
 
 import java.util.UUID;
 
@@ -56,7 +56,7 @@ public class OfflinePlayerArg extends Argument {
     public boolean parse(String input) {
         success = true;
         if (input == null || input.isEmpty()) {
-            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().parseArgs(name) : Message.NO_ARG_VALUE.msg();
+            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().params(Param.P("arg", name)) : Message.NO_ARG_VALUE.msg();
             success = false;
             return success;
         }
@@ -71,7 +71,7 @@ public class OfflinePlayerArg extends Argument {
 
         if (player == null) {
             success = false;
-            error = Message.INVALID_PLAYER.msg().parseArgs(input);
+            error = Message.INVALID_PLAYER.msg().params(Param.P("input", input));
         } else {
             success = true;
         }

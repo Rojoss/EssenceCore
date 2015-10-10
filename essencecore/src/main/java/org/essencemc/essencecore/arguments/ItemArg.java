@@ -29,6 +29,7 @@ import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.entity.EItem;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
+import org.essencemc.essencecore.message.Param;
 import org.essencemc.essencecore.parsers.ItemParser;
 
 public class ItemArg extends Argument {
@@ -53,7 +54,7 @@ public class ItemArg extends Argument {
     public boolean parse(String input) {
         success = true;
         if (input == null || input.isEmpty()) {
-            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().parseArgs(name) : Message.NO_ARG_VALUE.msg();
+            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().params(Param.P("arg", name)) : Message.NO_ARG_VALUE.msg();
             success = false;
             return success;
         }

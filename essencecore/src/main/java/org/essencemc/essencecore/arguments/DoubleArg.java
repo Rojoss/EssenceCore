@@ -28,6 +28,7 @@ package org.essencemc.essencecore.arguments;
 import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
+import org.essencemc.essencecore.message.Param;
 import org.essencemc.essencecore.util.NumberUtil;
 
 public class DoubleArg extends Argument {
@@ -79,23 +80,23 @@ public class DoubleArg extends Argument {
     public boolean parse(String input) {
         success = true;
         if (input == null || input.isEmpty()) {
-            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().parseArgs(name) : Message.NO_ARG_VALUE.msg();
+            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().params(Param.P("arg", name)) : Message.NO_ARG_VALUE.msg();
             success = false;
             return success;
         }
         value = NumberUtil.getDouble(input);
         if (value == null) {
-            error = Message.NOT_A_DECIMAL.msg().parseArgs(input);
+            error = Message.NOT_A_DECIMAL.msg().params(Param.P("input", input));
             success = false;
             return success;
         }
         if (min != null && (Double)value < min) {
-            error = Message.NUMBER_TOO_LOW.msg().parseArgs(input, Double.toString(min));
+            error = Message.NUMBER_TOO_LOW.msg().params(Param.P("input", input), Param.P("min", Double.toString(min)));
             success = false;
             return success;
         }
         if (max != null && (Double)value > max) {
-            error = Message.NUMBER_TOO_HIGH.msg().parseArgs(input, Double.toString(max));
+            error = Message.NUMBER_TOO_HIGH.msg().params(Param.P("input", input), Param.P("max", Double.toString(max)));
             success = false;
             return success;
         }
@@ -110,11 +111,11 @@ public class DoubleArg extends Argument {
     @Override
     public EText getDescription() {
         if (min != null && max != null) {
-            return Message.ARG_DECIMAL_MIN_MAX.msg().parseArgs(Double.toString(min), Double.toString(max));
+            return Message.ARG_DECIMAL_MIN_MAX.msg().params(Param.P("min", Double.toString(min)), Param.P("max", Double.toString(max)));
         } else if (min != null) {
-            return Message.ARG_DECIMAL_MIN.msg().parseArgs(Double.toString(min));
+            return Message.ARG_DECIMAL_MIN.msg().params(Param.P("min", Double.toString(min)));
         } else if (max != null) {
-            return Message.ARG_DECIMAL_MAX.msg().parseArgs(Double.toString(max));
+            return Message.ARG_DECIMAL_MAX.msg().params(Param.P("max", Double.toString(max)));
         }
         return Message.ARG_DECIMAL.msg();
     }

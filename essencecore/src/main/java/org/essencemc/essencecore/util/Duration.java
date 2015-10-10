@@ -2,6 +2,7 @@ package org.essencemc.essencecore.util;
 
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
+import org.essencemc.essencecore.message.Param;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,13 +41,13 @@ public class Duration {
                     ms += val * multipliers[i];
                 } else {
                     success = false;
-                    error = Message.INVALID_DURATION.msg().parseArgs(string, matcher.group(0));
+                    error = Message.INVALID_DURATION.msg().params(Param.P("input", string), Param.P("section", matcher.group(0)));
                 }
             }
         }
 
         if (ms <= 0) {
-            error = Message.INVALID_DURATION_NOT_ZERO.msg().parseArgs(string);
+            error = Message.INVALID_DURATION_NOT_ZERO.msg().params(Param.P("input", string));
             success = false;
         }
         this.time = ms;

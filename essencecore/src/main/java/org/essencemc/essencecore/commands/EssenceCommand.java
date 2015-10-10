@@ -41,6 +41,7 @@ import org.essencemc.essencecore.commands.links.*;
 import org.essencemc.essencecore.commands.links.internal.CommandLink;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
+import org.essencemc.essencecore.message.Param;
 import org.essencemc.essencecore.util.Util;
 
 import java.lang.reflect.Field;
@@ -228,7 +229,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                 }
                 String perm = modifiers.get(arg).getPerm();
                 if (!hasPermission(sender, perm)) {
-                    Message.NO_PERM.msg(true, true, castPlayer(sender)).parseArgs(perm.startsWith("essence.") ? perm : permission + "." + perm).send(sender);
+                    Message.NO_PERM.msg().send(sender, Param.P("perm", perm.startsWith("essence.") ? perm : permission + "." + perm));
                     result.success = false;
                     return result;
                 }
@@ -246,7 +247,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                     //It will allow empty arguments if there is a default or cached value.
                     if (!optionalArg.isValid()) {
                         if (!optionalArg.hasDefault() || (split.length > 1 && !split[1].isEmpty())) {
-                            optionalArg.getError().addPrefix().parsePlaceholders(castPlayer(sender)).toJSON().send(sender);
+                            optionalArg.getError().send(sender);
                             result.success = false;
                             return result;
                         }
@@ -327,7 +328,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                 //If there is no value specified for this argument and it's a required argument send and error.
                 //If it's an optional argument the value will be set to null.
                 if (cmdArg.isRequired(sender)) {
-                    Message.CMD_INVALID_USAGE.msg(true, true, castPlayer(sender)).parseArgs(cmd.getUsage(sender)).send(sender);
+                    Message.CMD_INVALID_USAGE.msg().send(sender, Param.P("usage", cmd.getUsage(sender)));
                     result.success = false;
                     return result;
                 } else {
@@ -345,7 +346,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
             if (link instanceof ConflictLink) {
                 //If both are specified send an error.
                 if (keys.contains(link.getFirst()) && keys.contains(link.getSecond())) {
-                    Message.CMD_LINK_CONFLICT.msg(true, true, castPlayer(sender)).parseArgs(link.getFirst(), link.getSecond()).send(sender);
+                    Message.CMD_LINK_CONFLICT.msg().send(sender, Param.P("arg1", link.getFirst()), Param.P("arg2", link.getSecond()));
                     result.success = false;
                     return result;
                 }
@@ -353,11 +354,11 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
             if (link instanceof LinkLink) {
                 //If one of these isn't specified and the other is send an error.
                 if (keys.contains(link.getFirst()) && !keys.contains(link.getSecond())) {
-                    Message.CMD_LINK_LINK.msg(true, true, castPlayer(sender)).parseArgs(link.getFirst(), link.getSecond()).send(sender);
+                    Message.CMD_LINK_LINK.msg().send(sender, Param.P("arg1", link.getFirst()), Param.P("arg2", link.getSecond()));
                     result.success = false;
                     return result;
                 } else if (keys.contains(link.getSecond()) && !keys.contains(link.getFirst())) {
-                    Message.CMD_LINK_LINK.msg(true, true, castPlayer(sender)).parseArgs(link.getSecond(), link.getFirst()).send(sender);
+                    Message.CMD_LINK_LINK.msg().send(sender, Param.P("arg1", link.getSecond()), Param.P("arg2", link.getFirst()));
                     result.success = false;
                     return result;
                 }
@@ -433,44 +434,41 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
 
         List<String> argList = new ArrayList<String>();
         for (CmdArgument arg : cmdArgs) {
-            argList.add(Message.CMD_HELP_ARG.msg().parseArgs(arg.getName(sender), arg.getDescription().getText()).getText());
+            argList.add(Message.CMD_HELP_ARG.msg().params(Param.P("arg", arg.getName(sender)), Param.P("desc", arg.getDescription().getText())).getText());
         }
         String str_usage = label + " " + Util.implode(argList, " ");
 
         List<String> modifierList = new ArrayList<String>();
         for (Map.Entry<String, CommandModifier> entry : modifiers.entrySet()) {
-            modifierList.add(Message.CMD_HELP_MODIFIER.msg().parseArgs(entry.getKey(), entry.getValue().getInfo().getText()).getText());
+            argList.add(Message.CMD_HELP_MODIFIER.msg().params(Param.P("modifier", entry.getKey()), Param.P("desc", entry.getValue().getInfo().getText())).getText());
         }
         String str_modifiers = Util.implode(modifierList, Message.CMD_HELP_SEPARATOR.msg().getText());
 
         List<String> optArgList = new ArrayList<String>();
         for (Map.Entry<String, CommandOptionalArg> entry : optionalArgs.entrySet()) {
             Argument arg = entry.getValue().getArg();
-            optArgList.add(Message.CMD_HELP_OPT_ARG.msg().parseArgs(entry.getKey(), arg.getDescription().getText(), arg.getDefault() == null ? "&c&o&mundefined" : arg.getDefault().toString()).getText());
+            String defaultVal = arg.getDefault() == null ? "&c-" : arg.getDefault().toString();
+            String desc = entry.getValue().getInfo().getText();
+            String usage = entry.getValue().getArg().getDescription().getText();
+            argList.add(Message.CMD_HELP_OPT_ARG.msg().params(Param.P("arg", entry.getKey()), Param.P("desc", desc), Param.P("usage", usage), Param.P("default", defaultVal)).getText());
         }
         String str_optargs = Util.implode(optArgList, Message.CMD_HELP_SEPARATOR.msg().getText());
 
         List<String> optList = new ArrayList<String>();
         for (Map.Entry<String, CommandOption> entry : cmdOptions.entrySet()) {
-            optList.add(Message.CMD_HELP_OPTION.msg().parseArgs(entry.getKey(), entry.getValue().getInfo().getText(), entry.getValue().getArg().getValue().toString()).getText());
+            String value = entry.getValue().getArg().getValue().toString();
+            String desc = entry.getValue().getInfo().getText();
+            String usage = entry.getValue().getArg().getDescription().getText();
+
+            argList.add(Message.CMD_HELP_OPTION.msg().params(Param.P("option", entry.getKey()), Param.P("desc", desc), Param.P("usage", usage), Param.P("value", value)).getText());
         }
         String str_options = Util.implode(optList, Message.CMD_HELP_SEPARATOR.msg().getText());
 
         String none = Message.CMD_HELP_NONE.msg().color().getText();
 
-        HashMap<String, String> values = new HashMap<String, String>();
-        values.put("cmd", label);
-        values.put("desc", Util.color(description));
-        values.put("usage", Util.color(str_usage));
-        values.put("perm", permission.isEmpty() ? none : permission);
-        values.put("aliases", str_aliases.isEmpty() ? none : Util.color(str_aliases));
-        values.put("modifiers", str_modifiers.isEmpty() ? none : Util.color(str_modifiers));
-        values.put("opt-args", str_optargs.isEmpty() ? none : Util.color(str_optargs));
-        values.put("options", str_options.isEmpty() ? none : Util.color(str_options));
-
-        Bukkit.broadcastMessage(Util.removeColor(Message.CMD_HELP_ESSENCE.msg().parseArgs(values).getText()));
-        Bukkit.broadcastMessage(Util.removeColor(Message.CMD_HELP_ESSENCE.msg().parseArgs(values).toJSON().getText()));
-        Message.CMD_HELP_ESSENCE.msg().parseArgs(values).toJSON().send(sender);
+        Message.CMD_HELP_ESSENCE.msg().send(sender, Param.P("cmd", label), Param.P("desc", Util.color(description)), Param.P("usage", Util.color(str_usage)),
+                Param.P("aliases", str_aliases.isEmpty() ? none : Util.color(str_aliases)), Param.P("modifiers", str_modifiers.isEmpty() ? none : Util.color(str_modifiers)),
+                Param.P("opt-args", str_optargs.isEmpty() ? none : Util.color(str_optargs)), Param.P("options", str_options.isEmpty() ? none : Util.color(str_options)));
     }
 
     public Player castPlayer(CommandSender sender) {

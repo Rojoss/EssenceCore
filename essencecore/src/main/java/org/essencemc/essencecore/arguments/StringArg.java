@@ -29,6 +29,7 @@ import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.arguments.internal.MatchString;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
+import org.essencemc.essencecore.message.Param;
 
 public class StringArg extends Argument {
 
@@ -90,22 +91,22 @@ public class StringArg extends Argument {
     public boolean parse(String input) {
         success = true;
         if (input == null || input.isEmpty()) {
-            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().parseArgs(name) : Message.NO_ARG_VALUE.msg();
+            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().params(Param.P("arg", name)) : Message.NO_ARG_VALUE.msg();
             success = false;
             return success;
         }
         if (match != null && match.match != null && !match.match.isEmpty() && !input.equalsIgnoreCase(match.match)) {
-            error = Message.NO_STRING_MATCH.msg().parseArgs(input, match.match);
+            error = Message.NO_STRING_MATCH.msg().params(Param.P("input", input), Param.P("match", match.match));
             success = false;
             return success;
         }
         if (minChars != null && input.length() < minChars) {
-            error = Message.TOO_FEW_CHARACTERS.msg().parseArgs(input, Integer.toString(minChars));
+            error = Message.TOO_FEW_CHARACTERS.msg().params(Param.P("input", input), Param.P("min", Integer.toString(minChars)));
             success = false;
             return success;
         }
         if (maxChars != null && input.length() > maxChars) {
-            error = Message.TOO_MUCH_CHARACTERS.msg().parseArgs(input, Integer.toString(maxChars));
+            error = Message.TOO_MUCH_CHARACTERS.msg().params(Param.P("input", input), Param.P("max", Integer.toString(maxChars)));
             success = false;
             return success;
         }
@@ -121,13 +122,13 @@ public class StringArg extends Argument {
     @Override
     public EText getDescription() {
         if (match != null && match.match != null && !match.match.isEmpty()) {
-            return Message.ARG_STRING_MATCH.msg().parseArgs(match.match);
+            return Message.ARG_STRING_MATCH.msg().params(Param.P("match", match.match));
         } else if (minChars != null && maxChars != null) {
-            return Message.ARG_STRING_MIN_MAX.msg().parseArgs(Integer.toString(minChars), Integer.toString(maxChars));
+            return Message.ARG_STRING_MIN_MAX.msg().params(Param.P("min", Integer.toString(minChars)), Param.P("max", Integer.toString(maxChars)));
         } else if (minChars != null) {
-            return Message.ARG_STRING_MIN.msg().parseArgs(Integer.toString(minChars));
+            return Message.ARG_STRING_MIN.msg().params(Param.P("min", Integer.toString(minChars)));
         } else if (maxChars != null) {
-            return Message.ARG_STRING_MAX.msg().parseArgs(Integer.toString(maxChars));
+            return Message.ARG_STRING_MAX.msg().params(Param.P("max", Integer.toString(maxChars)));
         }
         return Message.ARG_STRING.msg();
     }

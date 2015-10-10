@@ -37,6 +37,7 @@ import org.essencemc.essencecore.arguments.internal.MatchString;
 import org.essencemc.essencecore.commands.EssenceCommand;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
+import org.essencemc.essencecore.message.Param;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,7 +64,7 @@ public class CmdArgument {
 
         if (arg == null || arg.isEmpty()) {
             if (isRequired(sender)) {
-                Message.CMD_INVALID_USAGE.msg(true, true, cmd.castPlayer(sender)).parseArgs(cmd.getUsage()).send(sender);
+                Message.CMD_INVALID_USAGE.msg().send(sender, Param.P("perm", cmd.getUsage(sender)));
                 result.success = false;
             } else {
                 result.success = true;
@@ -72,13 +73,13 @@ public class CmdArgument {
         }
 
         if (!cmd.hasPermission(sender, permission)) {
-            Message.NO_PERM.msg(true, true, cmd.castPlayer(sender)).parseArgs(cmd.getPermission() + "." + permission).send(sender);
+            Message.NO_PERM.msg().send(sender, Param.P("perm", cmd.getPermission() + "." + permission));
             result.success = false;
             return result;
         }
 
         if (!argument.parse(arg)) {
-            argument.getError().addPrefix().parsePlaceholders(cmd.castPlayer(sender)).toJSON().send(sender);
+            argument.getError().send(sender);
             result.success = false;
             return result;
         }

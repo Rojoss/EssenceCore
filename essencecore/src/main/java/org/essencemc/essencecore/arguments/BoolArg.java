@@ -28,6 +28,7 @@ package org.essencemc.essencecore.arguments;
 import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
+import org.essencemc.essencecore.message.Param;
 
 public class BoolArg extends Argument {
 
@@ -51,7 +52,7 @@ public class BoolArg extends Argument {
     public boolean parse(String input) {
         success = true;
         if (input == null || input.isEmpty()) {
-            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().parseArgs(name) : Message.NO_ARG_VALUE.msg();
+            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().params(Param.P("arg", name)) : Message.NO_ARG_VALUE.msg();
             success = false;
             return success;
         }
@@ -63,7 +64,7 @@ public class BoolArg extends Argument {
             value = false;
             return success;
         }
-        error = Message.NOT_A_BOOLEAN.msg().parseArgs(input);
+        error = Message.NOT_A_BOOLEAN.msg().params(Param.P("input", input));
         success = false;
         return success;
     }

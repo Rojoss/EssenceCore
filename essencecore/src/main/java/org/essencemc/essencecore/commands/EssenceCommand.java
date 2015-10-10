@@ -272,7 +272,8 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         List<CmdArgument> cmdArgsClone = new ArrayList<CmdArgument>(cmdArgs);
         for (CommandLink link : links) {
             //Skip all links that don't modify command args.
-            if (!(link instanceof RemoveLink) && !(link instanceof ShiftLink) && !(link instanceof MakeOptionalLink)) {
+            if (!(link instanceof RemoveLink) && !(link instanceof ShiftLink) && !(link instanceof MakeOptionalLink)
+                    && !(link instanceof MakeRequiredLink) && !(link instanceof MakeRequiredConsoleLink)) {
                 continue;
             }
             //Make sure the first value for the link has been specified.
@@ -290,6 +291,14 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
                     //Make optional
                     if (link instanceof MakeOptionalLink) {
                         cmdArg.setRequirement(ArgumentRequirement.OPTIONAL);
+                    }
+                    //Make required
+                    if (link instanceof MakeRequiredLink) {
+                        cmdArg.setRequirement(ArgumentRequirement.REQUIRED);
+                    }
+                    //Make required console
+                    if (link instanceof MakeRequiredConsoleLink) {
+                        cmdArg.setRequirement(ArgumentRequirement.REQUIRED_CONSOLE);
                     }
                     //Shift to other index.
                     if (link instanceof ShiftLink) {

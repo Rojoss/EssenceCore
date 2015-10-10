@@ -1,14 +1,20 @@
 package org.essencemc.essencecore.util;
 
 import org.essencemc.essencecore.message.EText;
+import org.essencemc.essencecore.message.Message;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Duration {
 
-    private String string;
-    private Long time;
+    private String string = "";
+    private Long time = 0l;
 
     private boolean success = false;
     private EText error;
+
+    private final String[] patterns = new String[] {"\\d+ms", "\\d+s", "\\d+m", "\\d+h", "\\d+d"};
 
     /**
      * Parses the given duration string to time in milliseconds.
@@ -19,18 +25,53 @@ public class Duration {
      */
     public Duration(String string) {
         this.string = string;
-        //TODO: Format string to miliseconds.
         success = true;
+
+        int[] multipliers = new int[] {1, Time.MS_IN_SEC, Time.MS_IN_MIN, Time.MS_IN_HOUR, Time.MS_IN_DAY};
+        Long ms = 0l;
+
+        for (int i = 0; i < patterns.length; i++) {
+            Pattern pattern = Pattern.compile(patterns[i]);
+            Matcher matcher = pattern.matcher(string);
+            if (matcher.find()) {
+                string = string.replaceAll(matcher.group(0), "");
+                Integer val = NumberUtil.getInt(matcher.group(0).replaceAll("[^\\d.]", ""));
+                if (val != null) {
+                    ms += val * multipliers[i];
+                } else {
+                    success = false;
+                    error = Message.INVALID_DURATION.msg().parseArgs(string, matcher.group(0));
+                }
+            }
+        }
+
+        if (ms <= 0) {
+            error = Message.INVALID_DURATION_NOT_ZERO.msg().parseArgs(string);
+            success = false;
+        }
+        this.time = ms;
     }
 
     /**
      * Parses the given time to a duration string.
      * The duration string will look like 1d10h5m
-     * @param time The time in milliseconds that needs to be parsed.
+     * @param ms The time in milliseconds that needs to be parsed.
      */
-    public Duration(Long time) {
-        this.time = time;
-        //TODO: Format time to string.
+    public Duration(Long ms) {
+        this.time = ms;
+        Time time = new Time(ms);
+        String str = "";
+        if (time.getDays() > 0)
+            str += time.getDays() + "d";
+        if (time.getHours() > 0)
+            str += time.getHours() + "h";
+        if (time.getMinutes() > 0)
+            str += time.getMinutes() + "m";
+        if (time.getSeconds() > 0)
+            str += time.getSeconds() + "s";
+        if (time.getMs() > 0)
+            str += time.getMs() + "ms";
+        this.string = str;
         success = true;
     }
 
@@ -50,8 +91,25 @@ public class Duration {
      * @return String with proper duration formatting like 1d10h5m10s100ms
      */
     public String getString(int depth) {
-        //TODO: Strip time of duration based on depth.
+        if (depth > 0) {
+            for (int i = 0; i < depth; i++) {
+                string = string.replaceAll(patterns[i], "");
+            }
+        }
         return string;
+    }
+
+    /**
+     * Get the depth of the duration string.
+     * ms=1 s=2 m=3 h=4 d=5
+     * If the string is 1ms the depth would 1 and when it's 1h the depth would be 4
+     * If the string has multiple times the highest depth will be returned.
+     * So a string like 10m5s100ms would return depth 3 for minutes.
+     * @return The depth of the duration.
+     */
+    public int getDepth() {
+        //TODO: Get depth of string.
+        return 0;
     }
 
     /**

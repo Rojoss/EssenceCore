@@ -183,12 +183,14 @@ public class Util {
             return BoolArg.Parse((Boolean)obj);
         } else if (obj instanceof  Integer) {
             return IntArg.Parse((Integer)obj);
-        //} else if (obj instanceof Long) {
-            //return LongArg.Parse((Long)obj);
+        } else if (obj instanceof Long) {
+            return LongArg.Parse((Long)obj);
         } else if (obj instanceof Float) {
             return FloatArg.Parse((Float)obj);
         } else if (obj instanceof Double) {
             return DoubleArg.Parse((Double)obj);
+        } else if (obj instanceof Duration) {
+            return DurationArg.Parse((Duration)obj);
         } else if (obj instanceof Location) {
             return LocationArg.Parse((Location)obj);
         } else if (obj instanceof Vector) {
@@ -197,10 +199,10 @@ public class Util {
             return WorldArg.Parse((World)obj);
         } else if (obj instanceof Player) {
             return PlayerArg.Parse((Player) obj);
-        //} else if (obj instanceof EEntity) {
-            //return EntityArg.Parse((EEntity)obj);
-        //} else if (obj instanceof Entity) {
-            //return EntityArg.Parse(new EEntity((Entity)obj));
+        } else if (obj instanceof EEntity) {
+            return EntityArg.Parse((EEntity)obj);
+        } else if (obj instanceof Entity) {
+            return EntityArg.Parse(new EEntity((Entity)obj));
         } else if (obj instanceof EItem) {
             return ItemArg.Parse((EItem)obj);
         } else if (obj instanceof ItemStack) {

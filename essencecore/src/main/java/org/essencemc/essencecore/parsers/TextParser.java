@@ -39,21 +39,21 @@ public class TextParser {
 
             switch (c) {
                 case '[':
-                    if (square++ == 0 && curly == 0 && angle == 0) {
-                        json = formatJSONWithArray(json, builder.substring(0, builder.length() - 1));
-                        builder = "[";
+                    if (square++ == 1 && curly == 0 && angle == 0) {
+                        json = formatJSONWithArray(json, builder.substring(0, builder.length() - 2));
+                        builder = "[[";
                     }
                     break;
                 case '{':
-                    if (curly++ == 0 && square == 0 && angle == 0) {
-                        json = formatJSONWithArray(json, builder.substring(0, builder.length() - 1));
-                        builder = "{";
+                    if (curly++ == 1 && square == 0 && angle == 0) {
+                        json = formatJSONWithArray(json, builder.substring(0, builder.length() - 2));
+                        builder = "{{";
                     }
                     break;
                 case '<':
-                    if (angle++ == 0 && square == 0 && curly == 0) {
-                        json = formatJSONWithArray(json, builder.substring(0, builder.length() - 1));
-                        builder = "<";
+                    if (angle++ == 1 && square == 0 && curly == 0) {
+                        json = formatJSONWithArray(json, builder.substring(0, builder.length() - 2));
+                        builder = "<<";
                     }
                     break;
                 case ']':
@@ -145,9 +145,11 @@ public class TextParser {
         String[] split = text.split(splitChar);
 
         String[] hover = null;
-        if (split[1].contains("{")) {
+        if (split[1].contains("{{")) {
             hover = formatHoverInherit(split[1]);
-            split[1] = hover[1];
+            if (hover.length > 1) {
+                split[1] = hover[1];
+            }
         }
 
         String json = "\"text\": \"" + split[1] + "\",\"clickEvent\": {\"action\": \"" + action + "\",\"value\": \"" + split[0] + "\"}";

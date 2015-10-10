@@ -11,6 +11,7 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
 import org.essencemc.essencecore.arguments.*;
 import org.essencemc.essencecore.entity.EEntity;
+import org.essencemc.essencecore.util.Duration;
 
 public enum ArgumentType {
     INTEGER(new IntArg(), "integer", "int", "in"),
@@ -20,6 +21,7 @@ public enum ArgumentType {
     STRING(new StringArg(), "string", "str", "st"),
     BOOLEAN(new BoolArg(), "boolean", "bool", "boo", "bo"),
 
+    DURATION(new DurationArg(), "duration", "dur", "du"),
     LOCATION(new LocationArg(), "location", "loc", "lo"),
     VECTOR(new VectorArg(), "vector", "vec", "ve"),
     WORLD(new WorldArg(), "world", "wor", "wo"),
@@ -76,6 +78,8 @@ public enum ArgumentType {
             return ArgumentType.FLOAT;
         } else if (obj instanceof Double) {
             return ArgumentType.DOUBLE;
+        } else if (obj instanceof Duration) {
+            return ArgumentType.DURATION;
         } else if (obj instanceof Location) {
             return ArgumentType.LOCATION;
         } else if (obj instanceof Vector) {
@@ -114,6 +118,8 @@ public enum ArgumentType {
             return ArgumentType.FLOAT;
         } else if (!value.endsWith("f") && !value.endsWith("F") && parseSuccessful(ArgumentType.DOUBLE, value)) {
             return ArgumentType.DOUBLE;
+        } else if (parseSuccessful(ArgumentType.DURATION, value)) {
+            return ArgumentType.DURATION;
         } else if (parseSuccessful(ArgumentType.PLAYER, value)) {
             return ArgumentType.PLAYER;
         } else if (parseSuccessful(ArgumentType.OFFLINE_PLAYER, value)) {

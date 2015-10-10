@@ -34,7 +34,7 @@ public class EText {
     }
 
     /**
-     * Color the string by replacing all & symbols to
+     * Color the string by replacing all &amp; symbols to
      * @return EText instance.
      */
     public EText color() {

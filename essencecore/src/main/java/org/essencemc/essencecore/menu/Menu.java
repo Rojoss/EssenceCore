@@ -29,7 +29,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -39,7 +38,6 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.essencemc.essencecore.entity.EItem;
-import org.essencemc.essencecore.util.Debug;
 import org.essencemc.essencecore.util.Util;
 
 import java.util.*;
@@ -61,7 +59,7 @@ public abstract class Menu {
 
 
     /**
-     * Creates a new menu instance with the default "&8&lMenu" title.
+     * Creates a new menu instance with the default "&amp;8&amp;lMenu" title.
      * @param plugin The plugin that owns this menu which is used for event listeners.
      * @param name The menu name which is the identifier key.
      * @param rows The amount of rows for the menu. (Not recommended to set above 6)

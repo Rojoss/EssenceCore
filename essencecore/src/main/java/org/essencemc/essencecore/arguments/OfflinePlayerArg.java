@@ -69,7 +69,7 @@ public class OfflinePlayerArg extends Argument {
             player = Bukkit.getOfflinePlayer(input);
         }
 
-        if (player == null) {
+        if (player == null || !player.hasPlayedBefore()) {
             success = false;
             error = Message.INVALID_PLAYER.msg().params(Param.P("input", input));
         } else {

@@ -196,7 +196,7 @@ public class Placeholder {
         //If there is no source specified and the type is a raw type or there is no player the placeholder is invalid.
         //TODO: Should probably have error codes for setting the value. Like Undefined-1 would be no raw source value specified etc.
         if (source == null) {
-            return Message.INVALID_PLACEHOLDER_VALUE.msg(true, true, player).getText();
+            return Message.INVALID_PLACEHOLDER_VALUE.msg().getText();
         }
 
         //Dispatch the custom event with the placeholder, source and arguments.
@@ -205,7 +205,7 @@ public class Placeholder {
 
         //If there is no value set for the placeholder it's invalid.
         if (event.getValue() == null || event.getValue().isEmpty()) {
-            return Message.INVALID_PLACEHOLDER_VALUE.msg(true, true, player).getText();
+            return Message.INVALID_PLACEHOLDER_VALUE.msg().getText();
         }
 
         return event.getValue();

@@ -30,6 +30,7 @@ import org.essencemc.essencecore.aliases.Items;
 import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
+import org.essencemc.essencecore.message.Param;
 
 public class MaterialArg extends Argument {
 
@@ -53,14 +54,14 @@ public class MaterialArg extends Argument {
     public boolean parse(String input) {
         success = true;
         if (input == null || input.isEmpty()) {
-            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().parseArgs(name) : Message.NO_ARG_VALUE.msg();
+            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().params(Param.P("arg", name)) : Message.NO_ARG_VALUE.msg();
             success = false;
             return success;
         }
 
         value = Items.getMaterialData(input);
         if (value == null) {
-            error = Message.NOT_A_MATERIAL.msg().parseArgs(input);
+            error = Message.NOT_A_MATERIAL.msg().params(Param.P("input", input));
             success = false;
             return success;
         }

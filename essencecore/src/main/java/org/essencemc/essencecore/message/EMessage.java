@@ -39,7 +39,7 @@ import java.util.TreeMap;
  * In Essence messages are registered in the Message enum but you could also create messages directly.
  * However, an enum is probably the best approach so that you can access the messages easily.
  * To send a message to a player you would do something like:
- * Message.NO_PERM.msg(true).parseArgs("essence.example.perm").send(player);
+ * Message.NO_PERM.msg(true).params("essence.example.perm").send(player);
  */
 public class EMessage {
 

@@ -28,6 +28,7 @@ package org.essencemc.essencecore.arguments;
 import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
+import org.essencemc.essencecore.message.Param;
 import org.essencemc.essencecore.util.NumberUtil;
 
 public class LongArg extends Argument {
@@ -79,23 +80,23 @@ public class LongArg extends Argument {
     public boolean parse(String input) {
         success = true;
         if (input == null || input.isEmpty()) {
-            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().parseArgs(name) : Message.NO_ARG_VALUE.msg();
+            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().params(Param.P("arg", name)) : Message.NO_ARG_VALUE.msg();
             success = false;
             return success;
         }
         value = NumberUtil.getLong(input);
         if (value == null) {
-            error = Message.NOT_A_NUMBER.msg().parseArgs(input);
+            error = Message.NOT_A_NUMBER.msg().params(Param.P("input", input));
             success = false;
             return success;
         }
         if (min != null && (Long)value < min) {
-            error = Message.NUMBER_TOO_LOW.msg().parseArgs(input, Long.toString(min));
+            error = Message.NUMBER_TOO_LOW.msg().params(Param.P("input", input), Param.P("min", Long.toString(min)));
             success = false;
             return success;
         }
         if (max != null && (Long)value > max) {
-            error = Message.NUMBER_TOO_LOW.msg().parseArgs(input, Long.toString(max));
+            error = Message.NUMBER_TOO_LOW.msg().params(Param.P("input", input), Param.P("max", Long.toString(max)));
             success = false;
             return success;
         }
@@ -110,11 +111,11 @@ public class LongArg extends Argument {
     @Override
     public EText getDescription() {
         if (min != null && max != null) {
-            return Message.ARG_INT_MIN_MAX.msg().parseArgs(Long.toString(min), Long.toString(max));
+            return Message.ARG_INT_MIN_MAX.msg().params(Param.P("min", Long.toString(min)), Param.P("max", Long.toString(max)));
         } else if (min != null) {
-            return Message.ARG_INT_MIN.msg().parseArgs(Long.toString(min));
+            return Message.ARG_INT_MIN.msg().params(Param.P("min", Long.toString(min)));
         } else if (max != null) {
-            return Message.ARG_INT_MAX.msg().parseArgs(Long.toString(max));
+            return Message.ARG_INT_MAX.msg().params(Param.P("max", Long.toString(max)));
         }
         return Message.ARG_INT.msg();
     }

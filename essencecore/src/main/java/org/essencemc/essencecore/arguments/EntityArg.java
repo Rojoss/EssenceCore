@@ -33,8 +33,8 @@ import org.essencemc.essencecore.entity.EEntity;
 import org.essencemc.essencecore.entity.EItem;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
+import org.essencemc.essencecore.message.Param;
 import org.essencemc.essencecore.parsers.EntityParser;
-import org.essencemc.essencecore.parsers.ItemParser;
 import org.essencemc.essencecore.util.NumberUtil;
 
 import java.util.List;
@@ -62,7 +62,7 @@ public class EntityArg extends Argument {
     public boolean parse(String input) {
         success = true;
         if (input == null || input.isEmpty()) {
-            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().parseArgs(name) : Message.NO_ARG_VALUE.msg();
+            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().params(Param.P("arg", name)) : Message.NO_ARG_VALUE.msg();
             success = false;
             return success;
         }
@@ -97,7 +97,7 @@ public class EntityArg extends Argument {
         }
 
         if (parser.getEntities().size() < 1 || parser.getEntities().get(0).size() < 1) {
-            error = Message.INVALID_ENTITY.msg().parseArgs(input);
+            error = Message.INVALID_ENTITY.msg().params(Param.P("input", input));
             success = false;
             return success;
         }

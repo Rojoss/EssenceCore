@@ -38,6 +38,7 @@ import org.essencemc.essencecore.entity.EEntity;
 import org.essencemc.essencecore.entity.EntityTag;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
+import org.essencemc.essencecore.message.Param;
 import org.essencemc.essencecore.util.NumberUtil;
 import org.essencemc.essencecore.util.Util;
 
@@ -124,7 +125,7 @@ public class EntityParser {
             if (!data.isEmpty()) {
                 String[] split = data.split(" ");
                 if (NumberUtil.getInt(split[0]) == null) {
-                    error = Message.PARSER_INVALID_AMOUNT.msg().parseArgs(split[0]);
+                    error = Message.PARSER_INVALID_AMOUNT.msg().params(Param.P("input", split[0]));
                     return;
                 }
                 amount = NumberUtil.getInt(split[0]);
@@ -166,7 +167,7 @@ public class EntityParser {
             //TODO: Get entity from alias.
             EntityType type = EntityType.fromName(entity);
             if (type == null) {
-                error = Message.INVALID_ENITY_TYPE.msg().parseArgs(entity);
+                error = Message.INVALID_ENITY_TYPE.msg().params(Param.P("entity", entity));
                 return;
             }
 
@@ -213,7 +214,7 @@ public class EntityParser {
                     if (tag != null) {
                         if (!EntityTag.getTags(entry.getKey()).contains(tag)) {
                             //TODO: Get name from alias.
-                            error = Message.INVALID_ENTITY_TAG_ENTITY.msg().parseArgs(data.getKey(), entry.getKey().getName());
+                            error = Message.INVALID_ENTITY_TAG_ENTITY.msg().params(Param.P("input", data.getKey()), Param.P("entity", entry.getKey().getName()));
                             if (!ignoreErrors) {
                                 entity.remove();
                                 return;
@@ -290,7 +291,7 @@ public class EntityParser {
                     //Do the same for potion effects by key.
                     //TODO: Potion effects as tags.
 
-                    error = Message.INVALID_ENTITY_TAG.msg().parseArgs(data.getKey());
+                    error = Message.INVALID_ENTITY_TAG.msg().params(Param.P("input", data.getKey()));
                     if (!ignoreErrors) {
                         entity.remove();
                         return;

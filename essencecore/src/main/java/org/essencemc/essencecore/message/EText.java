@@ -1,17 +1,15 @@
 package org.essencemc.essencecore.message;
 
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.essencemc.essencecore.EssenceCore;
 import org.essencemc.essencecore.parsers.TextParser;
 import org.essencemc.essencecore.placeholders.Placeholder;
-import org.essencemc.essencecore.util.Debug;
 import org.essencemc.essencecore.util.Util;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Text builder to parse text in multiple ways and sending text easily.
@@ -23,6 +21,7 @@ import java.util.Map;
  */
 public class EText {
 
+    private String originalText = "";
     private String text = "";
 
     /**
@@ -30,6 +29,7 @@ public class EText {
      * @param text The text that needs to be build/parsed.
      */
     public EText(String text) {
+        this.originalText = originalText;
         this.text = text;
     }
 
@@ -54,23 +54,11 @@ public class EText {
     }
 
     /**
-     * Add the default configured Essence prefix in front of the string.
-     * <b>Do not call this after converting the text to JSON!</b>
+     * Parse the prefix {p} in a message to the Essence prefix.
      * @return EText instance.
      */
-    public EText addPrefix() {
-        text = Message.PREFIX.msg().color().getText() + " " + text;
-        return this;
-    }
-
-    /**
-     * Add the specified prefix in front of the string.
-     * Do not call this after converting the text to JSON!
-     * @param prefix The string used as prefix. (Supports color codes)
-     * @return EText instance.
-     */
-    public EText addPrefix(String prefix) {
-        text = Util.color(prefix) + " " + text;
+    public EText parsePrefix() {
+        params(Param.P("p", Message.PREFIX.msg().getText()));
         return this;
     }
 
@@ -88,34 +76,42 @@ public class EText {
     }
 
     /**
-     * Replace all numbered args based on the specified args.
-     * For example a message like 'You have been given {0} {1}.'
-     * If you pass in '1' as the first argument and 'diamond' as the second.
+     * Replace all parameters in the text with the specified parameters.
+     * For example a message like 'You have been given {0} {item}.'
+     * If you pass in '1' as the first argument and 'diamond' as the second {item} argument.
      * the result message would be 'You have been given 1 diamond.'
-     * @param args All the arguments that will be replaced. The order you specify this in matters for the index id's!
+     * @param params A list of Param instances with names and values.
      * @return EText instance.
      */
-    public EText parseArgs(String... args) {
-        for (int i = 0; i < args.length; i++) {
-            if (args[i] == null) {
+    public EText params(Param... params) {
+        for (int i = 0; i < params.length; i++) {
+            if (params[i] == null) {
                 continue;
             }
-            text = text.replace("{" + i + "}", args[i]);
+            text = text.replace("{" + params[i].getName() + "}", params[i].getValue());
+            text = text.replace("{" + i + "}", params[i].getValue());
         }
         return this;
     }
 
     /**
-     * Replace all key args based on the specified args in the map.
-     * For example a message like 'You have been given {amount} {item}.'
-     * If you pass in {{'amount': '1'}, {'item': 'diamond'}}
-     * the result message would be 'You have been given 1 diamond.'
-     * @param args A map with string keys and values. (Keys should not have the curly brackets!)
-     * @return EText instance.
+     * Format the text completely.
+     * @param sender The sender used as source for placeholders.
+     * @param parsePlaceholders When set to true placeholders will be parsed.
+     * @param json When set to true the text will be converted to JSON and implement hover messages etc.
+     * @param params List of parameters that need to be replaced.
+     * @return
      */
-    public EText parseArgs(HashMap<String, String> args) {
-        for (Map.Entry<String, String> arg : args.entrySet()) {
-            text = text.replace("{" + arg.getKey() + "}", arg.getValue());
+    public EText format(CommandSender sender, boolean parsePlaceholders, boolean json, Param... params) {
+        params(Param.P("p", Message.PREFIX.msg().getText()));
+        if (params.length > 0) {
+            params(params);
+        }
+        if (parsePlaceholders) {
+            parsePlaceholders(sender instanceof Player ? (Player)sender : null);
+        }
+        if (json) {
+            toJSON();
         }
         return this;
     }
@@ -129,35 +125,52 @@ public class EText {
         return text;
     }
 
+
+
+
     /**
-     * Send the text to the specified player.
-     * If the text is JSON it will send it as a JSON message with proper formatting.
-     * @param player The player to send the text to.
+     * Send the text to the specified command sender.
+     * It will add the default Essence prefix, parse placeholders and format to json.
+     * @param sender The CommandSender to send the text to.
      * @return EText instance.
      */
-    public EText send(Player player) {
-        if (text.contains("{")) {
-            //player.sendMessage(text);
-            EssenceCore.inst().getChat().sendChat(text, player);
-        } else {
-            player.sendMessage(text);
-        }
+    public EText send(CommandSender sender) {
+        send(sender, true, true);
         return this;
     }
 
     /**
      * Send the text to the specified command sender.
-     * If the text is JSON it will send it as a JSON message with proper formatting if the sender is a player.
+     * It will add the default Essence prefix, parse placeholders, format to json and parse all specified params.
      * @param sender The CommandSender to send the text to.
+     * @param params List of parameters that need to be replaced.
      * @return EText instance.
      */
-    public EText send(CommandSender sender) {
+    public EText send(CommandSender sender, Param... params) {
+        send(sender, true, true, params);
+        return this;
+    }
+
+    /**
+     * Send the text to the specified command sender.
+     * If json is true, the text is json and the sender is a player the message will be send like tellraw.
+     * @param sender The CommandSender to send the text to.
+     * @param parsePlaceholders When set to true placeholders will be parsed.
+     * @param json When set to true the text will be converted to JSON and implement hover messages etc.
+     * @param params List of parameters that need to be replaced.
+     * @return EText instance.
+     */
+    public EText send(CommandSender sender, boolean parsePlaceholders, boolean json, Param... params) {
+        if (sender instanceof Player) {
+            format(sender, parsePlaceholders, json, params);
+        } else {
+            format(sender, parsePlaceholders, false, params);
+        }
+
         if (text.contains("{")) {
             if (sender instanceof Player) {
-                //sender.sendMessage(text);
                 EssenceCore.inst().getChat().sendChat(text, (Player)sender);
             } else {
-                //TODO: If JSON undo json parsing and send it as a regular message.
                 sender.sendMessage(text);
             }
         } else {
@@ -166,69 +179,162 @@ public class EText {
         return this;
     }
 
+
+
     /**
-     * Broadcast the text to the entire server.
-     * If the text is JSON it will send it as a JSON message with proper formatting.
+     * Send the text to the specified command sender.
+     * It will add the default Essence prefix, parse placeholders and format to json.
+     * @param players List of players to send the message to..
      * @return EText instance.
      */
-    public EText broadcast() {
-        if (text.contains("{")) {
-            EssenceCore.inst().getChat().sendChat(text, Bukkit.getServer().getOnlinePlayers());
-        } else {
-            Bukkit.getServer().broadcastMessage(text);
-        }
+    public EText send(List<Player> players) {
+        send(players, true, true);
+        return this;
+    }
+
+
+
+    /**
+     * Send the text to the specified command sender.
+     * It will add the default Essence prefix, parse placeholders, format to json and parse all specified params.
+     * @param players List of players to send the message to.
+     * @param params List of parameters that need to be replaced.
+     * @return EText instance.
+     */
+    public EText send(List<Player> players, Param... params) {
+        send(players, true, true, params);
         return this;
     }
 
     /**
-     * Broadcast the text to the specified worlds.
-     * If the text is JSON it will send it as a JSON message with proper formatting.
+     * Send the text to the specified command sender.
+     * If json is true and the text is jso the message will be send like tellraw.
+     * @param players List of players to send the message to.
+     * @param parsePlaceholders When set to true placeholders will be parsed.
+     * @param json When set to true the text will be converted to JSON and implement hover messages etc.
+     * @param params List of parameters that need to be replaced.
      * @return EText instance.
      */
-    public EText broadcast(World... worlds) {
-        if (text.contains("{")) {
-            for (World world : worlds) {
-                EssenceCore.inst().getChat().sendChat(text, world.getPlayers());
-            }
-        } else {
-            for (World world : worlds) {
-                for (Player player : world.getPlayers()) {
-                    player.sendMessage(text);
-                }
+    public EText send(List<Player> players, boolean parsePlaceholders, boolean json, Param... params) {
+        for (Player player : players) {
+            format(player, parsePlaceholders, json, params);
+
+            if (text.contains("{")) {
+                EssenceCore.inst().getChat().sendChat(text, player);
+            } else {
+                player.sendMessage(text);
             }
         }
+        return this;
+    }
+
+
+
+    /**
+     * Broadcast the text to the entire server.
+     * It will add the default Essence prefix, parse placeholders, format to json and parse all specified params.
+     * @param params List of parameters that need to be replaced.
+     * @return EText instance.
+     */
+    public EText broadcast(Param... params) {
+        broadcast(true, true, params);
+        return this;
+    }
+
+    /**
+     * Broadcast the text to the entire server.
+     * If json is true and the text is jso the message will be send like tellraw.
+     * @param parsePlaceholders When set to true placeholders will be parsed.
+     * @param json When set to true the text will be converted to JSON and implement hover messages etc.
+     * @param params List of parameters that need to be replaced.
+     * @return EText instance.
+     */
+    public EText broadcast(boolean parsePlaceholders, boolean json, Param... params) {
+        send(new ArrayList<Player>(Bukkit.getOnlinePlayers()), parsePlaceholders, json, params);
+        return this;
+    }
+
+
+
+    /**
+     * Send the text to the specified players action bar. (above the hotbar)
+     * This doesn't support JSON formatting as you can't hover over the text and/or click on it.
+     * It will add the default Essence prefix and parse placeholders.
+     * @param player The CommandSender to send the text to.
+     * @return EText instance.
+     */
+    public EText sendBar(Player player) {
+        sendBar(player, true);
         return this;
     }
 
     /**
      * Send the text to the specified players action bar. (above the hotbar)
      * This doesn't support JSON formatting as you can't hover over the text and/or click on it.
-     * @param player The player to send the text to.
+     * It will add the default Essence prefix, parse placeholders and parse all specified params.
+     * @param player The CommandSender to send the text to.
+     * @param params List of parameters that need to be replaced.
      * @return EText instance.
      */
-    public EText sendBar(Player player) {
+    public EText sendBar(Player player, Param... params) {
+        sendBar(player, true, params);
+        return this;
+    }
+
+    /**
+     * Send the text to the specified players action bar. (above the hotbar)
+     * This doesn't support JSON formatting as you can't hover over the text and/or click on it.
+     * @param player The CommandSender to send the text to.
+     * @param parsePlaceholders When set to true placeholders will be parsed.
+     * @param params List of parameters that need to be replaced.
+     * @return EText instance.
+     */
+    public EText sendBar(Player player, boolean parsePlaceholders, Param... params) {
+        format(player, parsePlaceholders, false, params);
         EssenceCore.inst().getChat().sendActionbar(text, player);
         return this;
     }
 
+
+
     /**
-     * Broadcast the text to all players their actionbar.
+     * Send the text to the specified players action bar. (above the hotbar)
      * This doesn't support JSON formatting as you can't hover over the text and/or click on it.
+     * It will add the default Essence prefix and parse placeholders.
+     * @param players The CommandSender to send the text to.
      * @return EText instance.
      */
-    public EText broadcastBar() {
-        EssenceCore.inst().getChat().sendActionbar(text, Bukkit.getServer().getOnlinePlayers());
+    public EText sendBar(List<Player> players) {
+        sendBar(players, true);
         return this;
     }
 
     /**
-     * Broadcast the text to all players their actionbar in the specified worlds.
+     * Send the text to the specified players action bar. (above the hotbar)
      * This doesn't support JSON formatting as you can't hover over the text and/or click on it.
+     * It will add the default Essence prefix, parse placeholders and parse all specified params.
+     * @param players The CommandSender to send the text to.
+     * @param params List of parameters that need to be replaced.
      * @return EText instance.
      */
-    public EText broadcastBar(World... worlds) {
-        for (World world : worlds) {
-            EssenceCore.inst().getChat().sendActionbar(text, world.getPlayers());
+    public EText sendBar(List<Player> players, Param... params) {
+        sendBar(players, true, params);
+        return this;
+    }
+
+    /**
+     * Send the text to the specified players action bar. (above the hotbar)
+     * This doesn't support JSON formatting as you can't hover over the text and/or click on it.
+     * @param players The CommandSender to send the text to.
+     *
+     * @param parsePlaceholders When set to true placeholders will be parsed.
+     * @param params List of parameters that need to be replaced.
+     * @return EText instance.
+     */
+    public EText sendBar(List<Player> players, boolean parsePlaceholders, Param... params) {
+        for (Player player : players) {
+            format(player, parsePlaceholders, false, params);
+            EssenceCore.inst().getChat().sendActionbar(text, player);
         }
         return this;
     }

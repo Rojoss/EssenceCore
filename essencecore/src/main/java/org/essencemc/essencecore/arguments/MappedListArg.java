@@ -28,6 +28,7 @@ package org.essencemc.essencecore.arguments;
 import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
+import org.essencemc.essencecore.message.Param;
 import org.essencemc.essencecore.util.Util;
 
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ public class MappedListArg extends Argument {
     public boolean parse(String input) {
         success = true;
         if (input == null || input.isEmpty()) {
-            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().parseArgs(name) : Message.NO_ARG_VALUE.msg();
+            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().params(Param.P("arg", name)) : Message.NO_ARG_VALUE.msg();
             success = false;
             return success;
         }
@@ -73,7 +74,7 @@ public class MappedListArg extends Argument {
             }
         }
 
-        error = Message.INVALID_LIST_ARGUMENT.msg().parseArgs(input, Util.implode(allArgs, ","));
+        error = Message.INVALID_LIST_ARGUMENT.msg().params(Param.P("input", input), Param.P("values", Util.implode(allArgs, ",")));
         success = false;
         return success;
     }
@@ -85,7 +86,7 @@ public class MappedListArg extends Argument {
 
     @Override
     public EText getDescription() {
-        return Message.ARG_LIST.msg().parseArgs(Util.implode(values.keySet(), ","));
+        return Message.ARG_LIST.msg().params(Param.P("values", Util.implode(values.keySet(), ",")));
     }
 
     @Override

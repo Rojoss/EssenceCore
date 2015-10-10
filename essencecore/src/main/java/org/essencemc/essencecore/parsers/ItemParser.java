@@ -44,7 +44,7 @@ import org.essencemc.essencecore.aliases.Items;
 import org.essencemc.essencecore.entity.EItem;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
-import org.essencemc.essencecore.util.Debug;
+import org.essencemc.essencecore.message.Param;
 import org.essencemc.essencecore.util.NumberUtil;
 import org.essencemc.essencecore.util.Util;
 
@@ -87,7 +87,7 @@ public class ItemParser {
         //item[:data]
         ItemAlias itemAlias = Items.getItem(sections[0]);
         if (itemAlias == null) {
-            error = Message.PARSER_INVALID_ITEM.msg().parseArgs(sections[0]);
+            error = Message.PARSER_INVALID_ITEM.msg().params(Param.P("input", sections[0]));
             return;
         }
         item.setType(itemAlias.getType());
@@ -103,7 +103,7 @@ public class ItemParser {
         //Amount
         if (sections.length > 1) {
             if (NumberUtil.getInt(sections[1]) == null) {
-                error = Message.PARSER_INVALID_AMOUNT.msg().parseArgs(sections[1]);
+                error = Message.PARSER_INVALID_AMOUNT.msg().params(Param.P("input", sections[1]));
                 if (!ignoreErrors) {
                     return;
                 }
@@ -124,7 +124,7 @@ public class ItemParser {
         for (String section : sectionList) {
             String[] split = section.split(":");
             if (split.length < 2) {
-                error = Message.NO_META_VALUE.msg().parseArgs(split[0]);
+                error = Message.NO_META_VALUE.msg().params(Param.P("meta", split[0]));
                 if (ignoreErrors) {
                     continue;
                 } else {
@@ -151,7 +151,7 @@ public class ItemParser {
         if (metaMap.containsKey("leather")) {
             Color color = Util.getColor(metaMap.get("leather"));
             if (color == null) {
-                error = Message.PARSER_INVALID_COLOR.msg().parseArgs(metaMap.get("leather"));
+                error = Message.PARSER_INVALID_COLOR.msg().params(Param.P("input", metaMap.get("leather")));
                 if (!ignoreErrors) {
                     return;
                 }
@@ -193,7 +193,7 @@ public class ItemParser {
         if (metaMap.containsKey("basecolor")) {
             DyeColor color = Aliases.getDyeColor(metaMap.get("basecolor"));
             if (color == null) {
-                error = Message.PARSER_INVALID_DYE_COLOR.msg().parseArgs(metaMap.get("basecolor"));
+                error = Message.PARSER_INVALID_DYE_COLOR.msg().params(Param.P("input", metaMap.get("basecolor")));
                 if (!ignoreErrors) {
                     return;
                 }
@@ -210,7 +210,7 @@ public class ItemParser {
         boolean hasColor = false;
         if (metaMap.containsKey("power")) {
             if (NumberUtil.getInt(metaMap.get("power")) == null) {
-                error = Message.NOT_A_NUMBER.msg().parseArgs(metaMap.get("power"));
+                error = Message.NOT_A_NUMBER.msg().params(Param.P("input", metaMap.get("power")));
                 if (!ignoreErrors) {
                     return;
                 }
@@ -222,7 +222,7 @@ public class ItemParser {
         if (metaMap.containsKey("shape")) {
             FireworkEffect.Type shape = Aliases.getFireworkEffect(metaMap.get("shape"));
             if (shape == null) {
-                error = Message.PARSER_INVALID_SHAPE.msg().parseArgs(metaMap.get("shape"));
+                error = Message.PARSER_INVALID_SHAPE.msg().params(Param.P("input", metaMap.get("shape")));
                 if (!ignoreErrors) {
                     return;
                 }
@@ -239,7 +239,7 @@ public class ItemParser {
             for (String color : colorSplit) {
                 Color clr = Util.getColor(color);
                 if (clr == null) {
-                    error = Message.PARSER_INVALID_COLOR.msg().parseArgs(metaMap.get("color"));
+                    error = Message.PARSER_INVALID_COLOR.msg().params(Param.P("input", metaMap.get("color")));
                     if (!ignoreErrors) {
                         return;
                     }
@@ -260,7 +260,7 @@ public class ItemParser {
             for (String color : colorSplit) {
                 Color clr = Util.getColor(color);
                 if (clr == null) {
-                    error = Message.PARSER_INVALID_COLOR.msg().parseArgs(metaMap.get("fade"));
+                    error = Message.PARSER_INVALID_COLOR.msg().params(Param.P("input", metaMap.get("fade")));
                     if (!ignoreErrors) {
                         return;
                     }
@@ -314,7 +314,7 @@ public class ItemParser {
                 Enchantment enchant = Aliases.getEnchantment(entry.getKey());
                 if (enchant != null) {
                     if (NumberUtil.getInt(entry.getValue()) == null) {
-                        error = Message.PARSER_ENCHANT_VALUE.msg().parseArgs(entry.getValue());
+                        error = Message.PARSER_ENCHANT_VALUE.msg().params(Param.P("input", entry.getValue()));
                         return;
                     }
                     item.addEnchant(enchant, NumberUtil.getInt(entry.getValue()));
@@ -326,11 +326,11 @@ public class ItemParser {
                 if (effect != null) {
                     String[] split = entry.getValue().split("\\.");
                     if (split.length < 2) {
-                        error = Message.PARSER_POTION_VALUE.msg().parseArgs(entry.getValue());
+                        error = Message.PARSER_POTION_VALUE.msg().params(Param.P("input", entry.getValue()));
                         return;
                     }
                     if (NumberUtil.getInt(split[0]) == null || NumberUtil.getInt(split[1]) == null) {
-                        error = Message.PARSER_POTION_VALUE.msg().parseArgs(entry.getValue());
+                        error = Message.PARSER_POTION_VALUE.msg().params(Param.P("input", entry.getValue()));
                         return;
                     }
                     item.addEffect(new PotionEffect(effect, NumberUtil.getInt(split[0]), NumberUtil.getInt(split[1])), true);
@@ -342,7 +342,7 @@ public class ItemParser {
                 if (pattern != null) {
                     DyeColor color = Aliases.getDyeColor(entry.getValue());
                     if (color == null) {
-                        error = Message.PARSER_INVALID_DYE_COLOR.msg().parseArgs(entry.getValue());
+                        error = Message.PARSER_INVALID_DYE_COLOR.msg().params(Param.P("input", entry.getValue()));
                         return;
                     }
                     item.addPattern(pattern, color);

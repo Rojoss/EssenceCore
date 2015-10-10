@@ -31,6 +31,7 @@ import org.bukkit.entity.Player;
 import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
+import org.essencemc.essencecore.message.Param;
 import org.essencemc.essencecore.util.NumberUtil;
 
 import java.util.Map;
@@ -57,7 +58,7 @@ public class LocationArg extends Argument {
     public boolean parse(String input) {
         success = true;
         if (input == null || input.isEmpty()) {
-            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().parseArgs(name) : Message.NO_ARG_VALUE.msg();
+            error = hasName() ? Message.NO_ARG_VALUE_NAME.msg().params(Param.P("arg", name)) : Message.NO_ARG_VALUE.msg();
             success = false;
             return success;
         }
@@ -107,13 +108,13 @@ public class LocationArg extends Argument {
         //Get the coords x,y,z[,yaw,pitch]
         String[] coords = split[0].split(",");
         if (coords.length < 3) {
-            error = Message.MISSING_XYZ_LOCATION.msg().parseArgs(input);
+            error = Message.MISSING_XYZ_LOCATION.msg().params(Param.P("input", input));
             success = false;
             return success;
         }
 
         if (location.getWorld() == null) {
-            error = Message.MISSING_WORLD_LOCATION.msg().parseArgs(input);
+            error = Message.MISSING_WORLD_LOCATION.msg().params(Param.P("input", input));
             success = false;
             return success;
         }
@@ -134,7 +135,7 @@ public class LocationArg extends Argument {
             //Parse the value.
             Double val = NumberUtil.getDouble(value);
             if (val == null && !value.isEmpty()) {
-                error = Message.NOT_A_DECIMAL.msg().parseArgs(value);
+                error = Message.NOT_A_DECIMAL.msg().params(Param.P("val", value));
                 success = false;
                 return success;
             }
@@ -157,7 +158,7 @@ public class LocationArg extends Argument {
 
         //Final error check just to make sure.
         if (location == null) {
-            error = Message.INVALID_LOCATION.msg().parseArgs(input);
+            error = Message.INVALID_LOCATION.msg().params(Param.P("input", input));
             success = false;
             return success;
         }

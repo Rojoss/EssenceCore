@@ -34,6 +34,7 @@ public enum MsgCat {
     COMMAND_OTHER,
     VALIDATION,
     ITEM_PARSER,
+    META,
     OTHER,
     EXTERNAL,
     ;

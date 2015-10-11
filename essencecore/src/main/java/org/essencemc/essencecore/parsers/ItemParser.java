@@ -25,10 +25,7 @@
 
 package org.essencemc.essencecore.parsers;
 
-import org.bukkit.Color;
-import org.bukkit.DyeColor;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
@@ -41,13 +38,17 @@ import org.essencemc.essencecore.aliases.AliasType;
 import org.essencemc.essencecore.aliases.Aliases;
 import org.essencemc.essencecore.aliases.ItemAlias;
 import org.essencemc.essencecore.aliases.Items;
+import org.essencemc.essencecore.arguments.internal.Argument;
 import org.essencemc.essencecore.entity.EItem;
+import org.essencemc.essencecore.entity.ItemTag;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 import org.essencemc.essencecore.message.Param;
 import org.essencemc.essencecore.util.NumberUtil;
 import org.essencemc.essencecore.util.Util;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -75,55 +76,62 @@ public class ItemParser {
     public ItemParser(String string, boolean ignoreErrors) {
         this.string = string;
 
-        EItem item = new EItem(Material.AIR);
-
-        String[] sections = string.split(" ");
-        if (sections.length < 1) {
+        String[] words = string.split(" ");
+        if (string == null || string.trim().length() < 1) {
             error = Message.PARSER_NO_ITEM_SPECIFIED.msg();
             return;
         }
-        List<String> sectionList = new ArrayList<String>(Arrays.asList(sections));
 
-        //item[:data]
-        ItemAlias itemAlias = Items.getItem(sections[0]);
+        EItem item = new EItem(Material.AIR);
+        List<String> sections = Util.splitQuotedString(string.trim());
+
+        //Item
+        ItemAlias itemAlias = Items.getItem(sections.get(0));
         if (itemAlias == null) {
-            error = Message.PARSER_INVALID_ITEM.msg().params(Param.P("input", sections[0]));
+            error = Message.PARSER_INVALID_ITEM.msg().params(Param.P("input", sections.get(0)));
             return;
         }
         item.setType(itemAlias.getType());
         item.setDurability(itemAlias.getData());
-        sectionList.remove(0);
 
-        //No meta can be applied to air.
-        if (item.getType() == Material.AIR) {
+        //If it's air or if there is no meta specified we're done parsing...
+        if (item.getType() == Material.AIR || sections.size() < 2) {
             this.item = item;
             return;
         }
+        ItemMeta defaultMeta = Bukkit.getServer().getItemFactory().getItemMeta(item.getType());
 
-        //Amount
-        if (sections.length > 1) {
-            if (NumberUtil.getInt(sections[1]) == null) {
-                error = Message.PARSER_INVALID_AMOUNT.msg().params(Param.P("input", sections[1]));
-                if (!ignoreErrors) {
+        //Set amount and create map with key values for meta.
+        Map<ItemTag, String> metaMap = new HashMap<ItemTag, String>();
+        for (int i = 1; i < sections.size(); i++) {
+            String section = sections.get(i);
+            //Amount
+            if (NumberUtil.getInt(section) != null) {
+                item.setAmount(NumberUtil.getInt(section));
+            }
+
+            String[] split = section.split(":", 2);
+            //Only accept valid tags.
+            ItemTag tag = ItemTag.fromString(split[0]);
+            if (tag == null) {
+                error = Message.UNKNOWN_ITEM_TAG.msg().params(Param.P("input", split[0]));
+                if (ignoreErrors) {
+                    continue;
+                } else {
                     return;
                 }
-            } else {
-                item.setAmount(NumberUtil.getInt(sections[1]));
             }
-            sectionList.remove(0);
-        }
-
-        //No meta specified
-        if (sectionList.size() < 1) {
-            this.item = item;
-            return;
-        }
-
-        //Create a map with all meta keys/values.
-        Map<String, String> metaMap = new HashMap<String, String>();
-        for (String section : sectionList) {
-            String[] split = section.split(":");
-            if (split.length < 2) {
+            //Make sure the tag can be applied to the item we're creating.
+            if (!ItemTag.getTags(defaultMeta).contains(tag)) {
+                error = Message.INVALID_ITEM_TAG.msg().params(Param.P("input", split[0]));
+                if (ignoreErrors) {
+                    continue;
+                } else {
+                    return;
+                }
+            }
+            //Make sure there is a value.
+            if (split.length < 2 || split[1].trim().isEmpty()) {
                 error = Message.NO_META_VALUE.msg().params(Param.P("meta", split[0]));
                 if (ignoreErrors) {
                     continue;
@@ -131,227 +139,130 @@ public class ItemParser {
                     return;
                 }
             }
-            metaMap.put(split[0].toLowerCase(), split[1].replaceAll("_", " "));
+            metaMap.put(tag, split[1].trim());
         }
 
-        //Name
-        if (metaMap.containsKey("name")) {
-            item.setName(metaMap.get("name"));
-            metaMap.remove("name");
-        }
 
-        //Lore
-        if (metaMap.containsKey("lore")) {
-            String[] lore =  metaMap.get("lore").split("\\|");
-            item.setLore(lore);
-            metaMap.remove("lore");
-        }
+        //Parse all meta and apply it to the item.
+        FireworkEffect.Type firework_effect = null;
+        boolean firework_twinkle = false;
+        boolean firework_trail = false;
+        List<Color> firework_colors = new ArrayList<Color>();
+        List<Color> firework_fadecolors = new ArrayList<Color>();
+        for (Map.Entry<ItemTag, String> meta : metaMap.entrySet()) {
+            ItemTag tag = meta.getKey();
+            String val = meta.getValue();
 
-        //Color
-        if (metaMap.containsKey("leather")) {
-            Color color = Util.getColor(metaMap.get("leather"));
-            if (color == null) {
-                error = Message.PARSER_INVALID_COLOR.msg().params(Param.P("input", metaMap.get("leather")));
-                if (!ignoreErrors) {
-                    return;
-                }
-            } else {
-                item.setColor(color);
+            Argument arg = tag.getArg();
+            if (!arg.parse(meta.getValue())) {
+                error = arg.getError();
+                return;
             }
-            metaMap.remove("leather");
-        }
 
-        //Books
-        if (metaMap.containsKey("book")) {
-            //TODO: Get book file and format it etc.
-            metaMap.remove("book");
-        }
-        if (metaMap.containsKey("author")) {
-            item.setAuthor(metaMap.get("author"));
-            metaMap.remove("author");
-        }
-        if (metaMap.containsKey("title")) {
-            item.setAuthor(metaMap.get("title"));
-            metaMap.remove("title");
-        }
-        if (metaMap.containsKey("editable")) {
-            item.setEditable(Util.getBoolean(metaMap.get("editable")));
-            metaMap.remove("editable");
-        }
-
-        //Skulls
-        if (metaMap.containsKey("player")) {
-            item.setSkull(metaMap.get("player"));
-            metaMap.remove("player");
-        }
-        if (metaMap.containsKey("texture")) {
-            item.setTexture(metaMap.get("texture"));
-            metaMap.remove("texture");
-        }
-
-        //Banners
-        if (metaMap.containsKey("basecolor")) {
-            DyeColor color = Aliases.getDyeColor(metaMap.get("basecolor"));
-            if (color == null) {
-                error = Message.PARSER_INVALID_DYE_COLOR.msg().params(Param.P("input", metaMap.get("basecolor")));
-                if (!ignoreErrors) {
-                    return;
-                }
-            } else {
-                item.setBaseColor(color);
-            }
-            metaMap.remove("basecolor");
-        }
-
-        //Firework
-        FireworkEffect.Builder fireworkBuilder = FireworkEffect.builder();
-        boolean hasFireworkMeta = false;
-        boolean hasShape = false;
-        boolean hasColor = false;
-        if (metaMap.containsKey("power")) {
-            if (NumberUtil.getInt(metaMap.get("power")) == null) {
-                error = Message.NOT_A_NUMBER.msg().params(Param.P("input", metaMap.get("power")));
-                if (!ignoreErrors) {
-                    return;
-                }
-            } else {
-                item.setPower(NumberUtil.getInt(metaMap.get("power")));
-            }
-            metaMap.remove("power");
-        }
-        if (metaMap.containsKey("shape")) {
-            FireworkEffect.Type shape = Aliases.getFireworkEffect(metaMap.get("shape"));
-            if (shape == null) {
-                error = Message.PARSER_INVALID_SHAPE.msg().params(Param.P("input", metaMap.get("shape")));
-                if (!ignoreErrors) {
-                    return;
-                }
-            } else {
-                fireworkBuilder.with(shape);
-            }
-            metaMap.remove("shape");
-            hasFireworkMeta = true;
-            hasShape = true;
-        }
-        if (metaMap.containsKey("color")) {
-            String[] colorSplit = metaMap.get("color").split(";");
-            List<Color> colors = new ArrayList<Color>();
-            for (String color : colorSplit) {
-                Color clr = Util.getColor(color);
-                if (clr == null) {
-                    error = Message.PARSER_INVALID_COLOR.msg().params(Param.P("input", metaMap.get("color")));
+            //Parse and apply custom meta.
+            if (tag.getName().equals("color")) {
+                Color color = Util.getColor(val);
+                if (color == null) {
+                    error = Message.PARSER_INVALID_COLOR.msg().params(Param.P("input", val));
                     if (!ignoreErrors) {
                         return;
                     }
                 } else {
-                    colors.add(clr);
+                    item.setColor(color);
                 }
-            }
-            if (colors.size() > 0) {
-                fireworkBuilder.withColor(colors);
-            }
-            metaMap.remove("color");
-            hasFireworkMeta = true;
-            hasColor = true;
-        }
-        if (metaMap.containsKey("fade")) {
-            String[] colorSplit = metaMap.get("fade").split(";");
-            List<Color> colors = new ArrayList<Color>();
-            for (String color : colorSplit) {
-                Color clr = Util.getColor(color);
-                if (clr == null) {
-                    error = Message.PARSER_INVALID_COLOR.msg().params(Param.P("input", metaMap.get("fade")));
-                    if (!ignoreErrors) {
-                        return;
-                    }
-                } else {
-                    colors.add(clr);
-                }
-            }
-            if (colors.size() > 0) {
-                fireworkBuilder.withFade(colors);
-            }
-            metaMap.remove("fade");
-            hasFireworkMeta = true;
-        }
-        if (metaMap.containsKey("flicker")) {
-            if (Util.getBoolean(metaMap.get("flicker"))) {
-                fireworkBuilder.withFlicker();
-            }
-            metaMap.remove("twinkle");
-            hasFireworkMeta = true;
-        }
-        if (metaMap.containsKey("trail")) {
-            if (Util.getBoolean(metaMap.get("trail"))) {
-                fireworkBuilder.withTrail();
-            }
-            metaMap.remove("trail");
-            hasFireworkMeta = true;
-        }
-        try {
-            item.addEffect(fireworkBuilder.build());
-        } catch (Exception e) {
-            if (hasFireworkMeta) {
-                if (!hasShape) {
-                    error = Message.PARSER_MISSING_FIREWORK_SHAPE.msg();
-                    if (!ignoreErrors) {
-                        return;
-                    }
-                }
-                if (!hasColor) {
-                    error = Message.PARSER_MISSING_FIREWORK_COLOR.msg();
-                    if (!ignoreErrors) {
-                        return;
-                    }
-                }
-            }
-        }
-
-        //If there is any meta remaining do enchants, effects and banner patterns.
-        if (metaMap.size() > 0) {
-            for (Map.Entry<String, String> entry : metaMap.entrySet()) {
-                //Enchantments
-                Enchantment enchant = Aliases.getEnchantment(entry.getKey());
-                if (enchant != null) {
-                    if (NumberUtil.getInt(entry.getValue()) == null) {
-                        error = Message.PARSER_ENCHANT_VALUE.msg().params(Param.P("input", entry.getValue()));
-                        return;
-                    }
-                    item.addEnchant(enchant, NumberUtil.getInt(entry.getValue()));
-                    continue;
-                }
-
-                //Potion effects
-                PotionEffectType effect = Aliases.getPotionEffect(entry.getKey());
-                if (effect != null) {
-                    String[] split = entry.getValue().split("\\.");
-                    if (split.length < 2) {
-                        error = Message.PARSER_POTION_VALUE.msg().params(Param.P("input", entry.getValue()));
-                        return;
-                    }
-                    if (NumberUtil.getInt(split[0]) == null || NumberUtil.getInt(split[1]) == null) {
-                        error = Message.PARSER_POTION_VALUE.msg().params(Param.P("input", entry.getValue()));
-                        return;
-                    }
-                    item.addEffect(new PotionEffect(effect, NumberUtil.getInt(split[0]), NumberUtil.getInt(split[1])), true);
-                    continue;
-                }
-
-                //Banner patterns
-                PatternType pattern = Aliases.getBannerPattern(entry.getKey());
-                if (pattern != null) {
-                    DyeColor color = Aliases.getDyeColor(entry.getValue());
+            } else if (tag.getName().equals("book")) {
+                //TODO: Get book content and set it.
+            } else if (tag.getName().equals("basecolor")) {
+                item.setBaseColor(Aliases.getDyeColor(val));
+            } else if (tag.getName().equals("shape")) {
+                firework_effect = Aliases.getFireworkEffect(val);
+            } else if (tag.getName().equals("twinkle")) {
+                firework_twinkle = (Boolean)arg.getValue();
+            } else if (tag.getName().equals("trail")) {
+                firework_trail = (Boolean)arg.getValue();
+            } else if (tag.getName().equals("colors") || tag.getName().equals("fade")) {
+                String[] split = val.split(":");
+                for (String clr : split) {
+                    Color color = Util.getColor(clr.trim());
                     if (color == null) {
-                        error = Message.PARSER_INVALID_DYE_COLOR.msg().params(Param.P("input", entry.getValue()));
-                        return;
+                        error = Message.PARSER_INVALID_COLOR.msg().params(Param.P("input", clr));
+                    } else {
+                        if (tag.getName().equals("fade")) {
+                            firework_fadecolors.add(color);
+                        } else {
+                            firework_colors.add(color);
+                        }
                     }
-                    item.addPattern(pattern, color);
-                    continue;
                 }
+            } else if (tag.getMethod().equals("ENCHANT")) {
+                Enchantment enchant = Aliases.getEnchantment(tag.getName());
+                item.addEnchant(enchant, (Integer)arg.getValue());
+            } else if (tag.getName().equals("POTION")) {
+                String[] split = val.split("\\.");
+                if (split.length < 2) {
+                    error = Message.PARSER_POTION_VALUE.msg().params(Param.P("input", val));
+                } else {
+                    Integer duration = NumberUtil.getInt(split[0]);
+                    Integer amplifier = NumberUtil.getInt(split[1]);
+                    if (duration == null || amplifier == null) {
+                        error = Message.PARSER_POTION_VALUE.msg().params(Param.P("input", val));
+                    } else {
+                        PotionEffectType potion = Aliases.getPotionEffect(tag.getName());
+                        item.addEffect(new PotionEffect(potion, duration, amplifier), true);
+                    }
+                }
+            } else if (tag.getMethod().equals("PATTERN")) {
+                PatternType pattern = Aliases.getBannerPattern(tag.getName());
+                item.addPattern(pattern, Aliases.getDyeColor(val));
+            } else {
+                //Apply meta.
+                try {
+                    Method method = item.getClass().getMethod(tag.getMethod(), arg.getRawClass());
+                    method.invoke(item, arg.getValue());
+                } catch (NoSuchMethodException e) {
+                    EssenceCore.inst().logError("No item method for " + tag.getMethod() + " for the tag " + tag.getName() + "!");
+                } catch (IllegalAccessException e) {
+                    EssenceCore.inst().logError("The item method " + tag.getMethod() + " can't be accessed!");
+                } catch (InvocationTargetException e) {
+                    EssenceCore.inst().logError("Failed to invoke the method " + tag.getMethod() + " for the tag " + tag.getName() + "!");
+                    EssenceCore.inst().logError(e.getTargetException().getMessage());
+                } catch (IllegalArgumentException e) {
+                    EssenceCore.inst().logError("Invalid method body for the method " + tag.getMethod() + " for the tag " + tag.getName() + "!");
+                    EssenceCore.inst().logError("Input: " + arg.getValue().getClass() + " : " + arg.getValue().toString());
+                    try {
+                        Method method = item.getClass().getMethod(tag.getMethod(), arg.getValue().getClass());
+                        List<String> params = new ArrayList<String>();
+                        for (Class c : method.getParameterTypes()) {
+                            params.add(c.getName());
+                        }
+                        EssenceCore.inst().logError("Expected: " + Util.implode(params, ", "));
+                    } catch (NoSuchMethodException e1) {}
+                }
+            }
+
+            if (!ignoreErrors && error != null) {
+                return;
             }
         }
 
-        //DONE PARSING!
+        //Set item when ignoring errors in case firework building fails.
+        if (ignoreErrors) {
+            this.item = item;
+        }
+
+        //Create firework effect if applied.
+        if (firework_effect != null || firework_trail || firework_twinkle || !firework_colors.isEmpty() || !firework_fadecolors.isEmpty()) {
+            if (firework_effect == null) {
+                error = Message.PARSER_MISSING_FIREWORK_SHAPE.msg();
+                return;
+            }
+            if (firework_colors.isEmpty()) {
+                error = Message.PARSER_MISSING_FIREWORK_SHAPE.msg();
+                return;
+            }
+            item.addEffect(firework_effect, firework_colors, firework_fadecolors, firework_twinkle, firework_trail);
+        }
+
         this.item = item;
     }
 

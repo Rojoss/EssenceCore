@@ -36,6 +36,7 @@ import org.essencemc.essencecore.config.aliases.ItemAliases;
 import org.essencemc.essencecore.database.Database;
 import org.essencemc.essencecore.database.MySql.MySql;
 import org.essencemc.essencecore.database.SqlLite.SqlLite;
+import org.essencemc.essencecore.entity.ItemTag;
 import org.essencemc.essencecore.exceptions.NMSClassNotFoundException;
 import org.essencemc.essencecore.listeners.ModuleListener;
 import org.essencemc.essencecore.listeners.PlaceholderListener;
@@ -108,6 +109,8 @@ public class EssenceCore extends JavaPlugin {
         cmdOptionsCfg = new CommandOptionsCfg("plugins/Essence/CommandOptions.yml");
 
         loadAliases();
+        ItemTag.register();
+
         if (!setupDatabase()) {
             return;
         }

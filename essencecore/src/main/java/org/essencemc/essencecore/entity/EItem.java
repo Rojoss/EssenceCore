@@ -38,6 +38,7 @@ import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.essencemc.essencecore.EssenceCore;
+import org.essencemc.essencecore.util.Debug;
 import org.essencemc.essencecore.util.Util;
 
 import java.util.ArrayList;
@@ -63,11 +64,11 @@ public class EItem extends ItemStack {
         super(material, 1);
     }
 
-    public EItem(Material material, int amount) {
+    public EItem(Material material, Integer amount) {
         super(material, amount);
     }
 
-    public EItem(Material material, int amount, short durability) {
+    public EItem(Material material, Integer amount, Short durability) {
         super(material, amount, durability);
     }
 
@@ -85,11 +86,18 @@ public class EItem extends ItemStack {
      * Add all ItemFlags to the item.
      * It will hide all tooltips like enchants, attributes, effects etc.
      */
-    public EItem addAllFlags() {
+    public EItem addAllFlags(Boolean add) {
+        Debug.bc(add);
         ItemMeta meta = getItemMeta();
         for (ItemFlag itemFlag : ItemFlag.values()) {
-            if (!meta.hasItemFlag(itemFlag)) {
-                meta.addItemFlags(itemFlag);
+            if (add) {
+                if (!meta.hasItemFlag(itemFlag)) {
+                    meta.addItemFlags(itemFlag);
+                }
+            } else {
+                if (meta.hasItemFlag(itemFlag)) {
+                    meta.removeItemFlags(itemFlag);
+                }
             }
         }
         setItemMeta(meta);
@@ -109,17 +117,30 @@ public class EItem extends ItemStack {
     }
 
     /** Add the enchantment glow effect on the item. (Doesn't work for all items like skulls for example not) */
-    public EItem makeGlowing() {
+    public EItem makeGlowing(Boolean glow) {
         //TODO: Check for protocol lib and if enabled use protocol lib.
+        //TODO: Use custom enchantment.
         ItemMeta meta = getItemMeta();
-        if (!meta.hasItemFlag(ItemFlag.HIDE_ENCHANTS)) {
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        }
-        setItemMeta(meta);
-        if (getType() == Material.FISHING_ROD) {
-            addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 0);
+        if (glow) {
+            if (!meta.hasItemFlag(ItemFlag.HIDE_ENCHANTS)) {
+                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            }
+            setItemMeta(meta);
+            if (getType() == Material.FISHING_ROD) {
+                addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 0);
+            } else {
+                addUnsafeEnchantment(Enchantment.LURE, 0);
+            }
         } else {
-            addUnsafeEnchantment(Enchantment.LURE, 0);
+            if (meta.hasItemFlag(ItemFlag.HIDE_ENCHANTS)) {
+                meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
+            }
+            setItemMeta(meta);
+            if (getType() == Material.FISHING_ROD) {
+                removeEnchantment(Enchantment.ARROW_INFINITE);
+            } else {
+                removeEnchantment(Enchantment.LURE);
+            }
         }
         return this;
     }
@@ -136,9 +157,10 @@ public class EItem extends ItemStack {
     }
 
     /** Set the display name of the item. If color is set to true it will automatically format colors. */
-    public EItem setName(String name, boolean color) {
+    public EItem setName(String name, Boolean color) {
         ItemMeta meta = getItemMeta();
-        meta.setDisplayName(Util.color(name));
+        name = name.replaceAll("(?<!_)_(?!_)", " ");
+        meta.setDisplayName(color ? Util.color(name) : name);
         setItemMeta(meta);
         return this;
     }
@@ -158,13 +180,22 @@ public class EItem extends ItemStack {
     // ##################################################
 
     //Set
+    /**
+     * Set the lore lines. It will automatically format colors.
+     * New lines are split by the | symbol.
+     */
+    public EItem setLore(String lore) {
+        String[] split = lore.split("\\|");
+        return setLore(true , split);
+    }
+
     /** Set the lore lines. It will automatically format colors. */
     public EItem setLore(String... lore) {
         return setLore(true , Arrays.asList(lore));
     }
 
     /** Set the lore lines. If color is set to true it will automatically format colors. */
-    public EItem setLore(boolean color, String... lore) {
+    public EItem setLore(Boolean color, String... lore) {
         return setLore(color, Arrays.asList(lore));
     }
 
@@ -174,11 +205,14 @@ public class EItem extends ItemStack {
     }
 
     /** Set the lore lines. If color is set to true it will automatically format colors. */
-    public EItem setLore(boolean color, List<String> lore) {
-        if (color) {
-            for (int i = 0; i < lore.size(); i++) {
-                lore.set(i,  Util.color(lore.get(i)));
+    public EItem setLore(Boolean color, List<String> lore) {
+        for (Integer i = 0; i < lore.size(); i++) {
+            String loreStr = lore.get(i);
+            loreStr = loreStr.replaceAll("(?<!_)_(?!_)", " ");
+            if (color) {
+                loreStr = Util.color(loreStr);
             }
+            lore.set(i,  loreStr);
         }
         ItemMeta meta = getItemMeta();
         meta.setLore(lore);
@@ -194,7 +228,7 @@ public class EItem extends ItemStack {
     }
 
     /** Add the given lore lines to the current lore. If color is set to true it will automatically format colors. */
-    public EItem addLore(boolean color, String... lore) {
+    public EItem addLore(Boolean color, String... lore) {
         return addLore(color, Arrays.asList(lore));
     }
 
@@ -204,11 +238,14 @@ public class EItem extends ItemStack {
     }
 
     /** Add the given lore lines to the current lore. If color is set to true it will automatically format colors. */
-    public EItem addLore(boolean color, List<String> lore) {
-        if (color) {
-            for (int i = 0; i < lore.size(); i++) {
-                lore.set(i,  Util.color(lore.get(i)));
+    public EItem addLore(Boolean color, List<String> lore) {
+        for (Integer i = 0; i < lore.size(); i++) {
+            String loreStr = lore.get(i);
+            loreStr = loreStr.replaceAll("(?<!_)_(?!_)", " ");
+            if (color) {
+                loreStr = Util.color(loreStr);
             }
+            lore.set(i,  loreStr);
         }
         ItemMeta meta = getItemMeta();
         if (meta.hasLore()) {
@@ -227,7 +264,7 @@ public class EItem extends ItemStack {
      * It will add empty lines if the line number is above the amount of lore lines.
      * It will automatically format colors.
      */
-    public EItem setLore(int lineNr, String lore) {
+    public EItem setLore(Integer lineNr, String lore) {
         return setLore(lineNr, lore, true);
     }
 
@@ -236,15 +273,16 @@ public class EItem extends ItemStack {
      * It will add empty lines if the line number is above the amount of lore lines.
      * If color is set to true it will automatically format colors.
      */
-    public EItem setLore(int lineNr, String lore, boolean color) {
+    public EItem setLore(Integer lineNr, String lore, Boolean color) {
+        lore = lore.replaceAll("(?<!_)_(?!_)", " ");
         if (color) {
             lore = Util.color(lore);
         }
         ItemMeta meta = getItemMeta();
 
         List<String> loreList = meta.hasLore() ? meta.getLore() : new ArrayList<String>();
-        int lines = Math.max(lineNr + 1, loreList.size());
-        for (int i = 0; i < lines; i++) {
+        Integer lines = Math.max(lineNr + 1, loreList.size());
+        for (Integer i = 0; i < lines; i++) {
             if (i >= loreList.size()) {
                 loreList.add("");
             }
@@ -268,7 +306,7 @@ public class EItem extends ItemStack {
     }
 
     /** Clear a specific line of lore from the lines. */
-    public EItem clearLore(int lineNr) {
+    public EItem clearLore(Integer lineNr) {
         ItemMeta meta = getItemMeta();
         List<String> lore = meta.getLore();
         if (lore.size() > lineNr) {
@@ -290,7 +328,7 @@ public class EItem extends ItemStack {
     }
 
     /** Get a specific line of lore. */
-    public String getLore(int lineNr) {
+    public String getLore(Integer lineNr) {
         if (!getItemMeta().hasLore() || getItemMeta().getLore().size() <= lineNr) {
             return "";
         }
@@ -302,7 +340,7 @@ public class EItem extends ItemStack {
      * If wholeLine is true the given string need to match a whole line.
      * If it's false it will check if any of the lore lines contains the string.
      */
-    public boolean containsLore(String string, boolean wholeLine) {
+    public Boolean containsLore(String string, Boolean wholeLine) {
         List<String> lore = getLore();
         for (String str : lore) {
             if (wholeLine && str.equalsIgnoreCase(string)) {
@@ -323,14 +361,14 @@ public class EItem extends ItemStack {
     // ##################################################
 
     /** Add the given enchantment and level to the item. */
-    public EItem addEnchant(Enchantment enchantment, int level) {
+    public EItem addEnchant(Enchantment enchantment, Integer level) {
         return addEnchant(enchantment, level, true);
     }
 
     /** Add the given enchantment and level to the item.
      * If allowUnsafe is set to false it will throw an error if the level is too high or if the enchantment can't be applied on this item.
      */
-    public EItem addEnchant(Enchantment enchantment, int level, boolean allowUnsafe) {
+    public EItem addEnchant(Enchantment enchantment, Integer level, Boolean allowUnsafe) {
         if (allowUnsafe) {
             super.addUnsafeEnchantment(enchantment, level);
         } else {
@@ -348,7 +386,7 @@ public class EItem extends ItemStack {
      * Add the given enchantments with their levels to the item.
      * If allowUnsafe is set to false it will throw an error if the level of any enchants is too high or if any of the enchantments can't be applied on this item.
      */
-    public EItem addEnchants(Map<Enchantment, Integer> enchants, boolean allowUnsafe) {
+    public EItem addEnchants(Map<Enchantment, Integer> enchants, Boolean allowUnsafe) {
         if (allowUnsafe) {
             super.addUnsafeEnchantments(enchants);
         } else {
@@ -372,7 +410,7 @@ public class EItem extends ItemStack {
         return this;
     }
 
-    public EItem addEffect(PotionEffect effect, boolean overwrite) {
+    public EItem addEffect(PotionEffect effect, Boolean overwrite) {
         ItemMeta meta = getItemMeta();
         if (meta instanceof PotionMeta) {
             ((PotionMeta)meta).addCustomEffect(effect, overwrite);
@@ -453,7 +491,7 @@ public class EItem extends ItemStack {
     }
 
     /** Can turn a written book in book and quil and the other way around if editable is set to false. */
-    public EItem setEditable(boolean editable) {
+    public EItem setEditable(Boolean editable) {
         //TODO: Probably need a better method for this. (needs testing)
         if (editable) {
             setType(Material.BOOK_AND_QUILL);
@@ -483,7 +521,7 @@ public class EItem extends ItemStack {
      * The content can have up to 256 characters. (any more will be truncated)
      *  for several book formatting options. //TODO: Put link for book formatting class.
      */
-    public EItem setPage(int page, String content) {
+    public EItem setPage(Integer page, String content) {
         ItemMeta meta = getItemMeta();
         if (meta instanceof BookMeta) {
             ((BookMeta)meta).setPage(page, content);
@@ -518,7 +556,7 @@ public class EItem extends ItemStack {
     }
 
     /** Get the content of the given page */
-    public String getPage(int page) {
+    public String getPage(Integer page) {
         ItemMeta meta = getItemMeta();
         if (meta instanceof BookMeta) {
             return ((BookMeta)meta).getPage(page);
@@ -576,12 +614,12 @@ public class EItem extends ItemStack {
     }
 
     /** Insert a pattern to the banner at the given index. */
-    public EItem insertPattern(int index, PatternType type, DyeColor color) {
+    public EItem insertPattern(Integer index, PatternType type, DyeColor color) {
         return insertPattern(index, new Pattern(color, type));
     }
 
     /** Insert a pattern to the banner at the given index. */
-    public EItem insertPattern(int index, Pattern pattern) {
+    public EItem insertPattern(Integer index, Pattern pattern) {
         ItemMeta meta = getItemMeta();
         if (meta instanceof BannerMeta) {
             if (((BannerMeta)meta).getPatterns().size() > index) {
@@ -610,7 +648,7 @@ public class EItem extends ItemStack {
     }
 
     /** Get the banner pattern at the given index. */
-    public Pattern getPattern(int index) {
+    public Pattern getPattern(Integer index) {
         ItemMeta meta = getItemMeta();
         if (meta instanceof BannerMeta) {
             return ((BannerMeta)meta).getPattern(index);
@@ -677,7 +715,7 @@ public class EItem extends ItemStack {
     // ##################################################
 
     /** Set the firework rocket power */
-    public EItem setPower(int power) {
+    public EItem setPower(Integer power) {
         ItemMeta meta = getItemMeta();
         if (meta instanceof FireworkMeta) {
             ((FireworkMeta)meta).setPower(power);
@@ -687,7 +725,7 @@ public class EItem extends ItemStack {
     }
 
     /** Get the firework rocket power. */
-    public int getPower() {
+    public Integer getPower() {
         ItemMeta meta = getItemMeta();
         if (meta instanceof FireworkMeta) {
             return ((FireworkMeta)meta).getPower();
@@ -718,7 +756,7 @@ public class EItem extends ItemStack {
     }
 
     /** Add a firework effect to the item. */
-    public EItem addEffect(FireworkEffect.Type type, List<Color> colors, List<Color> fadeColors, boolean flicker, boolean trail) {
+    public EItem addEffect(FireworkEffect.Type type, List<Color> colors, List<Color> fadeColors, Boolean flicker, Boolean trail) {
         ItemMeta meta = getItemMeta();
         if (meta instanceof FireworkMeta) {
             FireworkEffect.Builder builder = FireworkEffect.builder();
@@ -736,7 +774,7 @@ public class EItem extends ItemStack {
     }
 
     /** Get a firework effect at the given index. */
-    public FireworkEffect getEffect(int index) {
+    public FireworkEffect getEffect(Integer index) {
         ItemMeta meta = getItemMeta();
         if (meta instanceof FireworkMeta) {
             List<FireworkEffect> effects = ((FireworkMeta)meta).getEffects();

@@ -39,19 +39,15 @@ import org.essencemc.essencecore.entity.EItem;
 
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Util {
 
     private static final List<PotionEffectType> NEGATIVE_POTION_EFFECTS = Arrays.asList(PotionEffectType.BLINDNESS, PotionEffectType.CONFUSION, PotionEffectType.HARM, PotionEffectType.HUNGER, PotionEffectType.POISON, PotionEffectType.SLOW, PotionEffectType.SLOW_DIGGING, PotionEffectType.WEAKNESS, PotionEffectType.WITHER);
     public static final Set<Material> TRANSPARENT_MATERIALS = new HashSet<Material>();
 
-    static {
-        for (Material material : Material.values()) {
-            if (material.isTransparent()) {
-                TRANSPARENT_MATERIALS.add(material);
-            }
-        }
-    }
+
 
     /**
      * Integrate ChatColor in a string based on color codes.
@@ -322,5 +318,31 @@ public class Util {
         result[1] = string.substring(index + 1);
 
         return result;
+    }
+
+    /**
+     * Splits the specified string in sections.
+     * Strings inside quotes will be placed together in sections.
+     * For example 'Essence is "super awesome"' will return {"essence", "is", "super awesome"}
+     * @authors sk89q, desht
+     * @param string The string that needs to be split.
+     * @return List of strings split from the input string.
+     */
+    public static List<String> splitQuotedString(String string) {
+        List<String> sections = new ArrayList<String>();
+
+        Pattern regex = Pattern.compile("[^\\s\"']+|\"([^\"]*)\"|'([^']*)'");
+        Matcher regexMatcher = regex.matcher(string);
+
+        while (regexMatcher.find()) {
+            if (regexMatcher.group(1) != null) {
+                sections.add(regexMatcher.group(1));
+            } else if (regexMatcher.group(2) != null) {
+                sections.add(regexMatcher.group(2));
+            } else {
+                sections.add(regexMatcher.group());
+            }
+        }
+        return sections;
     }
 }

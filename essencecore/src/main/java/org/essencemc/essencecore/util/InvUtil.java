@@ -37,23 +37,38 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class InvUtil {
 
-    /** @see #addItems(Inventory, ItemStack, int, boolean) */
+    /** @see #addItems(Inventory, ItemStack, int, boolean, boolean) */
     public static HashMap<Integer, ItemStack> addItems(Inventory inventory, ItemStack item) {
-        return addItems(inventory, item, -1, true);
+        return addItems(inventory, item, -1, true, true);
     }
 
-    /** @see #addItems(Inventory, ItemStack, int, boolean) */
+    /** @see #addItems(Inventory, ItemStack, int, boolean, boolean) */
     public static HashMap<Integer, ItemStack> addItems(Inventory inventory, ItemStack item, int slot) {
-        return addItems(inventory, item, slot, true);
+        return addItems(inventory, item, slot, true, true);
     }
 
-    /** @see #addItems(Inventory, ItemStack, int, boolean) */
+    /** @see #addItems(Inventory, ItemStack, int, boolean, boolean) */
     public static HashMap<Integer, ItemStack> addItems(Inventory inventory, ItemStack item, boolean dropifFull) {
-        return addItems(inventory, item, -1, dropifFull);
+        return addItems(inventory, item, -1, dropifFull, true);
+    }
+
+    /** @see #addItems(Inventory, ItemStack, int, boolean, boolean) */
+    public static HashMap<Integer, ItemStack> addItems(Inventory inventory, ItemStack item, boolean dropifFull, boolean unstack) {
+        return addItems(inventory, item, -1, dropifFull, unstack);
+    }
+
+    /** @see #addItems(Inventory, ItemStack, int, boolean, boolean) */
+    public static void addItems(Inventory inventory, List<ItemStack> items, int slot, boolean dropIfFull, boolean unstack) {
+        HashMap<Integer, ItemStack> excess = null;
+        for (ItemStack item : items) {
+            addItems(inventory, item, slot, dropIfFull, unstack);
+        }
     }
 
     /**
@@ -63,7 +78,19 @@ public class InvUtil {
      * If the items don't fit in it will drop them on the ground if the boolean dropIfFull is set to true.
      * It will return a map with excess items if items didn't fit in. (This includes items that have been dropped)
      */
-    public static HashMap<Integer, ItemStack> addItems(Inventory inventory, ItemStack item, int slot, boolean dropIfFull) {
+    public static HashMap<Integer, ItemStack> addItems(Inventory inventory, ItemStack item, int slot, boolean dropIfFull, boolean unstack) {
+        if (unstack && item.getAmount() > item.getMaxStackSize()) {
+            List<ItemStack> splitStacks = new ArrayList<ItemStack>();
+            int amount = item.getAmount();
+            while (amount > 0) {
+                amount -= item.getMaxStackSize();
+                ItemStack splitStack = item.clone();
+                splitStack.setAmount(amount >= 0 ? item.getMaxStackSize() : item.getMaxStackSize() + amount);
+                splitStacks.add(splitStack);
+            }
+            addItems(inventory, splitStacks, slot, dropIfFull, false);
+            return new HashMap<Integer, ItemStack>();
+        }
         if (slot >= 0) {
             if (inventory.getItem(slot) == null || inventory.getItem(slot).getType() == Material.AIR) {
                 inventory.setItem(slot, item);

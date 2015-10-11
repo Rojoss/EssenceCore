@@ -63,7 +63,7 @@ public class ItemArg extends Argument {
             input = input.substring(1, input.length()-1);
         }
 
-        ItemParser parser = new ItemParser(input, false);
+        ItemParser parser = new ItemParser(input, 1, false);
         if (!parser.isValid()) {
             error = parser.getError();
             success = false;

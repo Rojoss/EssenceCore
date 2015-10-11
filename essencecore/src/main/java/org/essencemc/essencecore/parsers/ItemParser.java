@@ -73,7 +73,7 @@ public class ItemParser {
      * @param string The item string. (For example: /i {string})
      * @param ignoreErrors If true it will continue parsing even when there is an error.
      */
-    public ItemParser(String string, boolean ignoreErrors) {
+    public ItemParser(String string, int defaultAmount, boolean ignoreErrors) {
         this.string = string;
 
         String[] words = string.split(" ");
@@ -93,6 +93,7 @@ public class ItemParser {
         }
         item.setType(itemAlias.getType());
         item.setDurability(itemAlias.getData());
+        item.setAmount(defaultAmount);
 
         //If it's air or if there is no meta specified we're done parsing...
         if (item.getType() == Material.AIR || sections.size() < 2) {

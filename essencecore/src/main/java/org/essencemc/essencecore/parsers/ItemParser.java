@@ -108,6 +108,7 @@ public class ItemParser {
             //Amount
             if (NumberUtil.getInt(section) != null) {
                 item.setAmount(NumberUtil.getInt(section));
+                continue;
             }
 
             String[] split = section.split(":", 2);

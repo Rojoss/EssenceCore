@@ -87,7 +87,6 @@ public class EItem extends ItemStack {
      * It will hide all tooltips like enchants, attributes, effects etc.
      */
     public EItem addAllFlags(Boolean add) {
-        Debug.bc(add);
         ItemMeta meta = getItemMeta();
         for (ItemFlag itemFlag : ItemFlag.values()) {
             if (add) {

@@ -42,6 +42,7 @@ import org.essencemc.essencecore.commands.links.internal.CommandLink;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 import org.essencemc.essencecore.message.Param;
+import org.essencemc.essencecore.util.Debug;
 import org.essencemc.essencecore.util.Util;
 
 import java.lang.reflect.Field;
@@ -440,9 +441,10 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
 
         List<String> modifierList = new ArrayList<String>();
         for (Map.Entry<String, CommandModifier> entry : modifiers.entrySet()) {
-            argList.add(Message.CMD_HELP_MODIFIER.msg().params(Param.P("modifier", entry.getKey()), Param.P("desc", entry.getValue().getInfo().getText())).getText());
+            modifierList.add(Message.CMD_HELP_MODIFIER.msg().params(Param.P("modifier", entry.getKey()), Param.P("desc", entry.getValue().getInfo().getText())).getText());
         }
         String str_modifiers = Util.implode(modifierList, Message.CMD_HELP_SEPARATOR.msg().getText());
+        Debug.bc(str_modifiers);
 
         List<String> optArgList = new ArrayList<String>();
         for (Map.Entry<String, CommandOptionalArg> entry : optionalArgs.entrySet()) {
@@ -450,7 +452,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
             String defaultVal = arg.getDefault() == null ? "&c-" : arg.getDefault().toString();
             String desc = entry.getValue().getInfo().getText();
             String usage = entry.getValue().getArg().getDescription().getText();
-            argList.add(Message.CMD_HELP_OPT_ARG.msg().params(Param.P("arg", entry.getKey()), Param.P("desc", desc), Param.P("usage", usage), Param.P("default", defaultVal)).getText());
+            optArgList.add(Message.CMD_HELP_OPT_ARG.msg().params(Param.P("arg", entry.getKey()), Param.P("desc", desc), Param.P("usage", usage), Param.P("default", defaultVal)).getText());
         }
         String str_optargs = Util.implode(optArgList, Message.CMD_HELP_SEPARATOR.msg().getText());
 
@@ -459,14 +461,13 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
             String value = entry.getValue().getArg().getValue().toString();
             String desc = entry.getValue().getInfo().getText();
             String usage = entry.getValue().getArg().getDescription().getText();
-
-            argList.add(Message.CMD_HELP_OPTION.msg().params(Param.P("option", entry.getKey()), Param.P("desc", desc), Param.P("usage", usage), Param.P("value", value)).getText());
+            optList.add(Message.CMD_HELP_OPTION.msg().params(Param.P("option", entry.getKey()), Param.P("desc", desc), Param.P("usage", usage), Param.P("value", value)).getText());
         }
         String str_options = Util.implode(optList, Message.CMD_HELP_SEPARATOR.msg().getText());
 
         String none = Message.CMD_HELP_NONE.msg().color().getText();
 
-        Message.CMD_HELP_ESSENCE.msg().send(sender, Param.P("cmd", label), Param.P("desc", Util.color(description)), Param.P("usage", Util.color(str_usage)),
+        Message.CMD_HELP_ESSENCE.msg().send(sender, Param.P("cmd", label), Param.P("desc", Util.color(description)), Param.P("usage", Util.color(str_usage)), Param.P("perm", getPermission()),
                 Param.P("aliases", str_aliases.isEmpty() ? none : Util.color(str_aliases)), Param.P("modifiers", str_modifiers.isEmpty() ? none : Util.color(str_modifiers)),
                 Param.P("opt-args", str_optargs.isEmpty() ? none : Util.color(str_optargs)), Param.P("options", str_options.isEmpty() ? none : Util.color(str_options)));
     }

@@ -458,7 +458,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
 
         List<String> optList = new ArrayList<String>();
         for (Map.Entry<String, CommandOption> entry : cmdOptions.entrySet()) {
-            String value = entry.getValue().getArg().getValue().toString();
+            String value = entry.getValue().getArg().toString();
             String desc = entry.getValue().getInfo().getText();
             String usage = entry.getValue().getArg().getDescription().getText();
             optList.add(Message.CMD_HELP_OPTION.msg().params(Param.P("option", entry.getKey()), Param.P("desc", desc), Param.P("usage", usage), Param.P("value", value)).getText());

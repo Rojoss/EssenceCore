@@ -38,13 +38,20 @@ import org.essencemc.essencecore.entity.EEntity;
 import org.essencemc.essencecore.entity.EItem;
 
 import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class Util {
 
     private static final List<PotionEffectType> NEGATIVE_POTION_EFFECTS = Arrays.asList(PotionEffectType.BLINDNESS, PotionEffectType.CONFUSION, PotionEffectType.HARM, PotionEffectType.HUNGER, PotionEffectType.POISON, PotionEffectType.SLOW, PotionEffectType.SLOW_DIGGING, PotionEffectType.WEAKNESS, PotionEffectType.WITHER);
+    public static final Set<Material> TRANSPARENT_MATERIALS = new HashSet<Material>();
+
+    static {
+        for (Material material : Material.values()) {
+            if (material.isTransparent()) {
+                TRANSPARENT_MATERIALS.add(material);
+            }
+        }
+    }
 
     /**
      * Integrate ChatColor in a string based on color codes.

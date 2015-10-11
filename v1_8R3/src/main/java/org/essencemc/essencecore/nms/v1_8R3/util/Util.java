@@ -60,7 +60,7 @@ public class Util {
     }
 
     public static int resolveEnvironment(Player player) {
-        return player.getWorld().getEnvironment().ordinal();
+        return player.getWorld().getEnvironment().getId();
     }
 
     public static void refreshPlayerChunks(int radius, Player player) {

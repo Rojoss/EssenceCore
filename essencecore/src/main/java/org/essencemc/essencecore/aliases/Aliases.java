@@ -57,6 +57,17 @@ public class Aliases {
         return Collections.emptyMap();
     }
 
+    public static List<String> getNames(AliasType aliasType, boolean noSpaces) {
+        if (aliases.containsKey(aliasType)) {
+            List<String> keys = new ArrayList<String>();
+            for (Alias alias : aliases.get(aliasType)) {
+                keys.add(noSpaces ? alias.getName().replace(" ", "") : alias.getName());
+            }
+            return keys;
+        }
+        return new ArrayList<String>();
+    }
+
     public static Enchantment getEnchantment(String string) {
         try {
             return Enchantment.getByName(getKey(AliasType.ENCHANTMENT, string));

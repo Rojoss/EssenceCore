@@ -53,16 +53,16 @@ public class StringArg extends Argument {
     }
 
     public StringArg(String defaultValue) {
-        super(defaultValue);
+        super(null, defaultValue);
     }
 
     public StringArg(String defaultValue, MatchString match) {
-        super(defaultValue);
+        super(null, defaultValue);
         this.match = match;
     }
 
     public StringArg(String defaultValue, Integer minChars, Integer maxChars) {
-        super(defaultValue);
+        super(null, defaultValue);
         this.minChars = minChars;
         this.maxChars = maxChars;
     }

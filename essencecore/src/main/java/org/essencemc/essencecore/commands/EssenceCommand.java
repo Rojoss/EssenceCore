@@ -42,7 +42,6 @@ import org.essencemc.essencecore.commands.links.internal.CommandLink;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 import org.essencemc.essencecore.message.Param;
-import org.essencemc.essencecore.util.Debug;
 import org.essencemc.essencecore.util.Util;
 
 import java.lang.reflect.Field;
@@ -214,6 +213,8 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
         for (Map.Entry<String, CommandOptionalArg> entry : optionalArgs.entrySet()) {
             if (entry.getValue().getArg().hasDefault()) {
                 result.addOptionalArg(entry.getKey(), entry.getValue().getArg().getDefault());
+            } else {
+                result.addOptionalArg(entry.getKey(), null);
             }
         }
 
@@ -444,7 +445,6 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
             modifierList.add(Message.CMD_HELP_MODIFIER.msg().params(Param.P("modifier", entry.getKey()), Param.P("desc", entry.getValue().getInfo().getText())).getText());
         }
         String str_modifiers = Util.implode(modifierList, Message.CMD_HELP_SEPARATOR.msg().getText());
-        Debug.bc(str_modifiers);
 
         List<String> optArgList = new ArrayList<String>();
         for (Map.Entry<String, CommandOptionalArg> entry : optionalArgs.entrySet()) {

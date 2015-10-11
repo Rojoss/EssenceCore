@@ -76,12 +76,10 @@ public class CommandOptionsCfg extends EasyConfig {
     }
 
     public void registerOption(EssenceCommand command, String optionKey) {
-        int changes = 0;
         Map<String, String> options;
         if (COMMAND_OPTIONS.containsKey(command.getLabel())) {
             options = COMMAND_OPTIONS.get(command.getLabel());
         } else {
-            changes++;
             options = new HashMap<String, String>();
         }
 
@@ -95,21 +93,16 @@ public class CommandOptionsCfg extends EasyConfig {
         }
         if (!options.containsKey(optionKey)) {
             //Insert option to config.'-'
-            if (cmdOption.hasDefault()) {
-                options.put(optionKey, cmdOption.getDefault().toString());
-            } else {
-                options.put(optionKey, "");
-            }
+            options.put(optionKey, cmdOption.toString());
             COMMAND_OPTIONS.put(command.getLabel(), options);
             save();
-        } else {
-            //Update option value with config value if it's valid.
-            cmdOption.parse(options.get(optionKey));
-            if (!cmdOption.isValid()) {
-                //Send an error to the console (it will use the default value)
-                EssenceCore.inst().warn("Invalid command option specified for command " + command.getLabel() + "!");
-                EssenceCore.inst().warn(cmdOption.getError());
-            }
+        }
+        //Update option value with config value if it's valid.
+        cmdOption.parse(options.get(optionKey));
+        if (!cmdOption.isValid()) {
+            //Send an error to the console (it will use the default value)
+            EssenceCore.inst().warn("Invalid command option specified for command " + command.getLabel() + "!");
+            EssenceCore.inst().warn(cmdOption.getError());
         }
         if (command.optionalArgs.containsKey(optionKey)) {
             command.optionalArgs.get(optionKey).getArg().setDefault(cmdOption.getValue());

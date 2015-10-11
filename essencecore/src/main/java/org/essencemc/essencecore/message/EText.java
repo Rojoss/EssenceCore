@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.essencemc.essencecore.EssenceCore;
 import org.essencemc.essencecore.parsers.TextParser;
 import org.essencemc.essencecore.placeholders.Placeholder;
+import org.essencemc.essencecore.util.Debug;
 import org.essencemc.essencecore.util.Util;
 
 import java.util.ArrayList;
@@ -333,7 +334,7 @@ public class EText {
      */
     public EText sendBar(List<Player> players, boolean parsePlaceholders, Param... params) {
         for (Player player : players) {
-            format(player, parsePlaceholders, false, params);
+            format(player, parsePlaceholders, true, params);
             EssenceCore.inst().getChat().sendActionbar(text, player);
         }
         return this;

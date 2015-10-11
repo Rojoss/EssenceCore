@@ -5,19 +5,22 @@ import org.essencemc.essencecore.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
-/*/**
- * This can be used to parse a string in to a JSON formatted string.
- * These strings can be used in like tellraw commands but also inside a lot EssenceCore methods and configurations.
+/**
+ * <p>This can be used to parse a string in to a JSON formatted string.
+ * These strings can be used in like tellraw commands but also inside a lot EssenceCore methods and configurations.</p>
  *
- * The following formats will be parsed in to JSON.
- * [[url]text] - Will open the given url
- * {{hover}text} - Will display hover when hovering over text.
- * <<cmd>text> - Will run /cmd when clicking on text.
- * <<<cmd>>text> - Will suggest /cmd when clicking on text.
- * Inheritance is supported for hover messages.
- * This means the message can be something like this:
- * [[http://essencemc.org]{{Click to go to the website!}website}]
- * <<heal>{{Click to heal yourself!}heal}]
+ * <ul>
+ * <li>The following formats will be parsed in to JSON:
+ * <li>[[url]text] - Will open the given url.
+ * <li>{{hover}text} - Will display hover when hovering over text.
+ * <li><<cmd>text> - Will run /cmd when clicking on text.
+ * <li><<<cmd>>text> - Will suggest /cmd when clicking on text.
+ * </ul>
+ *
+ * <p>Inheritance is supported for hover messages.
+ * This means the message can be something like this:</p>
+ * <p>[[http://essencemc.org]{{Click to go to the website!}website}]</p>
+ * <p><<heal>{{Click to heal yourself!}heal}]</p>
  */
 public class TextParser {
 
@@ -39,19 +42,19 @@ public class TextParser {
 
             switch (c) {
                 case '[':
-                    if (square++ == 1 && curly == 0 && angle == 0) {
+                    if (++square == 2 && curly == 0 && angle == 0 && builder.endsWith("[[")) {
                         json = formatJSONWithArray(json, builder.substring(0, builder.length() - 2));
                         builder = "[[";
                     }
                     break;
                 case '{':
-                    if (curly++ == 1 && square == 0 && angle == 0) {
+                    if (++curly == 2 && square == 0 && angle == 0 && builder.endsWith("{{")) {
                         json = formatJSONWithArray(json, builder.substring(0, builder.length() - 2));
                         builder = "{{";
                     }
                     break;
                 case '<':
-                    if (angle++ == 1 && square == 0 && curly == 0) {
+                    if (++angle == 2 && square == 0 && curly == 0 && builder.endsWith("<<")) {
                         json = formatJSONWithArray(json, builder.substring(0, builder.length() - 2));
                         builder = "<<";
                     }
@@ -89,11 +92,6 @@ public class TextParser {
     }
 
     private String formatJSON(String text) {
-        // Don't format empty texts
-        if (text.isEmpty()) {
-            return "";
-        }
-
         text = text.replace("\\n", "\n").replace("&", "§");
 
         //Get JSON for custom formats.
@@ -112,6 +110,11 @@ public class TextParser {
     }
 
     private String formatJSONWithArray(String json, String text) {
+        // Don't format empty texts
+        if (text.isEmpty()) {
+            return "";
+        }
+
         boolean empty = json.isEmpty();
 
         if (!empty) {
@@ -128,21 +131,21 @@ public class TextParser {
     }
 
     private String formatHover(String text) {
-        text = text.substring(2, text.length()-1);
-        String[] split = text.split("}");
+        text = text.substring(2, text.length() - 1);
+        String[] split = Util.bisect(text, "}");
         return "{\"text\": \"" + split[1] + "\",\"hoverEvent\": {\"action\": \"show_text\",\"value\": {\"text\": \"\",\"extra\": [{\"text\": \"" + split[0] + "\"}]}}}";
     }
 
     private String[] formatHoverInherit(String text) {
-        text = text.substring(2, text.length()-1);
-        String[] split = text.split("}");
+        text = text.substring(2, text.length() - 1);
+        String[] split = Util.bisect(text, "}");
         split[0] = "\"hoverEvent\": {\"action\": \"show_text\",\"value\": {\"text\": \"\",\"extra\": [{\"text\": \"" + split[0] + "\"}]}}";
         return split;
     }
 
     private String formatClick(String text, String splitChar, int charCount, String action) {
-        text = text.substring(charCount, text.length()-1);
-        String[] split = text.split(splitChar);
+        text = text.substring(charCount, text.length() - 1);
+        String[] split = Util.bisect(text, splitChar);
 
         String[] hover = null;
         if (split[1].contains("{{")) {

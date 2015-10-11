@@ -85,7 +85,7 @@ public enum Message {
     CMD_HELP_SEPARATOR(MsgCat.COMMAND_OTHER, "&8, &7"),
     CMD_HELP_NONE(MsgCat.COMMAND_OTHER, "&7&o&mNone"),
     CMD_HELP_MODIFIER(MsgCat.COMMAND_OTHER, "{{&7&o{desc}}&7{modifier}}"),
-    CMD_HELP_OPT_ARG(MsgCat.COMMAND_OTHER, "{{&7&o{desc}\n{usage}}&7{arg}&8(&a{default}&8}"),
+    CMD_HELP_OPT_ARG(MsgCat.COMMAND_OTHER, "{{&7&o{desc}\n{usage}}&7{arg}&8(&a{default}&8)}"),
     CMD_HELP_OPTION(MsgCat.COMMAND_OTHER, "{{&7&o{desc}\n{usage}}&7{option}&8(&a{value}&8)}"),
     CMD_HELP_ARG(MsgCat.COMMAND_OTHER, "{{&7&o{desc}}&7{arg}}"),
     CMD_LINK_CONFLICT(MsgCat.COMMAND_OTHER, "{p} &cYou can't specify &4{arg1} &ctogether with &4{arg2}&c!"),

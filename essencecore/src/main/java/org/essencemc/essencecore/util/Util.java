@@ -207,7 +207,7 @@ public class Util {
             return ItemArg.Parse((EItem)obj);
         } else if (obj instanceof ItemStack) {
             return ItemArg.Parse(new EItem((ItemStack)obj));
-        //} else if (obj instanceof Inventory) {
+            //} else if (obj instanceof Inventory) {
             //return InvArg.Parse((Inventory)obj);
         } else if (obj instanceof MaterialData) {
             return MaterialArg.Parse((MaterialData) obj);
@@ -298,4 +298,22 @@ public class Util {
         return implode(args.toArray(new Object[args.size()]), glue, lastGlue);
     }
 
+    /**
+     * Bisects a string from the instance of the delimiter
+     * @param string the string to split
+     * @param split the delimiter
+     * @return the resultant string, which can either be sized 1 or 2
+     */
+    public static String[] bisect(String string, String split) {
+        int index = string.indexOf(split);
+        if (index == -1) {
+            return new String[] { string };
+        }
+
+        String[] result = new String[2];
+        result[0] = string.substring(0, index);
+        result[1] = string.substring(index + 1);
+
+        return result;
+    }
 }

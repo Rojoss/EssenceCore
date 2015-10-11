@@ -123,7 +123,7 @@ public class ItemParser {
                 }
             }
             //Make sure the tag can be applied to the item we're creating.
-            if (!ItemTag.getTags(defaultMeta).contains(tag)) {
+            if (!ItemTag.getTagList(defaultMeta).contains(tag)) {
                 error = Message.INVALID_ITEM_TAG.msg().params(Param.P("input", split[0]));
                 if (ignoreErrors) {
                     continue;

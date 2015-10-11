@@ -158,7 +158,7 @@ public class ItemTag {
         return null;
     }
 
-    public static List<ItemTag> getTags(ItemMeta meta) {
+    public static List<ItemTag> getTagList(ItemMeta meta) {
         List<ItemTag> tags = new ArrayList<ItemTag>();
         for (ItemTag tag : ItemTag.tags.values()) {
             for (Class<? extends ItemMeta> clazz : tag.getClasses()) {
@@ -167,6 +167,14 @@ public class ItemTag {
                 }
             }
         }
+        return tags;
+    }
+
+    public static List<ItemTag> getTagList() {
+        return new ArrayList<>(tags.values());
+    }
+
+    public static Map<String, ItemTag> getTags() {
         return tags;
     }
 

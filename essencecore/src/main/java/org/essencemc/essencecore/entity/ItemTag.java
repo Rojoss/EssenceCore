@@ -83,7 +83,7 @@ public class ItemTag {
         for (Alias enchant : Aliases.getAliases(AliasType.ENCHANTMENT)) {
             String key = enchant.getName().toLowerCase().replace(" ", "");
             for (String alias : enchant.getAliases()) {
-                new ItemTag(alias, new IntArg(alias), "enchant." + key, Message.META_ENCHANT.msg(), "ENCHANT", ItemMeta.class);
+                new ItemTag(alias, false, new IntArg(alias), "enchant." + key, Message.META_ENCHANT.msg(), "ENCHANT", ItemMeta.class);
             }
         }
 
@@ -91,7 +91,7 @@ public class ItemTag {
         for (Alias potion : Aliases.getAliases(AliasType.POTION_EFFECT)) {
             String key = potion.getName().toLowerCase().replace(" ", "");
             for (String alias : potion.getAliases()) {
-                new ItemTag(alias, new StringArg(alias), "potion." + key, Message.META_POTION.msg(), "POTION", PotionMeta.class);
+                new ItemTag(alias, false, new StringArg(alias), "potion." + key, Message.META_POTION.msg(), "POTION", PotionMeta.class);
             }
         }
 
@@ -100,12 +100,13 @@ public class ItemTag {
         for (Alias pattern : Aliases.getAliases(AliasType.BANNER_PATTERNS)) {
             String key = pattern.getName().toLowerCase().replace(" ", "");
             for (String alias : pattern.getAliases()) {
-                new ItemTag(alias, new MappedListArg(alias, dyeColors), "pattern." + key, Message.META_PATTERN.msg(), "PATTERN", BannerMeta.class);
+                new ItemTag(alias, false, new MappedListArg(alias, dyeColors), "pattern." + key, Message.META_PATTERN.msg(), "PATTERN", BannerMeta.class);
             }
         }
     }
 
     private String name;
+    private boolean visible;
     private Argument argument;
     private String permission;
     private EText description;
@@ -113,11 +114,16 @@ public class ItemTag {
     private Class<? extends ItemMeta>[] classes;
 
     public ItemTag(String name, Argument argument, String permission, EText description, String method, Class<? extends ItemMeta>... classes) {
+        this(name, true, argument, permission, description, method, classes);
+    }
+
+    public ItemTag(String name, boolean visible, Argument argument, String permission, EText description, String method, Class<? extends ItemMeta>... classes) {
         name = name.toLowerCase().replace("_", "").replace(" ", "");
         if (tags.containsKey(name)) {
             return;
         }
         this.name = name;
+        this.visible = visible;
         this.argument = argument;
         this.permission = "essence.meta." + permission;
         this.description = description;
@@ -144,6 +150,10 @@ public class ItemTag {
 
     public EText getDescription() {
         return description;
+    }
+
+    public boolean isVisible() {
+        return visible;
     }
 
     public String getMethod() {

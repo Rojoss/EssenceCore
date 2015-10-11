@@ -70,11 +70,11 @@ public class MappedListArg extends Argument {
                     value = entry.getKey();
                     return success;
                 }
-                allArgs.add(str);
             }
+            allArgs.add(Message.ARG_LIST_VALUE.msg().params(Param.P("aliases", Util.implode(entry.getValue(), ",")), Param.P("value", entry.getKey())).getText());
         }
 
-        error = Message.INVALID_LIST_ARGUMENT.msg().params(Param.P("input", input), Param.P("values", Util.implode(allArgs, ",")));
+        error = Message.INVALID_LIST_ARGUMENT.msg().params(Param.P("input", input), Param.P("values", Util.implode(allArgs, ", ")));
         success = false;
         return success;
     }

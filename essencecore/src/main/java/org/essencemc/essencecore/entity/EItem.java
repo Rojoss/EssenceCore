@@ -248,7 +248,9 @@ public class EItem extends ItemStack {
         }
         ItemMeta meta = getItemMeta();
         if (meta.hasLore()) {
-            meta.getLore().addAll(lore);
+            List<String> prevLore = meta.getLore();
+            prevLore.addAll(lore);
+            meta.setLore(prevLore);
         } else {
             meta.setLore(lore);
         }

@@ -100,6 +100,10 @@ public abstract class Argument {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public boolean hasName() {
         return name != null && !name.isEmpty();
     }

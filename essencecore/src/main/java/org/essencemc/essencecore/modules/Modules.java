@@ -58,7 +58,7 @@ public class Modules {
             if (module.getName().equalsIgnoreCase(moduleName)) {
                 if (!moduleName.isEmpty() && !ess.getModuleCfg().isEnabled(parentModule, moduleName)) {
                     if (module instanceof StorageModule) {
-                        ((SqlStorageModule)module).onSave();
+                        ((StorageModule)module).onSave();
                     }
                     module.onDisable();
                     HandlerList.unregisterAll(module);
@@ -88,7 +88,7 @@ public class Modules {
             }
             module.onEnable();
             if (module instanceof StorageModule) {
-                ((SqlStorageModule)module).onLoad();
+                ((StorageModule)module).onLoad();
             }
             ess.getServer().getPluginManager().registerEvents(module, ess);
         } catch (InstantiationException e) {
@@ -113,7 +113,7 @@ public class Modules {
         for (Module module : modules) {
             if (module.getName().equalsIgnoreCase(moduleName)) {
                 if (module instanceof StorageModule) {
-                    ((SqlStorageModule)module).onSave();
+                    ((StorageModule)module).onSave();
                 }
                 module.onDisable();
                 HandlerList.unregisterAll(module);

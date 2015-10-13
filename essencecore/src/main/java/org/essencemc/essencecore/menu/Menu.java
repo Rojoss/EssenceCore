@@ -37,6 +37,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.essencemc.essencecore.entity.EItem;
 import org.essencemc.essencecore.util.Util;
 
@@ -185,7 +186,7 @@ public abstract class Menu {
                 player.closeInventory();
 
                 //Recreate menu with previous contents to restore player set items properly.
-                Inventory inv = Bukkit.createInventory(player, getSlots(), title);
+                Inventory inv = Bukkit.createInventory(player, getSlots(), Util.color(title));
                 inv.setMaxStackSize(id);
                 for (int s = 0; s < getSlots(); s++) {
                     if (prev.getContents().length > s) {
@@ -342,7 +343,7 @@ public abstract class Menu {
     public void show(Player player) {
         player.closeInventory();
 
-        Inventory inv = Bukkit.createInventory(player, getSlots(), title);
+        Inventory inv = Bukkit.createInventory(player, getSlots(), Util.color(title));
         inv.setMaxStackSize(id);
 
         for (int i = 0; i < items.length; i++) {
@@ -429,13 +430,19 @@ public abstract class Menu {
 
     public static class Events implements Listener {
         @EventHandler
-        private void menuOpen(InventoryOpenEvent event) {
+        private void menuOpen(final InventoryOpenEvent event) {
             Inventory inv = event.getInventory();
-            for (Menu menu : menus) {
+            for (final Menu menu : menus) {
                 if (!menu.isMenu(inv, true)) {
                     continue;
                 }
-                menu.onShow(event);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        menu.onShow(event);
+                    }
+                }.runTask(menu.plugin);
+                return;
             }
         }
 

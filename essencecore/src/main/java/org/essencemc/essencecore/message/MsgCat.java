@@ -27,6 +27,7 @@ package org.essencemc.essencecore.message;
 
 public enum MsgCat {
     GENERAL,
+    CORE_MODULE,
     COMMAND,
     COMMAND_MODIFIERS,
     COMMAND_OPTIONS,

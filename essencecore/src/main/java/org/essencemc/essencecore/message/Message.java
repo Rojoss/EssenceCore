@@ -33,8 +33,10 @@ public enum Message {
     PREFIX(MsgCat.GENERAL, "&8[&4Essence&8]"),
     NO_PERM(MsgCat.GENERAL, "{p} &cInsufficient permissions! &8'&7{perm}&8'"),
     DEAD_PLAYER(MsgCat.GENERAL, "{p} &4{player} &cis dead."),
+    MODULE_DISABLED(MsgCat.GENERAL, "{p} &cThe &4{module} &cis disabled."),
 
     //Argument parsing messages
+    INVALID_ARGUMENT_TYPE(MsgCat.VALIDATION, "{p} &4{input} &cis not a valid argument type."),
     INVALID_PLAYER(MsgCat.VALIDATION, "{p} &4{input} &cis not a valid player name or UUID."),
     INVALID_WORLD(MsgCat.VALIDATION, "{p} &4{input} &cis not a valid world name, ID or UUID."),
     NUMBER_TOO_LOW(MsgCat.VALIDATION, "{p} &4{input} &cis too low! &7It can't be less than &c{min}&7."),

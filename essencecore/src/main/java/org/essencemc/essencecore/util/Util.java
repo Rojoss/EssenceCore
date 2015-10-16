@@ -26,6 +26,7 @@
 package org.essencemc.essencecore.util;
 
 import org.bukkit.*;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -365,4 +366,46 @@ public class Util {
         }
         return sb.toString();
     }
+
+    /**
+     * Checks if the sender has the specified permission.
+     * It will check recursively at starting at the bottom component of the permission.
+     * So if the input permission is 'essence.kit.use.welcome' the player needs to have any of the following permissions.
+     * essence.*
+     * essence.kit.*
+     * essence.kit.use.*
+     * essence.kit.use.welcome
+     * @param sender The sender to do the permission check on. (Remember that Player is a CommandSender!)
+     * @param permission The permission to check. This should be the FULL permission string not a sub permission.
+     * @return true if the sender has any of the permissions and false if not.
+     */
+    public static boolean hasPermission(CommandSender sender, String permission) {
+        permission = permission.toLowerCase().trim();
+        if (sender.hasPermission(permission)) {
+            return true;
+        }
+        String[] components = permission.split("\\.");
+        String perm = "";
+        for (String component : components) {
+            perm += component + ".";
+            if (sender.hasPermission(perm + "*")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static List<String> splitNewLinesList(List<String> list) {
+        if (list != null && list.size() > 0) {
+            List<String> loreList = new ArrayList<String>();
+            List<String> listClone = list;
+            for (String string : listClone) {
+                loreList.addAll(Arrays.asList(string.split("\n")));
+            }
+            return loreList;
+        }
+        return list;
+    }
+
+
 }

@@ -57,7 +57,7 @@ public class EItem extends ItemStack {
     // Constructors
 
     public EItem(ItemStack itemStack) {
-        super(itemStack);
+        super(itemStack == null ? new ItemStack(Material.AIR) : itemStack);
     }
 
     public EItem(Material material) {
@@ -205,6 +205,7 @@ public class EItem extends ItemStack {
 
     /** Set the lore lines. If color is set to true it will automatically format colors. */
     public EItem setLore(Boolean color, List<String> lore) {
+        lore = Util.splitNewLinesList(lore);
         for (Integer i = 0; i < lore.size(); i++) {
             String loreStr = lore.get(i);
             loreStr = loreStr.replaceAll("(?<!_)_(?!_)", " ");
@@ -238,6 +239,7 @@ public class EItem extends ItemStack {
 
     /** Add the given lore lines to the current lore. If color is set to true it will automatically format colors. */
     public EItem addLore(Boolean color, List<String> lore) {
+        lore = Util.splitNewLinesList(lore);
         for (Integer i = 0; i < lore.size(); i++) {
             String loreStr = lore.get(i);
             loreStr = loreStr.replaceAll("(?<!_)_(?!_)", " ");

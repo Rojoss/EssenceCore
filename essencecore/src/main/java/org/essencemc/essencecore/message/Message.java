@@ -34,6 +34,13 @@ public enum Message {
     NO_PERM(MsgCat.GENERAL, "{p} &cInsufficient permissions! &8'&7{perm}&8'"),
     DEAD_PLAYER(MsgCat.GENERAL, "{p} &4{player} &cis dead."),
     MODULE_DISABLED(MsgCat.GENERAL, "{p} &cThe &4{module} &cis disabled."),
+    PREVIOUS_PAGE(MsgCat.GENERAL, "&6&lPrevious Page"),
+    NEXT_PAGE(MsgCat.GENERAL, "&6&lNext Page"),
+    BACK(MsgCat.GENERAL, "&6&lBack"),
+    CLOSE(MsgCat.GENERAL, "&6&lClose"),
+    INFORMATION(MsgCat.GENERAL, "&6&lInformation"),
+    ENABLED(MsgCat.GENERAL, "&aenabled"),
+    DISABLED(MsgCat.GENERAL, "&cdisabled"),
 
     //Argument parsing messages
     INVALID_ARGUMENT_TYPE(MsgCat.VALIDATION, "{p} &4{input} &cis not a valid argument type."),

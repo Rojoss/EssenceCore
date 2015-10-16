@@ -62,7 +62,7 @@ public class Commands {
      */
     public void registerCommand(Plugin plugin, Class<? extends EssenceCommand> clazz, String label, String parentModule, String module, String description, String[] aliases) {
         if (!module.isEmpty()) {
-            ess.getModuleCfg().registerModule(parentModule, module, false);
+            ess.getModuleCfg().registerModule(parentModule, module, true);
         }
         for (EssenceCommand cmd : commands) {
             if (cmd.getLabel().equals(label)) {

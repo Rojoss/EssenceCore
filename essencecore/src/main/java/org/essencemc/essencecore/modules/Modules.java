@@ -52,7 +52,7 @@ public class Modules {
 
     public void registerModule(Class<? extends Module> clazz, String parentModule, String moduleName) {
         if (!moduleName.isEmpty()) {
-            ess.getModuleCfg().registerModule(parentModule, moduleName, false);
+            ess.getModuleCfg().registerModule(parentModule, moduleName, true);
         }
         for (Module module : modules) {
             if (module.getName().equalsIgnoreCase(moduleName)) {

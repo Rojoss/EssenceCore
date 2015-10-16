@@ -36,6 +36,7 @@ import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.essencemc.essencecore.entity.EItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,6 +109,41 @@ public class InvUtil {
             location.getWorld().dropItem(location, itemStack);
         }
         return excess;
+    }
+
+
+    /**
+     * Set the specified list of items in the specified inventory.
+     * It will attempt to place all the items in the correct slots first.
+     * All items that didn't fit in will be given normally.
+     * @param inventory The inventory to set the items in.
+     * @param items The array with items to set. (The index of this array will be the slot index)
+     * @param dropIfFull All remaining items will be given normally. If there is no space should items be dropped?
+     * @param force If this is true items will be set even if the inventory already contains an item. (This will also set air if the array contains air)
+     */
+    public static void setItems(Inventory inventory, ItemStack[] items, boolean dropIfFull, boolean force) {
+        items = items.clone();
+        for (int i = 0; i < items.length; i++) {
+            if (items[i] == null || (!force && items[i].getType() == Material.AIR)) {
+                continue;
+            }
+            if (force || inventory.getItem(i) == null || inventory.getItem(i).getType() == Material.AIR) {
+                inventory.setItem(i, items[i]);
+                items[i] = null;
+            }
+        }
+        for (int i = 0; i < items.length; i++) {
+            if (items[i] == null) {
+                continue;
+            }
+            HashMap<Integer, ItemStack> excess = inventory.addItem(items[i]);
+            if (dropIfFull) {
+                Location location = getLocation(inventory);
+                for (ItemStack itemStack : excess.values()) {
+                    location.getWorld().dropItem(location, itemStack);
+                }
+            }
+        }
     }
 
 

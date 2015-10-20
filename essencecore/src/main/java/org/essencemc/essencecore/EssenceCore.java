@@ -42,17 +42,17 @@ import org.essencemc.essencecore.listeners.ModuleListener;
 import org.essencemc.essencecore.listeners.PlaceholderListener;
 import org.essencemc.essencecore.menu.Menu;
 import org.essencemc.essencecore.modules.Modules;
+import org.essencemc.essencecore.nms.ISkull;
+import org.essencemc.essencecore.nms.packet.playout.chat.Chat_1_8_R3;
 import org.essencemc.essencecore.nms.packet.playout.chat.IChat;
 import org.essencemc.essencecore.nms.packet.playout.respawn.IRespawn;
-import org.essencemc.essencecore.nms.ISkull;
-import org.essencemc.essencecore.nms.packet.playout.title.ITitle;
-import org.essencemc.essencecore.nms.packet.playout.chat.Chat_1_8_R3;
 import org.essencemc.essencecore.nms.packet.playout.respawn.Respawn_1_8_R3;
-import org.essencemc.essencecore.nms.v1_8R3.SkullUtil_1_8_R3;
+import org.essencemc.essencecore.nms.packet.playout.title.ITitle;
 import org.essencemc.essencecore.nms.packet.playout.title.Title_1_8_R3;
+import org.essencemc.essencecore.nms.v1_8R3.SkullUtil_1_8_R3;
 import org.essencemc.essencecore.player.PlayerManager;
+import org.essencemc.essencecore.plugin.INMS_Fetcher;
 
-import javax.swing.event.MenuListener;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -62,7 +62,7 @@ import java.util.logging.Logger;
 /**
  * The main class for the Essence Core plugin
  */
-public class EssenceCore extends JavaPlugin {
+public class EssenceCore extends JavaPlugin implements INMS_Fetcher {
 
     private static EssenceCore instance;
     private Gson gson = new Gson();
@@ -126,7 +126,7 @@ public class EssenceCore extends JavaPlugin {
     }
 
     /**
-     * Designate NMS classes for various NMS api's
+     * Designate NMS classes for various NMS APIs
      */
     private void setupNMS() {
         String version = null;
@@ -140,10 +140,10 @@ public class EssenceCore extends JavaPlugin {
 
         switch (version) {
             case "v1_8_R3" :
-                iSkull = new SkullUtil_1_8_R3();
-                iTitle = new Title_1_8_R3();
-                iChat = new Chat_1_8_R3();
-                iRespawn = new Respawn_1_8_R3();
+                iSkull = new SkullUtil_1_8_R3(this);
+                iTitle = new Title_1_8_R3(this);
+                iChat = new Chat_1_8_R3(this);
+                iRespawn = new Respawn_1_8_R3(this);
                 compatible = true;
                 break;
             default:
@@ -313,6 +313,7 @@ public class EssenceCore extends JavaPlugin {
      * @return {@link ISkull} instance
      * @throws NMSClassNotFoundException
      */
+    @Override
     public ISkull getSkull() throws NMSClassNotFoundException {
         if (iTitle.equals(null)) {
             throw new NMSClassNotFoundException("SkullData is not found for your server version");
@@ -355,6 +356,7 @@ public class EssenceCore extends JavaPlugin {
         return modules;
     }
 
+    @Override
     public ITitle getTitle() throws NMSClassNotFoundException {
         if (iTitle.equals(null)) {
             throw new NMSClassNotFoundException("Titles are not found for your server version");
@@ -363,6 +365,7 @@ public class EssenceCore extends JavaPlugin {
         }
     }
 
+    @Override
     public IChat getChat() throws NMSClassNotFoundException {
         if (iTitle.equals(null)) {
             throw new NMSClassNotFoundException("Chat and Actionbars are not found for your server version");
@@ -371,6 +374,7 @@ public class EssenceCore extends JavaPlugin {
         }
     }
 
+    @Override
     public IRespawn getRespawn() throws NMSClassNotFoundException {
         if (iRespawn.equals(null)) {
             throw new NMSClassNotFoundException("Respawning is not found for your server version");

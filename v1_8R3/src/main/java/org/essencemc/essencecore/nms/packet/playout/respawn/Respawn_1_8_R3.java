@@ -29,11 +29,19 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutRespawn;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.essencemc.essencecore.nms.v1_8R3.util.Util;
+import org.essencemc.essencecore.plugin.INMS_Fetcher;
 
 /**
  * Handles the player respawning for v1_8R3
  */
 public class Respawn_1_8_R3 implements IRespawn {
+
+    private final INMS_Fetcher inmsFetcher;
+
+    public Respawn_1_8_R3(INMS_Fetcher inmsFetcher) {
+        this.inmsFetcher = inmsFetcher;
+    }
+
     /**
      * Respawn a player
      *

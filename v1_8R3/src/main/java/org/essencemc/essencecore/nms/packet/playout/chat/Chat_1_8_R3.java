@@ -28,8 +28,8 @@ package org.essencemc.essencecore.nms.packet.playout.chat;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import org.bukkit.entity.Player;
-import org.essencemc.essencecore.nms.packet.playout.chat.IChat;
 import org.essencemc.essencecore.nms.v1_8R3.util.Util;
+import org.essencemc.essencecore.plugin.INMS_Fetcher;
 
 import java.util.Collection;
 
@@ -37,6 +37,12 @@ import java.util.Collection;
  * Handles the chat and actionbars for v1_8R3
  */
 public class Chat_1_8_R3 implements IChat {
+
+    private final INMS_Fetcher inmsFetcher;
+
+    public Chat_1_8_R3(INMS_Fetcher inmsFetcher) {
+        this.inmsFetcher = inmsFetcher;
+    }
 
     /**
      * @param message The message to be sent to the player.

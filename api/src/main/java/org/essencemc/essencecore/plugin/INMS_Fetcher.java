@@ -25,7 +25,7 @@
 
 package org.essencemc.essencecore.plugin;
 
-import org.essencemc.essencecore.exceptions.NMSClassNotFoundException;
+import org.essencemc.essencecore.plugin.exceptions.NMSClassNotFoundException;
 import org.essencemc.essencecore.nms.ISkull;
 import org.essencemc.essencecore.nms.packet.playout.chat.IChat;
 import org.essencemc.essencecore.nms.packet.playout.respawn.IRespawn;

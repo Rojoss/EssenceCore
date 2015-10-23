@@ -25,7 +25,12 @@
 
 package org.essencemc.essencecore.modules;
 
-public interface StorageModule {
-    void onLoad();
-    void onSave();
+public abstract class StorageModule extends Module {
+    public StorageModule(String name) {
+        super(name);
+    }
+
+    protected abstract void onLoad();
+
+    protected abstract void onSave();
 }

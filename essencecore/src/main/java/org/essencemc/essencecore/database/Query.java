@@ -25,17 +25,24 @@
 
 package org.essencemc.essencecore.database;
 
+import org.essencemc.essencecore.EssenceCore;
+import org.essencemc.essencecore.util.Debug;
 import org.essencemc.essencecore.util.Util;
 
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Query {
 
     private List<String> query = new ArrayList<String>();
+    private List<Object> values = new ArrayList<Object>();
 
     public Query createTable(String table, boolean ifNotExists, Column[] columns) {
-        String str = "CREATE TABLE" + (ifNotExists?" IF NOT EXISTS":"") + " " + table + "(";
+        String str = "CREATE TABLE " + (ifNotExists?"IF NOT EXISTS ":"") + table + " (";
         for (Column column : columns) {
             str += column.get() + ",";
         }
@@ -65,7 +72,7 @@ public class Query {
         return this;
     }
 
-    public Query delete(String table) {
+    public Query delete() {
         query.add("DELETE");
         return this;
     }
@@ -76,15 +83,12 @@ public class Query {
     }
 
     public Query values(List<String> columns, List<Object> values) {
+        this.values.addAll(values);
         String columns_str = "(";
         String values_str = "(";
         for (int i = 0; i < columns.size(); i++) {
             columns_str += columns.get(i) + ",";
-            if (values.get(i) instanceof String) {
-                values_str += "'" + values.get(i) + "',";
-            } else {
-                values_str += values.get(i) + ",";
-            }
+            values_str += "?, ";
         }
         columns_str = columns_str.substring(0, columns_str.length()-1);
         columns_str += ")";
@@ -95,13 +99,10 @@ public class Query {
     }
 
     public Query set(List<String> columns, List<Object> values) {
+        this.values.addAll(values);
         String str = "SET ";
         for (int i = 0; i < columns.size(); i++) {
-            if (values.get(i) instanceof String) {
-                str += columns.get(i) + "='" + values.get(i) + "',";
-            } else {
-                str += columns.get(i) + "=" + values.get(i) + ",";
-            }
+            str += columns.get(i) + " = ?,";
         }
         str = str.substring(0, str.length()-1);
         query.add(str);
@@ -109,29 +110,20 @@ public class Query {
     }
 
     public Query where(String column, Operator operator, Object value) {
-        if (value instanceof String) {
-            query.add("WHERE " + column + " " + operator.get() + " '" + value + "'");
-        } else {
-            query.add("WHERE " + column + " " + operator.get() + " " + value);
-        }
+        values.add(value);
+        query.add("WHERE " + column + " " + operator.get() + " ?");
         return this;
     }
 
     public Query and(String column, Operator operator, Object value) {
-        if (value instanceof String) {
-            query.add("AND " + column + " " + operator.get() + " '" + value + "'");
-        } else {
-            query.add("AND " + column + " " + operator.get() + " " + value);
-        }
+        values.add(value);
+        query.add("AND " + column + " " + operator.get() + " ?");
         return this;
     }
 
     public Query or(String column, Operator operator, Object value) {
-        if (value instanceof String) {
-            query.add("OR " + column + " " + operator.get() + " '" + value + "'");
-        } else {
-            query.add("OR " + column + " " + operator.get() + " " + value);
-        }
+        values.add(value);
+        query.add("OR " + column + " " + operator.get() + " ?");
         return this;
     }
 
@@ -171,11 +163,27 @@ public class Query {
     }
 
     public Query fullOutherJoin(String table, String column1, String column2) {
-        query.add("FULL OUTER JOIN " + table + " ON " + column1 + "=" + column2);
+        values.add(table);
+        query.add("FULL OUTER JOIN ? ON " + column1 + "=" + column2);
         return this;
     }
 
     public String get() {
         return Util.implode(query, " ") + ";";
+    }
+
+    public PreparedStatement getStatement() {
+        Debug.bc(get());
+        Connection sql = EssenceCore.inst().getSql();
+        try {
+            PreparedStatement statement = sql.prepareStatement(get());
+            for (int i = 0; i < values.size(); i++) {
+                statement.setObject(i+1, values.get(i));
+            }
+            return statement;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

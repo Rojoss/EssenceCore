@@ -75,7 +75,7 @@ public class Column {
 
     public Column defaultValue(Object value) {
         if (value instanceof String) {
-            column.add("DEFAULT `" + value + "`");
+            column.add("DEFAULT '" + value + "'");
         } else {
             column.add("DEFAULT " + value);
         }

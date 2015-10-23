@@ -25,10 +25,98 @@
 
 package org.essencemc.essencecore.modules;
 
-public interface SqlStorageModule extends StorageModule {
+import org.bukkit.scheduler.BukkitRunnable;
+import org.essencemc.essencecore.database.Column;
+import org.essencemc.essencecore.database.Database;
 
-    void createTable();
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
-    DataModules getDataType();
+public abstract class SqlStorageModule extends StorageModule {
+
+    private String table;
+    private DataModules dataType;
+
+    public SqlStorageModule(String name, String tableName, DataModules dataType) {
+        super(name);
+        this.dataType = dataType;
+        table = ess.getDataStorageCfg().table_name.replace("{type}", tableName).replace("{suffix}",
+                ess.getDataStorageCfg().storage_modules.get(dataType.toString().toLowerCase().replace("_", "-")).get("suffix"));
+
+    }
+
+    protected abstract Column[] getTableColumns();
+
+    protected Database getDatabase() {
+        return ess.getDB();
+    }
+
+    protected String getTable() {
+        return table;
+    }
+
+    protected PreparedStatement createStatement(String query) {
+        if (ess.getSql() == null) {
+            return null;
+        }
+        try {
+            ess.getSql().prepareStatement(query);
+        } catch (SQLException e) {
+            //TODO: Proper logging with in game warning etc.
+            ess.logError("Failed to create sql statement for the " + getName() + " module!");
+            ess.logError(e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    protected void closeStatement(PreparedStatement statement) {
+        try {
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void executeUpdate(final PreparedStatement statement) {
+        executeUpdate(statement, new SqlUpdateCallback() {
+            @Override
+            public void onExecute(int rowsChanged) {}
+        });
+    }
+
+    protected void executeUpdate(final PreparedStatement statement, final SqlUpdateCallback callback) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                try {
+                    callback.onExecute(statement.executeUpdate());
+                    statement.close();
+                } catch (SQLException e) {
+                    //TODO: Proper logging with in game warning etc.
+                    ess.logError("Failed to execute sql statement for the " + getName() + " module!");
+                    ess.logError(e.getMessage());
+                    ess.log(e.getErrorCode() + " - " + e.getSQLState() + " - " + e.toString());
+                }
+            }
+        }.runTaskAsynchronously(ess);
+    }
+
+    protected void executeQuery(final PreparedStatement statement, final SqlQueryCallback callback) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                try {
+                    callback.onExecute(statement.executeQuery());
+                    statement.close();
+                } catch (SQLException e) {
+                    //TODO: Proper logging with in game warning etc.
+                    ess.logError("Failed to execute sql statement for the " + getName() + " module!");
+                    ess.logError(e.getMessage());
+                    ess.log(e.getErrorCode() + " - " + e.getSQLState() + " - " + e.toString());
+                }
+            }
+        }.runTaskAsynchronously(ess);
+    }
 
 }

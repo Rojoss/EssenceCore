@@ -30,7 +30,7 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 /**
- * Any utility methods
+ * v1_8R3 utility methods
  */
 public class Util {
 

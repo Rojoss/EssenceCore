@@ -99,7 +99,6 @@ public class EssenceCore extends JavaPlugin implements INMS_Fetcher {
 
     @Override
     public void onEnable() {
-        //Testing git commit. :D
         instance = this;
         log.setParent(this.getLogger());
 

@@ -23,24 +23,18 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.plugin;
+package org.essencemc.essencecore.nms.packet.playout.title.builder;
 
-import org.essencemc.essencecore.plugin.exceptions.NMSClassNotFoundException;
-import org.essencemc.essencecore.nms.ISkull;
-import org.essencemc.essencecore.nms.packet.playout.chat.IChat;
-import org.essencemc.essencecore.nms.packet.playout.respawn.IRespawn;
-import org.essencemc.essencecore.nms.packet.playout.title.ITitle;
+import org.essencemc.essencecore.plugin.INMS_Fetcher;
 
 /**
  *
  */
-public interface INMS_Fetcher {
+public class Builder {
 
-    ITitle getTitle() throws NMSClassNotFoundException;
+    private final INMS_Fetcher inmsFetcher;
 
-    IChat getChat() throws NMSClassNotFoundException;
-
-    IRespawn getRespawn() throws NMSClassNotFoundException;
-
-    ISkull getSkull() throws NMSClassNotFoundException;
+    public Builder(INMS_Fetcher inmsFetcher) {
+        this.inmsFetcher = inmsFetcher;
+    }
 }

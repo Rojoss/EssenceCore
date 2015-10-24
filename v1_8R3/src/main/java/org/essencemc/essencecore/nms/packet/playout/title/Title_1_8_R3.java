@@ -28,6 +28,7 @@ package org.essencemc.essencecore.nms.packet.playout.title;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import org.bukkit.entity.Player;
+import org.essencemc.essencecore.nms.packet.playout.title.builder.Builder;
 import org.essencemc.essencecore.nms.v1_8R3.util.Util;
 import org.essencemc.essencecore.plugin.INMS_Fetcher;
 
@@ -181,4 +182,8 @@ public class Title_1_8_R3 implements ITitle {
         return this;
     }
 
+    @Override
+    public Builder builder(INMS_Fetcher inmsFetcher) {
+        return new Builder(inmsFetcher);
+    }
 }

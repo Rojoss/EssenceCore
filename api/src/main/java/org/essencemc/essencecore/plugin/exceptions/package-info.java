@@ -26,4 +26,4 @@
 /**
  * All the custom exceptions in the Essence Core plugin
  */
-package org.essencemc.essencecore.exceptions;
+package org.essencemc.essencecore.plugin.exceptions;

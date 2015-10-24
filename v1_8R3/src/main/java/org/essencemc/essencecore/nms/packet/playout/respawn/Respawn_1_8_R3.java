@@ -84,7 +84,7 @@ public class Respawn_1_8_R3 implements IRespawn {
      */
     @Override
     public IRespawn changePlayerSky(World.Environment environment, Player player) {
-        PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(environment.ordinal(), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
+        PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(Util.resolveEnvironment(player), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
         Util.sendPacket(player, respawnPacket);
 
         Util.refreshPlayerChunks(10, player);
@@ -101,7 +101,7 @@ public class Respawn_1_8_R3 implements IRespawn {
      * @return IRespawn instance
      */
     public IRespawn changePlayerSky(World.Environment environment, int chunkRadius, Player player) {
-        PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(environment.ordinal(), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
+        PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(Util.resolveEnvironment(player), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
         Util.sendPacket(player, respawnPacket);
 
         Util.refreshPlayerChunks(chunkRadius, player);
@@ -119,7 +119,7 @@ public class Respawn_1_8_R3 implements IRespawn {
     @Override
     public IRespawn changePlayerSky(World.Environment environment, Player[] players) {
         for (Player player: players) {
-            PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(environment.ordinal(), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
+            PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(Util.resolveEnvironment(player), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
             Util.sendPacket(player, respawnPacket);
 
             Util.refreshPlayerChunks(10, player);
@@ -138,7 +138,7 @@ public class Respawn_1_8_R3 implements IRespawn {
      */
     public IRespawn changePlayerSky(World.Environment environment, int chunkRadius, Player[] players) {
         for (Player player: players) {
-            PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(environment.ordinal(), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
+            PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(Util.resolveEnvironment(player), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
             Util.sendPacket(player, respawnPacket);
 
             Util.refreshPlayerChunks(chunkRadius, player);

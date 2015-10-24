@@ -2,10 +2,7 @@ package org.essencemc.essencecore.parsers;
 
 import org.essencemc.essencecore.util.Util;
 
-import java.util.ArrayList;
-import java.util.List;
-
-/**
+/*/**
  * <p>This can be used to parse a string in to a JSON formatted string.
  * These strings can be used in like tellraw commands but also inside a lot EssenceCore methods and configurations.</p>
  *

@@ -27,8 +27,10 @@ package org.essencemc.essencecore.modules;
 
 import org.bukkit.event.HandlerList;
 import org.essencemc.essencecore.EssenceCore;
+import org.essencemc.essencecore.database.Column;
 
 import java.lang.reflect.InvocationTargetException;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,14 +83,31 @@ public class Modules {
         }
 
         try {
-            Module module = clazz.getConstructor(String.class).newInstance(moduleName);
+            final Module module = clazz.getConstructor(String.class).newInstance(moduleName);
             modules.add(module);
             if (module instanceof SqlStorageModule) {
-                ((SqlStorageModule)module).createTable();
-            }
-            module.onEnable();
-            if (module instanceof StorageModule) {
-                ((StorageModule)module).onLoad();
+                SqlStorageModule sqlModule = (SqlStorageModule)module;
+                Column[] columns = sqlModule.getTableColumns();
+                PreparedStatement statement = sqlModule.getDatabase().createQuery().createTable(sqlModule.getTable(), true, columns).getStatement();
+                if (statement == null) {
+                    unregisterModule(moduleName);
+                    return;
+                }
+
+                sqlModule.executeUpdate(statement, new SqlUpdateCallback() {
+                    @Override
+                    public void onExecute(int rowsChanged) {
+                        module.onEnable();
+                        if (module instanceof StorageModule) {
+                            ((StorageModule)module).onLoad();
+                        }
+                    }
+                });
+            } else {
+                module.onEnable();
+                if (module instanceof StorageModule) {
+                    ((StorageModule)module).onLoad();
+                }
             }
             ess.getServer().getPluginManager().registerEvents(module, ess);
         } catch (InstantiationException e) {

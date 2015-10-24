@@ -41,6 +41,7 @@ public enum DataModules {
     JAIL("jail", 0),
     FREEZE("freeze", 0),
     WARNING("warning", 10),
+    SHOP_ITEMS("shopitems", 0),
     ;
 
     private String module;

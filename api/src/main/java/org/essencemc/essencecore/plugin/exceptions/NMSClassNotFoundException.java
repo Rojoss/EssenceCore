@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.exceptions;
+package org.essencemc.essencecore.plugin.exceptions;
 
 /**
  * Exception for indicating a supporting nms handler is not found

@@ -45,12 +45,7 @@ public class Chat_1_8_R3 implements IChat {
     }
 
     /**
-     * @param message The message to be sent to the player.
-     *                It has to be a string in raw JSON format.
-     *                You can use TextParser to build one if you want.
-     * @param player  The player the message has to be sent to.
-     *                Note that the player has to be a {@link Player} object or else it wont work.
-     * @return IChat instance
+     * {@inheritDoc}
      */
     @Override
     public IChat sendActionbar(String message, Player player) {
@@ -62,12 +57,7 @@ public class Chat_1_8_R3 implements IChat {
     }
 
     /**
-     * @param message The message to be sent to the player.
-     *                It has to be a string in raw JSON format.
-     *                You can use TextParser to build one if you want.
-     * @param players The players the message has to be sent to.
-     *                Note that the players have to be an array of {@link Player} object or else it wont work
-     * @return IChat instance
+     * {@inheritDoc}
      */
     @Override
     public IChat sendActionbar(String message, Player[] players) {
@@ -82,12 +72,7 @@ public class Chat_1_8_R3 implements IChat {
     }
 
     /**
-     * @param message The message to be sent to the player.
-     *                It has to be a string in raw JSON format.
-     *                You can use TextParser to build one if you want.
-     * @param players The players the message has to be sent to.
-     *                Note that the players have to be a collection of {@link Player} object or else it wont work
-     * @return IChat instance
+     * {@inheritDoc}
      */
     @Override
     public IChat sendActionbar(String message, Collection<? extends Player> players) {
@@ -102,12 +87,7 @@ public class Chat_1_8_R3 implements IChat {
     }
 
     /**
-     * @param message The message to be sent to the player.
-     *                It has to be a string in raw JSON format.
-     *                You can use TextParser to build one if you want.
-     * @param player  The player the message has to be sent to.
-     *                Note that the player has to be a {@link Player} object or else it wont work.
-     * @return IChat instance
+     * {@inheritDoc}
      */
     @Override
     public IChat sendChat(String message, Player player) {
@@ -119,12 +99,7 @@ public class Chat_1_8_R3 implements IChat {
     }
 
     /**
-     * @param message The message to be sent to the player.
-     *                It has to be a string in raw JSON format.
-     *                You can use TextParser to build one if you want.
-     * @param players The players the message has to be sent to.
-     *                Note that the players have to be an array of {@link Player} object or else it wont work
-     * @return
+     * {@inheritDoc}
      */
     @Override
     public IChat sendChat(String message, Player[] players) {
@@ -139,12 +114,7 @@ public class Chat_1_8_R3 implements IChat {
     }
 
     /**
-     * @param message The message to be sent to the player.
-     *                It has to be a string in raw JSON format.
-     *                You can use TextParser to build one if you want.
-     * @param players The players the message has to be sent to.
-     *                Note that the players have to be a collection of {@link Player} object or else it wont work
-     * @return
+     * {@inheritDoc}
      */
     @Override
     public IChat sendChat(String message, Collection<? extends Player> players) {

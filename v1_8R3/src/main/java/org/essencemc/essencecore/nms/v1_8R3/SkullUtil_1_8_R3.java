@@ -60,8 +60,7 @@ public class SkullUtil_1_8_R3 implements ISkull {
     }
 
     /**
-     * @param skinUrl The textures.minecraft.net skin url for the skull.
-     * @param block   The skull block on which the skin has to be applied on.
+     * {@inheritDoc}
      */
     @Override
     public void setSkullUrl(String skinUrl, Block block) {
@@ -82,9 +81,7 @@ public class SkullUtil_1_8_R3 implements ISkull {
 
 
     /**
-     * @param skinUrl The textures.minecraft.net skin url for the skull.
-     * @param meta    The skull meta of a skull block.
-     * @return SkullMeta
+     * {@inheritDoc}
      */
     @Override
     public SkullMeta setSkullUrl(String skinUrl, SkullMeta meta) {
@@ -110,8 +107,7 @@ public class SkullUtil_1_8_R3 implements ISkull {
     }
 
     /**
-     * @param meta The skull meta of a skull block.
-     * @return The textures.minecraft.net skin url for the skull.
+     * {@inheritDoc}
      */
     @Override
     public String getSkullUrl(SkullMeta meta) {

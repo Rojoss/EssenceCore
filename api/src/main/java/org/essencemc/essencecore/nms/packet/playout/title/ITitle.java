@@ -26,6 +26,10 @@
 package org.essencemc.essencecore.nms.packet.playout.title;
 
 import org.bukkit.entity.Player;
+import org.essencemc.essencecore.plugin.INMS_Fetcher;
+import org.essencemc.essencecore.nms.packet.playout.title.builder.Builder;
+
+import java.util.Collection;
 
 /**
  * Interface for handling Titles and Subtitles
@@ -64,6 +68,22 @@ public interface ITitle {
      */
     ITitle sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Player[] players);
 
+    /**
+     * Send the players only the title message
+     *
+     * @param titleMessage The message to be sent to the player.
+     *                     It has to be a string in raw JSON format.
+     *                     You can use TextParser to build one if you want.
+     * @param fadeIn Fade in time for the title message in ticks.
+     * @param stay Time in ticks the message stays floating on the screen
+     * @param fadeOut Fade in time for the title message in ticks.
+     * @param players The players the message has to be sent to.
+     *                Note that the players have to be a collection of {@link Player} object or else it wont work
+     *
+     * @return ITitle instance
+     */
+    ITitle sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Collection<? extends Player> players);
+
 
     /**
      * Send the player only the subtitle message
@@ -98,30 +118,8 @@ public interface ITitle {
     ITitle sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Player[] players);
 
     /**
-     * Send the player only the title message
+     * Send the players only subtitle message
      *
-     * @param titleMessage The message to be sent to the player.
-     *                     It has to be a string in raw JSON format.
-     *                     You can use TextParser to build one if you want.
-     * @param subtitleMessage The message to be sent to the player.
-     *                        It has to be a string in raw JSON format.
-     *                        You can use TextParser to build one if you want.
-     * @param fadeIn Fade in time for the title message in ticks.
-     * @param stay Time in ticks the message stays floating on the screen
-     * @param fadeOut Fade in time for the title message in ticks.
-     * @param player The player the message has to be sent to.
-     *               Note that the player has to be a {@link Player} object or else it wont work.
-     *
-     * @return ITitle instance
-     */
-    ITitle sendWholeTitle(String titleMessage, String subtitleMessage, int fadeIn, int stay, int fadeOut, Player player);
-
-    /**
-     * Send the player only the title message
-     *
-     * @param titleMessage The message to be sent to the player.
-     *                     It has to be a string in raw JSON format.
-     *                     You can use TextParser to build one if you want.
      * @param subtitleMessage The message to be sent to the player.
      *                        It has to be a string in raw JSON format.
      *                        You can use TextParser to build one if you want.
@@ -129,9 +127,11 @@ public interface ITitle {
      * @param stay Time in ticks the message stays floating on the screen
      * @param fadeOut Fade in time for the title message in ticks.
      * @param players The players the message has to be sent to.
-     *                Note that the players have to be an array of {@link Player} object or else it wont work
+     *                Note that the players have to be a collection of {@link Player} object or else it wont work
      *
      * @return ITitle instance
      */
-    ITitle sendWholeTitle(String titleMessage, String subtitleMessage, int fadeIn, int stay, int fadeOut, Player[] players);
+    ITitle sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Collection<? extends Player> players);
+
+    Builder builder(INMS_Fetcher inmsFetcher);
 }

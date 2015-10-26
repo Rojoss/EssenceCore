@@ -29,7 +29,6 @@ import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffectType;
@@ -332,7 +331,7 @@ public class Util {
      * Splits the specified string in sections.
      * Strings inside quotes will be placed together in sections.
      * For example 'Essence is "super awesome"' will return {"essence", "is", "super awesome"}
-     * @authors sk89q, desht
+     * @author sk89q, desht
      * @param string The string that needs to be split.
      * @return List of strings split from the input string.
      */

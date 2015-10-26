@@ -37,7 +37,7 @@ import org.essencemc.essencecore.database.Database;
 import org.essencemc.essencecore.database.MySql.MySql;
 import org.essencemc.essencecore.database.SqlLite.SqlLite;
 import org.essencemc.essencecore.entity.ItemTag;
-import org.essencemc.essencecore.exceptions.NMSClassNotFoundException;
+import org.essencemc.essencecore.plugin.exceptions.NMSClassNotFoundException;
 import org.essencemc.essencecore.listeners.ModuleListener;
 import org.essencemc.essencecore.listeners.PlaceholderListener;
 import org.essencemc.essencecore.menu.Menu;

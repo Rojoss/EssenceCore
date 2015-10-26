@@ -42,14 +42,14 @@ import org.essencemc.essencecore.commands.links.internal.CommandLink;
 import org.essencemc.essencecore.message.EText;
 import org.essencemc.essencecore.message.Message;
 import org.essencemc.essencecore.message.Param;
+import org.essencemc.essencecore.modules.EssModule;
 import org.essencemc.essencecore.util.Util;
 
 import java.lang.reflect.Field;
 import java.util.*;
 
-public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Listener {
+public abstract class EssenceCommand extends EssModule implements CommandExecutor, TabExecutor, Listener {
 
-    protected final Plugin plugin;
     protected final String label;
     protected String description;
     protected List<String> aliases;
@@ -64,7 +64,7 @@ public abstract class EssenceCommand implements CommandExecutor, TabExecutor, Li
     protected static CommandMap commandMap;
 
     public EssenceCommand(Plugin plugin, String label, String description, String permission, List<String> aliases) {
-        this.plugin = plugin;
+        super(plugin);
         this.label = label;
 
         addModifier("-?", Message.MOD_HELP.msg());

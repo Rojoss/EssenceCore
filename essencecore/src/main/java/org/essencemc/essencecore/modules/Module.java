@@ -26,14 +26,18 @@
 package org.essencemc.essencecore.modules;
 
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.essencemc.essencecore.EssenceCore;
+import org.essencemc.essencecore.commands.EssenceCommand;
 
-public abstract class Module implements Listener {
+import java.util.List;
 
-    protected EssenceCore ess = EssenceCore.inst();
+public abstract class Module extends EssModule implements Listener {
+
     protected String name;
 
-    public Module(String name) {
+    public Module(Plugin plugin, String name) {
+        super(plugin);
         this.name = name;
     }
 
@@ -46,5 +50,8 @@ public abstract class Module implements Listener {
     public String getName() {
         return name;
     }
+
+
+
 
 }

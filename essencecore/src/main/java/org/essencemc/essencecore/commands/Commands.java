@@ -39,7 +39,6 @@ public class Commands {
     private CommandsCfg cfg;
     public List<EssenceCommand> commands = new ArrayList<EssenceCommand>();
 
-
     public Commands(EssenceCore ess) {
         this.ess = ess;
         this.cfg = ess.getCommandsCfg();
@@ -67,7 +66,7 @@ public class Commands {
         for (EssenceCommand cmd : commands) {
             if (cmd.getLabel().equals(label)) {
                 cmd.unregister();
-                if (module.isEmpty() || ess.getModuleCfg().isEnabled(parentModule, module)) {
+                if ((module.isEmpty() || ess.getModuleCfg().isEnabled(parentModule, module)) && cmd.checkDependencies()) {
                     cmd.loadData(cfg.getDescription(label), cfg.getPermission(label), cfg.getAliases(label));
                     cmd.register();
                 } else {
@@ -90,6 +89,9 @@ public class Commands {
 
         try {
             EssenceCommand cmd = clazz.getConstructor(Plugin.class, String.class, String.class, String.class, List.class).newInstance(plugin, label, cfg.getDescription(label), cfg.getPermission(label), cfg.getAliases(label));
+            if (!cmd.checkDependencies()) {
+                return;
+            }
             commands.add(cmd);
         } catch (InstantiationException e) {
             ess.logError("Failed to register the command " + label);

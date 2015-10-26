@@ -92,7 +92,7 @@ public class Query {
         }
         columns_str = columns_str.substring(0, columns_str.length()-1);
         columns_str += ")";
-        values_str = values_str.substring(0, values_str.length()-1);
+        values_str = values_str.substring(0, values_str.length()-2);
         values_str += ")";
         query.add(columns_str + " VALUES " + values_str);
         return this;

@@ -31,7 +31,7 @@ import org.bukkit.entity.Player;
 import java.util.Collection;
 
 /**
- * Interface for handling player respawns
+ * Interface for handling player respawns and changing player sky
  */
 public interface IRespawn {
 

@@ -37,6 +37,7 @@ import org.essencemc.essencecore.database.Database;
 import org.essencemc.essencecore.database.MySql.MySql;
 import org.essencemc.essencecore.database.SqlLite.SqlLite;
 import org.essencemc.essencecore.entity.ItemTag;
+import org.essencemc.essencecore.nms.packet.playout.chat.Chat;
 import org.essencemc.essencecore.plugin.exceptions.NMSClassNotFoundException;
 import org.essencemc.essencecore.listeners.ModuleListener;
 import org.essencemc.essencecore.listeners.PlaceholderListener;
@@ -44,7 +45,6 @@ import org.essencemc.essencecore.menu.Menu;
 import org.essencemc.essencecore.modules.Modules;
 import org.essencemc.essencecore.nms.ISkull;
 import org.essencemc.essencecore.nms.packet.playout.chat.Chat_1_8_R3;
-import org.essencemc.essencecore.nms.packet.playout.chat.IChat;
 import org.essencemc.essencecore.nms.packet.playout.respawn.IRespawn;
 import org.essencemc.essencecore.nms.packet.playout.respawn.Respawn_1_8_R3;
 import org.essencemc.essencecore.nms.packet.playout.title.ITitle;
@@ -78,7 +78,7 @@ public class EssenceCore extends JavaPlugin implements INMS_Fetcher {
 
     private ISkull iSkull = null;
     private ITitle iTitle = null;
-    private IChat iChat = null;
+    private Chat chat = null;
     private IRespawn iRespawn = null;
 
     private ItemAliases itemAliases;
@@ -142,7 +142,7 @@ public class EssenceCore extends JavaPlugin implements INMS_Fetcher {
             case "v1_8_R3" :
                 iSkull = new SkullUtil_1_8_R3(this);
                 iTitle = new Title_1_8_R3(this);
-                iChat = new Chat_1_8_R3(this);
+                chat = new Chat_1_8_R3(this);
                 iRespawn = new Respawn_1_8_R3(this);
                 compatible = true;
                 break;
@@ -366,11 +366,11 @@ public class EssenceCore extends JavaPlugin implements INMS_Fetcher {
     }
 
     @Override
-    public IChat getChat() throws NMSClassNotFoundException {
+    public Chat getChat() throws NMSClassNotFoundException {
         if (iTitle.equals(null)) {
             throw new NMSClassNotFoundException("Chat and Actionbars are not found for your server version");
         } else {
-            return iChat;
+            return chat;
         }
     }
 

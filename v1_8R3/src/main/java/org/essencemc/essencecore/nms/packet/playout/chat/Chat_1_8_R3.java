@@ -36,7 +36,7 @@ import java.util.Collection;
 /**
  * Handles the chat and actionbars for v1_8R3
  */
-public class Chat_1_8_R3 implements IChat {
+public class Chat_1_8_R3 implements Chat {
 
     private final INMS_Fetcher inmsFetcher;
 
@@ -48,7 +48,7 @@ public class Chat_1_8_R3 implements IChat {
      * {@inheritDoc}
      */
     @Override
-    public IChat sendActionbar(String message, Player player) {
+    public Chat sendActionbar(String message, Player player) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(message);
         PacketPlayOutChat actionbarPacket = new PacketPlayOutChat(icbc, (byte) 2);
         Util.sendPacket(player, actionbarPacket);
@@ -60,7 +60,7 @@ public class Chat_1_8_R3 implements IChat {
      * {@inheritDoc}
      */
     @Override
-    public IChat sendActionbar(String message, Player[] players) {
+    public Chat sendActionbar(String message, Player[] players) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(message);
         PacketPlayOutChat actionbarPacket = new PacketPlayOutChat(icbc, (byte) 2);
 
@@ -75,7 +75,7 @@ public class Chat_1_8_R3 implements IChat {
      * {@inheritDoc}
      */
     @Override
-    public IChat sendActionbar(String message, Collection<? extends Player> players) {
+    public Chat sendActionbar(String message, Collection<? extends Player> players) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(message);
         PacketPlayOutChat actionbarPacket = new PacketPlayOutChat(icbc, (byte) 2);
 
@@ -90,7 +90,7 @@ public class Chat_1_8_R3 implements IChat {
      * {@inheritDoc}
      */
     @Override
-    public IChat sendChat(String message, Player player) {
+    public Chat sendChat(String message, Player player) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(message);
         PacketPlayOutChat chatPacket = new PacketPlayOutChat(icbc, (byte) 0);
         Util.sendPacket(player, chatPacket);
@@ -102,7 +102,7 @@ public class Chat_1_8_R3 implements IChat {
      * {@inheritDoc}
      */
     @Override
-    public IChat sendChat(String message, Player[] players) {
+    public Chat sendChat(String message, Player[] players) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(message);
         PacketPlayOutChat chatPacket = new PacketPlayOutChat(icbc, (byte) 0);
 
@@ -117,7 +117,7 @@ public class Chat_1_8_R3 implements IChat {
      * {@inheritDoc}
      */
     @Override
-    public IChat sendChat(String message, Collection<? extends Player> players) {
+    public Chat sendChat(String message, Collection<? extends Player> players) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(message);
         PacketPlayOutChat chatPacket = new PacketPlayOutChat(icbc, (byte) 0);
 

@@ -38,6 +38,7 @@ import org.essencemc.essencecore.database.MySql.MySql;
 import org.essencemc.essencecore.database.SqlLite.SqlLite;
 import org.essencemc.essencecore.entity.ItemTag;
 import org.essencemc.essencecore.nms.packet.playout.chat.Chat;
+import org.essencemc.essencecore.nms.packet.playout.respawn.Respawn;
 import org.essencemc.essencecore.plugin.exceptions.NMSClassNotFoundException;
 import org.essencemc.essencecore.listeners.ModuleListener;
 import org.essencemc.essencecore.listeners.PlaceholderListener;
@@ -45,7 +46,6 @@ import org.essencemc.essencecore.menu.Menu;
 import org.essencemc.essencecore.modules.Modules;
 import org.essencemc.essencecore.nms.ISkull;
 import org.essencemc.essencecore.nms.packet.playout.chat.Chat_1_8_R3;
-import org.essencemc.essencecore.nms.packet.playout.respawn.IRespawn;
 import org.essencemc.essencecore.nms.packet.playout.respawn.Respawn_1_8_R3;
 import org.essencemc.essencecore.nms.packet.playout.title.ITitle;
 import org.essencemc.essencecore.nms.packet.playout.title.Title_1_8_R3;
@@ -79,7 +79,7 @@ public class EssenceCore extends JavaPlugin implements INMS_Fetcher {
     private ISkull iSkull = null;
     private ITitle iTitle = null;
     private Chat chat = null;
-    private IRespawn iRespawn = null;
+    private Respawn respawn = null;
 
     private ItemAliases itemAliases;
     private Map<AliasType, AliasesCfg> aliases = new HashMap<AliasType, AliasesCfg>();
@@ -143,7 +143,7 @@ public class EssenceCore extends JavaPlugin implements INMS_Fetcher {
                 iSkull = new SkullUtil_1_8_R3(this);
                 iTitle = new Title_1_8_R3(this);
                 chat = new Chat_1_8_R3(this);
-                iRespawn = new Respawn_1_8_R3(this);
+                respawn = new Respawn_1_8_R3(this);
                 compatible = true;
                 break;
             default:
@@ -375,11 +375,11 @@ public class EssenceCore extends JavaPlugin implements INMS_Fetcher {
     }
 
     @Override
-    public IRespawn getRespawn() throws NMSClassNotFoundException {
-        if (iRespawn.equals(null)) {
+    public Respawn getRespawn() throws NMSClassNotFoundException {
+        if (respawn.equals(null)) {
             throw new NMSClassNotFoundException("Respawning is not found for your server version");
         } else {
-            return iRespawn;
+            return respawn;
         }
     }
 }

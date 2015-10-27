@@ -41,6 +41,8 @@ public enum Message {
     INFORMATION(MsgCat.GENERAL, "&6&lInformation"),
     ENABLED(MsgCat.GENERAL, "&aenabled"),
     DISABLED(MsgCat.GENERAL, "&cdisabled"),
+    YES(MsgCat.GENERAL, "&ayes"),
+    NO(MsgCat.GENERAL, "&cno"),
 
     //Argument parsing messages
     INVALID_ARGUMENT_TYPE(MsgCat.VALIDATION, "{p} &4{input} &cis not a valid argument type."),

@@ -25,6 +25,7 @@
 
 package org.essencemc.essencecore.modules;
 
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.essencemc.essencecore.database.Column;
 import org.essencemc.essencecore.database.Database;
@@ -37,8 +38,8 @@ public abstract class SqlStorageModule extends StorageModule {
     private String table;
     private DataModules dataType;
 
-    public SqlStorageModule(String name, String tableName, DataModules dataType) {
-        super(name);
+    public SqlStorageModule(Plugin plugin, String name, String tableName, DataModules dataType) {
+        super(plugin, name);
         this.dataType = dataType;
         table = ess.getDataStorageCfg().table_name.replace("{type}", tableName).replace("{suffix}",
                 ess.getDataStorageCfg().storage_modules.get(dataType.toString().toLowerCase().replace("_", "-")).get("suffix"));

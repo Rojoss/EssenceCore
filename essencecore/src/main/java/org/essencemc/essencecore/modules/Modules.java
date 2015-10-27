@@ -58,7 +58,7 @@ public class Modules {
         }
         for (Module module : modules) {
             if (module.getName().equalsIgnoreCase(moduleName)) {
-                if (!moduleName.isEmpty() && !ess.getModuleCfg().isEnabled(parentModule, moduleName)) {
+                if ((!moduleName.isEmpty() && !ess.getModuleCfg().isEnabled(parentModule, moduleName)) || !module.checkDependencies()) {
                     if (module instanceof StorageModule) {
                         ((StorageModule)module).onSave();
                     }
@@ -84,6 +84,9 @@ public class Modules {
 
         try {
             final Module module = clazz.getConstructor(String.class).newInstance(moduleName);
+            if (!module.checkDependencies()) {
+                return;
+            }
             modules.add(module);
             if (module instanceof SqlStorageModule) {
                 SqlStorageModule sqlModule = (SqlStorageModule)module;

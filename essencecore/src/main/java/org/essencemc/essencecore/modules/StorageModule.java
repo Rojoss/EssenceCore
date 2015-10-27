@@ -25,9 +25,11 @@
 
 package org.essencemc.essencecore.modules;
 
+import org.bukkit.plugin.Plugin;
+
 public abstract class StorageModule extends Module {
-    public StorageModule(String name) {
-        super(name);
+    public StorageModule(Plugin plugin, String name) {
+        super(plugin, name);
     }
 
     protected abstract void onLoad();

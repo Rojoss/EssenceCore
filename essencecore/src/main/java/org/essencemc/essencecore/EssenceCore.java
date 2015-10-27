@@ -39,6 +39,7 @@ import org.essencemc.essencecore.database.SqlLite.SqlLite;
 import org.essencemc.essencecore.entity.ItemTag;
 import org.essencemc.essencecore.nms.packet.playout.chat.Chat;
 import org.essencemc.essencecore.nms.packet.playout.respawn.Respawn;
+import org.essencemc.essencecore.nms.packet.playout.title.Title;
 import org.essencemc.essencecore.plugin.exceptions.NMSClassNotFoundException;
 import org.essencemc.essencecore.listeners.ModuleListener;
 import org.essencemc.essencecore.listeners.PlaceholderListener;
@@ -47,7 +48,6 @@ import org.essencemc.essencecore.modules.Modules;
 import org.essencemc.essencecore.nms.ISkull;
 import org.essencemc.essencecore.nms.packet.playout.chat.Chat_1_8_R3;
 import org.essencemc.essencecore.nms.packet.playout.respawn.Respawn_1_8_R3;
-import org.essencemc.essencecore.nms.packet.playout.title.ITitle;
 import org.essencemc.essencecore.nms.packet.playout.title.Title_1_8_R3;
 import org.essencemc.essencecore.nms.v1_8R3.SkullUtil_1_8_R3;
 import org.essencemc.essencecore.player.PlayerManager;
@@ -77,7 +77,7 @@ public class EssenceCore extends JavaPlugin implements INMS_Fetcher {
     private CommandOptionsCfg cmdOptionsCfg;
 
     private ISkull iSkull = null;
-    private ITitle iTitle = null;
+    private Title title = null;
     private Chat chat = null;
     private Respawn respawn = null;
 
@@ -141,7 +141,7 @@ public class EssenceCore extends JavaPlugin implements INMS_Fetcher {
         switch (version) {
             case "v1_8_R3" :
                 iSkull = new SkullUtil_1_8_R3(this);
-                iTitle = new Title_1_8_R3(this);
+                title = new Title_1_8_R3(this);
                 chat = new Chat_1_8_R3(this);
                 respawn = new Respawn_1_8_R3(this);
                 compatible = true;
@@ -315,7 +315,7 @@ public class EssenceCore extends JavaPlugin implements INMS_Fetcher {
      */
     @Override
     public ISkull getSkull() throws NMSClassNotFoundException {
-        if (iTitle.equals(null)) {
+        if (title.equals(null)) {
             throw new NMSClassNotFoundException("SkullData is not found for your server version");
         } else {
             return iSkull;
@@ -357,17 +357,17 @@ public class EssenceCore extends JavaPlugin implements INMS_Fetcher {
     }
 
     @Override
-    public ITitle getTitle() throws NMSClassNotFoundException {
-        if (iTitle.equals(null)) {
+    public Title getTitle() throws NMSClassNotFoundException {
+        if (title.equals(null)) {
             throw new NMSClassNotFoundException("Titles are not found for your server version");
         } else {
-            return iTitle;
+            return title;
         }
     }
 
     @Override
     public Chat getChat() throws NMSClassNotFoundException {
-        if (iTitle.equals(null)) {
+        if (title.equals(null)) {
             throw new NMSClassNotFoundException("Chat and Actionbars are not found for your server version");
         } else {
             return chat;

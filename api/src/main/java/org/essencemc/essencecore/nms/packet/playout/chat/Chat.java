@@ -111,4 +111,11 @@ public interface Chat {
      * @return Chat instance
      */
     Chat sendChat(String message, Collection<? extends Player> players);
+
+    /**
+     * Build a chat message and send
+     *
+     * @return Builder instance
+     */
+    Builder builder();
 }

@@ -128,4 +128,12 @@ public class Chat_1_8_R3 implements Chat {
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Builder builder() {
+        return new Builder(inmsFetcher);
+    }
+
 }

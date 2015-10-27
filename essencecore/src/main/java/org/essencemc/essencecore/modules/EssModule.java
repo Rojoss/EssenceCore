@@ -4,6 +4,7 @@ import org.bukkit.plugin.Plugin;
 import org.essencemc.essencecore.EssenceCore;
 import org.essencemc.essencecore.commands.EssenceCommand;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EssModule {
@@ -11,8 +12,8 @@ public class EssModule {
     protected final Plugin plugin;
     protected final EssenceCore ess = EssenceCore.inst();
 
-    private List<Class<? extends EssModule>> dependencies;
-    private List<Class<? extends EssModule>> softDependencies;
+    private List<Class<? extends EssModule>> dependencies = new ArrayList<Class<? extends EssModule>>();
+    private List<Class<? extends EssModule>> softDependencies = new ArrayList<Class<? extends EssModule>>();
 
     public EssModule(Plugin plugin) {
         this.plugin = plugin;

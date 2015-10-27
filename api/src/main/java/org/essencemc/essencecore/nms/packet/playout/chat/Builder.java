@@ -39,6 +39,7 @@ public class Builder {
     private byte location = ChatLocation.CHAT.getLocationId();
     private String message = "";
 
+     // We need a ref to EssenceCore class so cannot use no parameter contructor
     private Builder() {
         inmsFetcher = null;
     }
@@ -47,16 +48,38 @@ public class Builder {
         this.inmsFetcher = inmsFetcher;
     }
 
+    /**
+     * Set the location of chat message
+     *
+     * @param location Location of the chat message.
+     *
+     * @return Builder instance
+     */
     public Builder setChatLocation(ChatLocation location) {
         this.location = location.getLocationId();
         return this;
     }
 
+    /**
+     * Set the chat message
+     *
+     * @param message The message to be sent to the player.
+     *                It has to be a string in raw JSON format.
+     *                You can use TextParser to build one if you want.
+     *
+     * @return Builder instance
+     */
     public Builder setMessage(String message) {
         this.message = message;
         return this;
     }
 
+    /**
+     * Send the chat message to a single player
+     *
+     * @param player The player the message has to be sent to.
+     *               Note that the player has to be a {@link Player} object or else it wont work.
+     */
     public void send(Player player) {
         switch (location) {
             case 2:
@@ -67,6 +90,12 @@ public class Builder {
         }
     }
 
+    /**
+     * Send the chat message to players.
+     *
+     * @param players The players the message has to be sent to.
+     *                Note that the players have to be an array of {@link Player} object or else it wont work
+     */
     public void send(Player[] players) {
         switch (location) {
             case 2:
@@ -77,6 +106,12 @@ public class Builder {
         }
     }
 
+    /**
+     * Send the chat message to players.
+     *
+     * @param players The players the message has to be sent to.
+     *                Note that the players have to be a collection of {@link Player} object or else it wont work
+     */
     public void send(Collection<Player> players) {
         switch (location) {
             case 2:

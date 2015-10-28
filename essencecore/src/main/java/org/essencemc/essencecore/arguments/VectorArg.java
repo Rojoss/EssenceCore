@@ -120,9 +120,17 @@ public class VectorArg extends Argument {
     }
 
     public static String Parse(Vector input) {
+        return Parse(input, false);
+    }
+
+    public static String Parse(Vector input, boolean blockVector) {
         if (input == null) {
             return null;
         }
-        return input.getX() + "," + input.getY() + "," + input.getZ();
+        if (blockVector) {
+            return input.getBlockX() + "," + input.getBlockY() + "," + input.getBlockZ();
+        } else {
+            return input.getX() + "," + input.getY() + "," + input.getZ();
+        }
     }
 }

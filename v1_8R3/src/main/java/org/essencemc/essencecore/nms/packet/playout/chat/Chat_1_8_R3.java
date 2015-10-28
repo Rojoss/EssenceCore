@@ -29,7 +29,7 @@ import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import org.bukkit.entity.Player;
 import org.essencemc.essencecore.nms.v1_8R3.util.Util;
-import org.essencemc.essencecore.plugin.INMS_Fetcher;
+import org.essencemc.essencecore.plugin.NMSFetcher;
 
 import java.util.Collection;
 
@@ -38,10 +38,10 @@ import java.util.Collection;
  */
 public class Chat_1_8_R3 implements Chat {
 
-    private final INMS_Fetcher inmsFetcher;
+    private final NMSFetcher nmsFetcher;
 
-    public Chat_1_8_R3(INMS_Fetcher inmsFetcher) {
-        this.inmsFetcher = inmsFetcher;
+    public Chat_1_8_R3(NMSFetcher nmsFetcher) {
+        this.nmsFetcher = nmsFetcher;
     }
 
     /**
@@ -133,7 +133,7 @@ public class Chat_1_8_R3 implements Chat {
      */
     @Override
     public Builder builder() {
-        return new Builder(inmsFetcher);
+        return new Builder(nmsFetcher);
     }
 
 }

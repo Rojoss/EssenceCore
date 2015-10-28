@@ -38,7 +38,7 @@ import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.essencemc.essencecore.nms.ISkull;
 import org.essencemc.essencecore.nms.util.Util;
-import org.essencemc.essencecore.plugin.INMS_Fetcher;
+import org.essencemc.essencecore.plugin.NMSFetcher;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -53,10 +53,10 @@ import java.util.UUID;
 public class SkullUtil_1_8_R3 implements ISkull {
 
 
-    private final INMS_Fetcher inmsFetcher;
+    private final NMSFetcher nmsFetcher;
 
-    public SkullUtil_1_8_R3(INMS_Fetcher inmsFetcher) {
-        this.inmsFetcher = inmsFetcher;
+    public SkullUtil_1_8_R3(NMSFetcher nmsFetcher) {
+        this.nmsFetcher = nmsFetcher;
     }
 
     /**

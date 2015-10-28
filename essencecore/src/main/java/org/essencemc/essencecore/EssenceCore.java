@@ -37,21 +37,21 @@ import org.essencemc.essencecore.database.Database;
 import org.essencemc.essencecore.database.MySql.MySql;
 import org.essencemc.essencecore.database.SqlLite.SqlLite;
 import org.essencemc.essencecore.entity.ItemTag;
-import org.essencemc.essencecore.nms.packet.playout.chat.Chat;
-import org.essencemc.essencecore.nms.packet.playout.respawn.Respawn;
-import org.essencemc.essencecore.nms.packet.playout.title.Title;
-import org.essencemc.essencecore.plugin.exceptions.NMSClassNotFoundException;
 import org.essencemc.essencecore.listeners.ModuleListener;
 import org.essencemc.essencecore.listeners.PlaceholderListener;
 import org.essencemc.essencecore.menu.Menu;
 import org.essencemc.essencecore.modules.Modules;
 import org.essencemc.essencecore.nms.ISkull;
+import org.essencemc.essencecore.nms.packet.playout.chat.Chat;
 import org.essencemc.essencecore.nms.packet.playout.chat.Chat_1_8_R3;
+import org.essencemc.essencecore.nms.packet.playout.respawn.Respawn;
 import org.essencemc.essencecore.nms.packet.playout.respawn.Respawn_1_8_R3;
+import org.essencemc.essencecore.nms.packet.playout.title.Title;
 import org.essencemc.essencecore.nms.packet.playout.title.Title_1_8_R3;
 import org.essencemc.essencecore.nms.v1_8R3.SkullUtil_1_8_R3;
 import org.essencemc.essencecore.player.PlayerManager;
-import org.essencemc.essencecore.plugin.INMS_Fetcher;
+import org.essencemc.essencecore.plugin.NMSFetcher;
+import org.essencemc.essencecore.plugin.exceptions.NMSClassNotFoundException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -62,7 +62,7 @@ import java.util.logging.Logger;
 /**
  * The main class for the Essence Core plugin
  */
-public class EssenceCore extends JavaPlugin implements INMS_Fetcher {
+public class EssenceCore extends JavaPlugin implements NMSFetcher {
 
     private static EssenceCore instance;
     private Gson gson = new Gson();

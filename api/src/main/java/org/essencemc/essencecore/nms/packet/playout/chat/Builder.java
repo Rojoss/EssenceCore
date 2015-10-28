@@ -26,7 +26,7 @@
 package org.essencemc.essencecore.nms.packet.playout.chat;
 
 import org.bukkit.entity.Player;
-import org.essencemc.essencecore.plugin.INMS_Fetcher;
+import org.essencemc.essencecore.plugin.NMSFetcher;
 
 import java.util.Collection;
 
@@ -35,17 +35,17 @@ import java.util.Collection;
  */
 public class Builder {
 
-    private final INMS_Fetcher inmsFetcher;
+    private final NMSFetcher nmsFetcher;
     private byte location = ChatLocation.CHAT.getLocationId();
     private String message = "";
 
      // We need a ref to EssenceCore class so cannot use no parameter contructor
     private Builder() {
-        inmsFetcher = null;
+        nmsFetcher = null;
     }
 
-    public Builder(INMS_Fetcher inmsFetcher) {
-        this.inmsFetcher = inmsFetcher;
+    public Builder(NMSFetcher nmsFetcher) {
+        this.nmsFetcher = nmsFetcher;
     }
 
     /**
@@ -83,10 +83,10 @@ public class Builder {
     public void send(Player player) {
         switch (location) {
             case 2:
-                inmsFetcher.getChat().sendActionbar(message, player);
+                nmsFetcher.getChat().sendActionbar(message, player);
                 break;
             default:
-                inmsFetcher.getChat().sendChat(message, player);
+                nmsFetcher.getChat().sendChat(message, player);
         }
     }
 
@@ -99,10 +99,10 @@ public class Builder {
     public void send(Player[] players) {
         switch (location) {
             case 2:
-                inmsFetcher.getChat().sendActionbar(message, players);
+                nmsFetcher.getChat().sendActionbar(message, players);
                 break;
             default:
-                inmsFetcher.getChat().sendChat(message, players);
+                nmsFetcher.getChat().sendChat(message, players);
         }
     }
 
@@ -115,10 +115,10 @@ public class Builder {
     public void send(Collection<Player> players) {
         switch (location) {
             case 2:
-                inmsFetcher.getChat().sendActionbar(message, players);
+                nmsFetcher.getChat().sendActionbar(message, players);
                 break;
             default:
-                inmsFetcher.getChat().sendChat(message, players);
+                nmsFetcher.getChat().sendChat(message, players);
         }
     }
 

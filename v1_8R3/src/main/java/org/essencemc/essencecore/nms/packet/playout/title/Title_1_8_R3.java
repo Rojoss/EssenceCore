@@ -28,29 +28,28 @@ package org.essencemc.essencecore.nms.packet.playout.title;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import org.bukkit.entity.Player;
-import org.essencemc.essencecore.nms.packet.playout.title.builder.Builder;
 import org.essencemc.essencecore.nms.v1_8R3.util.Util;
-import org.essencemc.essencecore.plugin.INMS_Fetcher;
+import org.essencemc.essencecore.plugin.NMSFetcher;
 
 import java.util.Collection;
 
 /**
  * Handles the titles and subtitles for v1_8R3
  */
-public class Title_1_8_R3 implements ITitle {
+public class Title_1_8_R3 implements Title {
 
 
-    private INMS_Fetcher inmsFetcher;
+    private NMSFetcher nmsFetcher;
 
-    public Title_1_8_R3(INMS_Fetcher inmsFetcher) {
-        this.inmsFetcher = inmsFetcher;
+    public Title_1_8_R3(NMSFetcher nmsFetcher) {
+        this.nmsFetcher = nmsFetcher;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ITitle sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Player player) {
+    public Title sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Player player) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(titleMessage);
         PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, icbc, fadeIn, stay, fadeOut);
         Util.sendPacket(player, titlePacket);
@@ -62,7 +61,7 @@ public class Title_1_8_R3 implements ITitle {
      * {@inheritDoc}
      */
     @Override
-    public ITitle sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Player[] players) {
+    public Title sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Player[] players) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(titleMessage);
         PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, icbc, fadeIn, stay, fadeOut);
 
@@ -76,7 +75,7 @@ public class Title_1_8_R3 implements ITitle {
      * {@inheritDoc}
      */
     @Override
-    public ITitle sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Collection<? extends Player> players) {
+    public Title sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Collection<? extends Player> players) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(titleMessage);
         PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, icbc, fadeIn, stay, fadeOut);
 
@@ -91,7 +90,7 @@ public class Title_1_8_R3 implements ITitle {
      * {@inheritDoc}
      */
     @Override
-    public ITitle sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Player player) {
+    public Title sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Player player) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(subtitleMessage);
         PacketPlayOutTitle subtitlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, icbc, fadeIn, stay, fadeOut);
         Util.sendPacket(player, subtitlePacket);
@@ -103,7 +102,7 @@ public class Title_1_8_R3 implements ITitle {
      * {@inheritDoc}
      */
     @Override
-    public ITitle sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Player[] players) {
+    public Title sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Player[] players) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(subtitleMessage);
         PacketPlayOutTitle subtitlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, icbc, fadeIn, stay, fadeOut);
 
@@ -117,7 +116,7 @@ public class Title_1_8_R3 implements ITitle {
      * {@inheritDoc}
      */
     @Override
-    public ITitle sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Collection<? extends Player> players) {
+    public Title sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Collection<? extends Player> players) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(subtitleMessage);
         PacketPlayOutTitle subtitlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, icbc, fadeIn, stay, fadeOut);
 
@@ -128,7 +127,7 @@ public class Title_1_8_R3 implements ITitle {
     }
 
     @Override
-    public Builder builder(INMS_Fetcher inmsFetcher) {
-        return new Builder(inmsFetcher);
+    public Builder builder(NMSFetcher nmsFetcher) {
+        return new Builder(nmsFetcher);
     }
 }

@@ -23,18 +23,16 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.nms.packet.playout.title.builder;
-
-import org.essencemc.essencecore.plugin.INMS_Fetcher;
+package org.essencemc.essencecore.plugin.exceptions;
 
 /**
- *
+ * Exception that handles and methods and such not available on a particular server version
  */
-public class Builder {
+public class NMSFeatureNotFoundException extends Exception {
 
-    private final INMS_Fetcher inmsFetcher;
+    private NMSFeatureNotFoundException() {}
 
-    public Builder(INMS_Fetcher inmsFetcher) {
-        this.inmsFetcher = inmsFetcher;
+    public NMSFeatureNotFoundException(String message) {
+        super(message);
     }
 }

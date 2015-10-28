@@ -31,36 +31,36 @@ import org.bukkit.entity.Player;
 import java.util.Collection;
 
 /**
- * Interface for handling player respawns
+ * Interface for handling player respawns and changing player sky
  */
-public interface IRespawn {
+public interface Respawn {
 
     /**
      * Respawn a player
      *
      * @param player The player that has to be respawned.
      *               Note that the player has to be a {@link Player} object or else it wont work.
-     * @return IRespawn instance
+     * @return Respawn instance
      */
-    IRespawn respawnPlayer(Player player);
+    Respawn respawnPlayer(Player player);
 
     /**
      * Respawn multiple players
      *
      * @param players The players that have to be respawned.
      *                Note that the players have to be an array of {@link Player} object or else it wont work.
-     * @return IRespawn instance
+     * @return Respawn instance
      */
-    IRespawn respawnPlayers(Player[] players);
+    Respawn respawnPlayers(Player[] players);
 
     /**
      * Respawn multiple players
      *
      * @param players The players that have to be respawned.
      *                Note that the players have to be an collection of {@link Player} object or else it wont work.
-     * @return IRespawn instance
+     * @return Respawn instance
      */
-    IRespawn respawnPlayers(Collection<? extends Player> players);
+    Respawn respawnPlayers(Collection<? extends Player> players);
 
     /**
      * Change player sky type for a player
@@ -68,9 +68,9 @@ public interface IRespawn {
      * @param environment The dimension for the sky type
      * @param player The player that is going to have the sky type changed.
      *               Note that the player has to be a {@link Player} object or else it wont work.
-     * @return IRespawn instance
+     * @return Respawn instance
      */
-    IRespawn changePlayerSky(Environment environment, Player player);
+    Respawn changePlayerSky(Environment environment, Player player);
 
     /**
      * Change skies for multiple players
@@ -78,9 +78,9 @@ public interface IRespawn {
      * @param environment The dimension for the sky type
      * @param players The players that are going to have the sky type changed.
      *                Note that the players have to be an array of {@link Player} object or else it wont work.
-     * @return IRespawn instance
+     * @return Respawn instance
      */
-    IRespawn changePlayerSky(Environment environment, Player[] players);
+    Respawn changePlayerSky(Environment environment, Player[] players);
 
     /**
      * Change skies for multiple players
@@ -88,9 +88,9 @@ public interface IRespawn {
      * @param environment The dimension for the sky type
      * @param players The players that are going to have the sky type changed.
      *                Note that the players have to be a collection of {@link Player} object or else it wont work.
-     * @return IRespawn instance
+     * @return Respawn instance
      */
-    IRespawn changePlayerSky(Environment environment, Collection<? extends Player> players);
+    Respawn changePlayerSky(Environment environment, Collection<? extends Player> players);
 
     /**
      * Change player sky type for a player
@@ -99,9 +99,9 @@ public interface IRespawn {
      * @param chunkRadius The number of chunks that will be refreshed to apply the sky.
      * @param player The player that is going to have the sky type changed.
      *               Note that the player has to be a {@link Player} object or else it wont work.
-     * @return IRespawn instance
+     * @return Respawn instance
      */
-    IRespawn changePlayerSky(Environment environment, int chunkRadius, Player player);
+    Respawn changePlayerSky(Environment environment, int chunkRadius, Player player);
 
     /**
      * Change skies for multiple players
@@ -110,9 +110,9 @@ public interface IRespawn {
      * @param chunkRadius The number of chunks that will be refreshed to apply the sky.
      * @param players The players that are going to have the sky type changed.
      *                Note that the players have to be an array of {@link Player} object or else it wont work.
-     * @return IRespawn instance
+     * @return Respawn instance
      */
-    IRespawn changePlayerSky(Environment environment, int chunkRadius, Player[] players);
+    Respawn changePlayerSky(Environment environment, int chunkRadius, Player[] players);
 
     /**
      * Change skies for multiple players
@@ -121,7 +121,7 @@ public interface IRespawn {
      * @param chunkRadius The number of chunks that will be refreshed to apply the sky.
      * @param players The players that are going to have the sky type changed.
      *                Note that the players have to be a collection of {@link Player} object or else it wont work.
-     * @return IRespawn instance
+     * @return Respawn instance
      */
-    IRespawn changePlayerSky(Environment environment, int chunkRadius, Collection<? extends Player> players);
+    Respawn changePlayerSky(Environment environment, int chunkRadius, Collection<? extends Player> players);
 }

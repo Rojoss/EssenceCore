@@ -29,26 +29,26 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutRespawn;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.essencemc.essencecore.nms.v1_8R3.util.Util;
-import org.essencemc.essencecore.plugin.INMS_Fetcher;
+import org.essencemc.essencecore.plugin.NMSFetcher;
 
 import java.util.Collection;
 
 /**
  * Handles the player respawning for v1_8R3
  */
-public class Respawn_1_8_R3 implements IRespawn {
+public class Respawn_1_8_R3 implements Respawn {
 
-    private final INMS_Fetcher inmsFetcher;
+    private final NMSFetcher nmsFetcher;
 
-    public Respawn_1_8_R3(INMS_Fetcher inmsFetcher) {
-        this.inmsFetcher = inmsFetcher;
+    public Respawn_1_8_R3(NMSFetcher nmsFetcher) {
+        this.nmsFetcher = nmsFetcher;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public IRespawn respawnPlayer(Player player) {
+    public Respawn respawnPlayer(Player player) {
 
         PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(Util.resolveEnvironment(player), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
         Util.sendPacket(player, respawnPacket);
@@ -59,7 +59,7 @@ public class Respawn_1_8_R3 implements IRespawn {
      * {@inheritDoc}
      */
     @Override
-    public IRespawn respawnPlayers(Player[] players) {
+    public Respawn respawnPlayers(Player[] players) {
 
         for (Player player: players) {
             PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(Util.resolveEnvironment(player), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
@@ -72,7 +72,7 @@ public class Respawn_1_8_R3 implements IRespawn {
      * {@inheritDoc}
      */
     @Override
-    public IRespawn respawnPlayers(Collection<? extends Player> players) {
+    public Respawn respawnPlayers(Collection<? extends Player> players) {
         for (Player player: players) {
             PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(Util.resolveEnvironment(player), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
             Util.sendPacket(player, respawnPacket);
@@ -84,7 +84,7 @@ public class Respawn_1_8_R3 implements IRespawn {
      * {@inheritDoc}
      */
     @Override
-    public IRespawn changePlayerSky(World.Environment environment, Player player) {
+    public Respawn changePlayerSky(World.Environment environment, Player player) {
         PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(Util.resolveEnvironment(player), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
         Util.sendPacket(player, respawnPacket);
 
@@ -95,7 +95,7 @@ public class Respawn_1_8_R3 implements IRespawn {
     /**
      * {@inheritDoc}
      */
-    public IRespawn changePlayerSky(World.Environment environment, int chunkRadius, Player player) {
+    public Respawn changePlayerSky(World.Environment environment, int chunkRadius, Player player) {
         PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(Util.resolveEnvironment(player), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
         Util.sendPacket(player, respawnPacket);
 
@@ -107,7 +107,7 @@ public class Respawn_1_8_R3 implements IRespawn {
      * {@inheritDoc}
      */
     @Override
-    public IRespawn changePlayerSky(World.Environment environment, Player[] players) {
+    public Respawn changePlayerSky(World.Environment environment, Player[] players) {
         for (Player player: players) {
             PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(Util.resolveEnvironment(player), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
             Util.sendPacket(player, respawnPacket);
@@ -121,7 +121,7 @@ public class Respawn_1_8_R3 implements IRespawn {
      * {@inheritDoc}
      */
     @Override
-    public IRespawn changePlayerSky(World.Environment environment, Collection<? extends Player> players) {
+    public Respawn changePlayerSky(World.Environment environment, Collection<? extends Player> players) {
         for (Player player: players) {
             PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(Util.resolveEnvironment(player), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
             Util.sendPacket(player, respawnPacket);
@@ -132,7 +132,7 @@ public class Respawn_1_8_R3 implements IRespawn {
     /**
      * {@inheritDoc}
      */
-    public IRespawn changePlayerSky(World.Environment environment, int chunkRadius, Player[] players) {
+    public Respawn changePlayerSky(World.Environment environment, int chunkRadius, Player[] players) {
         for (Player player: players) {
             PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(Util.resolveEnvironment(player), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
             Util.sendPacket(player, respawnPacket);
@@ -146,7 +146,7 @@ public class Respawn_1_8_R3 implements IRespawn {
      * {@inheritDoc}
      */
     @Override
-    public IRespawn changePlayerSky(World.Environment environment, int chunkRadius, Collection<? extends Player> players) {
+    public Respawn changePlayerSky(World.Environment environment, int chunkRadius, Collection<? extends Player> players) {
         for (Player player: players) {
             PacketPlayOutRespawn respawnPacket = new PacketPlayOutRespawn(Util.resolveEnvironment(player), Util.resolveDifficulty(player), Util.resolveWorldType(player), Util.resolveGameMode(player));
             Util.sendPacket(player, respawnPacket);

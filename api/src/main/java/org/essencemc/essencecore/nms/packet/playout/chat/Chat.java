@@ -32,7 +32,7 @@ import java.util.Collection;
 /**
  * Interface for handling actionbars and chat
  */
-public interface IChat {
+public interface Chat {
 
     /**
      * Send actionbar to the player.
@@ -43,9 +43,9 @@ public interface IChat {
      * @param player The player the message has to be sent to.
      *               Note that the player has to be a {@link Player} object or else it wont work.
      *
-     * @return IChat instance
+     * @return Chat instance
      */
-    IChat sendActionbar(String message, Player player);
+    Chat sendActionbar(String message, Player player);
 
     /**
      * Send actionbar to the players
@@ -56,9 +56,9 @@ public interface IChat {
      * @param players The players the message has to be sent to.
      *                Note that the players have to be an array of {@link Player} object or else it wont work
      *
-     * @return IChat instance
+     * @return Chat instance
      */
-    IChat sendActionbar(String message, Player[] players);
+    Chat sendActionbar(String message, Player[] players);
 
     /**
      * Send actionbar to the players
@@ -69,9 +69,9 @@ public interface IChat {
      * @param players The players the message has to be sent to.
      *                Note that the players have to be a collection of {@link Player} object or else it wont work
      *
-     * @return IChat instance
+     * @return Chat instance
      */
-    IChat sendActionbar(String message, Collection<? extends Player> players);
+    Chat sendActionbar(String message, Collection<? extends Player> players);
 
     /**
      * Send raw chat message to the player
@@ -82,9 +82,9 @@ public interface IChat {
      * @param player The player the message has to be sent to.
      *               Note that the player has to be a {@link Player} object or else it wont work.
      *
-     * @return IChat instance
+     * @return Chat instance
      */
-    IChat sendChat(String message, Player player);
+    Chat sendChat(String message, Player player);
 
     /**
      * Send raw chat message to the players
@@ -95,9 +95,9 @@ public interface IChat {
      * @param players The players the message has to be sent to.
      *                Note that the players have to be an array of {@link Player} object or else it wont work
      *
-     * @return IChat instance
+     * @return Chat instance
      */
-    IChat sendChat(String message, Player[] players);
+    Chat sendChat(String message, Player[] players);
 
     /**
      * Send raw chat message to the players
@@ -108,7 +108,14 @@ public interface IChat {
      * @param players The players the message has to be sent to.
      *                Note that the players have to be a collection of {@link Player} object or else it wont work
      *
-     * @return IChat instance
+     * @return Chat instance
      */
-    IChat sendChat(String message, Collection<? extends Player> players);
+    Chat sendChat(String message, Collection<? extends Player> players);
+
+    /**
+     * Build a chat message and send
+     *
+     * @return Builder instance
+     */
+    Builder builder();
 }

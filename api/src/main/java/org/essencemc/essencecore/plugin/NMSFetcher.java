@@ -25,22 +25,22 @@
 
 package org.essencemc.essencecore.plugin;
 
+import org.essencemc.essencecore.nms.packet.playout.chat.Chat;
+import org.essencemc.essencecore.nms.packet.playout.respawn.Respawn;
 import org.essencemc.essencecore.plugin.exceptions.NMSClassNotFoundException;
 import org.essencemc.essencecore.nms.ISkull;
-import org.essencemc.essencecore.nms.packet.playout.chat.IChat;
-import org.essencemc.essencecore.nms.packet.playout.respawn.IRespawn;
-import org.essencemc.essencecore.nms.packet.playout.title.ITitle;
+import org.essencemc.essencecore.nms.packet.playout.title.Title;
 
 /**
  *
  */
-public interface INMS_Fetcher {
+public interface NMSFetcher {
 
-    ITitle getTitle() throws NMSClassNotFoundException;
+    Title getTitle() throws NMSClassNotFoundException;
 
-    IChat getChat() throws NMSClassNotFoundException;
+    Chat getChat() throws NMSClassNotFoundException;
 
-    IRespawn getRespawn() throws NMSClassNotFoundException;
+    Respawn getRespawn() throws NMSClassNotFoundException;
 
     ISkull getSkull() throws NMSClassNotFoundException;
 }

@@ -26,15 +26,14 @@
 package org.essencemc.essencecore.nms.packet.playout.title;
 
 import org.bukkit.entity.Player;
-import org.essencemc.essencecore.plugin.INMS_Fetcher;
-import org.essencemc.essencecore.nms.packet.playout.title.builder.Builder;
+import org.essencemc.essencecore.plugin.NMSFetcher;
 
 import java.util.Collection;
 
 /**
  * Interface for handling Titles and Subtitles
  */
-public interface ITitle {
+public interface Title {
 
     /**
      * Send the player only the title message
@@ -48,9 +47,9 @@ public interface ITitle {
      * @param player The player the message has to be sent to.
      *               Note that the player has to be a {@link Player} object or else it wont work.
      *
-     * @return ITitle instance
+     * @return Title instance
      */
-    ITitle sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Player player);
+    Title sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Player player);
 
     /**
      * Send the players only the title message
@@ -64,9 +63,9 @@ public interface ITitle {
      * @param players The players the message has to be sent to.
      *                Note that the players have to be an array of {@link Player} object or else it wont work
      *
-     * @return ITitle instance
+     * @return Title instance
      */
-    ITitle sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Player[] players);
+    Title sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Player[] players);
 
     /**
      * Send the players only the title message
@@ -80,9 +79,9 @@ public interface ITitle {
      * @param players The players the message has to be sent to.
      *                Note that the players have to be a collection of {@link Player} object or else it wont work
      *
-     * @return ITitle instance
+     * @return Title instance
      */
-    ITitle sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Collection<? extends Player> players);
+    Title sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Collection<? extends Player> players);
 
 
     /**
@@ -97,9 +96,9 @@ public interface ITitle {
      * @param player The player the message has to be sent to.
      *               Note that the player has to be a {@link Player} object or else it wont work.
      *
-     * @return ITitle instance
+     * @return Title instance
      */
-    ITitle sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Player player);
+    Title sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Player player);
 
     /**
      * Send the players only subtitle message
@@ -113,9 +112,9 @@ public interface ITitle {
      * @param players The players the message has to be sent to.
      *                Note that the players have to be an array of {@link Player} object or else it wont work
      *
-     * @return ITitle instance
+     * @return Title instance
      */
-    ITitle sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Player[] players);
+    Title sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Player[] players);
 
     /**
      * Send the players only subtitle message
@@ -129,9 +128,9 @@ public interface ITitle {
      * @param players The players the message has to be sent to.
      *                Note that the players have to be a collection of {@link Player} object or else it wont work
      *
-     * @return ITitle instance
+     * @return Title instance
      */
-    ITitle sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Collection<? extends Player> players);
+    Title sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Collection<? extends Player> players);
 
-    Builder builder(INMS_Fetcher inmsFetcher);
+    Builder builder(NMSFetcher inmsFetcher);
 }

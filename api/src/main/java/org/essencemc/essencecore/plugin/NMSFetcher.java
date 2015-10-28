@@ -34,7 +34,7 @@ import org.essencemc.essencecore.nms.packet.playout.title.Title;
 /**
  *
  */
-public interface INMS_Fetcher {
+public interface NMSFetcher {
 
     Title getTitle() throws NMSClassNotFoundException;
 

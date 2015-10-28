@@ -26,8 +26,7 @@
 package org.essencemc.essencecore.nms.packet.playout.title;
 
 import org.bukkit.entity.Player;
-import org.essencemc.essencecore.plugin.INMS_Fetcher;
-import org.essencemc.essencecore.nms.packet.playout.title.builder.Builder;
+import org.essencemc.essencecore.plugin.NMSFetcher;
 
 import java.util.Collection;
 
@@ -133,5 +132,5 @@ public interface Title {
      */
     Title sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Collection<? extends Player> players);
 
-    Builder builder(INMS_Fetcher inmsFetcher);
+    Builder builder(NMSFetcher inmsFetcher);
 }

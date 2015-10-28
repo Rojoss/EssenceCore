@@ -23,18 +23,18 @@
  * THE SOFTWARE.
  */
 
-package org.essencemc.essencecore.nms.packet.playout.title.builder;
+package org.essencemc.essencecore.nms.packet.playout.title;
 
-import org.essencemc.essencecore.plugin.INMS_Fetcher;
+import org.essencemc.essencecore.plugin.NMSFetcher;
 
 /**
  *
  */
 public class Builder {
 
-    private final INMS_Fetcher inmsFetcher;
+    private final NMSFetcher inmsFetcher;
 
-    public Builder(INMS_Fetcher inmsFetcher) {
+    public Builder(NMSFetcher inmsFetcher) {
         this.inmsFetcher = inmsFetcher;
     }
 }

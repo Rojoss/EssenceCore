@@ -28,9 +28,8 @@ package org.essencemc.essencecore.nms.packet.playout.title;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import org.bukkit.entity.Player;
-import org.essencemc.essencecore.nms.packet.playout.title.builder.Builder;
 import org.essencemc.essencecore.nms.v1_8R3.util.Util;
-import org.essencemc.essencecore.plugin.INMS_Fetcher;
+import org.essencemc.essencecore.plugin.NMSFetcher;
 
 import java.util.Collection;
 
@@ -40,10 +39,10 @@ import java.util.Collection;
 public class Title_1_8_R3 implements Title {
 
 
-    private INMS_Fetcher inmsFetcher;
+    private NMSFetcher nmsFetcher;
 
-    public Title_1_8_R3(INMS_Fetcher inmsFetcher) {
-        this.inmsFetcher = inmsFetcher;
+    public Title_1_8_R3(NMSFetcher nmsFetcher) {
+        this.nmsFetcher = nmsFetcher;
     }
 
     /**
@@ -128,7 +127,7 @@ public class Title_1_8_R3 implements Title {
     }
 
     @Override
-    public Builder builder(INMS_Fetcher inmsFetcher) {
-        return new Builder(inmsFetcher);
+    public Builder builder(NMSFetcher nmsFetcher) {
+        return new Builder(nmsFetcher);
     }
 }

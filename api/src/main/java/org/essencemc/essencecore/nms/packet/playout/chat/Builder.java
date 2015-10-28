@@ -79,8 +79,10 @@ public class Builder {
      *
      * @param player The player the message has to be sent to.
      *               Note that the player has to be a {@link Player} object or else it wont work.
+     *
+     * @return Builder instance
      */
-    public void send(Player player) {
+    public Builder send(Player player) {
         switch (location) {
             case 2:
                 nmsFetcher.getChat().sendActionbar(message, player);
@@ -88,6 +90,7 @@ public class Builder {
             default:
                 nmsFetcher.getChat().sendChat(message, player);
         }
+        return this;
     }
 
     /**
@@ -95,8 +98,10 @@ public class Builder {
      *
      * @param players The players the message has to be sent to.
      *                Note that the players have to be an array of {@link Player} object or else it wont work
+     *
+     * @return Builder instance
      */
-    public void send(Player[] players) {
+    public Builder send(Player[] players) {
         switch (location) {
             case 2:
                 nmsFetcher.getChat().sendActionbar(message, players);
@@ -104,6 +109,7 @@ public class Builder {
             default:
                 nmsFetcher.getChat().sendChat(message, players);
         }
+        return this;
     }
 
     /**
@@ -111,8 +117,10 @@ public class Builder {
      *
      * @param players The players the message has to be sent to.
      *                Note that the players have to be a collection of {@link Player} object or else it wont work
+     *
+     * @return Builder instance
      */
-    public void send(Collection<Player> players) {
+    public Builder send(Collection<Player> players) {
         switch (location) {
             case 2:
                 nmsFetcher.getChat().sendActionbar(message, players);
@@ -120,6 +128,7 @@ public class Builder {
             default:
                 nmsFetcher.getChat().sendChat(message, players);
         }
+        return this;
     }
 
     /**

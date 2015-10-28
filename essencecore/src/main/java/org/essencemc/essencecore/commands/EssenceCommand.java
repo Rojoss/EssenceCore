@@ -359,10 +359,6 @@ public abstract class EssenceCommand extends EssModule implements CommandExecuto
                     Message.CMD_LINK_LINK.msg().send(sender, Param.P("arg1", link.getFirst()), Param.P("arg2", link.getSecond()));
                     result.success = false;
                     return result;
-                } else if (keys.contains(link.getSecond()) && !keys.contains(link.getFirst())) {
-                    Message.CMD_LINK_LINK.msg().send(sender, Param.P("arg1", link.getSecond()), Param.P("arg2", link.getFirst()));
-                    result.success = false;
-                    return result;
                 }
             }
         }

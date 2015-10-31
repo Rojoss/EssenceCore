@@ -32,7 +32,7 @@ import org.bukkit.entity.Player;
 /**
  * v1_8R3 utility methods
  */
-public class Util {
+public class PacketUtil {
 
     public static void sendPacket(Player player, Packet packet) {
         ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);

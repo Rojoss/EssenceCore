@@ -34,7 +34,7 @@ import org.bukkit.entity.Entity;
  */
 public class NBTUtil {
 
-    public static NBTTagCompound getCompound(Entity entity) {
+    public static NBTTagCompound getNBTTagCompound(Entity entity) {
         return ((CraftEntity)entity).getHandle().getNBTTag();
     }
 }

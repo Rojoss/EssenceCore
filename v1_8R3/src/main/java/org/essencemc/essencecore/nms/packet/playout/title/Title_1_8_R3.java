@@ -28,7 +28,7 @@ package org.essencemc.essencecore.nms.packet.playout.title;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import org.bukkit.entity.Player;
-import org.essencemc.essencecore.nms.v1_8R3.util.Util;
+import org.essencemc.essencecore.nms.v1_8R3.util.PacketUtil;
 import org.essencemc.essencecore.plugin.NMSFetcher;
 
 import java.util.Collection;
@@ -52,7 +52,7 @@ public class Title_1_8_R3 implements Title {
     public Title sendTitle(String titleMessage, int fadeIn, int stay, int fadeOut, Player player) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(titleMessage);
         PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, icbc, fadeIn, stay, fadeOut);
-        Util.sendPacket(player, titlePacket);
+        PacketUtil.sendPacket(player, titlePacket);
         return this;
     }
 
@@ -66,7 +66,7 @@ public class Title_1_8_R3 implements Title {
         PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, icbc, fadeIn, stay, fadeOut);
 
         for (Player p: players) {
-            Util.sendPacket(p, titlePacket);
+            PacketUtil.sendPacket(p, titlePacket);
         }
         return this;
     }
@@ -80,7 +80,7 @@ public class Title_1_8_R3 implements Title {
         PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, icbc, fadeIn, stay, fadeOut);
 
         for (Player p: players) {
-            Util.sendPacket(p, titlePacket);
+            PacketUtil.sendPacket(p, titlePacket);
         }
         return this;
     }
@@ -93,7 +93,7 @@ public class Title_1_8_R3 implements Title {
     public Title sendSubtitle(String subtitleMessage, int fadeIn, int stay, int fadeOut, Player player) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(subtitleMessage);
         PacketPlayOutTitle subtitlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, icbc, fadeIn, stay, fadeOut);
-        Util.sendPacket(player, subtitlePacket);
+        PacketUtil.sendPacket(player, subtitlePacket);
         return this;
     }
 
@@ -107,7 +107,7 @@ public class Title_1_8_R3 implements Title {
         PacketPlayOutTitle subtitlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, icbc, fadeIn, stay, fadeOut);
 
         for (Player p: players) {
-            Util.sendPacket(p, subtitlePacket);
+            PacketUtil.sendPacket(p, subtitlePacket);
         }
         return this;
     }
@@ -121,7 +121,7 @@ public class Title_1_8_R3 implements Title {
         PacketPlayOutTitle subtitlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, icbc, fadeIn, stay, fadeOut);
 
         for (Player p: players) {
-            Util.sendPacket(p, subtitlePacket);
+            PacketUtil.sendPacket(p, subtitlePacket);
         }
         return this;
     }

@@ -28,7 +28,7 @@ package org.essencemc.essencecore.nms.packet.playout.chat;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import org.bukkit.entity.Player;
-import org.essencemc.essencecore.nms.v1_8R3.util.Util;
+import org.essencemc.essencecore.nms.v1_8R3.util.PacketUtil;
 import org.essencemc.essencecore.plugin.NMSFetcher;
 
 import java.util.Collection;
@@ -51,7 +51,7 @@ public class Chat_1_8_R3 implements Chat {
     public Chat sendActionbar(String message, Player player) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(message);
         PacketPlayOutChat actionbarPacket = new PacketPlayOutChat(icbc, (byte) 2);
-        Util.sendPacket(player, actionbarPacket);
+        PacketUtil.sendPacket(player, actionbarPacket);
 
         return this;
     }
@@ -65,7 +65,7 @@ public class Chat_1_8_R3 implements Chat {
         PacketPlayOutChat actionbarPacket = new PacketPlayOutChat(icbc, (byte) 2);
 
         for (Player player : players) {
-            Util.sendPacket(player, actionbarPacket);
+            PacketUtil.sendPacket(player, actionbarPacket);
         }
 
         return this;
@@ -80,7 +80,7 @@ public class Chat_1_8_R3 implements Chat {
         PacketPlayOutChat actionbarPacket = new PacketPlayOutChat(icbc, (byte) 2);
 
         for (Player player : players) {
-            Util.sendPacket(player, actionbarPacket);
+            PacketUtil.sendPacket(player, actionbarPacket);
         }
 
         return this;
@@ -93,7 +93,7 @@ public class Chat_1_8_R3 implements Chat {
     public Chat sendChat(String message, Player player) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a(message);
         PacketPlayOutChat chatPacket = new PacketPlayOutChat(icbc, (byte) 0);
-        Util.sendPacket(player, chatPacket);
+        PacketUtil.sendPacket(player, chatPacket);
 
         return this;
     }
@@ -107,7 +107,7 @@ public class Chat_1_8_R3 implements Chat {
         PacketPlayOutChat chatPacket = new PacketPlayOutChat(icbc, (byte) 0);
 
         for (Player p: players) {
-            Util.sendPacket(p, chatPacket);
+            PacketUtil.sendPacket(p, chatPacket);
         }
 
         return this;
@@ -122,7 +122,7 @@ public class Chat_1_8_R3 implements Chat {
         PacketPlayOutChat chatPacket = new PacketPlayOutChat(icbc, (byte) 0);
 
         for (Player p: players) {
-            Util.sendPacket(p, chatPacket);
+            PacketUtil.sendPacket(p, chatPacket);
         }
 
         return this;

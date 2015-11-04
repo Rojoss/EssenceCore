@@ -140,9 +140,9 @@ public class EssenceCore extends JavaPlugin implements NMSFetcher {
 
         switch (version) {
             case "v1_8_R3" :
-                iSkull = new SkullUtil_1_8_R3(this);
-                title = new Title_1_8_R3(this);
-                chat = new Chat_1_8_R3(this);
+                iSkull = new SkullUtil_1_8_R3();
+                title = new Title_1_8_R3();
+                chat = new Chat_1_8_R3();
                 respawn = new Respawn_1_8_R3(this);
                 compatible = true;
                 break;

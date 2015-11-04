@@ -26,7 +26,6 @@
 package org.essencemc.essencecore.nms.packet.playout.title;
 
 import org.bukkit.entity.Player;
-import org.essencemc.essencecore.plugin.NMSFetcher;
 
 import java.util.Collection;
 
@@ -35,7 +34,7 @@ import java.util.Collection;
  */
 public class Builder {
 
-    private final NMSFetcher nmsFetcher;
+    private Title title;
 
     private int titleFadeIn = 20;
     private int titleStay = 30;
@@ -49,11 +48,11 @@ public class Builder {
     private String subtitleMessage = "";
 
     private Builder() {
-        this.nmsFetcher = null;
+        this.title = null;
     }
 
-    public Builder(NMSFetcher nmsFetcher) {
-        this.nmsFetcher = nmsFetcher;
+    public Builder(Title title) {
+        this.title = title;
     }
 
     public Builder setTimings(int fadeIn, int stay, int fadeOut) {
@@ -97,11 +96,11 @@ public class Builder {
 
     public Builder send(Player player) {
         if (!titleMessage.equals("")) {
-            nmsFetcher.getTitle().sendTitle(titleMessage, titleFadeIn, titleStay, titleFadeOut, player);
+            title.sendTitle(titleMessage, titleFadeIn, titleStay, titleFadeOut, player);
         }
 
         if (!subtitleMessage.equals("")) {
-            nmsFetcher.getTitle().sendSubtitle(subtitleMessage, subtitleFadeIn, subtitleStay, subtitleFadeOut, player);
+            title.sendSubtitle(subtitleMessage, subtitleFadeIn, subtitleStay, subtitleFadeOut, player);
         }
 
         return this;
@@ -109,11 +108,11 @@ public class Builder {
 
     public Builder send(Player[] players) {
         if (!titleMessage.equals("")) {
-            nmsFetcher.getTitle().sendTitle(titleMessage, titleFadeIn, titleStay, titleFadeOut, players);
+            title.sendTitle(titleMessage, titleFadeIn, titleStay, titleFadeOut, players);
         }
 
         if (!subtitleMessage.equals("")) {
-            nmsFetcher.getTitle().sendSubtitle(subtitleMessage, subtitleFadeIn, subtitleStay, subtitleFadeOut, players);
+            title.sendSubtitle(subtitleMessage, subtitleFadeIn, subtitleStay, subtitleFadeOut, players);
         }
 
         return this;
@@ -121,11 +120,11 @@ public class Builder {
 
     public Builder send(Collection<? extends Player> players) {
         if (!titleMessage.equals("")) {
-            nmsFetcher.getTitle().sendTitle(titleMessage, titleFadeIn, titleStay, titleFadeOut, players);
+            title.sendTitle(titleMessage, titleFadeIn, titleStay, titleFadeOut, players);
         }
 
         if (!subtitleMessage.equals("")) {
-            nmsFetcher.getTitle().sendSubtitle(subtitleMessage, subtitleFadeIn, subtitleStay, subtitleFadeOut, players);
+            title.sendSubtitle(subtitleMessage, subtitleFadeIn, subtitleStay, subtitleFadeOut, players);
         }
 
         return this;

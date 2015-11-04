@@ -38,11 +38,7 @@ import java.util.Collection;
  */
 public class Title_1_8_R3 implements Title {
 
-
-    private NMSFetcher nmsFetcher;
-
-    public Title_1_8_R3(NMSFetcher nmsFetcher) {
-        this.nmsFetcher = nmsFetcher;
+    public Title_1_8_R3() {
     }
 
     /**
@@ -127,7 +123,7 @@ public class Title_1_8_R3 implements Title {
     }
 
     @Override
-    public Builder builder(NMSFetcher nmsFetcher) {
-        return new Builder(nmsFetcher);
+    public Builder builder(Title title) {
+        return new Builder(this);
     }
 }

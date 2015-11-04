@@ -29,7 +29,6 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutRespawn;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.essencemc.essencecore.nms.v1_8R3.util.PacketUtil;
-import org.essencemc.essencecore.plugin.NMSFetcher;
 
 import java.util.Collection;
 
@@ -38,10 +37,7 @@ import java.util.Collection;
  */
 public class Respawn_1_8_R3 implements Respawn {
 
-    private final NMSFetcher nmsFetcher;
-
-    public Respawn_1_8_R3(NMSFetcher nmsFetcher) {
-        this.nmsFetcher = nmsFetcher;
+    public Respawn_1_8_R3() {
     }
 
     /**

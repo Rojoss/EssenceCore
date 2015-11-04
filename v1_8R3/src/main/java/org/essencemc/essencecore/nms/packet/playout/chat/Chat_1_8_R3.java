@@ -29,7 +29,6 @@ import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import org.bukkit.entity.Player;
 import org.essencemc.essencecore.nms.v1_8R3.util.PacketUtil;
-import org.essencemc.essencecore.plugin.NMSFetcher;
 
 import java.util.Collection;
 
@@ -38,11 +37,7 @@ import java.util.Collection;
  */
 public class Chat_1_8_R3 implements Chat {
 
-    private final NMSFetcher nmsFetcher;
-
-    public Chat_1_8_R3(NMSFetcher nmsFetcher) {
-        this.nmsFetcher = nmsFetcher;
-    }
+    public Chat_1_8_R3(){}
 
     /**
      * {@inheritDoc}

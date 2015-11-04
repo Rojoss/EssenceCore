@@ -143,7 +143,7 @@ public class EssenceCore extends JavaPlugin implements NMSFetcher {
                 iSkull = new SkullUtil_1_8_R3();
                 title = new Title_1_8_R3();
                 chat = new Chat_1_8_R3();
-                respawn = new Respawn_1_8_R3(this);
+                respawn = new Respawn_1_8_R3();
                 compatible = true;
                 break;
             default:

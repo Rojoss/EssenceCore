@@ -46,6 +46,8 @@ import org.essencemc.essencecore.nms.packet.playout.chat.Chat;
 import org.essencemc.essencecore.nms.packet.playout.chat.Chat_1_8_R3;
 import org.essencemc.essencecore.nms.packet.playout.respawn.Respawn;
 import org.essencemc.essencecore.nms.packet.playout.respawn.Respawn_1_8_R3;
+import org.essencemc.essencecore.nms.packet.playout.tabheaderfooter.TabHeaderFooter;
+import org.essencemc.essencecore.nms.packet.playout.tabheaderfooter.TabHeaderFooter_1_8_R3;
 import org.essencemc.essencecore.nms.packet.playout.title.Title;
 import org.essencemc.essencecore.nms.packet.playout.title.Title_1_8_R3;
 import org.essencemc.essencecore.nms.v1_8R3.SkullUtil_1_8_R3;
@@ -80,6 +82,7 @@ public class EssenceCore extends JavaPlugin implements NMSFetcher {
     private Title title = null;
     private Chat chat = null;
     private Respawn respawn = null;
+    private TabHeaderFooter headerFooter = null;
 
     private ItemAliases itemAliases;
     private Map<AliasType, AliasesCfg> aliases = new HashMap<AliasType, AliasesCfg>();
@@ -141,9 +144,11 @@ public class EssenceCore extends JavaPlugin implements NMSFetcher {
         switch (version) {
             case "v1_8_R3" :
                 iSkull = new SkullUtil_1_8_R3();
+
                 title = new Title_1_8_R3();
                 chat = new Chat_1_8_R3();
                 respawn = new Respawn_1_8_R3();
+                headerFooter = new TabHeaderFooter_1_8_R3();
                 compatible = true;
                 break;
             default:

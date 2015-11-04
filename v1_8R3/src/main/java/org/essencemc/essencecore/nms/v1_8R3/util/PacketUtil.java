@@ -38,11 +38,6 @@ public class PacketUtil {
         ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
     }
 
-    public static void sendPacket(Player player, Packet packet1, Packet packet2) {
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet1);
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet2);
-    }
-
     public static IChatBaseComponent serializeChat(String message) {
         return IChatBaseComponent.ChatSerializer.a(message);
     }

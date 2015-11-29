@@ -281,6 +281,9 @@ public class Util {
             }
         }
 
+        if (ret.trim().isEmpty()) {
+            return ret;
+        }
         return ret.substring(0, ret.length() - lastGlue.length());
     }
 

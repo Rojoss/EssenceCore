@@ -403,6 +403,14 @@ public class Aliases {
         list.add(getAlias(GameMode.SPECTATOR, "Spectator", new String[]{"3", "spe", "sp", "spec"}));
         aliases.put(currentType, new ArrayList<Alias>(list));
 
+        //Weather Types
+        list.clear();
+        currentType = AliasType.WEATHER;
+        list.add(getAlias(WeatherType.CLEAR, "Sun", new String[] {"0, clear"}));
+        list.add(getAlias(WeatherType.DOWNFALL, "Rain", new String[] {"1, downfall"}));
+        list.add(getAlias("THUNDER", "Thunder", new String[] {"2", "storm"}));
+        aliases.put(currentType, new ArrayList<>(list));
+
         //Paintings
         list.clear();
         currentType = AliasType.PAINTING;

@@ -30,6 +30,7 @@ public enum AliasType {
     POTION_EFFECT,
     ENTITY,
     GAME_MODE,
+    WEATHER,
     PAINTING,
     BIOME,
     DYE_COLOR,

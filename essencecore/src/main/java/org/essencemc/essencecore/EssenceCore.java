@@ -89,6 +89,7 @@ public class EssenceCore extends JavaPlugin implements NMSFetcher {
 
     private PlayerManager playerManager;
 
+
     private final Logger log = Logger.getLogger("EssenceCore");
 
     @Override
@@ -242,6 +243,7 @@ public class EssenceCore extends JavaPlugin implements NMSFetcher {
         aliases.put(AliasType.POTION_EFFECT, new AliasesCfg("plugins/Essence/aliases/PotionEffects.yml", AliasType.POTION_EFFECT));
         aliases.put(AliasType.ENTITY, new AliasesCfg("plugins/Essence/aliases/Entities.yml", AliasType.ENTITY));
         aliases.put(AliasType.GAME_MODE, new AliasesCfg("plugins/Essence/aliases/GameModes.yml", AliasType.GAME_MODE));
+        aliases.put(AliasType.WEATHER, new AliasesCfg("plugins/Essence/aliases/WeatherTypes.yml", AliasType.WEATHER));
         aliases.put(AliasType.PAINTING, new AliasesCfg("plugins/Essence/aliases/Paintings.yml", AliasType.PAINTING));
         aliases.put(AliasType.BIOME, new AliasesCfg("plugins/Essence/aliases/Biomes.yml", AliasType.BIOME));
         aliases.put(AliasType.DYE_COLOR, new AliasesCfg("plugins/Essence/aliases/DyeColors.yml", AliasType.DYE_COLOR));

@@ -321,7 +321,77 @@ public class Aliases {
         //Entities
         list.clear();
         currentType = AliasType.ENTITY;
-        //TODO: Add EntityTypes
+        list.add(getAlias(EntityType.DROPPED_ITEM, "Dropped Item", new String[] {}));
+        list.add(getAlias(EntityType.EXPERIENCE_ORB, "Experience Orb", new String[] {}));
+        list.add(getAlias(EntityType.LEASH_HITCH, "Leash Knot", new String[] {}));
+        list.add(getAlias(EntityType.PAINTING, "Painting", new String[] {}));
+        list.add(getAlias(EntityType.ARROW, "Arrow", new String[] {}));
+        list.add(getAlias(EntityType.SNOWBALL, "Snowball", new String[] {}));
+        list.add(getAlias(EntityType.FIREBALL, "Fireball", new String[] {}));
+        list.add(getAlias(EntityType.SMALL_FIREBALL, "Small Fireball", new String[] {}));
+        list.add(getAlias(EntityType.ENDER_PEARL, "Ender Pearl", new String[] {}));
+        list.add(getAlias(EntityType.ENDER_SIGNAL, "Ender Signal", new String[] {}));
+        list.add(getAlias(EntityType.THROWN_EXP_BOTTLE, "Thrown Exp Bottle", new String[] {}));
+        list.add(getAlias(EntityType.ITEM_FRAME, "Item Frame", new String[] {}));
+        list.add(getAlias(EntityType.WITHER_SKULL, "Wither Skull", new String[] {}));
+        list.add(getAlias(EntityType.PRIMED_TNT, "Primed TNT", new String[] {}));
+        list.add(getAlias(EntityType.FALLING_BLOCK, "Falling Block", new String[] {}));
+        list.add(getAlias(EntityType.FIREWORK, "Firework", new String[] {}));
+        list.add(getAlias(EntityType.ARMOR_STAND, "Armor Stand", new String[] {}));
+        list.add(getAlias(EntityType.MINECART_COMMAND, "Minecart Command Block", new String[] {}));
+        list.add(getAlias(EntityType.BOAT, "Boat", new String[] {}));
+        list.add(getAlias(EntityType.MINECART, "Minecart", new String[] {}));
+        list.add(getAlias(EntityType.MINECART_CHEST, "Minecart Chest", new String[] {}));
+        list.add(getAlias(EntityType.MINECART_FURNACE, "Minecart Furnace", new String[] {}));
+        list.add(getAlias(EntityType.MINECART_TNT, "Minecart TNT", new String[] {}));
+        list.add(getAlias(EntityType.MINECART_HOPPER, "Minecart Hopper", new String[] {}));
+        list.add(getAlias(EntityType.MINECART_MOB_SPAWNER, "Minecart Mob Spawner", new String[] {}));
+        list.add(getAlias(EntityType.CREEPER, "Creeper", new String[] {}));
+        list.add(getAlias(EntityType.SKELETON, "Skeleton", new String[] {}));
+        list.add(getAlias(EntityType.SPIDER, "Spider", new String[] {}));
+        list.add(getAlias(EntityType.GIANT, "Giant", new String[] {}));
+        list.add(getAlias(EntityType.ZOMBIE, "Zombie", new String[] {}));
+        list.add(getAlias(EntityType.SLIME, "Slime", new String[] {}));
+        list.add(getAlias(EntityType.GHAST, "Ghast", new String[] {}));
+        list.add(getAlias(EntityType.PIG_ZOMBIE, "Pig Zombie", new String[] {}));
+        list.add(getAlias(EntityType.ENDERMAN, "Enderman", new String[] {}));
+        list.add(getAlias(EntityType.CAVE_SPIDER, "Cave Spider", new String[] {}));
+        list.add(getAlias(EntityType.SILVERFISH, "Silverfish", new String[] {}));
+        list.add(getAlias(EntityType.BLAZE, "Blaze", new String[] {}));
+        list.add(getAlias(EntityType.MAGMA_CUBE, "Magma Cube", new String[] {}));
+        list.add(getAlias(EntityType.ENDER_DRAGON, "Ender Dragon", new String[] {}));
+        list.add(getAlias(EntityType.WITHER, "Wither", new String[] {}));
+        list.add(getAlias(EntityType.BAT, "Bat", new String[] {}));
+        list.add(getAlias(EntityType.WITCH, "Witch", new String[] {}));
+        list.add(getAlias(EntityType.ENDERMITE, "Endermite", new String[] {}));
+        list.add(getAlias(EntityType.GUARDIAN, "Guardian", new String[] {}));
+        list.add(getAlias(EntityType.PIG, "Pig", new String[] {}));
+        list.add(getAlias(EntityType.SHEEP, "Sheep", new String[] {}));
+        list.add(getAlias(EntityType.COW, "Cow", new String[] {}));
+        list.add(getAlias(EntityType.CHICKEN, "Chicken", new String[] {}));
+        list.add(getAlias(EntityType.SQUID, "Squid", new String[] {}));
+        list.add(getAlias(EntityType.WOLF, "Wolf", new String[] {}));
+        list.add(getAlias(EntityType.MUSHROOM_COW, "Mushroom Cow", new String[] {}));
+        list.add(getAlias(EntityType.SNOWMAN, "Snowman", new String[] {}));
+        list.add(getAlias(EntityType.OCELOT, "Ocelot", new String[] {}));
+        list.add(getAlias(EntityType.IRON_GOLEM, "Iron Golem", new String[] {}));
+        list.add(getAlias(EntityType.HORSE, "Horse", new String[] {}));
+        list.add(getAlias(EntityType.RABBIT, "Rabbit", new String[] {}));
+        list.add(getAlias(EntityType.VILLAGER, "Villager", new String[] {}));
+        list.add(getAlias(EntityType.ENDER_CRYSTAL, "Ender Crystal", new String[] {}));
+        list.add(getAlias(EntityType.SPLASH_POTION, "Splash Potion", new String[] {}));
+        list.add(getAlias(EntityType.EGG, "Egg", new String[] {}));
+        list.add(getAlias(EntityType.FISHING_HOOK, "Fishing Hook", new String[] {}));
+        list.add(getAlias(EntityType.LIGHTNING, "Lightning", new String[] {}));
+        list.add(getAlias(EntityType.WEATHER, "Weather", new String[] {}));
+        list.add(getAlias(EntityType.PLAYER, "Player", new String[] {}));
+        list.add(getAlias(EntityType.COMPLEX_PART, "Complex Part", new String[] {}));
+
+        /**
+         * TODO: Some entities still need aliases.
+         * I simply wrote all the entities in the EntityType class out in here with the name and aliases (which are at the moment just empty String[])
+         */
+
         aliases.put(currentType, new ArrayList<Alias>(list));
 
         //Game modes

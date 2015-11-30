@@ -61,6 +61,7 @@ public class Commands {
      */
     public void registerCommand(Plugin plugin, Class<? extends EssenceCommand> clazz, String label, String parentModule, String module, String description, String[] aliases) {
         if (!module.isEmpty()) {
+            module = module + "_cmd";
             ess.getModuleCfg().registerModule(parentModule, module, true);
         }
         for (EssenceCommand cmd : commands) {

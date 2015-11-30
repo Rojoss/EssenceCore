@@ -54,6 +54,7 @@ public class Modules {
 
     public void registerModule(Class<? extends Module> clazz, String parentModule, String moduleName) {
         if (!moduleName.isEmpty()) {
+            moduleName = moduleName + "_core";
             ess.getModuleCfg().registerModule(parentModule, moduleName, true);
         }
         for (Module module : modules) {

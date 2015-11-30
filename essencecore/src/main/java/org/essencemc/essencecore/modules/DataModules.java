@@ -38,6 +38,7 @@ public enum DataModules {
     POWERTOOL("powertools", 60),
     BAN("ban", 0),
     MUTE("mute", 0),
+    KICK("kick", 0),
     JAIL("jail", 0),
     FREEZE("freeze", 0),
     WARNING("warning", 10),

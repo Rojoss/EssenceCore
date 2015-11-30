@@ -28,6 +28,8 @@ package org.essencemc.essencecore.commands;
 import org.bukkit.plugin.Plugin;
 import org.essencemc.essencecore.EssenceCore;
 import org.essencemc.essencecore.config.CommandsCfg;
+import org.essencemc.essencecore.nms.util.Util;
+import org.essencemc.essencecore.util.Debug;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -61,13 +63,12 @@ public class Commands {
      */
     public void registerCommand(Plugin plugin, Class<? extends EssenceCommand> clazz, String label, String parentModule, String module, String description, String[] aliases) {
         if (!module.isEmpty()) {
-            module = module + "_cmd";
-            ess.getModuleCfg().registerModule(parentModule, module, true);
+            ess.getModuleCfg().registerModule(parentModule, module + "_cmd", true);
         }
         for (EssenceCommand cmd : commands) {
             if (cmd.getLabel().equals(label)) {
                 cmd.unregister();
-                if ((module.isEmpty() || ess.getModuleCfg().isEnabled(parentModule, module)) && cmd.checkDependencies()) {
+                if ((module.isEmpty() || ess.getModuleCfg().isEnabled(parentModule, module + "_cmd")) && cmd.checkDependencies()) {
                     cmd.loadData(cfg.getDescription(label), cfg.getPermission(label), cfg.getAliases(label));
                     cmd.register();
                 } else {
@@ -84,7 +85,7 @@ public class Commands {
         }
 
         cfg.registerCommand(label, description, "essence." + label, aliases);
-        if (!module.isEmpty() && !ess.getModuleCfg().isEnabled(parentModule, module)) {
+        if (!module.isEmpty() && !ess.getModuleCfg().isEnabled(parentModule, module + "_cmd")) {
             return;
         }
 

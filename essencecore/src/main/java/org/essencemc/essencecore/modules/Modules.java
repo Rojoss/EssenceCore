@@ -54,12 +54,11 @@ public class Modules {
 
     public void registerModule(Class<? extends Module> clazz, String parentModule, String moduleName) {
         if (!moduleName.isEmpty()) {
-            moduleName = moduleName + "_core";
-            ess.getModuleCfg().registerModule(parentModule, moduleName, true);
+            ess.getModuleCfg().registerModule(parentModule, moduleName + "_core", true);
         }
         for (Module module : modules) {
             if (module.getName().equalsIgnoreCase(moduleName)) {
-                if ((!moduleName.isEmpty() && !ess.getModuleCfg().isEnabled(parentModule, moduleName)) || !module.checkDependencies()) {
+                if ((!moduleName.isEmpty() && !ess.getModuleCfg().isEnabled(parentModule, moduleName + "_core")) || !module.checkDependencies()) {
                     if (module instanceof StorageModule) {
                         ((StorageModule)module).onSave();
                     }
@@ -73,7 +72,7 @@ public class Modules {
             }
         }
 
-        if (!moduleName.isEmpty() && !ess.getModuleCfg().isEnabled(parentModule, moduleName)) {
+        if (!moduleName.isEmpty() && !ess.getModuleCfg().isEnabled(parentModule, moduleName + "_core")) {
             return;
         }
 

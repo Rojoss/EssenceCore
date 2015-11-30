@@ -173,7 +173,6 @@ public class Query {
     }
 
     public PreparedStatement getStatement() {
-        Debug.bc(get());
         Connection sql = EssenceCore.inst().getSql();
         try {
             PreparedStatement statement = sql.prepareStatement(get());

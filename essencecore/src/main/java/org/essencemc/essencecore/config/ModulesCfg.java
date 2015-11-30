@@ -76,6 +76,8 @@ public class ModulesCfg extends EasyConfig {
     public boolean isEnabled(String parent, String module) {
         if (parent == null || parent.isEmpty()) {
             parent = module;
+            parent = parent.replace("_cmd", "");
+            parent = parent.replace("_core", "");
         }
         parent = parent.toUpperCase();
         module = module.toLowerCase();
@@ -97,6 +99,8 @@ public class ModulesCfg extends EasyConfig {
     public void setEnabled(String parent, String module, boolean state) {
         if (parent == null || parent.isEmpty()) {
             parent = module;
+            parent = parent.replace("_cmd", "");
+            parent = parent.replace("_core", "");
         }
         parent = parent.toUpperCase();
         module = module.toLowerCase();
